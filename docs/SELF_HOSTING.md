@@ -1,17 +1,17 @@
 # Self-hosting Fusion Table and building your own app
 
-Fusion Table v0.2.0 includes the complete source for a deterministic recipe website, an expanded barbecue/classic catalog, an ingredient-led meal builder and live local shop discovery. The default deployment is a React/Vinext website backed by a Cloudflare Worker. Both recipe engines are pure TypeScript and can be reused independently.
+Fusion Table v0.2.1 includes the complete source for a deterministic recipe website, an expanded barbecue/classic catalog, an ingredient-led meal builder and live local shop discovery. The default deployment is a React/Vinext website backed by a Cloudflare Worker. Both recipe engines are pure TypeScript and can be reused independently.
 
 ## 1. Get the source
 
-The repository is currently private. Its owner must grant access before you can clone it or download GitHub release assets. Repository visibility is separate from the website's audience.
+The [repository](https://github.com/blkph0x/fusion-table) and [published GitHub release assets](https://github.com/blkph0x/fusion-table/releases) are public. No owner-granted repository access is required to clone or download them. The hosted Sites app remains owner-private; repository visibility does not change the website's audience.
 
 ```sh
 git clone https://github.com/blkph0x/fusion-table.git
 cd fusion-table
 ```
 
-Alternatively, extract an authorised `fusion-table-v0.2.0-source.zip` and open the included `fusion-table` directory. The ZIP contains application code, complete recipe data, image assets, server routes, vendored runtime helpers, environment examples, tests, documentation, package manifest and pnpm lockfile. Installed dependencies, build output and credentials are omitted. Install from the lockfile to reproduce the build.
+Alternatively, extract `fusion-table-v0.2.1-source.zip` and open the included `fusion-table` directory. The ZIP contains application code, complete recipe data, image assets, server routes, vendored runtime helpers, environment examples, tests, documentation, package manifest and pnpm lockfile. Installed dependencies, build output and credentials are omitted. Install from the lockfile to reproduce the build.
 
 ## 2. Install and run locally
 
@@ -164,8 +164,8 @@ pnpm release:source
 The script requires a clean checkout and archives the committed `HEAD` into:
 
 ```text
-releases/fusion-table-v0.2.0-source.zip
-releases/fusion-table-v0.2.0-source.zip.sha256
+releases/fusion-table-v0.2.1-source.zip
+releases/fusion-table-v0.2.1-source.zip.sha256
 ```
 
 The version comes from committed `package.json`. The ZIP includes tracked source and rejects tracked environment files, private-key filenames, generated dependency/build/cache directories and common credential formats. These checks are a backstop, not a complete secret audit. The checksum identifies exact archive bytes; publish it with the matching version/tag.
@@ -178,7 +178,7 @@ After a fresh successful build:
 pnpm release:worker
 ```
 
-This needs the standard `tar` command and creates `releases/fusion-table-v0.2.0-cloudflare-worker.tar.gz` plus its checksum. It includes the compiled server/client and an independent deployment README/configuration. Original Site metadata, Worker name, account routing, local environment/key files and runtime variables are excluded. Inherited provisioned resource/service bindings and absolute configuration paths are rejected. Current Fusion Table needs no D1, R2 or service binding.
+This needs the standard `tar` command and creates `releases/fusion-table-v0.2.1-cloudflare-worker.tar.gz` plus its checksum. It includes the compiled server/client and an independent deployment README/configuration. Original Site metadata, Worker name, account routing, local environment/key files and runtime variables are excluded. Inherited provisioned resource/service bindings and absolute configuration paths are rejected. Current Fusion Table needs no D1, R2 or service binding.
 
 The compiled archive is for deployment; use the source ZIP for editing or building another app. Cloudflare's Vite plugin may copy `.dev.vars` into build output, so do not share an arbitrary manually zipped `dist/` containing local settings. Inspect deployment bundles separately.
 
@@ -198,7 +198,7 @@ Existing releases/assets stay untouched. A 404 counts as absent only after relea
 
 | Symptom | Check |
 | --- | --- |
-| Clone or release download denied | This repository is private; ask its owner for access. |
+| Clone or release download denied | The repository and published releases are public. Check the repository URL, release tag and network/proxy settings; owner-private Sites access is separate. |
 | `pnpm` missing/wrong version | Install pnpm 11.25.0 and use supported Node. |
 | Deployment cannot find build output | Run `pnpm build` before the deployment helper. |
 | Ingredient-led choice is rejected | Select a compatible main, diet and method; that builder does not silently exchange the main. |

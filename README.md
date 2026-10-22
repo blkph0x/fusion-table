@@ -10,7 +10,7 @@ All application source, recipe catalogs, images, server routes, tests, build too
 
 Earlier homepage preview; the current source also includes the expanded catalog and ingredient-led builder.
 
-## What's in v0.2.0
+## What's in v0.2.1
 
 - **28 classics × 24 regions = 672 classic/region pairings**, with all **5 dietary preferences** supported: **3,360 classic/region/diet configurations** before servings, heat and pantry choices.
 - The original **8 classics, 8 regions and 5 diets remain available**, with 20 new barbecue/smoking classics and 16 new regional profiles added.
@@ -94,7 +94,7 @@ Local discovery searches a **1–25 km straight-line radius** around a selected 
 
 ## Clone and run
 
-The GitHub repository is currently **private**. You need access granted by its owner to clone it or download releases. An authorised source-release ZIP can also be extracted and built without Git.
+The [GitHub repository](https://github.com/blkph0x/fusion-table) and [published release downloads](https://github.com/blkph0x/fusion-table/releases) are **public**. Anyone can clone the source or extract a source-release ZIP and build without Git. The existing hosted Sites app remains owner-private; its audience is separate from repository visibility.
 
 Requirements: **Node.js 22.13.0+** and **pnpm 11.25.0**. Install the pinned package manager if necessary:
 

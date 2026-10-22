@@ -112,7 +112,7 @@ Recipe composition sends no data to a remote recipe service. Map providers recei
 
 ## Builds, hosting and releases
 
-The original Sites deployment preserves its assigned project ID and private audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
+The GitHub source repository and published release assets are public. The original Sites deployment preserves its assigned project ID and owner-private audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
 
 A clean checkout selects the portable runner and resolves helpers from tracked source. Use Node 22.13.0+, pnpm 11.25.0, and the committed lockfile. Ordinary development uses `pnpm install --frozen-lockfile`, `pnpm dev`, `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`. The managed Linux installer remains separate.
 
