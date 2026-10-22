@@ -22,7 +22,7 @@ Earlier homepage preview; the current source also includes the expanded catalog 
 - The shopping list can check the Woolworths online catalogue. A price is shown only when that catalogue returns one. It is not the shelf at your local shop, and it is not a butcher or fruit-shop board.
 - Coles blocks an automatic check. ALDI and independent butchers and fruit shops have no public price feed. You can record a price you saw. A missing price stays blank, never $0.
 - Chicken, beef, lamb and pork can use a chosen cut, including thigh or breast, ordinary beef, Angus and wagyu. The name is what to shop for. Check the packet. It is not a marble grade.
-- The phone app can make the same catalogue check when you ask, and can list nearby supermarkets, butchers and fruit shops for a known postcode. The list itself still works offline. That APK is not updated on the download link until a new build is copied there.
+- The phone app can make the same catalogue check when you ask, and can list nearby supermarkets, butchers and fruit shops for a known postcode. The list itself still works offline. The download at `/downloads/MealPlannerAU.apk` is the signed 1.1.1 build.
 
 ## What's in v0.2.4
 
