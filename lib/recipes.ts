@@ -1,5 +1,5 @@
 import type {
-  DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeOption, SpiceHeat,
+  IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeOption, SpiceHeat,
 } from "./recipe-types.ts";
 
 export type { DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeStep, SpiceHeat } from "./recipe-types.ts";

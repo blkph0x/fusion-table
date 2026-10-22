@@ -200,7 +200,7 @@ export function normalizePhoton(data: unknown): LocationResult[] {
 const SERVICE_STATION = /\b(petrol|diesel|fuel|servo|service station|truck stop|ampol|caltex|\bbp\b|shell|mobil|united petroleum|7-?eleven|coles express|reddy express|\botr\b|eg australia|puma energy|liberty oil|nightowl)\b/i;
 
 /** Service stations are not useful grocery stops. A convenience tag alone is not a supermarket. */
-export function isUsefulFoodShop(name: string, tags: Record<string, unknown>, kind: ShopKind): boolean {
+export function isUsefulFoodShop(name: string, tags: Record<string, unknown>, _kind: ShopKind): boolean {
   if (tags.amenity === "fuel" || tags.fuel === "yes" || tags.shop === "fuel") return false;
   if (SERVICE_STATION.test(name)) return false;
   if (tags.shop === "convenience") {

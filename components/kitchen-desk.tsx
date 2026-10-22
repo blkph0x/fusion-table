@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Star } from "lucide-react";
 import { VERDICTS, isConsumable, makeRecipe, pantryKey, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
 
@@ -33,7 +33,6 @@ export function KitchenDesk({
   }, [ingredients, pantry]);
   const [owned, setOwned] = useState<Set<string>>(initial);
   const [message, setMessage] = useState("");
-  useEffect(() => { setOwned(initial); }, [initial]);
 
   function cook() {
     const lines: UseLine[] = ingredients.map((item) => ({
