@@ -20,12 +20,26 @@ export interface WeekPlanInput {
   constraints?: RecipeConstraints;
   /** 1-based day locks. An unsafe lock is left empty rather than cooked. */
   locks?: { day: number; classicId: string; regionId: string }[];
+  /**
+   * Omitted: the same brief always yields the same week.
+   * Set: pick among equally good templates so the same pantry can yield a different week.
+   * Filters are not relaxed.
+   */
+  seed?: number;
+}
+
+export interface DinnerOption {
+  classicId: string;
+  regionId: string;
+  title: string;
 }
 
 export interface PlannedDinner {
   day: number;
   recipe: Recipe | null;
   reason?: string;
+  /** Other matching templates for this night. Filters are not relaxed. */
+  options: DinnerOption[];
 }
 
 export interface WeekShoppingLine {
@@ -90,11 +104,88 @@ function pairKey(classicId: string, regionId: string): string {
   return `${classicId}:${regionId}`;
 }
 
-export function planWeek(input: WeekPlanInput): WeekPlan {
+type Slot = {
+  kind: "classic" | "meal";
+  classicId: string;
+  regionId: string;
+  anchor: string;
+  mainId?: string;
+  methodId?: string;
+  sideId?: string;
+};
+
+type Usage = {
+  pair: Map<string, number>;
+  anchor: Map<string, number>;
+  kind: Map<string, number>;
+  region: Map<string, number>;
+};
+
+type Prepared = {
+  input: WeekPlanInput;
+  days: number;
+  seed?: number;
+  locks: Map<number, { classicId: string; regionId: string }>;
+  constraints: RecipeConstraints;
+  diet: DietId;
+  avoidList: string[];
+  eligible: Slot[];
+  candidate: (slot: Slot) => { recipe: Recipe | null; reason?: string };
+};
+
+function mix(seed: number, classicId: string, regionId: string): number {
+  let hash = seed >>> 0;
+  const text = `${classicId}\0${regionId}`;
+  for (let i = 0; i < text.length; i += 1) hash = Math.imul(hash ^ text.charCodeAt(i), 16777619) >>> 0;
+  return hash;
+}
+
+function emptyUsage(): Usage {
+  return { pair: new Map(), anchor: new Map(), kind: new Map(), region: new Map() };
+}
+
+function remember(usage: Usage, slot: Slot) {
+  const key = pairKey(slot.classicId, slot.regionId);
+  usage.pair.set(key, (usage.pair.get(key) ?? 0) + 1);
+  usage.anchor.set(slot.anchor, (usage.anchor.get(slot.anchor) ?? 0) + 1);
+  usage.kind.set(slot.kind, (usage.kind.get(slot.kind) ?? 0) + 1);
+  usage.region.set(slot.regionId, (usage.region.get(slot.regionId) ?? 0) + 1);
+}
+
+function slotFromRecipe(recipe: Recipe): Slot {
+  const kind = recipe.kind === "meal" ? "meal" : "classic";
+  return {
+    kind,
+    classicId: recipe.classicId,
+    regionId: recipe.regionId,
+    anchor: kind === "meal" ? recipe.mainId || recipe.classicId : recipe.classicId,
+    mainId: recipe.mainId,
+    methodId: recipe.methodId,
+    sideId: recipe.sideId,
+  };
+}
+
+/** Same spread as before. A seed only changes which template wins a tie. */
+function rank(eligible: Slot[], usage: Usage, seed: number | undefined): Slot[] {
+  return eligible.slice().sort((a, b) =>
+    (usage.pair.get(pairKey(a.classicId, a.regionId)) ?? 0) - (usage.pair.get(pairKey(b.classicId, b.regionId)) ?? 0)
+    || (usage.kind.get(a.kind) ?? 0) - (usage.kind.get(b.kind) ?? 0)
+    || (usage.anchor.get(a.anchor) ?? 0) - (usage.anchor.get(b.anchor) ?? 0)
+    || (usage.region.get(a.regionId) ?? 0) - (usage.region.get(b.regionId) ?? 0)
+    || (seed == null ? 0 : mix(seed, a.classicId, a.regionId) - mix(seed, b.classicId, b.regionId))
+    || a.regionId.localeCompare(b.regionId)
+    || a.classicId.localeCompare(b.classicId)
+  );
+}
+
+function prepare(input: WeekPlanInput): Prepared {
   if (!input || typeof input !== "object") throw new Error("A week brief is required.");
   const days = input.days ?? 7;
   if (!Number.isInteger(days) || days < 1 || days > 14) throw new Error("Choose between 1 and 14 days.");
   if (!Number.isInteger(input.servings) || input.servings < 1 || input.servings > 12) throw new Error("Choose between 1 and 12 whole servings.");
+  if (input.seed != null && (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff)) {
+    throw new Error("Choose a whole-number seed.");
+  }
   const avoidList = (input.avoidAllergens ?? []).map(normalise).filter(Boolean);
   if (avoidList.some((name) => !AVOID.has(name))) throw new Error("Use a supported allergen name.");
   const avoid = new Set(avoidList);
@@ -114,15 +205,6 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
     locks.set(lock.day, { classicId: lock.classicId, regionId: lock.regionId });
   }
 
-  type Slot = {
-    kind: "classic" | "meal";
-    classicId: string;
-    regionId: string;
-    anchor: string;
-    mainId?: string;
-    methodId?: string;
-    sideId?: string;
-  };
   const slots: Slot[] = [
     ...CLASSICS.flatMap((classic) => REGIONS.map((region) => ({
       kind: "classic" as const, classicId: classic.id, regionId: region.id, anchor: classic.id,
@@ -161,52 +243,40 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
     return result;
   }
 
-  const eligible = slots.filter((slot) => candidate(slot).recipe);
-  const usedPair = new Map<string, number>();
-  const usedAnchor = new Map<string, number>();
-  const usedKind = new Map<string, number>();
-  const usedRegion = new Map<string, number>();
-  const planned: PlannedDinner[] = [];
+  return {
+    input, days, seed: input.seed, locks, constraints, diet, avoidList,
+    eligible: slots.filter((slot) => candidate(slot).recipe),
+    candidate,
+  };
+}
 
-  for (let day = 1; day <= days; day += 1) {
-    const lock = locks.get(day);
-    if (lock) {
-      const chosen = candidate({ kind: "classic", classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId });
-      if (!chosen.recipe) {
-        planned.push({ day, recipe: null, reason: `Locked choice does not match your recorded filters (${chosen.reason}) and was not replaced.` });
-        continue;
-      }
-      planned.push({ day, recipe: chosen.recipe });
-      const key = pairKey(lock.classicId, lock.regionId);
-      usedPair.set(key, (usedPair.get(key) ?? 0) + 1);
-      usedAnchor.set(lock.classicId, (usedAnchor.get(lock.classicId) ?? 0) + 1);
-      usedKind.set("classic", (usedKind.get("classic") ?? 0) + 1);
-      usedRegion.set(lock.regionId, (usedRegion.get(lock.regionId) ?? 0) + 1);
-      continue;
-    }
-    if (eligible.length === 0) {
-      planned.push({ day, recipe: null, reason: "No template matches your recorded filters." });
-      continue;
-    }
-    const pair = eligible.slice().sort((a, b) =>
-      (usedPair.get(pairKey(a.classicId, a.regionId)) ?? 0) - (usedPair.get(pairKey(b.classicId, b.regionId)) ?? 0)
-      || (usedKind.get(a.kind) ?? 0) - (usedKind.get(b.kind) ?? 0)
-      || (usedAnchor.get(a.anchor) ?? 0) - (usedAnchor.get(b.anchor) ?? 0)
-      || (usedRegion.get(a.regionId) ?? 0) - (usedRegion.get(b.regionId) ?? 0)
-      || a.regionId.localeCompare(b.regionId)
-      || a.classicId.localeCompare(b.classicId)
-    )[0];
-    const chosen = candidate(pair);
-    planned.push({ day, recipe: chosen.recipe });
-    const key = pairKey(pair.classicId, pair.regionId);
-    usedPair.set(key, (usedPair.get(key) ?? 0) + 1);
-    usedAnchor.set(pair.anchor, (usedAnchor.get(pair.anchor) ?? 0) + 1);
-    usedKind.set(pair.kind, (usedKind.get(pair.kind) ?? 0) + 1);
-    usedRegion.set(pair.regionId, (usedRegion.get(pair.regionId) ?? 0) + 1);
+function suggest(prepared: Prepared, planned: PlannedDinner[], day: number): DinnerOption[] {
+  if (prepared.locks.has(day)) return [];
+  const usage = emptyUsage();
+  for (const other of planned) {
+    if (other.day === day || !other.recipe) continue;
+    remember(usage, slotFromRecipe(other.recipe));
   }
+  const current = planned.find((item) => item.day === day)?.recipe;
+  const options: DinnerOption[] = [];
+  for (const slot of rank(prepared.eligible, usage, prepared.seed)) {
+    if (current && slot.classicId === current.classicId && slot.regionId === current.regionId) continue;
+    const recipe = prepared.candidate(slot).recipe;
+    if (!recipe) continue;
+    options.push({ classicId: slot.classicId, regionId: slot.regionId, title: recipe.title });
+    if (options.length === 3) break;
+  }
+  return options;
+}
 
+function withOptions(prepared: Prepared, planned: PlannedDinner[]): PlannedDinner[] {
+  return planned.map((day) => ({ ...day, options: day.recipe ? suggest(prepared, planned, day.day) : [] }));
+}
+
+function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
+  const days = withOptions(prepared, planned);
   const shopping = new Map<string, WeekShoppingLine>();
-  for (const day of planned) {
+  for (const day of days) {
     if (!day.recipe) continue;
     for (const item of day.recipe.ingredients) {
       if (item.inPantry) continue;
@@ -222,27 +292,93 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
       }
     }
   }
-
-  const unfilledDays = planned.filter((day) => !day.recipe).map((day) => day.day);
+  const unfilledDays = days.filter((day) => !day.recipe).map((day) => day.day);
   const notes = [WEEK_NOTE];
   if (unfilledDays.length > 0) {
     notes.push(`No plan found with available templates for day ${unfilledDays.join(", ")}. Hard filters stay in place. This is not a proof that no recipe exists.`);
   } else {
     notes.push("Dinners mix classic remixes and ingredient-led plates, including each region's staple food. This is the best spread of those templates, not a claim that no other meal exists.");
   }
+  if (prepared.seed != null) {
+    notes.push("This is one matching spread. Plan again, or randomise one dinner, for a different meal. Hard filters stay in place.");
+  }
   notes.push("Shop suggestions elsewhere in Fusion Table are places to ask. Stock and prices stay unverified.");
+  const { constraints, diet, avoidList } = prepared;
   if (constraints.glutenFree && diet !== "gluten-free") notes.push("Wheat, gluten, or oat filters use the gluten-free template, including burger mix without ordinary oats.");
   if (constraints.dairyFree && diet !== "dairy-free" && diet !== "vegan") notes.push("A milk filter uses the dairy-free template. It does not add a price.");
   if (constraints.eggFree && !constraints.vegan && diet !== "vegan") notes.push("An egg filter uses tofu in fried rice. Tofu is soy, so a soy filter can still refuse that day.");
   if (avoidList.some((name) => ["fish", "crustacean", "tree-nut", "peanut"].includes(name))) {
     notes.push("Fish, crustacean, and tree-nut filters remove templates that list those allergens. Peanut is not used in these templates. A template that does not list an allergen is not a packet check.");
   }
-
   return {
-    days: planned,
+    days,
     shopping: [...shopping.values()],
     notes,
     unfilledDays,
     sourceLabel: "Template-generated · not kitchen-tested",
   };
+}
+
+function requireDay(plan: WeekPlan, day: number): PlannedDinner {
+  const found = plan.days.find((item) => item.day === day);
+  if (!found) throw new Error("That day is outside this week.");
+  return found;
+}
+
+export function planWeek(input: WeekPlanInput): WeekPlan {
+  const prepared = prepare(input);
+  const usage = emptyUsage();
+  const planned: PlannedDinner[] = [];
+  for (let day = 1; day <= prepared.days; day += 1) {
+    const lock = prepared.locks.get(day);
+    if (lock) {
+      const chosen = prepared.candidate({ kind: "classic", classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId });
+      if (!chosen.recipe) {
+        planned.push({ day, recipe: null, options: [], reason: `Locked choice does not match your recorded filters (${chosen.reason}) and was not replaced.` });
+        continue;
+      }
+      planned.push({ day, recipe: chosen.recipe, options: [] });
+      remember(usage, { kind: "classic", classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId });
+      continue;
+    }
+    if (prepared.eligible.length === 0) {
+      planned.push({ day, recipe: null, options: [], reason: "No template matches your recorded filters." });
+      continue;
+    }
+    const pair = rank(prepared.eligible, usage, prepared.seed)[0];
+    planned.push({ day, recipe: prepared.candidate(pair).recipe, options: [] });
+    remember(usage, pair);
+  }
+  return assemble(prepared, planned);
+}
+
+/** Replace one night with another matching template. A locked or blocked night is left as it is. */
+export function swapDinner(input: WeekPlanInput, plan: WeekPlan, day: number): WeekPlan {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  if (prepared.locks.has(day)) return plan;
+  const usage = emptyUsage();
+  for (const other of plan.days) {
+    if (other.day === day || !other.recipe) continue;
+    remember(usage, slotFromRecipe(other.recipe));
+  }
+  const next = rank(prepared.eligible, usage, prepared.seed).find((slot) =>
+    slot.classicId !== current.recipe?.classicId || slot.regionId !== current.recipe?.regionId
+  );
+  const recipe = next ? prepared.candidate(next).recipe : null;
+  if (!recipe || recipe.id === current.recipe?.id) return plan;
+  const planned = plan.days.map((item) => item.day === day ? { day, recipe, options: [], reason: undefined } : item);
+  return assemble(prepared, planned);
+}
+
+/** Use one of the offered templates. A choice that fails the recorded filters is not cooked. */
+export function chooseDinner(input: WeekPlanInput, plan: WeekPlan, day: number, classicId: string, regionId: string): WeekPlan {
+  const prepared = prepare(input);
+  requireDay(plan, day);
+  if (prepared.locks.has(day)) return plan;
+  const slot = prepared.eligible.find((item) => item.classicId === classicId && item.regionId === regionId);
+  const recipe = slot ? prepared.candidate(slot).recipe : null;
+  if (!recipe) return plan;
+  const planned = plan.days.map((item) => item.day === day ? { day, recipe, options: [], reason: undefined } : item);
+  return assemble(prepared, planned);
 }

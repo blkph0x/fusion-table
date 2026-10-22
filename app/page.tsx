@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCheck, ChefHat, ChevronDown, ChevronRight, Clock3, Compass, Download, ExternalLink, Globe2, Heart, Leaf, LoaderCircle, LocateFixed, MapPin, Menu, Minus, Navigation, Plus, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Sprout, Star, Store, Utensils, Users, Wheat, X } from "lucide-react";
 import { CLASSICS, REGIONS, DIETS, generateRecipe } from "@/lib/recipes";
-import { planWeek, type WeekPlan } from "@/lib/planner";
+import { chooseDinner, planWeek, swapDinner, type WeekPlan } from "@/lib/planner";
 import type { Recipe, DietId, SpiceHeat } from "@/lib/recipe-types";
 import { SHOP_LABELS, type LocationResult, type Shop, type ShopKind, type ShopResponse } from "@/lib/locations";
 import { fetchLocationResults, fetchNearbyShops } from "@/lib/location-client";
@@ -39,6 +39,14 @@ function productSearch(shop: Shop, ingredient: string, place: string) {
   if (name.includes("woolworths")) return `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(ingredient)}`;
   if (name.includes("coles")) return `https://www.coles.com.au/search?q=${encodeURIComponent(ingredient)}`;
   return `https://www.google.com/search?q=${encodeURIComponent(`${shop.name} ${place} ${ingredient}`)}`;
+}
+function freshSeed(): number {
+  const buf = new Uint32Array(1);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(buf);
+    return buf[0];
+  }
+  return Math.floor(Math.random() * 0x100000000);
 }
 function downloadFile(filename: string, text: string, type: string) {
   const href = URL.createObjectURL(new Blob([text], { type }));
@@ -220,12 +228,34 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     setRecipe(next); setNotes(entry?.notes || ""); setRating(stars); setTested(entry?.tested || false);
     if (stars > 0) setRatings((current) => current[recipeKey(next)] === stars ? current : { ...current, [recipeKey(next)]: stars });
   }
+  function weekBrief(seed: number) {
+    const dislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
+    return { days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes, seed };
+  }
   function buildWeek(event?: FormEvent) {
     event?.preventDefault(); setWeekError("");
+    try { setWeek(planWeek(weekBrief(freshSeed()))); }
+    catch (error) { setWeekError(error instanceof Error ? error.message : "The week could not be planned."); }
+  }
+  function randomiseDay(day: number) {
+    if (!week) return;
+    setWeekError("");
     try {
-      const dislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
-      setWeek(planWeek({ days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes }));
-    } catch (error) { setWeekError(error instanceof Error ? error.message : "The week could not be planned."); }
+      const next = swapDinner(weekBrief(freshSeed()), week, day);
+      const before = week.days.find((item) => item.day === day)?.recipe?.id;
+      setWeek(next);
+      if (next.days.find((item) => item.day === day)?.recipe?.id === before) setWeekError("No other template matches your filters for that day. Filters stay in place.");
+    } catch (error) { setWeekError(error instanceof Error ? error.message : "That dinner could not be changed."); }
+  }
+  function pickDinner(day: number, classicIdToUse: string, regionIdToUse: string) {
+    if (!week) return;
+    setWeekError("");
+    try {
+      const before = week.days.find((item) => item.day === day)?.recipe?.id;
+      const next = chooseDinner(weekBrief(freshSeed()), week, day, classicIdToUse, regionIdToUse);
+      setWeek(next);
+      if (next.days.find((item) => item.day === day)?.recipe?.id === before) setWeekError("That choice does not match your recorded filters, so it was not used.");
+    } catch (error) { setWeekError(error instanceof Error ? error.message : "That dinner could not be changed."); }
   }
   function openPlanned(recipeToOpen: Recipe) {
     setRecipe(recipeToOpen);
@@ -316,7 +346,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
         <div className="benefit-strip"><span><Globe2 size={19} /> {CLASSICS.length} classics and regional plates</span><span><SlidersHorizontal size={19} /> Filters stay in place</span><span><ShoppingBasket size={19} /> One shopping list</span></div>
         <div className="page-width">{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">EXAMPLES</span><h2>A few plates to start from.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={item.image} alt={item.title} loading="lazy" /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Open template</span></div></button>)}</div></section><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">LOCAL SHOPS</span><h2>Supermarkets and food shops near you.</h2><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is added.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find local shops <ArrowRight size={16} /></button></section></div></>}
       {view === "studio" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><ChefHat size={15} /> RECIPE STUDIO</span><h1>Build a recipe.</h1><p>Pick a classic or a main, set servings and diet, then tick what you already have.</p></div>{studio()}{recipeDetail()}</div>}
-      {view === "week" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><CalendarDays size={15} /> WEEK PLAN</span><h1>Plan the dinners.</h1><p>Choose how many dinners, then plan from the templates. Tick what is already at home on each recipe. The list below is only what the pantry does not cover. Nothing here has a shelf price.</p></div>
+      {view === "week" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><CalendarDays size={15} /> WEEK PLAN</span><h1>A different week each time.</h1><p>The same pantry can lead to different dinners. Plan the week, pick another idea, or press Randomise. Filters stay in place. Templates are not kitchen-tested. Check the packet. Nothing here has a shelf price.</p></div>
         <form className="week-layout" onSubmit={buildWeek}>
           <div className="week-controls">
             <label>Days<input type="number" min={1} max={14} value={weekDays} onChange={(event) => setWeekDays(Math.max(1, Math.min(14, Number(event.target.value) || 1)))} /></label>
@@ -324,12 +354,12 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
             <button className="button primary" type="submit"><CalendarDays size={17} /> Plan my week</button>
           </div>
           <div className="avoid-row" role="group" aria-label="Allergens to avoid">{AVOID_CHOICES.map((name) => <label key={name} className="text-button"><input type="checkbox" checked={avoidAllergens.includes(name)} onChange={() => setAvoidAllergens((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name])} /> {name}</label>)}</div>
-          <p className="subtle-small">Uses the diet, spice, servings and pantry from Recipe studio. Wheat or gluten uses the gluten-free template. A recorded allergen is left out rather than cooked around. Check the packet. These plates are template-generated and not kitchen-tested.</p>
+          <p className="subtle-small">Uses the diet, spice, servings and pantry from Recipe studio. Press Plan my week again for a different spread. Wheat or gluten uses the gluten-free template. A recorded allergen is left out rather than cooked around. Check the packet. These plates are template-generated and not kitchen-tested.</p>
           {weekError && <p className="error-message" role="alert">{weekError}</p>}
         </form>
         {week && weekShortfalls(pantry, week.shopping).length > 0 && <ul className="week-notes">{weekShortfalls(pantry, week.shopping).map((warning) => <li key={warning}>{warning}</li>)}</ul>}
         {week && <button className="button secondary" type="button" onClick={() => { const tracked = rememberConsumables(pantry, week.shopping); setPantry(tracked); setBuyList(weekNeeds(tracked, week.shopping)); setCookNote("Shopping list updated from the week. Oils, butter and flour stay on the pantry list. No shelf price is on file."); shoppingView(); }}>Shop what the pantry does not cover</button>}
-        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => <article key={day.day} className="week-day"><h3>Day {day.day}</h3>{day.recipe ? <><p><strong>{day.recipe.title}</strong></p><p>{day.recipe.sourceLabel}. {day.recipe.allergens.length ? `Lists ${day.recipe.allergens.join(", ")}.` : "No allergen is listed on this template."} Check the packet.</p><button className="text-button" type="button" onClick={() => openPlanned(day.recipe!)}>Open recipe <ArrowRight size={14} /></button></> : <p>{day.reason}</p>}</article>)}</div>
+        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => <article key={day.day} className="week-day"><h3>Day {day.day}</h3>{day.recipe ? <><p><strong>{day.recipe.title}</strong></p><p>{day.recipe.sourceLabel}. {day.recipe.allergens.length ? `Lists ${day.recipe.allergens.join(", ")}.` : "No allergen is listed on this template."} Check the packet.</p><div className="week-day-actions"><button className="text-button" type="button" onClick={() => openPlanned(day.recipe!)}>Open recipe <ArrowRight size={14} /></button><button className="text-button" type="button" onClick={() => randomiseDay(day.day)}>Randomise</button></div>{day.options.length > 0 && <div className="week-options"><span>Or try</span>{day.options.map((option) => <button key={`${option.classicId}:${option.regionId}`} type="button" onClick={() => pickDinner(day.day, option.classicId, option.regionId)}>{option.title}</button>)}</div>}</> : <p>{day.reason}</p>}</article>)}</div>
           <section><h2>Still to buy</h2><p className="subtle-small">Amounts the pantry does not cover. Oils, butter and flour are kept on the pantry list. No shelf price is on file.</p>{weekNeeds(pantry, week.shopping).length === 0 ? <p>The pantry covers this week.</p> : <ul>{weekNeeds(pantry, week.shopping).map((line) => <li key={`${line.id}-${line.unit}`}>{line.name} — {amount(line.amount, line.unit)}. {line.reason}</li>)}</ul>}</section>
           <ul className="week-notes">{week.notes.map((note) => <li key={note}>{note}</li>)}</ul>
           <button className="button secondary" type="button" onClick={() => downloadFile("fusion-table-week.json", JSON.stringify(week, null, 2), "application/json")}><Download size={16} /> Download week</button>

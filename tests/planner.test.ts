@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { planWeek } from "../lib/planner.ts";
+import { chooseDinner, planWeek, swapDinner } from "../lib/planner.ts";
 import { generateRecipe } from "../lib/recipes.ts";
 
 describe("fusion week planner", () => {
@@ -73,5 +73,58 @@ describe("fusion week planner", () => {
     assert.throws(() => planWeek({ days: 0, servings: 4 }));
     assert.throws(() => planWeek({ days: 15, servings: 4 }));
     assert.throws(() => planWeek({ days: 7, servings: 4, locks: [{ day: 8, classicId: "pasta", regionId: "thai" }] }));
+    assert.throws(() => planWeek({ days: 1, servings: 1, seed: 1.5 }));
+    assert.throws(() => planWeek({ days: 1, servings: 1, seed: -1 }));
+  });
+
+  it("keeps an unseeded week stable and lets a seed change the dinners", () => {
+    const ids = (seed?: number) => planWeek({ days: 7, servings: 4, seed }).days.map((day) => day.recipe?.id);
+    const stable = ids();
+    assert.deepEqual(stable, ids());
+    const seeded = [1, 2, 3, 4, 5].map((seed) => ids(seed));
+    assert.ok(seeded.some((row) => row.join("|") !== stable.join("|")));
+    assert.deepEqual(seeded[0], ids(1));
+    const varied = planWeek({ days: 7, servings: 4, seed: 1 });
+    assert.equal(new Set(varied.days.map((day) => day.recipe?.id)).size, 7);
+    assert.ok(varied.days.some((day) => day.recipe?.kind === "meal"));
+    assert.ok(varied.days.some((day) => day.recipe?.kind !== "meal"));
+    assert.ok(varied.days.every((day) => day.options.length === 3));
+    assert.ok(varied.days.every((day) => day.options.every((option) => option.classicId !== day.recipe?.classicId || option.regionId !== day.recipe?.regionId)));
+    assert.ok(varied.notes.some((note) => note.includes("one matching spread")));
+    const swapped = swapDinner({ days: 7, servings: 4, seed: 9 }, varied, 1);
+    assert.notEqual(swapped.days[0].recipe?.id, varied.days[0].recipe?.id);
+    assert.deepEqual(swapped.days.slice(1).map((day) => day.recipe?.id), varied.days.slice(1).map((day) => day.recipe?.id));
+    const option = varied.days[2].options[0];
+    const chosen = chooseDinner({ days: 7, servings: 4, seed: 9 }, varied, 3, option.classicId, option.regionId);
+    assert.equal(chosen.days[2].recipe?.classicId, option.classicId);
+    assert.equal(chosen.days[2].recipe?.regionId, option.regionId);
+    assert.equal(chosen.days[0].recipe?.id, varied.days[0].recipe?.id);
+  });
+
+  it("does not relax filters when a seed or a randomise asks for another meal", () => {
+    const sesame = planWeek({ days: 7, servings: 4, avoidAllergens: ["sesame"], seed: 11 });
+    assert.ok(sesame.days.every((day) => !day.recipe?.allergens.includes("sesame")));
+    const offered = sesame.days[0].options[0];
+    const picked = chooseDinner({ days: 7, servings: 4, avoidAllergens: ["sesame"], seed: 12 }, sesame, 1, offered.classicId, offered.regionId);
+    assert.ok(!picked.days[0].recipe?.allergens.includes("sesame"));
+    const swapped = swapDinner({ days: 7, servings: 4, avoidAllergens: ["sesame"], seed: 12 }, sesame, 1);
+    assert.ok(swapped.days.every((day) => !day.recipe?.allergens.includes("sesame")));
+    const refused = chooseDinner(
+      { days: 7, servings: 4, avoidAllergens: ["sesame"], seed: 12 },
+      sesame, 1, "pasta", "japanese",
+    );
+    assert.equal(refused.days[0].recipe?.id, sesame.days[0].recipe?.id);
+    const locked = planWeek({
+      days: 2, servings: 4, avoidAllergens: ["sesame"], seed: 4,
+      locks: [{ day: 1, classicId: "pasta", regionId: "japanese" }],
+    });
+    const stillLocked = swapDinner({
+      days: 2, servings: 4, avoidAllergens: ["sesame"], seed: 8,
+      locks: [{ day: 1, classicId: "pasta", regionId: "japanese" }],
+    }, locked, 1);
+    assert.equal(stillLocked.days[0].recipe, null);
+    assert.match(stillLocked.days[0].reason || "", /not replaced/);
+    const blocked = planWeek({ days: 3, servings: 4, dislikes: ["garlic"], seed: 6 });
+    assert.deepEqual(blocked.unfilledDays, [1, 2, 3]);
   });
 });

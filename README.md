@@ -2,13 +2,18 @@
 
 **Familiar classics, proper barbecue methods, regional flavour and nearby places to shop.**
 
-Fusion Table is a responsive cooking website built from deterministic, authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions and a browser-local cookbook. Identical inputs produce identical recipes. There is no runtime language model, model-generated recipe endpoint or random recipe generator.
+Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions and a browser-local cookbook. The same classic, region, diet, servings, heat and pantry still produce the same recipe. A week plan can vary: the same filters and pantry can be arranged as different dinners, and each night offers a few other matching templates. There is no runtime language model and no model-generated recipe endpoint. A different week is another choice among those templates, not a new recipe.
 
 All application source, recipe catalogs, images, server routes, tests, build tooling and lockfiles are included in this repository.
 
 ![Fusion Table homepage](docs/images/fusion-table-preview-1792653198544.jpg)
 
 Earlier homepage preview; the current source also includes the expanded catalog and ingredient-led builder.
+
+## What's in v0.2.4
+
+- Plan my week again and the dinners change, even with the same pantry and filters. Each night shows a few other matching templates, and Randomise swaps that night only.
+- Filters are not relaxed. A recorded allergen or hard dislike is still left out. Templates stay labelled “Template-generated · not kitchen-tested”.
 
 ## What's in v0.2.3
 
