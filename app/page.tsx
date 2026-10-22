@@ -333,7 +333,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
           <section><h2>Still to buy</h2><p className="subtle-small">Amounts the pantry does not cover. Oils, butter and flour are kept on the pantry list. No shelf price is on file.</p>{weekNeeds(pantry, week.shopping).length === 0 ? <p>The pantry covers this week.</p> : <ul>{weekNeeds(pantry, week.shopping).map((line) => <li key={`${line.id}-${line.unit}`}>{line.name} — {amount(line.amount, line.unit)}. {line.reason}</li>)}</ul>}</section>
           <ul className="week-notes">{week.notes.map((note) => <li key={note}>{note}</li>)}</ul>
           <button className="button secondary" type="button" onClick={() => downloadFile("fusion-table-week.json", JSON.stringify(week, null, 2), "application/json")}><Download size={16} /> Download week</button>
-        </div>}
+        </div></div>}
       {view === "shops" && <div className="page-width inner-page shops-page">
         <div className="page-intro split-intro"><div><span className="eyebrow"><MapPin size={15} /> LOCAL SHOPS</span><h1>Shops for this list.</h1><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is included.</p></div>{recipe && <div className="shopping-for"><span>ON YOUR MENU</span><strong>{recipe.title}</strong><button className="text-button" onClick={() => navigate("studio")}>Back to recipe <ArrowRight size={14} /></button></div>}</div>
         <div className="location-toolbar">
