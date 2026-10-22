@@ -142,10 +142,12 @@ async function request<T>(path: string, validate: (value: unknown) => value is T
   }
 }
 
+const apiPrefix = (process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "");
+
 /** Submitted searches only: no third-party requests or credentials in the client. */
 export function fetchLocationResults(query: string, signal?: AbortSignal): Promise<LocationsResponse> {
   const params = new URLSearchParams({ q: query.trim() });
-  return request(`/api/locations?${params}`, locationsResponse, "locations", signal);
+  return request(`${apiPrefix}/api/locations?${params}`, locationsResponse, "locations", signal);
 }
 
 /** Keep the selected centre and radius attached to the matching response. */
@@ -153,5 +155,5 @@ export function fetchNearbyShops(place: { lat: number; lon: number }, radiusKm: 
   const params = new URLSearchParams({ lat: String(place.lat), lon: String(place.lon), radiusKm: String(radiusKm) });
   const matchesRequest = (value: unknown): value is ShopResponse => shopResponse(value) &&
     value.location.lat === place.lat && value.location.lon === place.lon && value.radiusKm === radiusKm;
-  return request(`/api/shops?${params}`, matchesRequest, "shops", signal);
+  return request(`${apiPrefix}/api/shops?${params}`, matchesRequest, "shops", signal);
 }
