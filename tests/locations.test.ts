@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 // Node's native TypeScript loader requires a .ts URL; keeping it dynamic also
 // lets the app's bundler type-check this file without changing compiler options.
 const source = new URL("../lib/locations.ts", import.meta.url).href;
-const { distanceKm, validateShopSearch, validateLocationQuery, normalizePhoton, normalizeOverpass, normalizePhotonShops, safeWebsite, buildOverpassQuery } = await import(source);
+const { distanceKm, validateShopSearch, validateLocationQuery, normalizePhoton, normalizeOverpass, normalizePhotonShops, safeWebsite, buildOverpassQuery, isUsefulFoodShop } = await import(source);
 
 test("radius and coordinates cannot escape the bounded numeric query", () => {
   assert.deepEqual(validateShopSearch({ lat: "-33.9", lon: "151.18", radiusKm: "5" }), { lat: -33.9, lon: 151.18, radiusKm: 5 });
@@ -17,6 +17,22 @@ test("radius and coordinates cannot escape the bounded numeric query", () => {
   assert.throws(() => validateShopSearch({ lat: 91, lon: 0, radiusKm: 5 }));
   assert.throws(() => validateShopSearch({ lat: 0, lon: 181, radiusKm: 5 }));
   assert.match(buildOverpassQuery({ lat: -33.9, lon: 151.18, radiusKm: 5 }), /around:5000,-33\.9,151\.18/);
+});
+
+test("service stations and unnamed convenience shops are not offered as grocery stops", () => {
+  assert.equal(isUsefulFoodShop("BP", { shop: "convenience", fuel: "yes" }, "grocery"), false);
+  assert.equal(isUsefulFoodShop("Reddy Express", { shop: "convenience" }, "grocery"), false);
+  assert.equal(isUsefulFoodShop("Coles Express", { shop: "convenience" }, "grocery"), false);
+  assert.equal(isUsefulFoodShop("EG Australia", { amenity: "fuel" }, "grocery"), false);
+  assert.equal(isUsefulFoodShop("Woolworths", { shop: "supermarket" }, "supermarket"), true);
+  assert.equal(isUsefulFoodShop("IGA", { shop: "convenience" }, "grocery"), true);
+  const result = normalizeOverpass({ elements: [
+    { type: "node", id: 1, lat: 0, lon: 0, tags: { shop: "convenience", name: "BP Shop", fuel: "yes" } },
+    { type: "node", id: 2, lat: 0, lon: 0, tags: { shop: "supermarket", name: "Woolworths" } },
+    { type: "node", id: 3, lat: 0, lon: 0, tags: { shop: "convenience", name: "NightOwl" } },
+  ] }, { lat: 0, lon: 0, radiusKm: 5 });
+  assert.deepEqual(result.shops.map((shop) => shop.name), ["Woolworths"]);
+  assert.doesNotMatch(buildOverpassQuery({ lat: 0, lon: 0, radiusKm: 5 }), /convenience/);
 });
 
 test("geodesic distance handles identical points, dateline and antipodes", () => {

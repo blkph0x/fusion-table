@@ -1,6 +1,7 @@
 import type { DietId, IngredientCategory, RecipeIngredient, RecipeStep, SpiceHeat } from "./recipe-types.ts";
 import type { MainIngredientOption, MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
 import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMainsForDiet } from "./meal-catalog.ts";
+import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
@@ -55,7 +56,13 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   if (!MEAL_SIDES.some((item) => item.id === sideId)) throw new Error("Choose a recognised side pairing.");
   const diet = input.diet ?? "balanced";
   if (!DIET_IDS.includes(diet)) throw new Error("Choose a recognised dietary preference.");
+  const requested = input.constraints ?? {};
+  if (requested === null || typeof requested !== "object" || Array.isArray(requested)) throw new Error("Dietary constraints must be a set of flags.");
+  const dairyFree = diet === "dairy-free" || diet === "vegan" || requested.dairyFree === true;
+  const eggFree = diet === "vegan" || requested.eggFree === true;
   if (!getMainsForDiet(diet).some((item) => item.id === main.id)) throw new Error(`${main.name} does not fit the ${diet} preference. Select a compatible main ingredient.`);
+  if (dairyFree && main.id === "halloumi") throw new Error(`${main.name} does not fit the dairy-free preference. Select a compatible main ingredient.`);
+  if (eggFree && main.id === "eggs") throw new Error("Eggs do not fit an egg-free preference. Select a compatible main ingredient.");
   const spiceHeat = input.spiceHeat ?? "medium";
   if (!HEAT_IDS.includes(spiceHeat)) throw new Error("Choose mild, medium or hot.");
   if (!Number.isInteger(input.servings) || input.servings < 1 || input.servings > 12) throw new Error("Servings must be a whole number between 1 and 12.");
@@ -77,8 +84,8 @@ function describe(items: readonly DraftIngredient[], servings: number): string {
   return items.map((item) => `${amount(item.amount, servings)}${item.unit ? ` ${item.unit}` : ""} ${item.name.toLocaleLowerCase("en")}`).join(", ");
 }
 
-function regionalProfile(regionId: string, diet: DietId, heat: SpiceHeat): RegionProfile {
-  const gf = diet === "gluten-free";
+function regionalProfile(regionId: string, glutenFree: boolean, heat: SpiceHeat): RegionProfile {
+  const gf = glutenFree;
   const hot = { mild: 0.25, medium: 1, hot: 1.75 }[heat];
   const garlic = ingredient("garlic", "Garlic", 15, "g", "produce", [], "Peeled and finely minced.", ["garlic cloves"]);
   const ginger = ingredient("ginger", "Fresh ginger", 15, "g", "produce", [], "Peeled and finely grated.", ["ginger"]);
@@ -205,8 +212,8 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
   return { ingredient: ingredient(id, name, quantity, unit, category, allergens, preparation, main.ingredientAliases), preparation, endpoint, minutes: COOK_TIMES[id][method], ...(safetyNote ? { safetyNote, safetySource } : {}) };
 }
 
-function sidePlan(sideId: string, diet: DietId, servings: number): SidePlan {
-  const gf = diet === "gluten-free";
+function sidePlan(sideId: string, glutenFree: boolean, servings: number): SidePlan {
+  const gf = glutenFree;
   const s = (title: string, detail: string, minutes: number): RecipeStep => ({ title, detail, minutes });
   const oil = (quantity: number) => ingredient("olive-oil", "Olive oil", quantity, "tbsp", "grocery", [], undefined, ["olive oil"]);
   const lemon = ingredient("lemon-juice", "Lemon juice", 30, "ml", "produce", [], "Freshly squeezed; measure the juice.");
@@ -251,8 +258,8 @@ function mergeIngredients(drafts: readonly DraftIngredient[], servings: number, 
     const previous = merged.get(draft.id);
     if (previous) {
       if (previous.unit !== draft.unit || previous.name !== draft.name) throw new Error(`Conflicting ingredient definition: ${draft.id}`);
-      merged.set(draft.id, { ...previous, amount: previous.amount + draft.amount, allergens: [...new Set([...previous.allergens, ...draft.allergens])], aliases: [...new Set([...(previous.aliases ?? []), ...(draft.aliases ?? [])])], notes: [...new Set([previous.notes, draft.notes].filter(Boolean))].join(" ") });
-    } else merged.set(draft.id, { ...draft });
+      merged.set(draft.id, { ...previous, amount: previous.amount + draft.amount, allergens: [...new Set([...previous.allergens, ...draft.allergens].map(canonAllergen))], aliases: [...new Set([...(previous.aliases ?? []), ...(draft.aliases ?? [])])], notes: [...new Set([previous.notes, draft.notes].filter(Boolean))].join(" ") });
+    } else merged.set(draft.id, { ...draft, allergens: draft.allergens.map(canonAllergen) });
   }
   return [...merged.values()].map(({ aliases, ...entry }) => ({ ...entry, amount: Number((entry.amount * servings / 4).toFixed(4)), inPantry: [entry.name, ...(aliases ?? [])].some((term) => available.has(normalizeTerm(term))) }));
 }
@@ -261,13 +268,16 @@ function mergeIngredients(drafts: readonly DraftIngredient[], servings: number, 
 export function generateMeal(rawInput: MealInput): MealRecipe {
   const input = validateMealInput(rawInput);
   const { mainId, methodId, regionId, sideId, servings, diet, spiceHeat } = input;
+  const requested = rawInput.constraints ?? {};
+  const glutenFree = diet === "gluten-free" || requested.glutenFree === true;
+  const dairyFree = diet === "dairy-free" || diet === "vegan" || requested.dairyFree === true;
   const main = MAIN_INGREDIENTS.find((entry) => entry.id === mainId)!;
   const method = COOKING_METHODS.find((entry) => entry.id === methodId)!;
   const region = MEAL_REGIONS.find((entry) => entry.id === regionId)!;
   const plan = mainPlan(main, methodId);
-  const profile = regionalProfile(regionId, diet, spiceHeat);
-  const side = sidePlan(sideId, diet, servings);
-  const gf = diet === "gluten-free";
+  const profile = regionalProfile(regionId, glutenFree, spiceHeat);
+  const side = sidePlan(sideId, glutenFree, servings);
+  const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);
   const slowMeat = main.category === "meat" && !["chicken", "turkey"].includes(mainId) && integrated;
   const deferSides = integrated && plan.minutes > side.minutes + 5;
@@ -354,7 +364,9 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   if (deferSides) steps.push({ ...side.steps[0], title: `Near the end: ${side.steps[0].title.toLowerCase()}`, detail: `Begin this side during the final ${side.minutes} minutes of the main's simmer, once slow-cooking meat is nearly tender. ${side.steps[0].detail} Keep it hot and serve promptly with the finished main.` });
   steps.push(...side.steps.slice(1));
   steps.push({ title: "Bring the meal together", detail: `Divide the ${side.side} and ${side.vegetables} between ${servings} ${servings === 1 ? "plate" : "plates"}. Add the ${method.name.toLowerCase()} ${main.name.toLowerCase()}${integrated ? " with its sauce" : ` and ${profile.sauce}`}. ${methodId === "schnitzel" || methodId === "patties" ? "Serve the sauce beside the main to preserve its crisp surface." : "Taste the cooked sauce before adding any extra seasoning."} Serve promptly.`, minutes: 3 });
-  const recipeIngredients = mergeIngredients(ingredients, servings, input.pantry);
+  const stapled = applyStaples(ingredients, regionId, { glutenFree, dairyFree });
+  if (stapled.served.length) steps.push({ title: "Plate the regional staple", detail: stapleStep(stapled.served, `${region.name} plate`) });
+  const recipeIngredients = mergeIngredients(stapled.ingredients, servings, input.pantry);
   const allergens = [...new Set(recipeIngredients.flatMap((entry) => entry.allergens))].sort();
   // Patty prep includes any plant precook/cooling and a separate 15-minute chill.
   const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : 15;
@@ -373,7 +385,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     tags: [main.name, method.name, region.name, "Complete meal", diet, spiceHeat], allergens,
     dietaryNotes: [
       "Ingredient and allergen information is based on the specified products. Check every packet and prevent cross-contact when cooking for an allergy.",
-      ...(diet === "gluten-free" ? ["Use the explicitly gluten-free condiments, stock, crumbs, noodles or flatbread listed. The couscous side uses quinoa and its own cooking method."] : []),
+      ...(glutenFree ? ["Use the explicitly gluten-free condiments, stock, crumbs, noodles or flatbread listed. The couscous side uses quinoa and its own cooking method."] : []),
+      ...(stapled.served.length ? [`Regional staple on this plate: ${stapled.served.map((item) => item.name).join(", ")}. Template staple, not a kitchen-tested traditional dish. Check the packet.`] : []),
       ...(diet === "vegan" || diet === "vegetarian" ? ["The selected main is retained. Pastes, stock, noodles and bread are specified without animal additions; halloumi, when selected, must use vegetarian rennet."] : []),
       ...(spiceHeat === "mild" ? ["Mild reduces chilli; it does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand."] : ["Taste the sauce as it cooks; chilli and spice-blend strengths vary by brand."]),
       "Times are estimates for the specified cut and thickness. Cook sides alongside the main where equipment allows; additional batches take longer.",

@@ -28,6 +28,7 @@ This is a standalone application repository. The original [research repository](
 | `lib/locations.ts` | Location/shop types, validation, distances, normalisation and safe links. |
 | `lib/location-providers.ts` | Photon/Overpass clients, selection, timeouts, caches, cooldowns and error mapping. |
 | `lib/shopping.ts` | Conservative ingredient/shop matching and ranking. |
+| `lib/planner.ts` | Week of dinners from the template catalogue. Hard filters are never relaxed. No prices. |
 | `app/api/locations/route.ts` | Explicit location-search API. |
 | `app/api/shops/route.ts` | Bounded nearby-shop API. |
 | `tests/recipes.test.ts`, `tests/bbq-recipes.test.ts`, `tests/meals.test.ts` | Original behavior, full BBQ matrix, dietary/technique rules and ingredient-led recipes. |
@@ -57,6 +58,8 @@ The new classic set covers low-and-slow brisket, pulled protein and ribs; revers
 A vegetarian or vegan classic uses its own ingredient choices and cooking instructions. Whole cuts, minced sausages, poultry, fish and fully cooked products have different treatment. A long-cook meat version does not impose its meat cooking duration on a plant alternative. Glazes and regional sauces are prepared separately and added at the appropriate point; sugary condiments are not automatically used as a high-heat rub.
 
 Portion changes can alter the method as well as ingredient amounts. The whole-bird classic uses bone-in chicken portions for one to three servings and whole unstuffed birds for four or more, retaining a stable ingredient ID while changing its displayed product and directions. Small brisket, shoulder, rib and belly portions use covered-oven instructions instead of a large-joint outdoor smoking schedule. Quantities still scale once from the four-serving base; cooking durations follow the selected cut and method.
+
+`planWeek` asks for 1–14 dinners, default seven. It mixes classic remixes, barbecue templates, and curated ingredient-led plates, and it adds each region's staple food without duplicating a staple already on the plate. Optional constraints stack on the diet and only tighten it. Wheat, gluten, oat, barley, or rye avoidance uses the gluten-free path. An egg filter uses tofu in fried rice and says that tofu is soy. Sesame avoidance refuses templates that list sesame. A locked classic that fails a filter is left empty. The merged list omits pantry matches and has no price. Fish, crustacean, and tree-nut filters remove templates that list those allergens. Peanut is not an ingredient here. A missing allergen line is not a packet check. This is a rule over the catalogue, not a live model, and not a proof that no other meal exists.
 
 ### Smoking, grilling and cold products
 
@@ -145,6 +148,10 @@ All three images were generated with the built-in Imagegen tool for this website
 | `public/images/moroccan-traybake.png` | Editorial vegan chickpea, cauliflower and carrot traybake with lemon, herbs, cumin and paprika, in a cream dish on warm oak with sage linen, from an elevated 45-degree angle. |
 
 These images illustrate the featured pairings. They do not establish that a recipe was cooked or photographed, and their garnishes or vegetables can differ from the generated recipe. For example, the Moroccan template uses potatoes, carrots, onion and chickpeas, while the inspiration image includes cauliflower. The structured ingredient list and method are the cooking instructions.
+
+### Pantry and ratings in v0.2.3
+
+`lib/pantry.ts` keeps amounts on this device. “I’m making this” records items the visitor already has, reduces them when the meal is cooked, and keeps oils, butter, flour and similar cupboard items on the list. A shortfall is an amount still to buy. It is never a price and an unknown price is never stored as zero. `planWeek` does not invent a shelf price. Shop search excludes petrol stations and unnamed convenience shops. Star ratings and the four “have again” choices stay in browser storage with the cookbook.
 
 ### Shopping resilience in v0.2.2
 

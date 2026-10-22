@@ -10,6 +10,14 @@ All application source, recipe catalogs, images, server routes, tests, build too
 
 Earlier homepage preview; the current source also includes the expanded catalog and ingredient-led builder.
 
+## What's in v0.2.3
+
+- Pantry amounts stay in this browser. Tick what you already have, then choose **I’m making this**. Oils, butter and flour stay on the list and are reduced as they are used.
+- A week plan warns when the pantry will not cover the dinners. The shopping list is the amount still to buy. It is never a price.
+- Star ratings and “won’t have again”, “might have again”, “will have again” or “this is a new staple” stay with the recipe.
+- Nearby shops are supermarkets, grocers, butchers and markets. Petrol stations are left out.
+- The header links to `/downloads/MealPlannerAU.apk`. That address stays the same. The phone app does not use the network.
+
 ## What's in v0.2.2
 
 - **28 classics × 24 regions = 672 classic/region pairings**, with all **5 dietary preferences** supported: **3,360 classic/region/diet configurations** before servings, heat and pantry choices.
@@ -93,6 +101,15 @@ Local discovery searches a **1–25 km straight-line radius** around a selected 
 
 **Shop listings use live map data; stock and prices are unverified.** The app suggests plausible shop types and useful retailer links. Check availability, market operating days and dietary variants with the shop before travelling. Map coverage is limited and travel distances can be longer.
 
+
+## Regional staples and the week planner
+
+Every generated classic and ingredient meal adds that region's staple foods. A staple already on the plate is not added twice. Generic rice is renamed to the regional rice instead of a second rice. Gluten-free templates swap wheat breads, couscous, and chapati for labelled gluten-free alternatives. Ethiopian injera is named 100% teff and says to check the packet, because many injera mixes contain wheat. These staples are authored templates, not a traditional complete dish and not a packet check.
+
+`planWeek` fills 1–14 dinners from classics, barbecue templates, and a curated set of ingredient-led plates. It spreads region and meal style. Filters only tighten. The phone catalogue is a bounded export of those templates, not all 23,400 meal configurations written out in full.
+
+Tick what is already at home, then choose **I’m making this**. Oils, butter, flour and similar cupboard items stay on the pantry list and are reduced as they are used. A shortfall is an amount still to buy, never a price. The week plan warns when the pantry will not cover the planned dinners. Star ratings, and “won’t have again”, “might have again”, “will have again” or “this is a new staple”, stay in this browser. Shop search lists supermarkets, grocers, butchers and markets. Petrol stations are left out.
+
 ## Clone and run
 
 The [GitHub repository](https://github.com/blkph0x/fusion-table) and [published release downloads](https://github.com/blkph0x/fusion-table/releases) are **public**. Anyone can clone the source or extract a source-release ZIP and build without Git. The [hosted Fusion Table app](https://fusion-table-kitchen.free-jelly-7189.chatgpt.site) is also public. Website access is managed separately from repository visibility.
@@ -130,6 +147,8 @@ Open the local URL printed by the server, normally `http://localhost:5173`. A cl
 The supplied `install:ci` command is for the managed Linux Sites environment and uses Bash, `flock` and GNU `timeout`. Ordinary clones and GitHub CI use `pnpm install --frozen-lockfile`.
 
 For maintainers, changing the version in `package.json` and pushing to `main` triggers the versioned release workflow. It runs all checks and creates a missing `vVERSION` release with source ZIP, Worker archive and checksums. Existing releases/assets are preserved. Include matching `docs/releases/vVERSION.md` notes; manual dispatch is also supported.
+
+`scripts/export-mealplanner-catalog.ts` writes the medium-heat, four-serve catalogue MealPlanner AU stores on the phone. It does not add prices. The website header links to `/downloads/MealPlannerAU.apk`. That address stays the same; replace the file when a new phone build is ready. The phone app does not use the network.
 
 See **[Self-hosting and building your own app](docs/SELF_HOSTING.md)** for independent deployment, map configuration, release packaging and reuse of both deterministic engines. The complete website has server routes; uploading only static assets to GitHub Pages does not provide live location/shop search.
 

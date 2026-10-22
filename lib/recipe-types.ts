@@ -19,12 +19,22 @@ export interface RecipeIngredient {
   inPantry: boolean;
   notes?: string;
   allergens: string[];
+  aliases?: string[];
 }
 
 export interface RecipeStep {
   title: string;
   detail: string;
   minutes?: number;
+}
+
+/** Extra rules stacked on the single diet choice. They tighten a recipe; they never relax it. */
+export interface RecipeConstraints {
+  vegan?: boolean;
+  vegetarian?: boolean;
+  dairyFree?: boolean;
+  glutenFree?: boolean;
+  eggFree?: boolean;
 }
 
 export interface RecipeInput {
@@ -34,6 +44,7 @@ export interface RecipeInput {
   diet?: DietId;
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
+  constraints?: RecipeConstraints;
 }
 
 export interface Recipe {

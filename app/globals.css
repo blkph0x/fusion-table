@@ -1038,3 +1038,20 @@ ul, ol { margin: 0; padding: 0; }
 .bbq-method-notes li { font-size: 13px; color: #66765b; line-height: 1.85; padding-left: 4px; margin-top: 12px; }
 .classic-count-note { font-size: 12px; color: #7d8a6b; margin: 20px 0 0; line-height: 1.8; }
 @media (max-width: 700px) { .builder-template-note { display: none; } .bbq-method-notes { padding: 17px; } .bbq-method-notes li { font-size: 12px; } }
+
+.week-layout { display: grid; gap: 18px; }
+.week-controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; margin: 8px 0 18px; }
+.week-controls label { display: grid; gap: 6px; font-size: 12px; color: #516347; }
+.week-controls input[type="text"], .week-controls input[type="number"] { border: 1px solid #d5decc; border-radius: 8px; padding: 8px 10px; background: var(--paper); min-width: 180px; }
+.avoid-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.week-day { border: 1px solid #e2e6da; border-radius: 10px; padding: 14px 16px; background: var(--paper); }
+.week-day h3 { margin: 0 0 4px; }
+.week-day p { margin: 0; color: #6d7b62; font-size: 13px; }
+.week-notes { font-size: 13px; color: #516347; }
+.week-notes li { margin: 6px 0; }
+.kitchen-desk { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e0e6d6; }
+.kitchen-desk h3 { margin: 0; }
+.kitchen-desk .button { margin-top: 10px; }
+.kitchen-desk .avoid-row { margin-top: 14px; }
+.kitchen-desk .ingredient-list small { display: inline; margin-left: 8px; }
+.week-days { display: grid; gap: 12px; }

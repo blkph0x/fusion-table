@@ -156,7 +156,8 @@ describe("ingredient-first complete meal engine", () => {
     const item = (id: string) => recipe.ingredients.find((entry) => entry.id === id)!;
     assert.equal(item("garlic").inPantry, true);
     assert.equal(item("tofu").inPantry, true);
-    assert.equal(item("rice").inPantry, true);
+    assert.equal(item("jasmine-rice").inPantry, true);
+    assert.equal(recipe.ingredients.filter((entry) => entry.id === "rice").length, 0);
     assert.equal(item("coconut-milk").inPantry, false);
     assert.equal(item("red-curry-paste").inPantry, false);
     assert.equal(item("neutral-oil").inPantry, false);

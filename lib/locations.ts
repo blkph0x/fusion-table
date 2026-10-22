@@ -197,6 +197,18 @@ export function normalizePhoton(data: unknown): LocationResult[] {
   return output;
 }
 
+const SERVICE_STATION = /\b(petrol|diesel|fuel|servo|service station|truck stop|ampol|caltex|\bbp\b|shell|mobil|united petroleum|7-?eleven|coles express|reddy express|\botr\b|eg australia|puma energy|liberty oil|nightowl)\b/i;
+
+/** Service stations are not useful grocery stops. A convenience tag alone is not a supermarket. */
+export function isUsefulFoodShop(name: string, tags: Record<string, unknown>, kind: ShopKind): boolean {
+  if (tags.amenity === "fuel" || tags.fuel === "yes" || tags.shop === "fuel") return false;
+  if (SERVICE_STATION.test(name)) return false;
+  if (tags.shop === "convenience") {
+    return /\b(woolworths|coles|aldi|iga|foodworks|friendly grocer|supermarket)\b/i.test(name);
+  }
+  return true;
+}
+
 export function shopKind(tags: Record<string, unknown>): ShopKind | null {
   switch (tags.shop) {
     case "supermarket": return "supermarket";
@@ -213,7 +225,7 @@ export function buildOverpassQuery(input: ShopSearch): string {
   // Only validated numbers enter the query. Visitors cannot supply Overpass QL.
   const { lat, lon, radiusKm } = validateShopSearch(input);
   const around = `around:${Math.ceil(radiusKm * 1000)},${lat},${lon}`;
-  return `[out:json][timeout:15];(nwr["shop"~"^(supermarket|convenience|greengrocer|butcher|seafood|farm|deli|spices|cheese|bakery|grocery)$"](${around});nwr["amenity"="marketplace"](${around}););out tags center qt ${OVERPASS_OUTPUT_LIMIT};out count;`;
+  return `[out:json][timeout:15];(nwr["shop"~"^(supermarket|greengrocer|butcher|seafood|farm|deli|spices|cheese|bakery|grocery)$"](${around});nwr["amenity"="marketplace"](${around}););out tags center qt ${OVERPASS_OUTPUT_LIMIT};out count;`;
 }
 
 export function normalizeOverpass(data: unknown, input: ShopSearch): Pick<ShopResponse, "shops" | "count" | "matchedCount" | "sourceCount" | "matchedCountIsLowerBound" | "truncated" | "osmTimestamp"> {
@@ -245,7 +257,8 @@ export function normalizeOverpass(data: unknown, input: ShopSearch): Pick<ShopRe
     const lon = element.lon ?? center?.lon;
     if (typeof lat !== "number" || typeof lon !== "number" || !Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) continue;
     const kind = shopKind(tags);
-    if (!kind || tags.disused === "yes" || tags.abandoned === "yes" || tags.access === "private") continue;
+    const nameForFilter = text(tags.name) ?? text(tags.brand) ?? text(tags.operator) ?? "";
+    if (!kind || !isUsefulFoodShop(nameForFilter, tags, kind) || tags.disused === "yes" || tags.abandoned === "yes" || tags.access === "private") continue;
     const distance = distanceKm(input.lat, input.lon, lat, lon);
     // Do not round before this check: a location outside the chosen radius must
     // never be shown as inside it. Overpass geometries may extend past a centre.

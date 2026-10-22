@@ -237,7 +237,7 @@ export async function searchShops(input: ShopSearch, config: LocationProviderCon
       distanceType: "straight-line", coverage: "area-query", source: "OpenStreetMap via Private.coffee Overpass",
       attribution: ATTRIBUTION, attributionUrl: ATTRIBUTION_URL,
       fetchedAt: new Date().toISOString(), cached: false,
-      notice: "Mapped shops are suggested places to look, not confirmed stock. Check ingredient availability, prices and market days with the shop. Distances are straight-line.",
+      notice: "Supermarkets, grocers, butchers and markets only. Petrol stations are left out. Stock is not confirmed and no shelf price is included. Distances are straight-line.",
     };
   });
 }
@@ -251,7 +251,7 @@ async function searchPhotonShops(input: ShopSearch, config: LocationProviderConf
     url.searchParams.set("radius", String(input.radiusKm));
     url.searchParams.set("limit", "50");
     url.searchParams.set("lang", "en");
-    for (const tag of ["supermarket", "convenience", "greengrocer", "butcher", "seafood", "farm", "deli", "spices", "cheese", "bakery", "grocery"]) {
+    for (const tag of ["supermarket", "greengrocer", "butcher", "seafood", "farm", "deli", "spices", "cheese", "bakery", "grocery"]) {
       url.searchParams.append("osm_tag", `shop:${tag}`);
     }
     url.searchParams.append("osm_tag", "amenity:marketplace");
@@ -262,7 +262,7 @@ async function searchPhotonShops(input: ShopSearch, config: LocationProviderConf
       distanceType: "straight-line", coverage: "limited-nearby", source: "Photon / OpenStreetMap",
       attribution: ATTRIBUTION, attributionUrl: ATTRIBUTION_URL,
       fetchedAt: new Date().toISOString(), osmTimestamp: null, cached: false,
-      notice: "A limited selection of nearby mapped food shops, not a complete directory. Ingredient matches are suggestions; stock and prices need confirmation. Distances are straight-line.",
+      notice: "Supermarkets, grocers, butchers and markets only. Petrol stations are left out. Stock is not confirmed and no shelf price is included. Distances are straight-line.",
     };
   });
 }

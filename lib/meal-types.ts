@@ -1,4 +1,4 @@
-import type { DietId, Recipe, SpiceHeat } from "./recipe-types.ts";
+import type { DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
 /** A main ingredient is never silently exchanged to satisfy a dietary preference. */
 export interface MealInput {
@@ -10,6 +10,8 @@ export interface MealInput {
   diet?: DietId;
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
+  /** Extra tighten-only flags. They do not replace the selected main. */
+  constraints?: RecipeConstraints;
 }
 
 export interface NormalizedMealInput extends MealInput {

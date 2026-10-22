@@ -277,7 +277,20 @@ export function bbqBaseFor(context: RecipeContext): BaseRecipe | undefined {
     });
 
     case "bbq-sausages": {
-      const sausage = vegetarian ? item("plant-sausages", "Plant-based sausages", 600, "g", "grocery", ["soy", "wheat"], "Choose vegan-labelled links and follow their packet cooking instructions.") : meat("bbq-sausages", glutenFree ? "Gluten-free raw pork sausages" : dairyFree ? "Dairy-free raw pork sausages" : "Raw pork sausages", 650, "Fresh raw links, about 3 cm thick. For dairy-free choose explicitly dairy-free links; for gluten-free choose explicitly gluten-free links. Check the full allergen label.");
+      const sausage = vegetarian
+        ? item(
+          "plant-sausages",
+          glutenFree ? "Gluten-free plant-based sausages" : "Plant-based sausages",
+          600,
+          "g",
+          "grocery",
+          glutenFree ? ["soy"] : ["soy", "wheat"],
+          glutenFree
+            ? "Choose links explicitly labelled gluten-free and vegan. Many plant sausages contain wheat. Check the packet."
+            : "Choose vegan-labelled links and follow their packet cooking instructions. Many contain wheat.",
+          glutenFree ? ["gluten-free plant-based sausages", "gluten free vegan sausages"] : ["plant-based sausages", "vegan sausages"],
+        )
+        : meat("bbq-sausages", glutenFree ? "Gluten-free raw pork sausages" : dairyFree ? "Dairy-free raw pork sausages" : "Raw pork sausages", 650, "Fresh raw links, about 3 cm thick. For dairy-free choose explicitly dairy-free links; for gluten-free choose explicitly gluten-free links. Check the full allergen label.");
       if (!vegetarian && !glutenFree) sausage.allergens = ["wheat"];
       return assemble(context, {
         name: vegetarian ? "grilled plant links" : "grilled sausage flatbreads", description: "Sausages cook gently before a brief browning, keeping sweet regional sauce for the plate.", prep: 15, cook: 30, side: "flatbread-salad", mode: "grill", meat: !vegetarian, finishAfterSides: true,

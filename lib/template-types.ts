@@ -17,6 +17,8 @@ export interface RecipeContext {
   vegetarian: boolean;
   dairyFree: boolean;
   glutenFree: boolean;
+  /** Tightens only. Older callers omit it; that means eggs are still allowed. */
+  eggFree?: boolean;
   profile: Profile;
 }
 

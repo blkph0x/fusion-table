@@ -7,6 +7,7 @@ export type { DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput,
 import type { BaseRecipe, DraftIngredient, Profile, RecipeContext } from "./template-types.ts";
 import { BBQ_CLASSICS, bbqBaseFor } from "./bbq-classics.ts";
 import { BBQ_REGIONS, bbqProfileFor } from "./bbq-regions.ts";
+import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 
 export const CLASSICS: RecipeOption[] = [
   { id: "pasta", name: "Creamy pasta", origin: "Italy", emoji: "🍝", description: "Silky sauce, golden mushrooms and a familiar bowl of comfort." },
@@ -53,10 +54,10 @@ const onion = (amount = 1) => produce("brown-onion", "Brown onion", amount, "", 
 const salt = () => ingredient("salt", "Salt", 0.5, "tsp", "grocery", [], "Use less with salty condiments; adjust at the table.");
 const stock = (amount: number, gf: boolean) => ingredient("vegetable-stock", gf ? "Gluten-free vegetable stock" : "Vegetable stock", amount, "ml", "grocery", [], "Use a vegan stock. Check the label for your dietary needs.");
 
-function profileFor(regionId: string, diet: DietId, heat: SpiceHeat): Profile {
-  const gf = diet === "gluten-free";
+function profileFor(regionId: string, glutenFree: boolean, heat: SpiceHeat): Profile {
+  const gf = glutenFree;
   const chilliAmount = { mild: 0, medium: 0.25, hot: 0.75 }[heat];
-  const chilli = chilliAmount ? [ingredient("chilli-flakes", "Chilli flakes", chilliAmount, "tsp", "grocery", [], "Add gradually to your taste.", ["chili flakes", "red pepper flakes"])] : [];
+  const chilli = chilliAmount ? [ingredient("chilli-flakes", "Chilli flakes", chilliAmount, "tsp", "grocery", [], "Add gradually to your taste.", ["chili flakes", "red pepper flakes", "chilli", "chili"])] : [];
   const ginger = () => produce("fresh-ginger", "Fresh ginger", 20, "g", "Finely grate.", ["ginger"]);
   const springOnion = () => produce("spring-onion", "Spring onions", 3, "", "Thinly slice.", ["scallions", "green onions", "spring onion"]);
   const lemon = () => produce("lemon", "Lemon", 1, "", "Zest first, then juice; use to taste.");
@@ -112,7 +113,7 @@ function profileFor(regionId: string, diet: DietId, heat: SpiceHeat): Profile {
       note: "Ras el hanout and a little harissa give the base rounded warmth. Fresh mint and lemon keep the result balanced.",
     },
   };
-  const profile = profiles[regionId] ?? bbqProfileFor(regionId, diet, heat);
+  const profile = profiles[regionId] ?? bbqProfileFor(regionId, glutenFree ? "gluten-free" : "balanced", heat);
   if (!profile) throw new Error("Choose a supported region.");
   return profile;
 }
@@ -137,7 +138,7 @@ function yogurt(context: RecipeContext, amount: number): DraftIngredient {
 function baseFor(context: RecipeContext): BaseRecipe {
   const barbecue = bbqBaseFor(context);
   if (barbecue) return barbecue;
-  const { input, profile, vegan, vegetarian, dairyFree, glutenFree } = context;
+  const { input, profile, vegan, vegetarian, dairyFree, glutenFree, eggFree = false } = context;
   const warm = names(profile.warm);
   const herbs = "Prepare the fresh herbs and citrus from your finishing ingredients.";
   switch (input.classicId) {
@@ -148,7 +149,7 @@ function baseFor(context: RecipeContext): BaseRecipe {
       return {
         name: "creamy mushroom pasta", description: "Golden mushrooms, a silky sauce and a fresh regional finish, wrapped around your favourite pasta.", prep: 10, cook: 20,
         equipment: ["Large saucepan", "Wide frying pan", "Colander"],
-        ingredients: [ingredient("pasta", glutenFree ? "Gluten-free pasta" : "Dried egg-free pasta", 320, "g", "grocery", glutenFree ? [] : ["wheat"], "Choose a plant-based pasta; follow the packet cooking time."), produce("mushrooms", "Mushrooms", 400, "g", "Slice."), onion(), garlic(3), oliveOil(2), cream, salt()],
+        ingredients: [ingredient("pasta", glutenFree ? "Gluten-free pasta" : "Dried egg-free pasta", 320, "g", "grocery", glutenFree ? [] : ["wheat"], "Choose a plant-based pasta; follow the packet cooking time."), produce("mushrooms", "Mushrooms", 400, "g", "Slice.", ["mushroom", "mushrooms"]), onion(), garlic(3), oliveOil(2), cream, salt()],
         steps: [
           { title: "Get everything ready", detail: `Slice the mushrooms, dice the onion and chop the garlic. ${herbs} Bring a large pan of water to the boil.`, minutes: 10 },
           { title: "Cook the pasta", detail: "Cook the pasta according to its packet instructions. Before draining, reserve a mug of the cooking water.", minutes: 10 },
@@ -178,7 +179,7 @@ function baseFor(context: RecipeContext): BaseRecipe {
     case "risotto": return {
       name: "mushroom risotto", description: "Tender rice and golden mushrooms slowly stirred into a rich, aromatic bowl.", prep: 10, cook: 35,
       equipment: ["Wide, heavy saucepan", "Small saucepan", "Ladle"],
-      ingredients: [ingredient("risotto-rice", "Arborio risotto rice", 320, "g", "grocery", [], undefined, ["arborio rice", "risotto rice"]), produce("mushrooms", "Mushrooms", 400, "g", "Slice."), onion(), garlic(3), oliveOil(3), stock(1200, glutenFree), salt()],
+      ingredients: [ingredient("risotto-rice", "Arborio risotto rice", 320, "g", "grocery", [], undefined, ["arborio rice", "risotto rice"]), produce("mushrooms", "Mushrooms", 400, "g", "Slice.", ["mushroom", "mushrooms"]), onion(), garlic(3), oliveOil(3), stock(1200, glutenFree), salt()],
       steps: [
         { title: "Prepare the stock and vegetables", detail: `Warm the stock in a small saucepan. Slice the mushrooms, dice the onion and chop the garlic. ${herbs}` },
         { title: "Build the base", detail: "Heat the olive oil in a heavy saucepan. Soften the onion for 4 minutes, then add the mushrooms and cook until lightly golden. Add garlic and rice, stirring for 1 minute." },
@@ -189,14 +190,16 @@ function baseFor(context: RecipeContext): BaseRecipe {
     };
     case "burgers": {
       const protein = vegetarian
-        ? [ingredient("chickpeas", "Canned chickpeas, drained", 600, "g", "grocery", [], "Drain and pat very dry; amount is drained weight.", ["canned chickpeas", "chickpeas"]), ingredient("rolled-oats", "Rolled oats", 60, "g", "grocery", ["oats"]), ingredient("cornflour", "Cornflour", 2, "tbsp", "grocery", [], undefined, ["cornstarch"])]
+        ? glutenFree
+          ? [ingredient("chickpeas", "Canned chickpeas, drained", 600, "g", "grocery", [], "Drain and pat very dry; amount is drained weight.", ["canned chickpeas", "chickpeas"]), ingredient("cornflour", "Cornflour", 4, "tbsp", "grocery", [], "Oats are left out. Ordinary rolled oats are not used in this gluten-free template.", ["cornstarch", "cornflour"])]
+          : [ingredient("chickpeas", "Canned chickpeas, drained", 600, "g", "grocery", [], "Drain and pat very dry; amount is drained weight.", ["canned chickpeas", "chickpeas"]), ingredient("rolled-oats", "Rolled oats", 60, "g", "grocery", ["oats"], "Ordinary oats. Not a gluten-free template."), ingredient("cornflour", "Cornflour", 2, "tbsp", "grocery", [], undefined, ["cornstarch"])]
         : [ingredient("beef-mince", "Beef mince", 600, "g", "butcher", [], undefined, ["ground beef"] )];
       return {
         name: vegetarian ? "chickpea burgers" : "beef burgers", description: "A well-seasoned patty, crisp salad and a bright yogurt sauce in a toasted bun.", prep: vegetarian ? 25 : 15, cook: 15,
         equipment: ["Mixing bowl", "Frying pan", "Food thermometer for meat"], meat: !vegetarian,
         ingredients: [...protein, ingredient("burger-buns", glutenFree ? "Gluten-free burger buns" : vegan ? "Vegan burger buns" : "Dairy-free burger buns", 4, "", "grocery", glutenFree ? [] : ["wheat"], "Check the label; choose egg-free buns for vegan recipes."), onion(), garlic(2), oliveOil(2), produce("lettuce", "Lettuce", 80, "g"), produce("tomatoes", "Tomatoes", 2, "", "Slice."), yogurt(context, 120), salt()],
         steps: [
-          { title: "Make the patties", detail: `Finely dice the onion and garlic. ${vegetarian ? "Mash the very dry chickpeas until mostly smooth. Mix in the oats, cornflour, onion and garlic." : "Gently combine the beef mince with the onion and garlic."} Add the ${warm} and a little salt. Shape into ${input.servings} evenly sized patties.${vegetarian ? " If the mixture is dry, add water a teaspoon at a time; chill for 10 minutes." : " Wash your hands and clean surfaces after handling raw meat."}` },
+          { title: "Make the patties", detail: `Finely dice the onion and garlic. ${vegetarian ? (glutenFree ? "Mash the very dry chickpeas until mostly smooth. Mix in the cornflour, onion and garlic. This gluten-free template does not use oats." : "Mash the very dry chickpeas until mostly smooth. Mix in the oats, cornflour, onion and garlic.") : "Gently combine the beef mince with the onion and garlic."} Add the ${warm} and a little salt. Shape into ${input.servings} evenly sized patties.${vegetarian ? " If the mixture is dry, add water a teaspoon at a time; chill for 10 minutes." : " Wash your hands and clean surfaces after handling raw meat."}` },
           { title: "Prepare the sauce and salad", detail: `${herbs} ${finishText(context, "sauce")} Wash the lettuce and slice the tomatoes.` },
           { title: "Cook the burgers", detail: `Heat olive oil in a frying pan over medium heat. Cook patties for around 5–7 minutes per side, turning carefully.${vegetarian ? " Let a firm crust form before turning; cook until hot throughout." : " Use a food thermometer to check the centre of every patty reaches at least 75°C; time alone is not a doneness check."}` },
           { title: "Toast and assemble", detail: "Toast the buns. Add lettuce, tomato, a cooked patty and the prepared sauce. Serve immediately." },
@@ -220,15 +223,16 @@ function baseFor(context: RecipeContext): BaseRecipe {
       };
     }
     case "fried-rice": {
-      const protein = vegan ? ingredient("firm-tofu", "Firm tofu", 300, "g", "grocery", ["soy"], "Drain and crumble.", ["firm tofu"]) : ingredient("eggs", "Eggs", 4, "", "grocery", ["egg"]);
+      const noEgg = vegan || eggFree;
+      const protein = noEgg ? ingredient("firm-tofu", "Firm tofu", 300, "g", "grocery", ["soy"], "Drain and crumble.", ["firm tofu"]) : ingredient("eggs", "Eggs", 4, "", "grocery", ["egg"]);
       return {
-        name: vegan ? "vegetable & tofu fried rice" : "vegetable & egg fried rice", description: "A colourful pan of tender rice, crisp vegetables and a bold regional seasoning.", prep: 10, cook: 30,
+        name: noEgg ? "vegetable & tofu fried rice" : "vegetable & egg fried rice", description: "A colourful pan of tender rice, crisp vegetables and a bold regional seasoning.", prep: 10, cook: 30,
         equipment: ["Saucepan", "Large frying pan or wok", "Spatula"],
         ingredients: [ingredient("jasmine-rice", "Jasmine rice, uncooked", 300, "g", "grocery", [], undefined, ["jasmine rice"]), protein, produce("carrots", "Carrots", 2, "", "Finely dice."), ingredient("peas", "Frozen peas", 150, "g"), garlic(3), oliveOil(2), salt()],
         steps: [
           { title: "Cook the rice", detail: "Cook rice following its packet instructions. Spread it on a clean tray while you finish preparing the vegetables, then use it straightaway in this recipe. Do not store the cooked rice on the bench." },
-          { title: "Prepare the vegetables", detail: `Finely dice the carrots and chop the garlic. ${herbs} ${vegan ? "Drain and crumble the tofu." : "Beat the eggs in a bowl."}` },
-          { title: "Cook the vegetables and protein", detail: `Heat olive oil in a wide pan or wok. Stir-fry carrots for 4 minutes, then peas for 2 minutes. Add garlic. ${vegan ? "Add crumbled tofu and cook for 3–4 minutes until hot and lightly golden." : "Push vegetables aside, add the eggs and scramble until fully set."}` },
+          { title: "Prepare the vegetables", detail: `Finely dice the carrots and chop the garlic. ${herbs} ${noEgg ? "Drain and crumble the tofu." : "Beat the eggs in a bowl."}` },
+          { title: "Cook the vegetables and protein", detail: `Heat olive oil in a wide pan or wok. Stir-fry carrots for 4 minutes, then peas for 2 minutes. Add garlic. ${noEgg ? "Add crumbled tofu and cook for 3–4 minutes until hot and lightly golden." : "Push vegetables aside, add the eggs and scramble until fully set."}` },
           { title: "Fry the rice", detail: `Add the ${warm} and a splash of water; stir for 30 seconds. Add the cooked rice and stir-fry for 3–4 minutes, breaking up clumps until everything is steaming hot. Work in batches if the pan is crowded.` },
           { title: "Finish and eat", detail: `${finishText(context)} Taste before adding any salt. Serve immediately.` },
         ],
@@ -295,10 +299,16 @@ export function generateRecipe(input: RecipeInput): Recipe {
   const spiceHeat = input.spiceHeat ?? "medium";
   if (!["mild", "medium", "hot"].includes(spiceHeat)) throw new Error("Choose mild, medium or hot spice.");
   if (input.pantry !== undefined && typeof input.pantry !== "string" && (!Array.isArray(input.pantry) || input.pantry.some((term) => typeof term !== "string"))) throw new Error("List pantry ingredients as text.");
-  const vegan = diet === "vegan";
+  const requested = input.constraints ?? {};
+  if (requested !== null && typeof requested !== "object") throw new Error("Dietary constraints must be a set of flags.");
+  const vegan = diet === "vegan" || requested.vegan === true;
+  const vegetarian = vegan || diet === "vegetarian" || requested.vegetarian === true;
+  const dairyFree = vegan || diet === "dairy-free" || requested.dairyFree === true;
+  const glutenFree = diet === "gluten-free" || requested.glutenFree === true;
+  const eggFree = vegan || requested.eggFree === true;
   const context: RecipeContext = {
-    input: { ...input, diet, spiceHeat }, vegan, vegetarian: vegan || diet === "vegetarian",
-    dairyFree: vegan || diet === "dairy-free", glutenFree: diet === "gluten-free", profile: profileFor(input.regionId, diet, spiceHeat),
+    input: { ...input, diet, spiceHeat }, vegan, vegetarian, dairyFree, glutenFree, eggFree,
+    profile: profileFor(input.regionId, glutenFree, spiceHeat),
   };
   const base = baseFor(context);
   const pantry = parsePantry(input.pantry);
@@ -315,10 +325,12 @@ export function generateRecipe(input: RecipeInput): Recipe {
       if (notes.length) existing.notes = notes.join(" ");
     } else merged.set(item.id, { ...item, allergens: [...item.allergens], ...(item.aliases ? { aliases: [...item.aliases] } : {}) });
   }
-  const ingredients: RecipeIngredient[] = [...merged.values()].map((item) => ({
-    id: item.id, name: item.name, amount: Math.round(item.amount * factor * 10000) / 10000,
-    unit: item.unit, category: item.category, allergens: item.allergens,
-    ...(item.notes ? { notes: item.notes } : {}), inPantry: pantryHas(item, pantry),
+  const stapled = applyStaples([...merged.values()], input.regionId, { glutenFree, dairyFree });
+  const ingredients: RecipeIngredient[] = stapled.ingredients.map((item) => ({
+    ...item,
+    amount: Math.round(item.amount * factor * 10000) / 10000,
+    allergens: item.allergens.map(canonAllergen),
+    inPantry: pantryHas(item, pantry),
   }));
   const dietaryNotes = [
     "Dietary preferences guide ingredient choices. Check packaged-food labels and substitutions for your needs.",
@@ -327,18 +339,30 @@ export function generateRecipe(input: RecipeInput): Recipe {
   if (base.dietaryNotes) dietaryNotes.push(...base.dietaryNotes);
   if (context.glutenFree) dietaryNotes.push("Choose certified or clearly labelled gluten-free bread, pasta, stock and sauces; shared equipment can introduce gluten.");
   if (vegan) dietaryNotes.push("Use vegan-labelled curry paste, miso, breads and other prepared sauces; some versions contain animal ingredients.");
+  if (eggFree && !vegan) dietaryNotes.push("Eggs are left out. Fried rice uses tofu instead, which is a soy ingredient.");
+  if (stapled.served.length) dietaryNotes.push(`Regional staple on this plate: ${stapled.served.map((item) => item.name).join(", ")}. Template staple, not a kitchen-tested traditional dish. Check the packet.`);
+  const steps = stapled.served.length
+    ? [...base.steps, { title: "Serve the regional staple", detail: stapleStep(stapled.served, base.name) }]
+    : base.steps;
   if (input.servings > 6) dietaryNotes.push("For this larger batch, use extra pans or roasting trays and leave space between food. Cook in batches if needed; total time will be longer. Check each batch for doneness.");
   if (spiceHeat === "mild" && ["korean", "thai", "moroccan"].includes(input.regionId)) dietaryNotes.push("Mild uses less chilli paste, but pastes still vary in heat; add gradually.");
+  const extras = [
+    glutenFree && diet !== "gluten-free" ? "gf" : "",
+    vegan && diet !== "vegan" ? "vegan" : "",
+    dairyFree && !vegan && diet !== "dairy-free" ? "df" : "",
+    eggFree && !vegan ? "eggless" : "",
+    vegetarian && !vegan && diet !== "vegetarian" ? "veg" : "",
+  ].filter(Boolean);
   return {
-    id: `${input.classicId}-${input.regionId}-${diet}-${spiceHeat}-${input.servings}`,
+    id: [`${input.classicId}-${input.regionId}-${diet}-${spiceHeat}-${input.servings}`, ...extras].join("-"),
     classicId: input.classicId, regionId: input.regionId,
     title: `${context.profile.title} ${base.name}`,
     description: base.description,
     fusionNote: context.profile.note,
     prepMinutes: base.prep, cookMinutes: base.cook, totalMinutes: base.prep + base.cook,
-    servings: input.servings, diet, spiceHeat, ingredients, steps: base.steps,
+    servings: input.servings, diet, spiceHeat, ingredients, steps,
     equipment: base.equipment,
-    tags: [...context.profile.tags, ...(diet === "balanced" ? [] : [titleCaseFirst(diet)])],
+    tags: [...context.profile.tags, ...(diet === "balanced" ? [] : [titleCaseFirst(diet)]), ...(glutenFree && diet !== "gluten-free" ? ["Gluten-free"] : []), ...(vegan && diet !== "vegan" ? ["Vegan"] : []), ...(dairyFree && !vegan && diet !== "dairy-free" ? ["Dairy-free"] : []), ...(eggFree && !vegan ? ["Egg-free"] : [])],
     allergens: [...new Set(ingredients.flatMap((item) => item.allergens))].sort(),
     dietaryNotes,
     sourceLabel: "Template-generated · not kitchen-tested",
