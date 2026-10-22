@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type
 import { ArrowLeft, ArrowRight, BookOpen, Check, CheckCheck, ChefHat, ChevronDown, ChevronRight, Clock3, Compass, Download, ExternalLink, Globe2, Heart, Leaf, LoaderCircle, LocateFixed, MapPin, Menu, Minus, Navigation, Plus, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Sprout, Star, Store, Utensils, Users, Wheat, X } from "lucide-react";
 import { CLASSICS, REGIONS, DIETS, generateRecipe } from "@/lib/recipes";
 import type { Recipe, DietId, SpiceHeat } from "@/lib/recipe-types";
-import { SHOP_LABELS, type LocationResult, type LocationsResponse, type Shop, type ShopKind, type ShopResponse } from "@/lib/locations";
+import { SHOP_LABELS, type LocationResult, type Shop, type ShopKind, type ShopResponse } from "@/lib/locations";
+import { fetchLocationResults, fetchNearbyShops } from "@/lib/location-client";
 import { ingredientMatchesShop, suggestedShops } from "@/lib/shopping";
 import MealBuilder from "@/components/meal-builder";
 import { MAIN_INGREDIENTS, MEAL_REGIONS, COOKING_METHODS, getMealCombinationCount } from "@/lib/meals";
@@ -86,6 +87,7 @@ export default function Home() {
   const [shopData, setShopData] = useState<ShopResponse | null>(null);
   const [shopsLoading, setShopsLoading] = useState(false);
   const [shopError, setShopError] = useState("");
+  const [radiusChanged, setRadiusChanged] = useState(false);
   const [shopFilter, setShopFilter] = useState<ShopKind | "all">("all");
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const [checked, setChecked] = useState<string[]>([]);
@@ -100,6 +102,8 @@ export default function Home() {
   const [tested, setTested] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const shopRequest = useRef(0), locationRequest = useRef(0);
+  const latestRadius = useRef(radius);
+  const shopAbort = useRef<AbortController | null>(null), locationAbort = useRef<AbortController | null>(null);
   const recipeRef = useRef<HTMLElement>(null), composerRef = useRef<HTMLElement>(null);
 
   /* Browser storage is unavailable during SSR. Hydrate it once, then report storage failures in the UI. */
@@ -109,7 +113,7 @@ export default function Home() {
       const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
       if (Array.isArray(data.saved)) setSaved(data.saved.filter(validSaved));
       if (data.location && typeof data.location.name === "string" && Number.isFinite(data.location.lat) && Math.abs(data.location.lat) <= 90 && Number.isFinite(data.location.lon) && Math.abs(data.location.lon) <= 180) setLocation(data.location);
-      if (Number.isFinite(data.radius) && data.radius >= 1 && data.radius <= 25) setRadius(data.radius);
+      if (Number.isFinite(data.radius) && data.radius >= 1 && data.radius <= 25) { latestRadius.current = data.radius; setRadius(data.radius); }
     } catch { /* Cleared or invalid browser data starts a fresh collection. */ }
     setLoaded(true);
   }, []);
@@ -120,8 +124,12 @@ export default function Home() {
   }, [saved, location, radius, loaded]);
   /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(""), 5000); return () => clearTimeout(timer); }, [toast]);
+  useEffect(() => () => { shopAbort.current?.abort(); locationAbort.current?.abort(); }, []);
   const navigate = useCallback((next: View) => { setView(next); setMenuOpen(false); setCookingStep(null); window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
-  const closeLocation = useCallback(() => setLocationOpen(false), []);
+  const closeLocation = useCallback(() => {
+    locationRequest.current++; locationAbort.current?.abort();
+    setLocationLoading(false); setLocationOpen(false);
+  }, []);
   const closeAbout = useCallback(() => setAboutOpen(false), []);
   const closeCooking = useCallback(() => setCookingStep(null), []);
   const isSaved = !!recipe && saved.some((s) => recipeKey(s.recipe) === recipeKey(recipe));
@@ -130,33 +138,52 @@ export default function Home() {
   const matches = useMemo(() => needed.map((ingredient) => ({ ingredient, candidates: suggestedShops(ingredient, shopData?.shops || []).slice(0, 3) })), [needed, shopData]);
   const findShops = useCallback(async (place: LocationResult, distance: number) => {
     const sequence = ++shopRequest.current;
-    setShopsLoading(true); setShopError(""); setShopData(null); setSelectedShop(null);
+    shopAbort.current?.abort();
+    const controller = new AbortController(); shopAbort.current = controller;
+    setShopsLoading(true); setShopError(""); setShopData(null); setSelectedShop(null); setRadiusChanged(false);
     try {
-      const response = await fetch(`/api/shops?lat=${place.lat}&lon=${place.lon}&radiusKm=${distance}`);
-      const data = await response.json() as ShopResponse & { error?: string };
-      if (!response.ok) throw new Error(data.error || "We couldn't reach the shop directory. Please try again.");
+      const data = await fetchNearbyShops(place, distance, controller.signal);
       if (sequence === shopRequest.current) setShopData(data);
-    } catch (error) { if (sequence === shopRequest.current) setShopError(error instanceof Error ? error.message : "Shop search is unavailable."); }
-    finally { if (sequence === shopRequest.current) setShopsLoading(false); }
+    } catch (error) { if (sequence === shopRequest.current && !controller.signal.aborted) setShopError(error instanceof Error ? error.message : "Shop search is unavailable."); }
+    finally { if (sequence === shopRequest.current) { setShopsLoading(false); shopAbort.current = null; } }
   }, []);
   async function searchLocation(event: FormEvent) {
     event.preventDefault(); const sequence = ++locationRequest.current;
+    locationAbort.current?.abort();
+    const controller = new AbortController(); locationAbort.current = controller;
     setLocationLoading(true); setLocationError(""); setLocationResults([]); setLocationSearched(false);
     try {
-      const response = await fetch(`/api/locations?q=${encodeURIComponent(locationQuery.trim())}`);
-      const data: LocationsResponse & { error?: string } = await response.json();
-      if (!response.ok) throw new Error(data.error || "Location search is unavailable. Try your current location.");
+      const data = await fetchLocationResults(locationQuery.trim(), controller.signal);
       if (sequence === locationRequest.current) { setLocationResults(data.locations); setLocationSearched(true); }
-    } catch (error) { if (sequence === locationRequest.current) setLocationError(error instanceof Error ? error.message : "Could not find that location."); }
-    finally { if (sequence === locationRequest.current) setLocationLoading(false); }
+    } catch (error) { if (sequence === locationRequest.current && !controller.signal.aborted) setLocationError(error instanceof Error ? error.message : "Could not find that location."); }
+    finally { if (sequence === locationRequest.current) { setLocationLoading(false); locationAbort.current = null; } }
   }
-  function chooseLocation(place: LocationResult) { setLocation(place); setLocationOpen(false); setShopFilter("all"); void findShops(place, radius); setToast(`Your kitchen is set to ${place.name}.`); }
+  function chooseLocation(place: LocationResult) {
+    locationRequest.current++; locationAbort.current?.abort(); setLocationLoading(false);
+    setLocation(place); setLocationOpen(false); setShopFilter("all"); setShowMap(false);
+    void findShops(place, latestRadius.current); setToast(`Your kitchen is set to ${place.name}.`);
+  }
   function currentLocation() {
     if (!navigator.geolocation) { setLocationError("Location isn't supported by this browser. Search for your suburb instead."); return; }
-    setLocationLoading(true); setLocationError("");
-    navigator.geolocation.getCurrentPosition((position) => { setLocationLoading(false); chooseLocation({ id: "current-location", label: "Your current location", name: "Current location", lat: position.coords.latitude, lon: position.coords.longitude }); }, (error) => { setLocationLoading(false); setLocationError(error.code === 1 ? "Location permission wasn't granted. Search by suburb or postcode instead." : "We couldn't get your location. Please search by suburb or postcode."); }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 });
+    const sequence = ++locationRequest.current; locationAbort.current?.abort();
+    setLocationLoading(true); setLocationError(""); setLocationResults([]); setLocationSearched(false);
+    navigator.geolocation.getCurrentPosition((position) => {
+      if (sequence !== locationRequest.current) return;
+      chooseLocation({ id: "current-location", label: "Your current location", name: "Current location", lat: position.coords.latitude, lon: position.coords.longitude });
+    }, (error) => {
+      if (sequence !== locationRequest.current) return;
+      setLocationLoading(false); setLocationError(error.code === 1 ? "Location permission wasn't granted. Search by suburb or postcode instead." : "We couldn't get your location. Please search by suburb or postcode.");
+    }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 });
   }
-  function changeRadius(value: number) { setRadius(value); shopRequest.current++; setShopsLoading(false); setShopData(null); setShopError(""); setSelectedShop(null); }
+  function changeRadius(value: number) {
+    latestRadius.current = value; setRadius(value); shopRequest.current++; shopAbort.current?.abort();
+    setShopsLoading(false); setShopData(null); setShopError(""); setSelectedShop(null); setRadiusChanged(true);
+  }
+  function clearLocation() {
+    shopRequest.current++; shopAbort.current?.abort(); closeLocation();
+    setLocation(null); setShopData(null); setShopsLoading(false); setShopError("");
+    setSelectedShop(null); setShowMap(false); setRadiusChanged(false); setToast("Location cleared.");
+  }
   function showRecipe(next: Recipe) {
     const entry = saved.find((item) => recipeKey(item.recipe) === recipeKey(next));
     setRecipe(next); setNotes(entry?.notes || ""); setRating(entry?.rating || 0); setTested(entry?.tested || false);
@@ -190,7 +217,7 @@ export default function Home() {
     setDiet(entry.recipe.diet); setSpiceHeat(entry.recipe.spiceHeat); setServings(entry.recipe.servings); setChecked([]); setView("studio");
     setTimeout(() => { recipeRef.current?.focus({ preventScroll: true }); recipeRef.current?.scrollIntoView({ behavior: "smooth" }); }, 50);
   }
-  function shoppingView() { navigate("shops"); if (location) { if (!shopData && !shopsLoading) void findShops(location, radius); } else setLocationOpen(true); }
+  function shoppingView() { navigate("shops"); if (location) { if (!shopData && !shopsLoading) void findShops(location, radius); } else if (!recipe) setLocationOpen(true); }
   function exportShopping() {
     const escape = (value: string) => {
       const safe = /^[\s]*[=+\-@]|^[\t\r\n]/.test(value) ? `'${value}` : value;
@@ -239,20 +266,70 @@ export default function Home() {
         <div className="benefit-strip"><span><Globe2 size={19} /> {CLASSICS.length} classics. A world of flavour.</span><span><SlidersHorizontal size={19} /> Made to suit your table</span><span><ShoppingBasket size={19} /> Ingredients closer to home</span></div>
         <div className="page-width">{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">A LITTLE INSPIRATION</span><h2>Unexpectedly good together.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Find your own pairing <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={item.image} alt={item.title} loading="lazy" /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Make it yours</span></div></button>)}</div></section><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">YOUR NEIGHBOURHOOD, ON THE MENU</span><h2>Great ingredients are closer than you think.</h2><p>From the corner butcher to your favourite fruit market. Find local places to bring your recipe to life.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find shops near me <ArrowRight size={16} /></button></section></div></>}
       {view === "studio" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><ChefHat size={15} /> YOUR RECIPE STUDIO</span><h1>Familiar favourites.<br /><em>Fresh possibilities.</em></h1><p>Choose your starting point. We’ll help you take it somewhere delicious.</p></div>{studio()}{recipeDetail()}</div>}
-      {view === "shops" && <div className="page-width inner-page shops-page"><div className="page-intro split-intro"><div><span className="eyebrow"><MapPin size={15} /> FROM AROUND THE CORNER</span><h1>Shop a little closer.</h1><p>Fresh produce, local specialists, and everyday essentials for your next fusion.</p></div>{recipe && <div className="shopping-for"><span>ON YOUR MENU</span><strong>{recipe.title}</strong><button className="text-button" onClick={() => navigate("studio")}>Back to recipe <ArrowRight size={14} /></button></div>}</div>
-        <div className="location-toolbar"><button className="location-selector" onClick={() => setLocationOpen(true)}><MapPin size={19} /><span><small>Your starting point</small><strong>{location?.name || "Choose your location"}</strong></span><ChevronDown size={17} /></button><label className="radius-control"><span>Within <strong>{radius} km</strong></span><input type="range" min="1" max="25" value={radius} onChange={(e) => changeRadius(Number(e.target.value))} aria-label="Shopping radius in kilometres" /></label><button className="button primary" onClick={() => location ? void findShops(location, radius) : setLocationOpen(true)} disabled={shopsLoading}>{shopsLoading ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />} {shopsLoading ? "Finding local shops…" : "Find nearby shops"}</button></div><p className="distance-note"><Compass size={13} /> Distances are measured in a straight line. Walking and driving routes may be longer.</p>
-        {shopError && <div className="error-panel" role="alert"><Store size={25} /><div><strong>The local directory couldn’t be reached.</strong><p>{shopError}</p><button className="text-button" onClick={() => location && void findShops(location, radius)}>Try again <ArrowRight size={14} /></button></div></div>}
-        {!location && <div className="empty-state location-empty"><div className="empty-icon"><MapPin size={35} /></div><h3>Where’s your kitchen?</h3><p>Set a suburb, town, or postcode to find supermarkets, fruit shops, markets, and butchers within your radius.</p><button className="button primary" onClick={() => setLocationOpen(true)}>Set your location <ArrowRight size={16} /></button></div>}
-        {location && <div className="shops-layout"><div className="shops-main"><div className="shop-tabs" aria-label="Filter shop types">{SHOP_FILTERS.map((kind) => <button key={kind} className={shopFilter === kind ? "selected" : ""} onClick={() => setShopFilter(kind)}>{kind === "all" ? "All shops" : SHOP_LABELS[kind]}</button>)}</div><div className="shop-results-heading"><h3>{shopsLoading ? "Looking around your neighbourhood…" : shopData ? `${shops.length} ${shops.length === 1 ? "shop" : "shops"} to explore` : "Ready when you are"}</h3>{shopData && <span>Within {shopData.radiusKm} km</span>}</div>{shopsLoading && <div className="shop-loading" role="status"><LoaderCircle className="spin" size={26} /><h4>Checking local map listings</h4><p>Finding shops within {radius} km. This can take a little while.</p></div>}{!shopsLoading && !shopError && !shopData && <div className="empty-state small-empty"><Store size={30} /><p>Select “Find nearby shops” to search this area.</p></div>}{shopData && shops.length === 0 && <div className="empty-state small-empty"><Store size={30} /><h3>No matching shops in this search.</h3><p>Try another shop type or a wider radius. Map listings may be incomplete, especially for fresh produce and occasional markets.</p></div>}
-          <div className="shop-list">{shops.map((shop) => { const coverage = needed.filter((i) => matchesShop(i, shop)); return <article className={`shop-card ${selectedShop?.id === shop.id ? "selected-shop" : ""}`} key={shop.id}><div className={`shop-kind-icon kind-${shop.kind}`}>{shop.kind === "produce" ? <Sprout /> : shop.kind === "market" ? <ShoppingBasket /> : <Store />}</div><div className="shop-card-content"><div className="shop-card-top"><div><span className="shop-kind">{SHOP_LABELS[shop.kind]}</span><h4>{shop.name}</h4></div><span className="shop-distance">{shop.distanceKm < 1 ? `${Math.round(shop.distanceKm * 1000)} m` : `${shop.distanceKm.toFixed(1)} km`}</span></div><p>{shop.address || "Address details not provided in map listing"}</p>{coverage.length > 0 && <span className="coverage-note"><Leaf size={12} /> Suggested for {coverage.length} of your ingredients</span>}{shop.kind === "market" && <span className="market-note">Check stall types and market days before visiting.</span>}<div className="shop-actions"><a href={`https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lon}&destination=${shop.lat},${shop.lon}`} target="_blank" rel="noreferrer"><Navigation size={13} /> Directions</a>{shop.website && <a href={shop.website} target="_blank" rel="noreferrer">Website <ExternalLink size={12} /></a>}{shop.phone && <a href={`tel:${shop.phone.replace(/[^+\d]/g, "")}`}>Call shop</a>}<button onClick={() => { setSelectedShop(shop); setShowMap(true); window.open(shop.osmUrl, "_blank", "noopener,noreferrer"); }}>On map</button><a href={shop.osmUrl} target="_blank" rel="noreferrer" className="listing-source">Listing <ExternalLink size={11} /></a></div>{shop.openingHours && <details className="shop-hours"><summary>Listed opening hours</summary><p>{shop.openingHours}</p></details>}</div></article>; })}</div>
-          {shopData && <p className="data-attribution">Listings: <a href={shopData.attributionUrl} target="_blank" rel="noreferrer">{shopData.attribution}</a>. Retrieved {new Date(shopData.fetchedAt).toLocaleString("en-AU", { dateStyle: "medium", timeStyle: "short" })}. {shopData.notice} {shopData.truncated ? "Results are limited; try a smaller radius for a more focused view." : ""}</p>}
-        </div><aside className="shopping-sidebar"><div className="map-card"><div className="subheading"><h3>{selectedShop ? selectedShop.name : "Your neighbourhood"}</h3><MapPin size={17} /></div>{showMap ? <iframe title="OpenStreetMap view of your shopping area" src={mapUrl} loading="lazy" referrerPolicy="no-referrer" /> : <button className="map-placeholder" onClick={() => setShowMap(true)}><span className="map-grid" /><span className="map-circle" /><span className="map-pin"><MapPin size={26} fill="currentColor" /></span><span className="map-show-label">Show area map <ArrowRight size={14} /></span></button>}<p>Map © OpenStreetMap contributors</p></div><div className="shopping-list-panel"><div className="subheading"><h3>Your shopping list</h3><ShoppingBasket size={18} /></div>{!recipe ? <div className="list-empty"><p>Create a recipe to match its ingredients with nearby shop types.</p><button className="text-button" onClick={() => navigate("studio")}>Create a fusion <ArrowRight size={14} /></button></div> : <><p className="subtle-small">{needed.length} ingredients · {recipe.servings} servings</p><div className="stock-note"><Leaf size={16} /><p>Suggestions are based on shop type. Ingredient stock and prices are unconfirmed.</p></div>{matches.length === 0 && <p className="list-empty"><CheckCheck size={23} /> You’ve got everything on your list.</p>}<ul className="sourcing-list">{matches.map(({ ingredient, candidates }) => <li key={ingredient.id}><div><strong>{ingredient.name}</strong><span>{amount(ingredient.amount, ingredient.unit)}</span></div>{candidates.length ? <><a href={productSearch(candidates[0], ingredient.name, location.name)} target="_blank" rel="noreferrer">Search at {candidates[0].name} <ExternalLink size={11} /></a><small>Suggested shop · stock unconfirmed</small></> : <small>{shopData ? "No matching shop type found nearby" : "Search shops to see a suggestion"}</small>}</li>)}</ul><button className="button secondary full" onClick={exportShopping}><Download size={15} /> Download shopping list</button></>}</div></aside></div>}
+      {view === "shops" && <div className="page-width inner-page shops-page">
+        <div className="page-intro split-intro"><div><span className="eyebrow"><MapPin size={15} /> FROM AROUND THE CORNER</span><h1>Shop a little closer.</h1><p>Fresh produce, local specialists, and everyday essentials for your next fusion.</p></div>{recipe && <div className="shopping-for"><span>ON YOUR MENU</span><strong>{recipe.title}</strong><button className="text-button" onClick={() => navigate("studio")}>Back to recipe <ArrowRight size={14} /></button></div>}</div>
+        <div className="location-toolbar">
+          <button className="location-selector" onClick={() => setLocationOpen(true)}><MapPin size={19} /><span><small>Your starting point</small><strong>{location?.name || "Choose your location"}</strong></span><ChevronDown size={17} /></button>
+          <label className="radius-control"><span>Within <strong>{radius} km</strong></span><input type="range" min="1" max="25" value={radius} onChange={(e) => changeRadius(Number(e.target.value))} aria-label="Shopping radius in kilometres" /></label>
+          <button className="button primary" onClick={() => location ? void findShops(location, radius) : setLocationOpen(true)} disabled={shopsLoading}>{shopsLoading ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />} {shopsLoading ? "Finding local shops…" : radiusChanged && location ? `Search within ${radius} km` : "Find nearby shops"}</button>
+        </div>
+        <p className="distance-note"><Compass size={13} /> Distances are measured in a straight line. Walking and driving routes may be longer.</p>
+        {shopError && <div className="error-panel" role="alert"><Store size={25} /><div><strong>Shop search is temporarily unavailable.</strong><p>{shopError}</p>{recipe && <p>Your ingredient list and download are still available below.</p>}<button className="text-button" onClick={() => location && void findShops(location, radius)}>Try again <ArrowRight size={14} /></button></div></div>}
+        <div className="shops-layout">
+          <div className="shops-main">
+            {!location ? <div className="empty-state location-empty"><div className="empty-icon"><MapPin size={35} /></div><h3>Where’s your kitchen?</h3><p>Set a suburb, town, or postcode to find supermarkets, fruit shops, markets, and butchers within your radius.</p>{recipe && <p>Your shopping list is ready. You can use or download it before choosing a location.</p>}<button className="button primary" onClick={() => setLocationOpen(true)}>Set your location <ArrowRight size={16} /></button></div> : <>
+              <div className="shop-tabs" aria-label="Filter shop types">{SHOP_FILTERS.map((kind) => <button key={kind} className={shopFilter === kind ? "selected" : ""} aria-pressed={shopFilter === kind} onClick={() => setShopFilter(kind)}>{kind === "all" ? "All shops" : SHOP_LABELS[kind]}</button>)}</div>
+              <div className="shop-results-heading"><h3>{shopsLoading ? "Looking around your neighbourhood…" : shopData ? `${shops.length} ${shops.length === 1 ? "shop" : "shops"} to explore` : "Ready when you are"}</h3>{shopData && <span>Within {shopData.radiusKm} km</span>}</div>
+              {shopsLoading && <div className="shop-loading" role="status"><LoaderCircle className="spin" size={26} /><h4>Checking local map listings</h4><p>Finding shops within {radius} km. Your shopping list is available while we search.</p></div>}
+              {!shopsLoading && !shopError && !shopData && <div className="empty-state small-empty"><Store size={30} /><p>{radiusChanged ? `Radius changed to ${radius} km. Select “Search within ${radius} km” to refresh nearby shops.` : "Select “Find nearby shops” to search this area."}</p></div>}
+              {shopData && shops.length === 0 && <div className="empty-state small-empty"><Store size={30} /><h3>No matching shops in this search.</h3><p>Try another shop type or a wider radius. Map listings may be incomplete, especially for fresh produce and occasional markets.</p></div>}
+              <div className="shop-list">{shops.map((shop) => {
+                const coverage = needed.filter((i) => matchesShop(i, shop));
+                return <article className={`shop-card ${selectedShop?.id === shop.id ? "selected-shop" : ""}`} key={shop.id}>
+                  <div className={`shop-kind-icon kind-${shop.kind}`}>{shop.kind === "produce" ? <Sprout /> : shop.kind === "market" ? <ShoppingBasket /> : <Store />}</div>
+                  <div className="shop-card-content">
+                    <div className="shop-card-top"><div><span className="shop-kind">{SHOP_LABELS[shop.kind]}</span><h4>{shop.name}</h4></div><span className="shop-distance">{shop.distanceKm < 1 ? `${Math.round(shop.distanceKm * 1000)} m` : `${shop.distanceKm.toFixed(1)} km`}</span></div>
+                    <p>{shop.address || "Address details not provided in map listing"}</p>
+                    {coverage.length > 0 && <span className="coverage-note"><Leaf size={12} /> Suggested for {coverage.length} of your ingredients</span>}
+                    {shop.kind === "market" && <span className="market-note">Check stall types and market days before visiting.</span>}
+                    <div className="shop-actions">
+                      <a href={`https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lon}&destination=${shop.lat},${shop.lon}`} target="_blank" rel="noreferrer"><Navigation size={13} /> Directions</a>
+                      {shop.website && <a href={shop.website} target="_blank" rel="noreferrer">Website <ExternalLink size={12} /></a>}
+                      {shop.phone && <a href={`tel:${shop.phone.replace(/[^+\d]/g, "")}`}>Call shop</a>}
+                      <button onClick={() => { setSelectedShop(shop); setShowMap(true); window.open(shop.osmUrl, "_blank", "noopener,noreferrer"); }}>On map</button>
+                      <a href={shop.osmUrl} target="_blank" rel="noreferrer" className="listing-source">Listing <ExternalLink size={11} /></a>
+                    </div>
+                    {shop.openingHours && <details className="shop-hours"><summary>Listed opening hours</summary><p>{shop.openingHours}</p></details>}
+                  </div>
+                </article>;
+              })}</div>
+              {shopData && <p className="data-attribution">Listings: <a href={shopData.attributionUrl} target="_blank" rel="noreferrer">{shopData.attribution}</a>. Retrieved {new Date(shopData.fetchedAt).toLocaleString("en-AU", { dateStyle: "medium", timeStyle: "short" })}. {shopData.notice} {shopData.truncated ? "Results are limited; try a smaller radius for a more focused view." : ""}</p>}
+            </>}
+          </div>
+          <aside className="shopping-sidebar">
+            {location && <div className="map-card"><div className="subheading"><h3>{selectedShop ? selectedShop.name : "Your neighbourhood"}</h3><MapPin size={17} /></div>{showMap ? <iframe title="OpenStreetMap view of your shopping area" src={mapUrl} loading="lazy" referrerPolicy="no-referrer" /> : <button className="map-placeholder" onClick={() => setShowMap(true)}><span className="map-grid" /><span className="map-circle" /><span className="map-pin"><MapPin size={26} fill="currentColor" /></span><span className="map-show-label">Show area map <ArrowRight size={14} /></span></button>}<p>Map © OpenStreetMap contributors</p></div>}
+            <div className="shopping-list-panel">
+              <div className="subheading"><h3>Your shopping list</h3><ShoppingBasket size={18} /></div>
+              {!recipe ? <div className="list-empty"><p>Create a recipe to match its ingredients with nearby shop types.</p><button className="text-button" onClick={() => navigate("studio")}>Create a fusion <ArrowRight size={14} /></button></div> : <>
+                <p className="subtle-small">{needed.length} ingredients · {recipe.servings} servings</p>
+                {!location && <p className="subtle-small">Your list works without a location. Set one when you want nearby shop suggestions.</p>}
+                <div className="stock-note"><Leaf size={16} /><p>Suggestions are based on shop type. Ingredient stock and prices are unconfirmed.</p></div>
+                {matches.length === 0 && <p className="list-empty"><CheckCheck size={23} /> You’ve got everything on your list.</p>}
+                <ul className="sourcing-list">{matches.map(({ ingredient, candidates }) => <li key={ingredient.id}>
+                  <div><strong>{ingredient.name}</strong><span>{amount(ingredient.amount, ingredient.unit)}</span></div>
+                  {candidates.length ? <><a href={productSearch(candidates[0], ingredient.name, location?.name || "")} target="_blank" rel="noreferrer">Search at {candidates[0].name} <ExternalLink size={11} /></a><small>Suggested shop · stock unconfirmed</small></> : <small>{shopData ? "No matching shop type found nearby" : !location ? "Set a location to find nearby shops" : shopError ? "Shop suggestions are temporarily unavailable" : "Search shops to see a suggestion"}</small>}
+                </li>)}</ul>
+                <button className="button secondary full" onClick={exportShopping}><Download size={15} /> Download shopping list</button>
+              </>}
+            </div>
+          </aside>
+        </div>
       </div>}
       {view === "cookbook" && <div className="page-width inner-page"><div className="page-intro split-intro"><div><span className="eyebrow"><BookOpen size={15} /> YOUR PERSONAL COLLECTION</span><h1>Worth making again.</h1><p>Your favourite fusions, with notes from your own kitchen.</p></div>{saved.length > 0 && <button className="button secondary" onClick={() => downloadFile("fusion-table-cookbook.json", JSON.stringify(saved, null, 2), "application/json")}><Download size={16} /> Export cookbook</button>}</div><p className="device-note"><Heart size={14} /> Your cookbook is saved in this browser on this device.</p>{saved.length === 0 ? <div className="empty-state"><div className="empty-icon"><BookOpen size={35} /></div><h3>A cookbook with your name on it.</h3><p>Save a recipe you love, then add a rating and notes after cooking. Your collection starts with one good idea.</p><button className="button primary" onClick={() => navigate("studio")}>Create your first fusion <ArrowRight size={16} /></button></div> : <div className="saved-grid">{saved.map((entry) => <article className="saved-card" key={recipeKey(entry.recipe)}><span className="eyebrow">{regionName(entry.recipe.regionId)} <span>×</span> {recipeBaseName(entry.recipe)}</span><h3>{entry.recipe.title}</h3><p>{entry.recipe.description}</p><div className="recipe-meta"><span><Clock3 size={14} /> About {duration(entry.recipe.totalMinutes)}</span><span><Users size={14} /> {entry.recipe.servings}</span></div>{entry.tested && <span className="tested-label"><CheckCheck size={13} /> Kitchen-tested by you</span>}{entry.rating > 0 && <span className="saved-stars">{"★".repeat(entry.rating)}{"☆".repeat(5 - entry.rating)}</span>}{entry.notes && <p className="saved-notes">“{entry.notes.slice(0, 130)}{entry.notes.length > 130 ? "…" : ""}”</p>}<div className="saved-card-actions"><button className="text-button" onClick={() => openSaved(entry)}>Open recipe <ArrowRight size={15} /></button><button className="icon-button" aria-label={`Remove ${entry.recipe.title}`} onClick={() => { setSaved((all) => all.filter((s) => recipeKey(s.recipe) !== recipeKey(entry.recipe))); setToast("Recipe removed from your cookbook."); }}><Heart size={17} fill="currentColor" /></button></div></article>)}</div>}</div>}
     </main>
     <footer className="site-footer"><div className="page-width footer-inner"><button className="brand" onClick={() => navigate("discover")}><Sprout size={24} strokeWidth={1.5} /><span>fusion<span className="brand-light">table</span></span></button><span>A little curiosity. A lot of flavour.</span><div><button onClick={() => setAboutOpen(true)}>How it works</button><button onClick={shoppingView}>Find local shops</button><span className="footer-small">Made for curious cooks.</span></div></div></footer>
     {toast && <div className="toast" role="status"><Check size={17} />{toast}<button onClick={() => setToast("")} aria-label="Dismiss notification"><X size={14} /></button></div>}
-    {locationOpen && <Modal title="Where’s your kitchen?" close={closeLocation}><p className="modal-description">Find ingredients close to home. Search for a suburb, town, or postcode, then choose the right location.</p><form onSubmit={searchLocation} className="location-search"><label className="sr-only" htmlFor="location-search">Suburb, town or postcode</label><Search size={18} /><input id="location-search" value={locationQuery} onChange={(e) => setLocationQuery(e.target.value)} placeholder="e.g. Newtown, Sydney" minLength={2} maxLength={160} required /><button type="submit" className="button primary small" disabled={locationLoading}>{locationLoading ? <LoaderCircle size={17} className="spin" /> : "Search"}</button></form><button className="current-location-button" onClick={currentLocation} disabled={locationLoading}><LocateFixed size={18} /> Use my current location <ArrowRight size={16} /></button>{locationError && <p className="error-message" role="alert">{locationError}</p>}{locationSearched && locationResults.length === 0 && <p className="search-empty">No locations found. Try adding a city, state, or country.</p>}<div className="location-results">{locationResults.map((place) => <button key={place.id} onClick={() => chooseLocation(place)}><MapPin size={19} /><span><strong>{place.name}</strong><small>{place.label}</small></span><ChevronRight size={17} /></button>)}</div><div className="modal-radius"><label htmlFor="modal-radius">Shopping radius <strong>{radius} km</strong></label><input id="modal-radius" type="range" min="1" max="25" value={radius} onChange={(e) => changeRadius(Number(e.target.value))} /><div><span>1 km · around the corner</span><span>25 km · further afield</span></div></div><p className="modal-privacy">Your chosen location is saved on this device. Searches use Photon and OpenStreetMap. Your precise location is only requested when you choose “Use my current location”.</p>{location && <button className="text-button clear-location" onClick={() => { shopRequest.current++; setLocation(null); setShopData(null); setShopsLoading(false); setShopError(""); setLocationOpen(false); setToast("Location cleared."); }}>Clear saved location</button>}</Modal>}
+    {locationOpen && <Modal title="Where’s your kitchen?" close={closeLocation}><p className="modal-description">Find ingredients close to home. Search for a suburb, town, or postcode, then choose the right location.</p><form onSubmit={searchLocation} className="location-search"><label className="sr-only" htmlFor="location-search">Suburb, town or postcode</label><Search size={18} /><input id="location-search" value={locationQuery} onChange={(e) => setLocationQuery(e.target.value)} placeholder="e.g. Newtown, Sydney" minLength={2} maxLength={160} required /><button type="submit" className="button primary small" disabled={locationLoading}>{locationLoading ? <LoaderCircle size={17} className="spin" /> : "Search"}</button></form><button className="current-location-button" onClick={currentLocation} disabled={locationLoading}><LocateFixed size={18} /> Use my current location <ArrowRight size={16} /></button>{locationError && <p className="error-message" role="alert">{locationError}</p>}{locationSearched && locationResults.length === 0 && <p className="search-empty">No locations found. Try adding a city, state, or country.</p>}<div className="location-results">{locationResults.map((place) => <button key={place.id} onClick={() => chooseLocation(place)}><MapPin size={19} /><span><strong>{place.name}</strong><small>{place.label}</small></span><ChevronRight size={17} /></button>)}</div><div className="modal-radius"><label htmlFor="modal-radius">Shopping radius <strong>{radius} km</strong></label><input id="modal-radius" type="range" min="1" max="25" value={radius} onChange={(e) => changeRadius(Number(e.target.value))} /><div><span>1 km · around the corner</span><span>25 km · further afield</span></div></div><p className="modal-privacy">Your chosen location is saved on this device. Searches use Photon and OpenStreetMap. Your precise location is only requested when you choose “Use my current location”.</p>{location && <button className="text-button clear-location" onClick={clearLocation}>Clear saved location</button>}</Modal>}
     {aboutOpen && <Modal title="A little curiosity goes a long way." close={closeAbout}><div className="about-steps"><div><span>01</span><h3>Start with an ingredient. Make a whole meal.</h3><p>Choose from {MAIN_INGREDIENTS.length} mains, compatible cooking methods, {MEAL_REGIONS.length} regional profiles and six side pairings: {getMealCombinationCount().toLocaleString("en-AU")} meal combinations. Or explore {CLASSICS.length} classic structures and {REGIONS.length} regional profiles, including smoking, grilling and BBQ.</p></div><div><span>02</span><h3>Bring it closer to home.</h3><p>Live map listings find shops inside your chosen straight-line radius. We match ingredients to relevant shop types and provide links to check products. We don’t have live shop inventory or prices.</p></div><div><span>03</span><h3>Make it your own.</h3><p>Save, cook, rate, and refine. Generated recipes haven’t been kitchen-tested; your notes and ratings are the next chapter. Cookbook data stays in your browser.</p></div></div><p className="subtle-small">Food imagery is illustrative and AI-generated. Listings © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>. Source and setup details are included with the project.</p></Modal>}
     {cookingStep !== null && recipe && <Modal title="A little space to cook." close={closeCooking}><span className="eyebrow">{recipe.title}</span><div className="cooking-progress"><span style={{ width: `${((cookingStep + 1) / recipe.steps.length) * 100}%` }} /></div><span className="cooking-count">STEP {cookingStep + 1} OF {recipe.steps.length}</span><h3 className="cooking-title">{recipe.steps[cookingStep].title}</h3><p className="cooking-instruction">{recipe.steps[cookingStep].detail}</p><div className="cooking-controls"><button className="button secondary" disabled={cookingStep === 0} onClick={() => setCookingStep(cookingStep - 1)}><ArrowLeft size={16} /> Previous</button><button className="button primary" onClick={() => cookingStep === recipe.steps.length - 1 ? setCookingStep(null) : setCookingStep(cookingStep + 1)}>{cookingStep === recipe.steps.length - 1 ? "Enjoy your fusion" : "Next step"}<ArrowRight size={16} /></button></div></Modal>}
   </div>;

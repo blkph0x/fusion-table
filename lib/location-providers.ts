@@ -20,10 +20,81 @@ const SHOP_TTL = 30 * 60 * 1000;
 type CacheEntry = { value: LocationsResponse | ShopResponse; expires: number };
 const cache = new Map<string, CacheEntry>();
 const inFlight = new Map<string, Promise<LocationsResponse | ShopResponse>>();
-const providerState = {
-  photon: { active: false, nextAt: 0 },
-  overpass: { active: false, nextAt: 0 },
+type ProviderKind = "photon" | "overpass";
+type WaitingSearch = {
+  resolve: () => void;
+  reject: (error: LocationError) => void;
+  timeout: ReturnType<typeof setTimeout>;
 };
+type ProviderState = { active: boolean; nextAt: number; blockedUntil: number; waiting: WaitingSearch[] };
+const providerState: Record<ProviderKind, ProviderState> = {
+  photon: { active: false, nextAt: 0, blockedUntil: 0, waiting: [] },
+  overpass: { active: false, nextAt: 0, blockedUntil: 0, waiting: [] },
+};
+const MAX_WAITING_SEARCHES = 3;
+const QUEUE_WAIT_MS = 8_000;
+const pause = (milliseconds: number) => new Promise<void>(resolve => setTimeout(resolve, milliseconds));
+const cooldownMs = (kind: ProviderKind) => kind === "overpass" ? 3500 : 1200;
+
+// These failures can be transient. Configuration, redirects, malformed results
+// and provider rate limits must not trigger an immediate repeat request.
+class RetryableProviderError extends LocationError {}
+
+function rateLimitError(state: ProviderState): LocationError {
+  const retryAfter = Math.max(1, Math.ceil((state.blockedUntil - Date.now()) / 1000));
+  return new LocationError(`The public map service is busy. Please retry in ${retryAfter} seconds.`, 429, "provider_rate_limited", retryAfter);
+}
+
+async function acquireProvider(kind: ProviderKind): Promise<void> {
+  const state = providerState[kind];
+  if (state.blockedUntil > Date.now()) throw rateLimitError(state);
+  if (state.active) {
+    if (state.waiting.length >= MAX_WAITING_SEARCHES) {
+      throw new LocationError("Several map searches are in progress. Please try again in a few seconds.", 429, "search_rate_limited", 5);
+    }
+    await new Promise<void>((resolve, reject) => {
+      const waiting: WaitingSearch = {
+        resolve, reject,
+        timeout: setTimeout(() => {
+          const index = state.waiting.indexOf(waiting);
+          if (index !== -1) state.waiting.splice(index, 1);
+          reject(new LocationError("The map search queue is busy. Please try again in a few seconds.", 429, "search_rate_limited", 5));
+        }, QUEUE_WAIT_MS),
+      };
+      state.waiting.push(waiting);
+    });
+  } else state.active = true;
+  // The slot remains owned during this wait, so another visitor cannot start a
+  // simultaneous provider request or skip its cooldown.
+  const delay = state.nextAt - Date.now();
+  if (delay > 0) await pause(delay);
+}
+
+function releaseProvider(kind: ProviderKind): void {
+  const state = providerState[kind];
+  state.nextAt = Date.now() + cooldownMs(kind);
+  state.active = false;
+  while (state.waiting.length) {
+    const waiting = state.waiting.shift()!;
+    clearTimeout(waiting.timeout);
+    if (state.blockedUntil > Date.now()) waiting.reject(rateLimitError(state));
+    else {
+      state.active = true;
+      waiting.resolve();
+      break;
+    }
+  }
+}
+
+function retryAfterSeconds(value: string | null): number {
+  if (value) {
+    const seconds = Number(value);
+    if (Number.isFinite(seconds) && seconds > 0) return Math.ceil(seconds);
+    const date = Date.parse(value);
+    if (Number.isFinite(date) && date > Date.now()) return Math.ceil((date - Date.now()) / 1000);
+  }
+  return 60;
+}
 
 function endpoint(value: string | undefined, fallback: string): URL {
   try {
@@ -62,20 +133,33 @@ async function singleFlight<T extends LocationsResponse | ShopResponse>(key: str
   return promise;
 }
 
-async function fetchProvider(kind: "photon" | "overpass", url: URL, init: RequestInit, config: LocationProviderConfig): Promise<unknown> {
-  const state = providerState[kind];
-  const now = Date.now();
-  if (state.active || state.nextAt - now > 1500) {
-    throw new LocationError("A map search is already in progress. Please try again in a few seconds.", 429, "search_rate_limited", kind === "overpass" ? 5 : 2);
+async function fetchProvider(kind: ProviderKind, url: URL, init: RequestInit, config: LocationProviderConfig): Promise<unknown> {
+  await acquireProvider(kind);
+  // A slow first attempt cannot double the visitor's wait indefinitely. These
+  // budgets include both attempts and their intervening provider cooldown.
+  const deadline = Date.now() + (kind === "overpass" ? 26_000 : 20_000);
+  try {
+    for (let attempt = 0; ; attempt++) {
+      try {
+        return await fetchProviderAttempt(kind, url, init, config, Math.min(kind === "overpass" ? 22_000 : 12_000, deadline - Date.now()));
+      } catch (error) {
+        if (!(error instanceof RetryableProviderError) || attempt >= 1 || deadline - Date.now() <= cooldownMs(kind) + 1000) throw error;
+        await pause(cooldownMs(kind));
+      }
+    }
+  } finally {
+    releaseProvider(kind);
   }
-  state.active = true;
-  if (now < state.nextAt) await new Promise(resolve => setTimeout(resolve, state.nextAt - now));
+}
+
+async function fetchProviderAttempt(kind: ProviderKind, url: URL, init: RequestInit, config: LocationProviderConfig, timeoutMs: number): Promise<unknown> {
+  const state = providerState[kind];
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), kind === "overpass" ? 22_000 : 12_000);
+  const timeout = setTimeout(() => controller.abort(), Math.max(1, timeoutMs));
   try {
     const headers = new Headers(init.headers);
     headers.set("Accept", "application/json");
-    let origin = "https://github.com/blkph0x/p-vs-np-proof-research";
+    let origin = "https://github.com/blkph0x/fusion-table";
     if (config.appOrigin) {
       try { origin = new URL(config.appOrigin).origin + "/"; headers.set("Referer", origin); } catch { /* optional identification */ }
     }
@@ -85,12 +169,17 @@ async function fetchProvider(kind: "photon" | "overpass", url: URL, init: Reques
     // runtime incompatibility or forwarding headers to another destination.
     const response = await fetch(url, { ...init, headers, signal: controller.signal, redirect: "manual" });
     if (response.status >= 300 && response.status < 400) {
+      await response.body?.cancel().catch(() => undefined);
       throw new LocationError("The map provider endpoint has changed and needs a configuration update.", 503, "provider_redirect");
     }
     if (!response.ok) {
+      await response.body?.cancel().catch(() => undefined);
       if (response.status === 429) {
-        state.nextAt = Date.now() + 60_000;
-        throw new LocationError("The public map service is busy. Please retry in a minute.", 429, "provider_rate_limited", 60);
+        state.blockedUntil = Date.now() + retryAfterSeconds(response.headers.get("Retry-After")) * 1000;
+        throw rateLimitError(state);
+      }
+      if (response.status === 408 || response.status >= 500) {
+        throw new RetryableProviderError("The live map service is temporarily unavailable. Please retry the shop search in a moment.", 503, "provider_unavailable", 30);
       }
       throw new LocationError("The live map service is temporarily unavailable. Your recipes still work; retry the shop search later.", 503, "provider_unavailable", 30);
     }
@@ -104,13 +193,11 @@ async function fetchProvider(kind: "photon" | "overpass", url: URL, init: Reques
   } catch (error) {
     if (error instanceof LocationError) throw error;
     if (controller.signal.aborted) {
-      throw new LocationError("The map search took too long. Try a smaller radius or retry in a moment.", 504, "provider_timeout", 15);
+      throw new RetryableProviderError("The map search took too long. Try a smaller radius or retry in a moment.", 504, "provider_timeout", 15);
     }
-    throw new LocationError("We couldn't reach the live map service. Please retry in a moment.", 503, "provider_unavailable", 30);
+    throw new RetryableProviderError("We couldn't reach the live map service. Please retry in a moment.", 503, "provider_unavailable", 30);
   } finally {
     clearTimeout(timeout);
-    state.active = false;
-    state.nextAt = Math.max(state.nextAt, Date.now() + (kind === "overpass" ? 3500 : 1200));
   }
 }
 

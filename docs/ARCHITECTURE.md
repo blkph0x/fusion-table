@@ -6,7 +6,7 @@ Fusion Table combines two deterministic authored recipe engines with live discov
 
 Shop discovery is separate: server routes call the configured map provider and return places that may carry an ingredient, with stock and prices explicitly unverified. A template proposal, an automated check, a cook's observation and actual retailer inventory evidence remain different records.
 
-The app uses React with the Next-style App Router through Vinext. Vite builds browser assets and a Cloudflare Worker. Tracked Sites integration remains for the existing private deployment; an independent Cloudflare deployment has its own configuration, account and audience.
+The app uses React with the Next-style App Router through Vinext. Vite builds browser assets and a Cloudflare Worker. Tracked Sites integration remains for the existing public deployment; an independent Cloudflare deployment has its own configuration, account and audience.
 
 This is a standalone application repository. The original [research repository](https://github.com/blkph0x/p-vs-np-proof-research) was inspected at [`7dedc73f758dfbdc072e7aa29dfc08505761ebd5`](https://github.com/blkph0x/p-vs-np-proof-research/tree/7dedc73f758dfbdc072e7aa29dfc08505761ebd5). No mathematics engine or P-versus-NP result is used by the website.
 
@@ -112,7 +112,7 @@ Recipe composition sends no data to a remote recipe service. Map providers recei
 
 ## Builds, hosting and releases
 
-The GitHub source repository and published release assets are public. The original Sites deployment preserves its assigned project ID and owner-private audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
+The GitHub source repository and published release assets are public. The original Sites deployment preserves its assigned project ID and public audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
 
 A clean checkout selects the portable runner and resolves helpers from tracked source. Use Node 22.13.0+, pnpm 11.25.0, and the committed lockfile. Ordinary development uses `pnpm install --frozen-lockfile`, `pnpm dev`, `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`. The managed Linux installer remains separate.
 
@@ -145,3 +145,7 @@ All three images were generated with the built-in Imagegen tool for this website
 | `public/images/moroccan-traybake.png` | Editorial vegan chickpea, cauliflower and carrot traybake with lemon, herbs, cumin and paprika, in a cream dish on warm oak with sage linen, from an elevated 45-degree angle. |
 
 These images illustrate the featured pairings. They do not establish that a recipe was cooked or photographed, and their garnishes or vegetables can differ from the generated recipe. For example, the Moroccan template uses potatoes, carrots, onion and chickpeas, while the inspiration image includes cauliflower. The structured ingredient list and method are the cooking instructions.
+
+### Shopping resilience in v0.2.2
+
+The shopping list and CSV export are available independently of location selection or map-provider success. The browser uses `lib/location-client.ts` for bounded, cancellable requests, safe handling of non-JSON responses, and validation of response shapes. New searches, radius changes and location-dialog dismissal invalidate stale requests. Closing the dialog also invalidates a pending browser geolocation callback. The server queues a small number of searches and retries eligible transient failures once while retaining provider cooldowns, bounded operation time, exact-radius checks and honest failure responses.

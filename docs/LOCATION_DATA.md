@@ -101,7 +101,7 @@ Even a category match for gluten-free bread is only a place to ask: availability
 labelling and suitability still need checking with the retailer.
 
 Errors return `{ error, code, retryAfter? }` with a non-2xx status. Invalid inputs
-produce 400; concurrency/cooldowns and provider rate limits produce 429;
+produce 400; a full/expired search queue and provider rate limits produce 429;
 unreadable provider output produces 502; unavailability/incomplete results produce
 503; timeouts produce 504. Partial Overpass results containing a runtime-error
 remark are rejected. An upstream error is never transformed into “no shops.”
@@ -111,14 +111,30 @@ remark are rejected. An upstream error is never transformed into “no shops.”
 In-memory caches are bounded to 80 combined entries. Locations are cached for
 24 hours; shop results for 30 minutes. Identical in-flight requests coalesce.
 Only one outbound request per provider runs per worker isolate, followed by
-a short cooldown (1.2 seconds for Photon, 3.5 seconds for Overpass). A provider
-429 enforces a 60-second cooldown. Upstream requests time out after 12 seconds
-(Photon) or 22 seconds (Overpass), and large responses are rejected.
+a short cooldown (1.2 seconds for Photon, 3.5 seconds for Overpass). Up to three
+different searches can wait for that slot, for at most eight seconds. An ordinary
+overlap between a location lookup and a shop lookup therefore waits briefly
+instead of immediately failing. A full or expired queue returns a retryable 429.
+
+Transient network failures, timeouts, HTTP 408 and upstream 5xx responses receive
+at most one retry, separated by the same provider cooldown. Both attempts share
+an overall operation budget of 20 seconds for Photon or 26 seconds for Overpass.
+An individual attempt is limited to 12 or 22 seconds respectively. Including the
+queue and initial cooldown, the upper bounds are approximately 29.2 seconds for
+Photon and 37.5 seconds for Overpass. Persistent failure remains an error, never
+an empty successful directory. Redirects, invalid configuration, malformed JSON,
+oversized results and provider 429s are not retried automatically.
+
+A provider 429 preserves its `Retry-After` delay (seconds or an HTTP date), with
+60 seconds used when the header is missing or invalid. Queued callers receive
+that same remaining cooldown without issuing more provider requests. Large
+responses are rejected, and failed HTTP response bodies are cancelled before
+retrying to release the upstream connection.
 
 These controls are **per worker isolate**, not a global distributed quota. A
 public service with many visitors should use a provisioned provider and a shared
-cache/rate limiter; the current defaults suit this private, low-traffic first
-release. They cannot guarantee completeness, current business operation or
+cache/rate limiter; the current defaults are intended for modest traffic, even
+when the website is publicly accessible. They cannot guarantee completeness, current business operation or
 service uptime. Return `fetchedAt` from the actual retrieval even on cache hits.
 
 ## Verification
@@ -135,8 +151,10 @@ Nine tests cover malformed inputs/query injection, coordinate limits, dateline a
 antipodal distances, exact radius boundaries, missing source fields, unsafe links,
 partial provider errors and truthful counts under result caps.
 Provider tests also cover Workers-compatible redirect handling, safe rejection of
-redirects, and the preservation of the retrieval time on cache hits. Ingredient
-matching tests check specialist shop subtypes and ranked alternatives.
+redirects, preservation of the retrieval time on cache hits, transient 503/network
+recovery, persistent failure, overlapping geocoder/shop requests, queue limits,
+upstream rate-limit handling and the combined timeout budget. Ingredient matching
+tests check specialist shop subtypes and ranked alternatives.
 
 On 22 October 2026, live endpoint reads verified Photon location lookup for
 Newtown, New South Wales and its nearby food-shop reverse query. The latter

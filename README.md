@@ -10,7 +10,7 @@ All application source, recipe catalogs, images, server routes, tests, build too
 
 Earlier homepage preview; the current source also includes the expanded catalog and ingredient-led builder.
 
-## What's in v0.2.1
+## What's in v0.2.2
 
 - **28 classics × 24 regions = 672 classic/region pairings**, with all **5 dietary preferences** supported: **3,360 classic/region/diet configurations** before servings, heat and pantry choices.
 - The original **8 classics, 8 regions and 5 diets remain available**, with 20 new barbecue/smoking classics and 16 new regional profiles added.
@@ -18,6 +18,7 @@ Earlier homepage preview; the current source also includes the expanded catalog 
 - Servings from **1–12**, adjustable heat, exact pantry matching, measured ingredients, estimated times, allergens, equipment and technique notes.
 - Distinct methods for poultry, whole cuts, seafood, sausages, ready-to-eat smoked products and plant alternatives, including outdoor and kitchen options where appropriate.
 - A nearby shop finder, cooking mode, saved recipes, notes, ratings, JSON cookbook exports and CSV shopping exports.
+- Shopping lists and CSV exports work before you choose a location and during map-service failures. Map searches use bounded retries and a short queue; cancelled requests cannot overwrite newer choices.
 - Clone/build documentation, environment examples, unified tests, CI, an independent Cloudflare deployment helper and source/Worker release assets.
 
 These numbers describe supported template configurations, **not independently kitchen-tested recipes**. Every generated result is labelled exactly **“Template-generated · not kitchen-tested”**. Cooking times are estimates; follow the method's doneness checks and check packaged-food labels for your dietary needs.
@@ -94,7 +95,7 @@ Local discovery searches a **1–25 km straight-line radius** around a selected 
 
 ## Clone and run
 
-The [GitHub repository](https://github.com/blkph0x/fusion-table) and [published release downloads](https://github.com/blkph0x/fusion-table/releases) are **public**. Anyone can clone the source or extract a source-release ZIP and build without Git. The existing hosted Sites app remains owner-private; its audience is separate from repository visibility.
+The [GitHub repository](https://github.com/blkph0x/fusion-table) and [published release downloads](https://github.com/blkph0x/fusion-table/releases) are **public**. Anyone can clone the source or extract a source-release ZIP and build without Git. The [hosted Fusion Table app](https://fusion-table-kitchen.free-jelly-7189.chatgpt.site) is also public. Website access is managed separately from repository visibility.
 
 Requirements: **Node.js 22.13.0+** and **pnpm 11.25.0**. Install the pinned package manager if necessary:
 
@@ -140,7 +141,7 @@ Saved recipes, ratings, notes, location and radius live in the current browser's
 
 Location queries send only the required location text or coordinates to the selected map provider. Cookbook history and notes are not part of those requests. Browser geolocation is requested only after the visitor chooses it. Recipe composition itself makes no external service request.
 
-The existing Sites deployment remains private under its platform settings. `.openai/hosting.json` preserves that Site's identity. A separate Cloudflare deployment has its own audience and authentication settings and does not inherit Sites access controls.
+The existing Sites deployment is public under its platform settings. `.openai/hosting.json` preserves that Site's identity. A separate Cloudflare deployment has its own audience and authentication settings and does not inherit Sites access controls.
 
 ## Project background and implementation
 
