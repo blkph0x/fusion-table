@@ -18,7 +18,23 @@ const variants: { id: string; diet: DietId; constraints?: RecipeConstraints }[] 
   { id: "vegetarian-df-gf", diet: "vegetarian", constraints: { dairyFree: true, glutenFree: true } },
 ];
 
-const templates = [];
+type CatalogTemplate = {
+  classicId: string;
+  regionId: string;
+  variant: string;
+  kind: "classic" | "meal";
+  anchorId: string;
+  title: string;
+  description: string;
+  prepMinutes: number;
+  cookMinutes: number;
+  steps: string[];
+  safetyNote: string;
+  notes: string[];
+  ingredients: { id: string; name: string; amount: number; unit: string; allergens: string[]; aliases: string[]; notes: string }[];
+};
+
+const templates: CatalogTemplate[] = [];
 
 function pushTemplate(recipe: Recipe, variantId: string, kind: "classic" | "meal", anchorId: string) {
   templates.push({

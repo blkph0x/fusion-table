@@ -31,7 +31,7 @@ test("service stations and unnamed convenience shops are not offered as grocery 
     { type: "node", id: 2, lat: 0, lon: 0, tags: { shop: "supermarket", name: "Woolworths" } },
     { type: "node", id: 3, lat: 0, lon: 0, tags: { shop: "convenience", name: "NightOwl" } },
   ] }, { lat: 0, lon: 0, radiusKm: 5 });
-  assert.deepEqual(result.shops.map((shop) => shop.name), ["Woolworths"]);
+  assert.deepEqual(result.shops.map((shop: { name: string }) => shop.name), ["Woolworths"]);
   assert.doesNotMatch(buildOverpassQuery({ lat: 0, lon: 0, radiusKm: 5 }), /convenience/);
 });
 

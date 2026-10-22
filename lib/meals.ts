@@ -38,7 +38,7 @@ const LEGUMES = new Set(["chickpeas", "lentils", "butter-beans"]);
 const ROOTS = new Set(["pumpkin", "sweet-potato"]);
 
 function ingredient(id: string, name: string, amount: number, unit: string, category: IngredientCategory = "grocery", allergens: string[] = [], notes?: string, aliases?: readonly string[]): DraftIngredient {
-  return { id, name, amount, unit, category, allergens, ...(notes ? { notes } : {}), ...(aliases ? { aliases } : {}) };
+  return { id, name, amount, unit, category, allergens, ...(notes ? { notes } : {}), ...(aliases ? { aliases: [...aliases] } : {}) };
 }
 
 function normalizeTerm(value: string): string {

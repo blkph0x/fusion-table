@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Star } from "lucide-react";
-import { VERDICTS, isConsumable, makeRecipe, pantryKey, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
+import { VERDICTS, isConsumable, makeRecipe, pantryKey, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
 
 export function KitchenDesk({
   ingredients,
@@ -21,7 +21,7 @@ export function KitchenDesk({
   onPantry: (next: Stock[]) => void;
   onVerdict: (next: VerdictId) => void;
   onStars: (next: number) => void;
-  onShopping: (lines: { name: string; amount: number; unit: string }[], warnings: string[]) => void;
+  onShopping: (lines: ShopNeed[], warnings: string[]) => void;
 }) {
   const initial = useMemo(() => {
     const owned = new Set<string>();

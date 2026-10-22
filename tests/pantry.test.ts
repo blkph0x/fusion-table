@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-
-const { isConsumable, makeRecipe, rememberConsumables, weekNeeds, weekShortfalls } = await import(new URL("../lib/pantry.ts", import.meta.url).href);
+import { isConsumable, makeRecipe, rememberConsumables, weekNeeds, weekShortfalls } from "../lib/pantry.ts";
 
 test("oils, butter and flour are pantry consumables, and a steak is not", () => {
   assert.equal(isConsumable("Extra virgin olive oil"), true);
