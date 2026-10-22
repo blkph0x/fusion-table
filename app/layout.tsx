@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Fusion Table — Global inspiration. Local ingredients.",
-  description: "Bring classic dishes together with regional flavours. Create your fusion recipe, find ingredients at nearby shops, and make it your own.",
+  description: "Explore authored fusion recipes, smoking, grilling and BBQ. Choose a classic or build around a main ingredient, adapt the flavours and find ingredients at nearby shops.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

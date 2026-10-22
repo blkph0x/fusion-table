@@ -1,8 +1,12 @@
 import type {
-  DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeOption, RecipeStep, SpiceHeat,
-} from "./recipe-types";
+  DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeOption, SpiceHeat,
+} from "./recipe-types.ts";
 
-export type { DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeStep, SpiceHeat } from "./recipe-types";
+export type { DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeStep, SpiceHeat } from "./recipe-types.ts";
+
+import type { BaseRecipe, DraftIngredient, Profile, RecipeContext } from "./template-types.ts";
+import { BBQ_CLASSICS, bbqBaseFor } from "./bbq-classics.ts";
+import { BBQ_REGIONS, bbqProfileFor } from "./bbq-regions.ts";
 
 export const CLASSICS: RecipeOption[] = [
   { id: "pasta", name: "Creamy pasta", origin: "Italy", emoji: "🍝", description: "Silky sauce, golden mushrooms and a familiar bowl of comfort." },
@@ -13,6 +17,7 @@ export const CLASSICS: RecipeOption[] = [
   { id: "fried-rice", name: "Fried rice", origin: "China", emoji: "🥢", description: "A colourful, quick-cooking pan of rice and vegetables." },
   { id: "flatbread", name: "Loaded flatbread", origin: "Mediterranean", emoji: "🫓", description: "Crisp bread with roasted vegetables, chickpeas and a creamy finish." },
   { id: "cottage-pie", name: "Cottage pie", origin: "Britain", emoji: "🥧", description: "A hearty savoury filling beneath a golden mashed-potato lid." },
+  ...BBQ_CLASSICS,
 ];
 
 export const REGIONS: RecipeOption[] = [
@@ -24,6 +29,7 @@ export const REGIONS: RecipeOption[] = [
   { id: "levantine", name: "Levantine", emoji: "🌿", description: "Sumac, cumin, tahini, lemon and parsley." },
   { id: "italian", name: "Italian", emoji: "🇮🇹", description: "Tomato, oregano, basil and bright lemon." },
   { id: "moroccan", name: "Moroccan", emoji: "🇲🇦", description: "Ras el hanout, harissa, lemon and mint." },
+  ...BBQ_REGIONS,
 ];
 
 export const DIETS: RecipeOption[] = [
@@ -33,33 +39,6 @@ export const DIETS: RecipeOption[] = [
   { id: "gluten-free", name: "Gluten-free", description: "Use labelled gluten-free grains, breads and condiments." },
   { id: "dairy-free", name: "Dairy-free", description: "Use plant-based alternatives to milk, butter and yogurt." },
 ];
-
-type DraftIngredient = Omit<RecipeIngredient, "inPantry"> & { aliases?: string[] };
-interface Profile {
-  title: string;
-  tags: string[];
-  warm: DraftIngredient[];
-  finish: DraftIngredient[];
-  note: string;
-}
-interface RecipeContext {
-  input: Required<Pick<RecipeInput, "classicId" | "regionId" | "servings">> & { diet: DietId; spiceHeat: SpiceHeat };
-  vegan: boolean;
-  vegetarian: boolean;
-  dairyFree: boolean;
-  glutenFree: boolean;
-  profile: Profile;
-}
-interface BaseRecipe {
-  name: string;
-  description: string;
-  ingredients: DraftIngredient[];
-  steps: RecipeStep[];
-  prep: number;
-  cook: number;
-  equipment: string[];
-  meat?: boolean;
-}
 
 const FOOD_SAFETY_SOURCE = "https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics";
 
@@ -133,7 +112,7 @@ function profileFor(regionId: string, diet: DietId, heat: SpiceHeat): Profile {
       note: "Ras el hanout and a little harissa give the base rounded warmth. Fresh mint and lemon keep the result balanced.",
     },
   };
-  const profile = profiles[regionId];
+  const profile = profiles[regionId] ?? bbqProfileFor(regionId, diet, heat);
   if (!profile) throw new Error("Choose a supported region.");
   return profile;
 }
@@ -156,6 +135,8 @@ function yogurt(context: RecipeContext, amount: number): DraftIngredient {
 }
 
 function baseFor(context: RecipeContext): BaseRecipe {
+  const barbecue = bbqBaseFor(context);
+  if (barbecue) return barbecue;
   const { input, profile, vegan, vegetarian, dairyFree, glutenFree } = context;
   const warm = names(profile.warm);
   const herbs = "Prepare the fresh herbs and citrus from your finishing ingredients.";
@@ -325,17 +306,25 @@ export function generateRecipe(input: RecipeInput): Recipe {
   const merged = new Map<string, DraftIngredient>();
   for (const item of [...base.ingredients, ...context.profile.warm, ...context.profile.finish]) {
     const existing = merged.get(item.id);
-    if (existing && existing.unit === item.unit) existing.amount += item.amount;
-    else merged.set(item.id, { ...item, allergens: [...item.allergens] });
+    if (existing) {
+      if (existing.unit !== item.unit) throw new Error(`The authored ingredient ${item.id} has inconsistent units.`);
+      existing.amount += item.amount;
+      existing.allergens = [...new Set([...existing.allergens, ...item.allergens])];
+      existing.aliases = [...new Set([...(existing.aliases ?? []), ...(item.aliases ?? [])])];
+      const notes = [...new Set([existing.notes, item.notes].filter((note): note is string => Boolean(note)))];
+      if (notes.length) existing.notes = notes.join(" ");
+    } else merged.set(item.id, { ...item, allergens: [...item.allergens], ...(item.aliases ? { aliases: [...item.aliases] } : {}) });
   }
-  const ingredients: RecipeIngredient[] = [...merged.values()].map(({ aliases: _aliases, ...item }) => ({
-    ...item, amount: Math.round(item.amount * factor * 10000) / 10000,
-    inPantry: pantryHas(merged.get(item.id)!, pantry),
+  const ingredients: RecipeIngredient[] = [...merged.values()].map((item) => ({
+    id: item.id, name: item.name, amount: Math.round(item.amount * factor * 10000) / 10000,
+    unit: item.unit, category: item.category, allergens: item.allergens,
+    ...(item.notes ? { notes: item.notes } : {}), inPantry: pantryHas(item, pantry),
   }));
   const dietaryNotes = [
     "Dietary preferences guide ingredient choices. Check packaged-food labels and substitutions for your needs.",
     "Preparation and cooking times are estimates; use the doneness checks in the method, not the timer alone.",
   ];
+  if (base.dietaryNotes) dietaryNotes.push(...base.dietaryNotes);
   if (context.glutenFree) dietaryNotes.push("Choose certified or clearly labelled gluten-free bread, pasta, stock and sauces; shared equipment can introduce gluten.");
   if (vegan) dietaryNotes.push("Use vegan-labelled curry paste, miso, breads and other prepared sauces; some versions contain animal ingredients.");
   if (input.servings > 6) dietaryNotes.push("For this larger batch, use extra pans or roasting trays and leave space between food. Cook in batches if needed; total time will be longer. Check each batch for doneness.");
@@ -353,7 +342,8 @@ export function generateRecipe(input: RecipeInput): Recipe {
     allergens: [...new Set(ingredients.flatMap((item) => item.allergens))].sort(),
     dietaryNotes,
     sourceLabel: "Template-generated · not kitchen-tested",
-    ...(base.meat ? { safetyNote: "Use a clean food thermometer: chicken and minced meat should reach at least 75°C in the centre. Cooking times are estimates.", safetySource: FOOD_SAFETY_SOURCE } : {}),
+    ...(base.methodNotes ? { methodNotes: base.methodNotes } : {}),
+    ...(base.safetyNote ? { safetyNote: base.safetyNote, safetySource: base.safetySource || FOOD_SAFETY_SOURCE } : base.meat ? { safetyNote: "Use a clean food thermometer: chicken and minced meat should reach at least 75°C in the centre. Cooking times are estimates.", safetySource: FOOD_SAFETY_SOURCE } : {}),
   };
 }
 

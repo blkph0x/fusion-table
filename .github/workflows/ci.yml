@@ -1,0 +1,35 @@
+name: Check and build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          package-manager-cache: false
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.25.0
+          run_install: false
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Test recipe, provider and shopping behavior
+        run: pnpm test
+      - name: Check TypeScript
+        run: pnpm typecheck
+      - name: Lint source
+        run: pnpm lint
+      - name: Build Worker and client
+        run: pnpm build

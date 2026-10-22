@@ -1,0 +1,11 @@
+# Optional local Cloudflare Worker configuration for location/shop providers.
+# Copy this file to .dev.vars and uncomment only the values you need.
+# Deterministic recipes and the default map services require no secret keys.
+
+# PHOTON_API_URL=https://photon.komoot.io/api/
+# PHOTON_REVERSE_API_URL=https://photon.komoot.io/reverse
+# SHOP_DATA_PROVIDER=photon
+# OVERPASS_API_URL=https://overpass.private.coffee/api/interpreter
+
+# Local values do not configure your deployed Worker. Set deployed provider
+# variables through your own Cloudflare dashboard or supported deployment tools.

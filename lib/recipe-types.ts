@@ -58,4 +58,11 @@ export interface Recipe {
   sourceLabel: "Template-generated · not kitchen-tested";
   safetyNote?: string;
   safetySource?: string;
+  kind?: "classic" | "meal";
+  mainId?: string;
+  methodId?: string;
+  sideId?: string;
+  components?: { main: string; side: string; vegetables: string; sauce: string };
+  generation?: "authored";
+  methodNotes?: string[];
 }

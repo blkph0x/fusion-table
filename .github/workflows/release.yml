@@ -1,0 +1,119 @@
+name: Publish versioned release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+      - .github/workflows/release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fusion-table-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          package-manager-cache: false
+      - name: Validate version and check whether a release already exists
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, appendFile } from 'node:fs/promises';
+          const pkg = JSON.parse(await readFile('package.json', 'utf8'));
+          if (pkg.name !== 'fusion-table' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(pkg.version)) {
+            throw new Error('Expected fusion-table and a valid release version in package.json.');
+          }
+          const tag = `v${pkg.version}`;
+          const base = `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}`;
+          const headers = {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${process.env.GH_TOKEN}`,
+            'X-GitHub-Api-Version': '2026-03-10',
+          };
+          const release = await fetch(`${base}/releases/tags/${encodeURIComponent(tag)}`, { headers });
+          let exists;
+          if (release.status === 200) exists = true;
+          else if (release.status === 404) {
+            // A private-resource 404 can also conceal missing access. Confirm the
+            // token can read releases before deciding this tag is simply absent.
+            const access = await fetch(`${base}/releases?per_page=1`, { headers });
+            if (access.status !== 200) throw new Error(`Cannot verify release access: HTTP ${access.status}.`);
+            exists = false;
+          } else throw new Error(`Cannot check release: HTTP ${release.status}; refusing to create blindly.`);
+          await appendFile(process.env.GITHUB_OUTPUT, `version=${pkg.version}\ntag=${tag}\nexists=${exists}\n`);
+          console.log(exists ? `${tag} already exists; preserving its release and assets.` : `${tag} is absent; verification and packaging will run.`);
+          NODE
+      - uses: pnpm/action-setup@v6
+        if: steps.version.outputs.exists == 'false'
+        with:
+          version: 11.25.0
+          run_install: false
+      - name: Install locked dependencies
+        if: steps.version.outputs.exists == 'false'
+        run: pnpm install --frozen-lockfile
+      - name: Run all checks and build
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          pnpm test
+          pnpm typecheck
+          pnpm lint
+          pnpm build
+      - name: Verify tag target and package release assets
+        if: steps.version.outputs.exists == 'false'
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if git rev-parse --quiet --verify "refs/tags/$RELEASE_TAG" >/dev/null; then
+            tag_commit="$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+            if [ "$tag_commit" != "$GITHUB_SHA" ]; then
+              echo "An existing tag points at another commit. Refusing to move it or publish mismatched assets."
+              exit 1
+            fi
+          fi
+          pnpm release:source
+          pnpm release:worker
+      - name: Assemble checksums and release notes
+        if: steps.version.outputs.exists == 'false'
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const version = process.env.RELEASE_VERSION;
+          const names = [`fusion-table-v${version}-source.zip`, `fusion-table-v${version}-cloudflare-worker.tar.gz`];
+          const sums = await Promise.all(names.map(name => readFile(`releases/${name}.sha256`, 'utf8')));
+          await writeFile('releases/SHA256SUMS', sums.join(''));
+          const notes = await readFile(`docs/releases/v${version}.md`, 'utf8');
+          const run = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+          await writeFile('releases/RELEASE_NOTES.md', `${notes}\n\n## Build record\n\nCommit: \`${process.env.GITHUB_SHA}\`\n\n[Verification run](${run}) passed tests, TypeScript, lint and production build before these assets were packaged. Kitchen trials and verified retailer inventory are not implied by those checks.\n`);
+          NODE
+      - name: Create release with assets (never overwrite)
+        if: steps.version.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "releases/fusion-table-v$RELEASE_VERSION-source.zip" \
+            "releases/fusion-table-v$RELEASE_VERSION-cloudflare-worker.tar.gz" \
+            "releases/SHA256SUMS" \
+            --target "$GITHUB_SHA" \
+            --title "Fusion Table $RELEASE_TAG" \
+            --notes-file releases/RELEASE_NOTES.md

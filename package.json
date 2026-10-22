@@ -1,6 +1,6 @@
 {
   "name": "fusion-table",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -10,8 +10,13 @@
     "dev": "node scripts/run-framework.mjs dev",
     "build": "node scripts/run-framework.mjs build",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
+    "test": "node scripts/test.mjs",
+    "typecheck": "tsc --noEmit --allowImportingTsExtensions",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "deploy:cloudflare": "node scripts/deploy-cloudflare.mjs",
+    "release:source": "node scripts/package-source.mjs",
+    "db:generate": "drizzle-kit generate",
+    "release:worker": "node scripts/package-worker.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

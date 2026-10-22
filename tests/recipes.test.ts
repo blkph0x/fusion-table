@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CLASSICS, DIETS, REGIONS, formatIngredientAmount, generateRecipe, parsePantry } from "../lib/recipes.ts";
 import type { DietId } from "../lib/recipe-types.ts";
+const ORIGINAL_CLASSICS = new Set(["pasta", "tacos", "risotto", "burgers", "roast", "fried-rice", "flatbread", "cottage-pie"]);
 
 describe("fusion recipe engine", () => {
-  it("produces complete, bounded recipes for all 64 combinations and every dietary preference", () => {
+  it("produces complete, bounded recipes for every authored classic, region and dietary preference", () => {
     for (const classic of CLASSICS) for (const region of REGIONS) for (const diet of DIETS) {
       const recipe = generateRecipe({ classicId: classic.id, regionId: region.id, servings: 4, diet: diet.id as DietId });
       assert.ok(recipe.ingredients.length >= 8, recipe.id);
@@ -18,7 +19,9 @@ describe("fusion recipe engine", () => {
       if (["vegan", "dairy-free"].includes(diet.id)) assert.ok(!recipe.allergens.includes("milk"), recipe.id);
       if (diet.id === "vegan") assert.ok(!recipe.allergens.includes("egg"), recipe.id);
       if (diet.id === "gluten-free") assert.ok(!recipe.allergens.includes("wheat"), recipe.id);
-      if (recipe.ingredients.some((item) => item.category === "butcher")) {
+      // The original animal recipes use poultry/mince. Whole BBQ cuts and fish
+      // have separate, cut-specific endpoint checks in bbq-recipes.test.ts.
+      if (ORIGINAL_CLASSICS.has(classic.id) && recipe.ingredients.some((item) => item.category === "butcher")) {
         assert.ok(recipe.steps.some((step) => step.detail.includes("75°C")), recipe.id);
         assert.ok(recipe.safetySource?.startsWith("https://www.foodstandards.gov.au/"));
       }

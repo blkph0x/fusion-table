@@ -2,119 +2,137 @@
 
 ## Purpose and boundaries
 
-Fusion Table has two independent capabilities: a deterministic fusion-recipe composer and live discovery of nearby food shops. Recipe composition works without a network request. Shop discovery requires a map provider and returns places that may carry an ingredient, with inventory explicitly unverified.
+Fusion Table combines two deterministic authored recipe engines with live discovery of nearby food shops. Recipe composition is synchronous and uses only the selected inputs and checked-in templates. Identical inputs produce identical recipes; no runtime language model, remote recipe-generation API or random recipe selection is used.
 
-The application uses React with the Next-style App Router through Vinext. Vite builds the client and Cloudflare Worker. The supplied Sites integration in `vite.config.ts` and `worker/index.ts` is retained for hosted execution and private access.
+Shop discovery is separate: server routes call the configured map provider and return places that may carry an ingredient, with stock and prices explicitly unverified. A template proposal, an automated check, a cook's observation and actual retailer inventory evidence remain different records.
 
-The website is maintained as a standalone Fusion Table application repository. The original [research repository](https://github.com/blkph0x/p-vs-np-proof-research) was cloned for inspection and is retained separately. Its inspected baseline is [`7dedc73f758dfbdc072e7aa29dfc08505761ebd5`](https://github.com/blkph0x/p-vs-np-proof-research/tree/7dedc73f758dfbdc072e7aa29dfc08505761ebd5). No mathematics engine is called by this website. The reused idea is the separation between a proposed recipe, automated checks, and the cook's recorded observations.
+The app uses React with the Next-style App Router through Vinext. Vite builds browser assets and a Cloudflare Worker. Tracked Sites integration remains for the existing private deployment; an independent Cloudflare deployment has its own configuration, account and audience.
+
+This is a standalone application repository. The original [research repository](https://github.com/blkph0x/p-vs-np-proof-research) was inspected at [`7dedc73f758dfbdc072e7aa29dfc08505761ebd5`](https://github.com/blkph0x/p-vs-np-proof-research/tree/7dedc73f758dfbdc072e7aa29dfc08505761ebd5). No mathematics engine or P-versus-NP result is used by the website.
 
 ## Main modules
 
 | Path | Responsibility |
 | --- | --- |
-| `app/page.tsx` | Responsive Discover, Recipe Studio, Local Shops and Cookbook views; state, cooking mode, local saves and exports. |
-| `app/layout.tsx` and site styles | Global presentation and application metadata. |
-| `lib/recipe-types.ts` | Recipe briefs, ingredient categories, steps and generated recipe shape. |
-| `lib/recipes.ts` | Classic structures, regional flavour profiles, dietary substitutions, serving scaling, pantry matching and structured methods. |
-| `lib/locations.ts` | Provider-independent location/shop types, input validation, distance calculations, normalisation, bounded results and safe links. |
-| `lib/location-providers.ts` | Outbound Photon/Overpass calls, provider selection, timeouts, caches, cooldowns and error mapping. |
+| `app/page.tsx` | Discover/classic studio, local shops, cooking mode, browser cookbook and exports. |
+| `components/meal-builder.tsx` | Guided main/method/region/side controls using the deterministic meal engine. |
+| `app/layout.tsx` and styles | Global presentation and metadata. |
+| `lib/recipe-types.ts` | Shared inputs, ingredients, steps, source label and recipe output. |
+| `lib/template-types.ts` | Four-serving draft ingredients, regional profiles, recipe context and base-template result. |
+| `lib/recipes.ts` | Public classic/region/diet catalogs, validation, original classic templates and integrated generation. |
+| `lib/bbq-classics.ts` | 20 additional barbecue/smoking templates, specific cuts/substitutions, method notes and doneness guidance. |
+| `lib/bbq-regions.ts` | 16 additional regional profiles with warm/finish ingredients and dietary-aware labels. |
+| `lib/meal-types.ts` | Ingredient-led input and complete-meal types. |
+| `lib/meal-catalog.ts` | 22 mains, compatible methods, 20 profiles, 6 sides and count helpers. |
+| `lib/meals.ts` | Ingredient-led complete meals, selected-main preservation, scaling, substitutions and method instructions. |
+| `lib/locations.ts` | Location/shop types, validation, distances, normalisation and safe links. |
+| `lib/location-providers.ts` | Photon/Overpass clients, selection, timeouts, caches, cooldowns and error mapping. |
 | `lib/shopping.ts` | Conservative ingredient/shop matching and ranking. |
 | `app/api/locations/route.ts` | Explicit location-search API. |
 | `app/api/shops/route.ts` | Bounded nearby-shop API. |
-| `public/images/` | Generated culinary inspiration imagery. |
-| `tests/` | Focused deterministic tests for recipes, map results and matching rules. |
-| `.openai/hosting.json` | Site identity and deployment bindings. D1 and R2 are unused. |
-| `scripts/`, `vite.config.ts`, `worker/index.ts` | Supplied installation, development, build and Sites runtime integration. |
+| `tests/recipes.test.ts`, `tests/bbq-recipes.test.ts`, `tests/meals.test.ts` | Original behavior, full BBQ matrix, dietary/technique rules and ingredient-led recipes. |
+| Other `tests/` files | Location/provider and shopping behavior. |
+| `public/images/` | Culinary inspiration images. |
+| `.openai/hosting.json` | Existing Site identity; D1/R2 are unused. |
+| `scripts/`, `vite.config.ts`, `worker/index.ts` | Tracked runtime/build helpers, tests, independent deployment and archive packaging. |
+| `.github/workflows/` | Verification and versioned release workflows. |
 
-The starter contains optional database and connector helpers. Their presence does not mean a retailer inventory connector, application database, or background research agent is active.
+Starter database/connector helpers do not imply an active inventory connector, user database or background agent.
 
-## Recipe composition
+## Expanded classic and barbecue engine
 
-`generateRecipe(brief)` accepts a classic ID, region ID, whole servings from 1–12, one dietary preference, a heat preference, and optional pantry text or terms. It validates the brief, assembles the appropriate classic method and regional seasoning, scales the ingredient amounts from four servings, and returns structured ingredients and steps.
+`generateRecipe(input)` accepts `classicId`, `regionId`, integer `servings` from 1–12, and optional `diet`, `spiceHeat` and `pantry`. All original 8 classics, 8 regions and 5 diets remain. The added 20 classics and 16 profiles expand the catalog to **28 classics × 24 regions = 672 pairings**, or **3,360 classic/region/diet configurations**. Serving, heat and pantry variants are not used to inflate those counts.
 
-The eight classic structures are creamy pasta, tacos, risotto, burgers, a roast traybake, fried rice, flatbread, and cottage pie. The eight profiles are Japanese, Korean, Thai, Mexican, Indian, Levantine, Italian, and Moroccan. The five dietary variants are no restriction, vegetarian, vegan, gluten-free, and dairy-free. These give 320 supported classic/region/diet configurations before servings, heat and pantry choices; they are not 320 independently kitchen-tested recipes.
+The new classic set covers low-and-slow brisket, pulled protein and ribs; reverse-seared/flank steaks and lamb chops; skewers, sausages and wings; whole chicken and turkey breast; pork belly; hot-smoked/whole fish, prawns and ready-cooked octopus; vegetable trays, grain bowls, smoked dip and a ready-to-eat cold platter. The [README tables](../README.md#new-barbecue-and-smoking-classics) list every new classic and regional profile with its role.
 
-Ingredient categories are `produce`, `butcher`, `fishmonger`, `grocery`, and `specialty`. Each ingredient has a stable ID, name, numeric amount, unit, known ingredient allergens, optional notes, and pantry status. Names and methods reflect substitutions: a vegan taco uses tofu and its method cooks tofu, rather than retaining chicken instructions.
+### Generation flow
 
-Pantry matching is intentionally exact after case/spacing normalisation and explicit aliases. For example, ordinary soy sauce does not satisfy labelled gluten-free tamari, and milk does not satisfy coconut milk. A match is a convenience for the shopping checklist, not a quantity or freshness check.
+1. Validate the selected IDs, diet, heat, pantry structure and serving count.
+2. Construct the regional profile as separate warm and finishing ingredients.
+3. Select the classic template and its concrete dietary adaptation.
+4. Assemble the base ingredients and both profile portions, merging compatible ingredient IDs/units.
+5. Scale authored four-serving quantities exactly once and apply conservative pantry matching.
+6. Return measured ingredients, steps, estimated times, equipment, method notes, dietary notes and applicable safety guidance.
 
-Preparation and cooking times are estimates. Scaling quantity does not prove the same elapsed time for twelve servings, so larger batches receive pan/tray and batch-cooking guidance. Chicken and mince instructions retain their thermometer endpoint regardless of serving count. The source for the 75°C endpoint is [Food Standards Australia New Zealand](https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics).
+A vegetarian or vegan classic uses its own ingredient choices and cooking instructions. Whole cuts, minced sausages, poultry, fish and fully cooked products have different treatment. A long-cook meat version does not impose its meat cooking duration on a plant alternative. Glazes and regional sauces are prepared separately and added at the appropriate point; sugary condiments are not automatically used as a high-heat rub.
 
-Every result retains `sourceLabel: "Template-generated · not kitchen-tested"`. A user's “I've cooked this recipe” setting is saved as their observation and does not convert a template into independently validated evidence. Dietary labels are ingredient-selection rules; packaged-food labels and substitutions still require checking.
+Portion changes can alter the method as well as ingredient amounts. The whole-bird classic uses bone-in chicken portions for one to three servings and whole unstuffed birds for four or more, retaining a stable ingredient ID while changing its displayed product and directions. Small brisket, shoulder, rib and belly portions use covered-oven instructions instead of a large-joint outdoor smoking schedule. Quantities still scale once from the four-serving base; cooking durations follow the selected cut and method.
 
-## Local discovery and ingredient suggestions
+### Smoking, grilling and cold products
 
-### Request flow
+`Recipe.methodNotes` carries the template's method guidance to the website. Outdoor smokers, direct grills, indirect heat and ordinary oven alternatives are identified explicitly. Smoke-style seasoning in a kitchen oven is presented as a practical alternative, not as the same smoke process. Fuel/wood belongs to equipment guidance rather than mandatory food-shopping ingredients.
+
+Poultry and raw minced-meat sausage guidance uses a 75°C centre endpoint. Whole beef/lamb/pork cuts use the templates' conservative 71°C target, with additional texture/endpoints for slow-cooked cuts. Fish uses applicable 63°C guidance, and already-cooked octopus is reheated as directed. Brisket, pulled meat and ribs also need their higher tenderness target and a probe/texture check; clock time alone is insufficient. The source notes refer to [Food Standards Australia New Zealand](https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics) and the [NSW Food Authority](https://www.foodauthority.nsw.gov.au/consumer/food-safety-home/cooking-temperatures).
+
+The cold platter is an **assembly recipe using commercially ready-to-eat smoked products or fully cooked alternatives**. It is not a home curing process and never treats cold smoke as sufficient cooking for raw fish. The template includes refrigeration/use-by handling and guidance for vulnerable people, with fully cooked alternatives. Smoked cheese uses appropriate ready-to-eat pasteurised products; plant versions use fully cooked ready-to-eat smoked tofu or the specified alternative.
+
+## Ingredient-led complete meals
+
+`generateMeal(input)` accepts `mainId`, `methodId`, `regionId`, optional `sideId`, integer servings from 1–12, and optional diet/heat/pantry. `getMethodsForMain()` and `getMainsForDiet()` support guided controls. In this builder, incompatible main/diet choices fail explicitly rather than silently changing the main the visitor selected.
+
+The catalog has **195 compatible main/method pairs**, **20 regions** and **6 sides**, giving **23,400 supported main/method/region/side configurations**. Every meal includes a main, side, vegetables and sauce. Cut, preparation, quantities, cooking sequence and dietary alternatives follow the chosen method. For example, gluten-free quinoa uses quinoa cooking instructions rather than retaining a couscous method.
+
+Both engines are pure TypeScript and reusable without Cloudflare-specific routes. [Self-hosting](SELF_HOSTING.md) includes working calls for each.
+
+## Shared recipe semantics and provenance
+
+Ingredients have IDs, names, numeric amounts, units, known allergens, shopping categories, notes and pantry status. Categories are `produce`, `butcher`, `fishmonger`, `grocery` and `specialty`. Matching is exact after explicit normalisation/aliases: ordinary soy sauce does not satisfy labelled gluten-free tamari, and generic milk does not satisfy coconut milk. Pantry matching is a convenience, not a quantity or freshness check.
+
+All generated output has the exact `sourceLabel` **“Template-generated · not kitchen-tested”**. A saved cooked flag records the visitor's own observation; it does not turn a template into independent kitchen validation. Dietary substitutions guide ingredient selection, while product labels and preparation conditions still matter. Quantities scale with portions, but time estimates and larger-batch advice must be interpreted with the specified doneness checks.
+
+## Local discovery and shopping suggestions
 
 1. The visitor explicitly submits location text to `GET /api/locations?q=...`, or chooses browser geolocation.
-2. Text search returns up to six Photon location candidates. The visitor selects the intended place.
-3. The client calls `GET /api/shops?lat=...&lon=...&radiusKm=...` for a radius between 1 and 25 km.
-4. The server validates finite coordinates and the bounded radius, calls its configured provider, normalises records, filters exact straight-line distances, and returns attributed results.
-5. `lib/shopping.ts` associates the recipe's missing ingredients with plausible shop types. The client shows up to three suggestions per ingredient.
+2. Text search returns up to six candidates and the visitor chooses the intended one.
+3. The browser requests `GET /api/shops?lat=...&lon=...&radiusKm=...` for a radius of 1–25 km.
+4. The server validates inputs, calls its configured provider, normalises records and filters exact straight-line distances.
+5. Missing ingredients are associated with plausible shop types, with up to three suggestions per ingredient.
 
-The default nearby provider is Photon tag-filtered reverse search, with at most 50 returned food-shop entries. This is labelled `coverage: "limited-nearby"`, and its count is not presented as an area-wide total. Optional Overpass queries use `coverage: "area-query"`; dataset incompleteness still applies.
+Photon tag-filtered nearby search returns at most 50 food-shop entries and uses `coverage: "limited-nearby"`. Optional Overpass uses `coverage: "area-query"`; both remain incomplete map data. Counts are not an area-wide inventory.
 
-`inventoryStatus` is always `"unverified"` in this release. Shop-category matches, website links, and retailer product-search links do not demonstrate stock. Source opening-hours text is shown as supplied; the application does not infer “open now.” A mapped marketplace is not assumed to be a farmers market or to run every day.
+`inventoryStatus` is always `"unverified"`. Shop-category matches, websites and product-search links do not prove stock or price. Opening-hours text is shown as supplied, and the app does not infer “open now.” A mapped market is not automatically a farmers market or a daily event.
 
-Matching uses the original OpenStreetMap shop subtype. A bakery can match bread or buns; a spice merchant can match dry spices; a butcher can match meat. An arbitrary specialty shop does not match all specialist ingredients. Appropriate specialist sources rank ahead of supermarkets, then grocers or convenience shops; distance orders otherwise equivalent sources. A supermarket match still needs product and dietary-variant confirmation.
+Matching respects the original shop subtype: a bakery can supply bread, a butcher meat, a spice merchant dry spices. Arbitrary specialty shops do not match every specialist item. Appropriate specialists rank ahead of supermarkets/grocers, with distance ordering otherwise equivalent matches.
 
-### Provider boundary
+Provider endpoints come only from server settings and must be HTTPS without embedded credentials, fragments or query strings. Overpass queries use validated numbers and fixed shop tags. Location results cache for 24 hours and shops for 30 minutes, with bounded caches, coalescing, timeouts, response limits, concurrency controls and per-instance cooldowns. Errors remain explicit, rather than becoming a successful empty directory. See [LOCATION_DATA.md](LOCATION_DATA.md) for exact contracts, attribution, provider policies and verification records.
 
-Provider endpoint selection belongs to server runtime configuration, never incoming visitor parameters. Endpoint configuration is restricted to HTTPS URLs without user information, fragments or query strings. Overpass queries are generated from validated numbers and a fixed shop-tag set, rather than accepting user-authored query text.
-
-A bounded in-memory cache stores location results for 24 hours and shop results for 30 minutes. Identical in-flight requests coalesce. Provider cooldowns and concurrency limits operate per Worker isolate, with explicit timeouts and maximum response sizes. These are suitable controls for a private low-traffic first release, not a distributed public-service quota.
-
-Malformed input, provider rate limits, timeouts and upstream failures return explicit non-success responses. A failed or incomplete provider request is never turned into a successful empty directory. Responses retain attribution and retrieval time. See [LOCATION_DATA.md](LOCATION_DATA.md) for exact contracts, limits, policies, configuration and live verification evidence.
-
-## State, privacy and persistence
+## State and privacy
 
 | State | Location and lifetime |
 | --- | --- |
-| Current recipe, form values, ingredient checkmarks, filters and cooking step | React state in the active page. |
-| Saved recipe snapshots, notes, ratings and own kitchen-test status | Browser `localStorage`, under `fusion-table-v1`. |
-| Selected location and radius | The same browser-local record. |
-| Map provider cache and in-flight requests | Transient Worker-isolate memory; not a durable user database. |
-| Recipe/cookbook JSON and shopping CSV | Explicitly downloaded by the visitor. |
+| Current form/recipe, checkmarks, filters and cooking step | React state in the active page. |
+| Saved full recipe snapshots, notes, ratings and cooked status | Browser `localStorage`, under `fusion-table-v1`. |
+| Selected shopping location/radius | The same browser-local record. |
+| Provider caches/limits | Transient Worker-instance memory. |
+| Recipe/cookbook JSON and shopping CSV | Files explicitly downloaded by the visitor. |
 
-Cookbook records are device/browser specific and have no cross-device sync. Clearing browser site data removes them. Exports preserve a portable record, but this version does not offer an import interface. A saved recipe stores its complete snapshot, so future engine changes do not silently rewrite the saved method.
+Saved recipes do not sync between devices. Clearing browser data removes them; exports keep an independent copy. New saves are limited to 100 recipes while existing records remain intact. Snapshots preserve ingredients/methods when the generator changes.
 
-Location text goes to Photon for geocoding. Coordinates and radius go to the configured nearby provider. Recipe history, kitchen notes, user names and email addresses are not included in those requests. The optional map contacts OpenStreetMap only when opened. External shop/product-search links contact their destination when followed. Precise geolocation requires the visitor's browser permission after an explicit action.
+Recipe composition sends no data to a remote recipe service. Map providers receive only required query text/coordinates. Cookbook history and notes are not included. Opening the optional map contacts OpenStreetMap, while external shop links contact their destinations. Precise geolocation follows explicit visitor action and browser permission.
 
-## Hosting and source workflow
+## Builds, hosting and releases
 
-The application is configured for an owner-private Sites deployment; the hosting platform enforces the audience. It does not create an application-specific login/password system. Keep the assigned `project_id` in `.openai/hosting.json` when updating the existing Site and preserve private access unless an authorised owner changes it.
+The original Sites deployment preserves its assigned project ID and private audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
 
-The current manifest leaves D1 and R2 unset. Do not treat browser-local cookbook entries as server-backed accounts. Runtime configuration and any future secrets belong in server-side deployment settings; never commit credentials or include them in generated client code.
+A clean checkout selects the portable runner and resolves helpers from tracked source. Use Node 22.13.0+, pnpm 11.25.0, and the committed lockfile. Ordinary development uses `pnpm install --frozen-lockfile`, `pnpm dev`, `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`. The managed Linux installer remains separate.
 
-Use the supplied Sites source helper to synchronise the exact source, build, package, and deploy the corresponding version. The standalone Fusion Table repository contains the application at its root; the Site deploys that application source through its configured source workflow. Generated `dist/`, dependencies, local environment files, publication archives and runtime state remain outside tracked source. A local build is not evidence of a completed deployment; use the hosting operation's result.
+`pnpm deploy:cloudflare --name your-name-fusion-table` requires an explicit independent Worker name and writes a separate configuration while preserving original Site/build identity. `--dry-run` validates without publishing. The full app needs map server routes, so a static-only upload is insufficient.
 
-For local development, `package.json` pins pnpm 11.25.0 and requires Node 22.13.0+. Existing `dev`, `build` and `start` scripts select the supplied runtime workflow. `install:ci` is the managed Linux Bash/pnpm installer. Ordinary clean local checkouts select the portable profile. [README.md](../README.md) gives the current commands.
+`pnpm release:source` archives a clean committed Git HEAD into a ZIP with checksum and excludes generated/private state. `pnpm release:worker` packages a fresh compiled build into an independent Worker archive, excluding local environment files/Sites metadata and clearing runtime variables. Binding/path and common-credential checks are safeguards, not a substitute for review.
 
-## Focused verification
+CI verifies pull requests and main pushes. The release workflow runs on main changes to `package.json` or itself, or manual dispatch. It validates the version/access, preserves existing releases, runs all checks and builds, then creates a missing release with source ZIP, Worker archive and checksums. A conflicting tag or authentication/network error stops publication. See [Self-hosting](SELF_HOSTING.md) for the maintainer process.
 
-- Recipe tests exercise all classic/region/diet combinations, substitution-sensitive methods, serving scaling, conservative pantry matching, heat changes and invalid inputs.
-- Location tests exercise coordinate/radius validation, geodesic edge cases, exact boundaries, incomplete data, safe links, provider errors and bounded counts.
-- Two provider regression tests exercise Workers-compatible `redirect: "manual"`, rejection of upstream redirects without following them, and caching of successful location results.
-- Shopping tests prevent implausible specialist matches, preserve category-specific matching and check ranking/deduplication.
-- Type checking and a production build check framework integration. Browser QA checks the actual user flows separately.
+## Verification and extension points
 
-These checks cannot verify taste, recipe repeatability, a shop's current stock, or a retailer's prices. Kitchen observations and real retailer evidence remain separate data.
+- Original recipe regression tests keep the original IDs, diets, substitutions, scaling and validation behavior.
+- BBQ tests cover every integrated classic/region/diet configuration, deterministic repeated output, source labels, selected cuts, cooking endpoints, ready-to-eat handling, plant-specific methods, small-portion branches, dietary/pantry safeguards, suitable shop subtypes and absence of mandatory wood-shopping ingredients.
+- Ingredient-led tests cover compatible combinations, main preservation, substitutions, side sequencing and quantities.
+- Location/provider tests cover exact-radius boundaries, safe links, manual redirect handling, caches and error responses.
+- Shopping tests reject implausible specialist matches and check ranking/deduplication. Type checking, lint and production builds cover integration.
 
-## Extension points
+Extend templates with concrete ingredients, cuts, cooking sequence, substitutions and method notes. Keep raw/cooked/drained states distinct. New regional profiles need measured warm/finish ingredients and valid dietary labels. Preserve the exact source label and verify the full matrix after additions.
 
-### Ingredient catalog
-
-The current ingredient definitions live in `lib/recipes.ts`. A future catalog can move them into a versioned data layer with canonical ingredient IDs, preparation states, units, retailer identifiers, provenance and verified dietary attributes. Preserve distinctions such as raw versus cooked, canned drained weight, and a specifically labelled gluten-free product. If nutrition is added, record the source and measurement basis instead of assigning values from recipe prose.
-
-### Additional recipes and regions
-
-Add a classic method or profile through the existing typed structures, then check every supported dietary substitution and the actual ingredient use in its method. Keep the template source status until a kitchen trial is recorded. New recipes should use ingredients that the sourcing layer can classify; adding a cuisine name alone does not create a useful regional adaptation.
-
-### Real retailer inventory
-
-Confirmed availability or pricing requires a permitted retailer/provider integration with the correct branch, product and freshness information. Introduce a separate inventory response model that carries evidence such as retailer product ID, store ID, timestamp, status, currency and price basis. Keep map-based suggestions visibly distinct from verified inventory, and never upgrade a category match into “in stock.” Follow the provider's access terms and store credentials only in server-side secret settings.
-
-For a wider public audience, replace public demo endpoints with provisioned or self-hosted services and add shared rate limiting/cache infrastructure before increasing traffic. The current per-isolate controls are not a substitute for an agreed provider quota.
+Nutrition or verified retailer inventory requires its own evidence, source and measurement basis. A future inventory response should identify the actual branch/product, timestamp, status, quantity and price/currency. Do not infer availability from map categories.
 
 ## Image provenance
 

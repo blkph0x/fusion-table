@@ -18,6 +18,7 @@ const DRY_SPICE_IDS = new Set([
   "chilli-flakes", "chili-flakes", "black-pepper", "white-pepper", "cinnamon",
   "ground-coriander", "coriander-seeds", "cumin-seeds", "fennel-seeds",
   "cardamom", "cloves", "nutmeg", "ground-ginger", "curry-powder", "zaatar",
+  "sweet-paprika", "garlic-powder", "onion-powder", "five-spice", "gf-five-spice", "dried-mint",
   "za-atar", "allspice", "star-anise", "dried-thyme", "dried-rosemary",
 ]);
 
@@ -52,7 +53,7 @@ function isDairyCheese(ingredient: RecipeIngredient): boolean {
   const name = ingredientName(ingredient);
   if (/\b(vegan|plant.?based|dairy.?free|non.?dairy|soy|coconut|almond|cashew)\b/.test(name)) return false;
   if (!ingredient.allergens.some(allergen => allergen.toLowerCase() === "milk")) return false;
-  return /\b(cheese|cheddar|feta|parmesan|pecorino|ricotta|mozzarella|halloumi|paneer|gouda|brie|camembert|mascarpone)\b/.test(name);
+  return /\b(cheese|cheddar|feta|parmesan|pecorino|ricotta|mozzarella|halloumi|provolone|paneer|gouda|brie|camembert|mascarpone)\b/.test(name);
 }
 
 function isDrySpice(ingredient: RecipeIngredient): boolean {
