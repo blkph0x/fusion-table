@@ -2,13 +2,27 @@
 
 **Familiar classics, proper barbecue methods, regional flavour and nearby places to shop.**
 
-Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions and a browser-local cookbook. The same classic, region, diet, servings, heat and pantry still produce the same recipe. A week plan can vary: the same filters and pantry can be arranged as different dinners, and each night offers a few other matching templates. There is no runtime language model and no model-generated recipe endpoint. A different week is another choice among those templates, not a new recipe.
+Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions and a browser-local cookbook. Leaving the seed off still produces the same template. **Create my fusion**, and each new week, pass a new seed. A small SAT search on this device then chooses a finish: the same main can come back as a cold stir-fry, a hot stir-fry, a chopped salad, a wrap, or a broth, with a different sauce, heat, crunch and extra ingredient. The same seed repeats that finish. Hard filters stay in place. There is no cloud language model. A seeded plate is still template-generated and not kitchen-tested.
 
 All application source, recipe catalogs, images, server routes, tests, build tooling and lockfiles are included in this repository.
 
 ![Fusion Table homepage](docs/images/fusion-table-preview-1792653198544.jpg)
 
 Earlier homepage preview; the current source also includes the expanded catalog and ingredient-led builder.
+
+## What's in v0.2.6
+
+- **Create my fusion** runs a new seed on every click. Chicken and Thai is no longer one fixed recipe. One seed can slice the cooked schnitzel into a cold stir-fry with fish, oyster sauce, sriracha, bird's eye chillies and lime. Another seed picks a different finish. The same seed repeats.
+- A seven-day plan with a seed is ordered by that seed, not by alphabetical region or classic. Each dinner can carry its own seeded finish.
+- The search is a small CDCL solver in the same propagate / learn / backjump shape as the local P versus NP research. It chooses one allowed finish. It does not prove anything about P versus NP, taste, or food safety.
+- Diet, allergen and hard-dislike filters are clauses. They are not relaxed. Poultry is still cooked to its endpoint. A cold plate, including a cold stir-fry, is cooked, then chilled. Added fish is cooked to at least 63°C. Added prawns are cooked until pink and opaque.
+
+## What's in v0.2.5
+
+- The shopping list can check the Woolworths online catalogue. A price is shown only when that catalogue returns one. It is not the shelf at your local shop, and it is not a butcher or fruit-shop board.
+- Coles blocks an automatic check. ALDI and independent butchers and fruit shops have no public price feed. You can record a price you saw. A missing price stays blank, never $0.
+- Chicken, beef, lamb and pork can use a chosen cut, including thigh or breast, ordinary beef, Angus and wagyu. The name is what to shop for. Check the packet. It is not a marble grade.
+- The phone app can make the same catalogue check when you ask, and can list nearby supermarkets, butchers and fruit shops for a known postcode. The list itself still works offline. That APK is not updated on the download link until a new build is copied there.
 
 ## What's in v0.2.4
 
@@ -21,7 +35,7 @@ Earlier homepage preview; the current source also includes the expanded catalog 
 - A week plan warns when the pantry will not cover the dinners. The shopping list is the amount still to buy. It is never a price.
 - Star ratings and “won’t have again”, “might have again”, “will have again” or “this is a new staple” stay with the recipe.
 - Nearby shops are supermarkets, grocers, butchers and markets. Petrol stations are left out.
-- The header links to `/downloads/MealPlannerAU.apk`. That address stays the same. The phone app does not use the network.
+- The header links to `/downloads/MealPlannerAU.apk`. That address stays the same. The phone can read the Woolworths online catalogue when you ask, and can list nearby shops for a known postcode. It does not upload the plan.
 
 ## What's in v0.2.2
 
@@ -153,7 +167,7 @@ The supplied `install:ci` command is for the managed Linux Sites environment and
 
 For maintainers, changing the version in `package.json` and pushing to `main` triggers the versioned release workflow. It runs all checks and creates a missing `vVERSION` release with source ZIP, Worker archive and checksums. Existing releases/assets are preserved. Include matching `docs/releases/vVERSION.md` notes; manual dispatch is also supported.
 
-`scripts/export-mealplanner-catalog.ts` writes the medium-heat, four-serve catalogue MealPlanner AU stores on the phone. It does not add prices. The website header links to `/downloads/MealPlannerAU.apk`. That address stays the same; replace the file when a new phone build is ready. The phone app does not use the network.
+`scripts/export-mealplanner-catalog.ts` writes the medium-heat, four-serve catalogue MealPlanner AU stores on the phone. It does not add prices. The website header links to `/downloads/MealPlannerAU.apk`. That address stays the same; replace the file when a new phone build is ready. The phone can read the Woolworths online catalogue when you ask, and can list nearby supermarkets, butchers and fruit shops for a known postcode. It does not upload the plan. A catalogue price is not a local shelf price. Coles, ALDI, butchers and fruit shops still have no price feed.
 
 See **[Self-hosting and building your own app](docs/SELF_HOSTING.md)** for independent deployment, map configuration, release packaging and reuse of both deterministic engines. The complete website has server routes; uploading only static assets to GitHub Pages does not provide live location/shop search.
 
@@ -169,6 +183,6 @@ The existing Sites deployment is public under its platform settings. `.openai/ho
 
 ## Project background and implementation
 
-Fusion Table is an independent application inspired by the proposal/check/observation workflow in [blkph0x/p-vs-np-proof-research](https://github.com/blkph0x/p-vs-np-proof-research), inspected at commit [`7dedc73f758dfbdc072e7aa29dfc08505761ebd5`](https://github.com/blkph0x/p-vs-np-proof-research/tree/7dedc73f758dfbdc072e7aa29dfc08505761ebd5). It does not use SAT solvers as a cooking engine or rely on a P-versus-NP result.
+Fusion Table is an independent application. The week order and the extra plate on **Create my fusion** are chosen by a small CDCL solver whose propagate / 1-UIP / backjump loop follows the shape of `horn_cdclt_lab/cdcl.py` in [blkph0x/p-vs-np-proof-research](https://github.com/blkph0x/p-vs-np-proof-research). That lab decides the first free variable false and therefore returns one model. Fusion Table seeds the decision order, checks that the assignment satisfies the clauses, and stops there. It does not rely on a P-versus-NP result, and a satisfying assignment is not a proof of taste, safety, or kitchen testing.
 
 Read [Architecture](docs/ARCHITECTURE.md) for implementation boundaries, validation, storage and image provenance. Automated checks cover structure and declared constraints; taste, repeatability and retailer stock need separate real-world evidence.

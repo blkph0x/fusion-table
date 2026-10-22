@@ -3,16 +3,26 @@
 import { useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, ChefHat, ChevronDown, Globe2, Leaf, Search, Sparkles, Utensils } from "lucide-react";
 import { DIETS } from "@/lib/recipes";
+import { cutsForMain } from "@/lib/cuts";
 import { MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, generateMeal, getMealCombinationCount, getMainsForDiet, getMethodsForMain } from "@/lib/meals";
 import type { MealInput } from "@/lib/meal-types";
 import type { DietId, Recipe, SpiceHeat } from "@/lib/recipe-types";
 
-type Props = { onCreated: (recipe: Recipe) => void; initialRecipe?: Recipe | null };
+type Props = { onCreated: (recipe: Recipe) => void; initialRecipe?: Recipe | null; avoidAllergens?: string[]; dislikes?: string[] };
+
+function freshSeed(): number {
+  const buf = new Uint32Array(1);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(buf);
+    return buf[0];
+  }
+  return Math.floor(Math.random() * 0x100000000);
+}
 const STEPS = ["Main ingredient", "Cooking method", "Regional flavour", "Make it a meal"];
 const POPULAR = ["chicken", "beef", "salmon", "prawns", "tofu", "mushrooms", "cauliflower", "chickpeas"];
 const CATEGORIES = [{ id: "all", name: "All ingredients" }, { id: "meat", name: "Meat & poultry" }, { id: "seafood", name: "Seafood" }, { id: "plant", name: "Plants & pulses" }, { id: "vegetarian", name: "Eggs & cheese" }] as const;
 
-export default function MealBuilder({ onCreated, initialRecipe }: Props) {
+export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens = [], dislikes = [] }: Props) {
   const seed = initialRecipe?.kind === "meal" ? initialRecipe : null;
   const [step, setStep] = useState(seed ? 3 : 0);
   const [mainId, setMainId] = useState(seed?.mainId || "");
@@ -22,6 +32,7 @@ export default function MealBuilder({ onCreated, initialRecipe }: Props) {
   const [diet, setDiet] = useState<DietId>(seed?.diet || "balanced");
   const [spiceHeat, setSpiceHeat] = useState<SpiceHeat>(seed?.spiceHeat || "medium");
   const [servings, setServings] = useState(seed?.servings || 2);
+  const [cutId, setCutId] = useState("");
   const [pantry, setPantry] = useState(seed?.ingredients.filter((i) => i.inPantry).map((i) => i.name).join(", ") || "");
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
@@ -42,7 +53,8 @@ export default function MealBuilder({ onCreated, initialRecipe }: Props) {
   const method = methods.find((item) => item.id === methodId);
   const region = MEAL_REGIONS.find((item) => item.id === regionId);
   const side = MEAL_SIDES.find((item) => item.id === sideId);
-  const input: MealInput = { mainId, methodId, regionId, sideId, servings, diet, spiceHeat, pantry };
+  const cuts = cutsForMain(mainId);
+  const input: MealInput = { mainId, methodId, regionId, sideId, servings, diet, spiceHeat, pantry, ...(cutId ? { cutId } : {}) };
   const canOpen = (index: number) => index === 0 || (!!main && (index === 1 || !!method));
 
   function goTo(next: number) {
@@ -51,19 +63,20 @@ export default function MealBuilder({ onCreated, initialRecipe }: Props) {
   }
   function chooseMain(id: string) {
     setMainId(id);
+    setCutId("");
     if (!getMethodsForMain(id).some((item) => item.id === methodId)) setMethodId("");
     goTo(1);
   }
   function changeDiet(next: DietId) {
     setDiet(next); setError("");
     if (mainId && !getMainsForDiet(next).some((item) => item.id === mainId)) {
-      setMainId(""); setMethodId(""); goTo(0); setCategory("all"); setSearch(""); setShowAll(true);
+      setMainId(""); setMethodId(""); setCutId(""); goTo(0); setCategory("all"); setSearch(""); setShowAll(true);
       setError(`${main?.name || "Your main"} doesn’t fit that preference. Choose a compatible main below.`);
     }
   }
   function create(event: FormEvent) {
     event.preventDefault(); setError("");
-    try { onCreated(generateMeal(input)); }
+    try { onCreated(generateMeal({ ...input, seed: freshSeed(), avoidAllergens, dislikes })); }
     catch (err) { setError(err instanceof Error ? err.message : "Please check your meal choices."); }
   }
 
@@ -86,12 +99,12 @@ export default function MealBuilder({ onCreated, initialRecipe }: Props) {
         <fieldset className="meal-settings"><legend className="sr-only">Finish your meal</legend>
           <div className="meal-selection-summary"><span><ChefHat size={16} /> {main?.name}</span><ArrowRight size={13} /><span>{method?.name}</span><ArrowRight size={13} /><span><Globe2 size={16} /> {region?.name}</span></div>
           <div className="side-choices" aria-label="Side dishes">{MEAL_SIDES.map((item) => <button type="button" key={item.id} className={`side-choice ${sideId === item.id ? "selected" : ""}`} aria-pressed={sideId === item.id} onClick={() => setSideId(item.id)}><span aria-hidden="true">{item.emoji}</span><span><strong>{item.name}</strong><small>{item.description}</small></span>{sideId === item.id && <Check size={16} />}</button>)}</div>
-          <div className="meal-preferences"><label className="field"><span>Servings</span><select value={servings} onChange={(event) => setServings(Number(event.target.value))}>{Array.from({ length: 12 }, (_, i) => i + 1).map((value) => <option key={value} value={value}>{value} {value === 1 ? "person" : "people"}</option>)}</select></label><label className="field"><span>Dietary preference</span><select value={diet} onChange={(event) => changeDiet(event.target.value as DietId)}>{DIETS.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label className="field"><span>Spice level</span><select value={spiceHeat} onChange={(event) => setSpiceHeat(event.target.value as SpiceHeat)}><option value="mild">Mild & mellow</option><option value="medium">A little kick</option><option value="hot">Bring the heat</option></select></label></div>
+          <div className="meal-preferences"><label className="field"><span>Servings</span><select value={servings} onChange={(event) => setServings(Number(event.target.value))}>{Array.from({ length: 12 }, (_, i) => i + 1).map((value) => <option key={value} value={value}>{value} {value === 1 ? "person" : "people"}</option>)}</select></label><label className="field"><span>Dietary preference</span><select value={diet} onChange={(event) => changeDiet(event.target.value as DietId)}>{DIETS.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label className="field"><span>Spice level</span><select value={spiceHeat} onChange={(event) => setSpiceHeat(event.target.value as SpiceHeat)}><option value="mild">Mild & mellow</option><option value="medium">A little kick</option><option value="hot">Bring the heat</option></select></label>{cuts.length > 0 && <label className="field"><span>Cut</span><select aria-label="Meat cut" value={cuts.some((cut) => cut.id === cutId) ? cutId : ""} onChange={(event) => setCutId(event.target.value)}><option value="">Match the cooking method</option>{(["Everyday", "Breed", "Less common"] as const).map((group) => { const groupCuts = cuts.filter((cut) => cut.group === group); return groupCuts.length ? <optgroup key={group} label={group}>{groupCuts.map((cut) => <option key={cut.id} value={cut.id}>{cut.shoppingName}</option>)}</optgroup> : null; })}</select><small>Check the packet. Angus or wagyu is the cut to shop for, not a marble grade.</small></label>}</div>
           <label className="field meal-pantry"><span>Already in your pantry</span><input value={pantry} onChange={(event) => setPantry(event.target.value)} maxLength={500} placeholder="e.g. rice, garlic, olive oil" /><small>Separate items with commas to leave them off your shopping list.</small></label>
         </fieldset>
-        <div className="builder-create-row"><p><Utensils size={17} /><span><strong>A complete meal</strong>Main, {side?.name.toLowerCase()}, and a regional sauce.</span></p><button type="submit" className="button primary" disabled={!main || !method}><Sparkles size={18} />Create my meal<ArrowRight size={18} /></button></div>
+        <div className="builder-create-row"><p><Utensils size={17} /><span><strong>A different plate each time</strong>Same main and region. A new seeded search on every click.</span></p><button type="submit" className="button primary" disabled={!main || !method}><Sparkles size={18} />Create my fusion<ArrowRight size={18} /></button></div>
 
-        <p className="builder-footnote">Template-generated · not kitchen-tested. The same selections produce the same meal, with ingredients and instructions matched to your choices.</p>
+        <p className="builder-footnote">Template-generated · not kitchen-tested. Each click uses a new seed, so the same main and region can come back as a different dish, such as a cold stir-fry or a chopped salad. The same seed would repeat. Hard filters stay in place. The cut you pick is the one the shopping list asks for. Check the packet.</p>
       </form>}
       {step > 0 && <button type="button" className="text-button builder-back" onClick={() => goTo(step - 1)}><ArrowLeft size={15} /> Back to {STEPS[step - 1].toLowerCase()}</button>}
     </div>

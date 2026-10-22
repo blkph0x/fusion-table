@@ -12,6 +12,19 @@ export interface MealInput {
   pantry?: string | string[];
   /** Extra tighten-only flags. They do not replace the selected main. */
   constraints?: RecipeConstraints;
+  /**
+   * Optional butcher cut. Omitted means the cooking method keeps its usual cut.
+   * The recipe title stays the main ingredient; the shopping name uses the cut.
+   */
+  cutId?: string;
+  /**
+   * Omitted: the same choices always build the same template.
+   * Set: a seeded SAT search chooses a finish. The same seed repeats it.
+   * Filters passed with the seed are not relaxed.
+   */
+  seed?: number;
+  avoidAllergens?: string[];
+  dislikes?: string[];
 }
 
 export interface NormalizedMealInput extends MealInput {

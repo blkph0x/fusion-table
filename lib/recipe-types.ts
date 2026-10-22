@@ -45,6 +45,10 @@ export interface RecipeInput {
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
   constraints?: RecipeConstraints;
+  /** Omitted keeps the authored template. Set adds one seeded SAT finish. */
+  seed?: number;
+  avoidAllergens?: string[];
+  dislikes?: string[];
 }
 
 export interface Recipe {

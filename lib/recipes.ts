@@ -8,6 +8,7 @@ import type { BaseRecipe, DraftIngredient, Profile, RecipeContext } from "./temp
 import { BBQ_CLASSICS, bbqBaseFor } from "./bbq-classics.ts";
 import { BBQ_REGIONS, bbqProfileFor } from "./bbq-regions.ts";
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
+import { applySatFusion } from "./fusion-sat.ts";
 
 export const CLASSICS: RecipeOption[] = [
   { id: "pasta", name: "Creamy pasta", origin: "Italy", emoji: "🍝", description: "Silky sauce, golden mushrooms and a familiar bowl of comfort." },
@@ -299,6 +300,11 @@ export function generateRecipe(input: RecipeInput): Recipe {
   const spiceHeat = input.spiceHeat ?? "medium";
   if (!["mild", "medium", "hot"].includes(spiceHeat)) throw new Error("Choose mild, medium or hot spice.");
   if (input.pantry !== undefined && typeof input.pantry !== "string" && (!Array.isArray(input.pantry) || input.pantry.some((term) => typeof term !== "string"))) throw new Error("List pantry ingredients as text.");
+  if (input.seed != null && (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff)) throw new Error("Choose a whole-number seed.");
+  const supportedAvoid = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
+  if (input.avoidAllergens != null && (!Array.isArray(input.avoidAllergens) || input.avoidAllergens.some((name) => typeof name !== "string" || !supportedAvoid.has(name.trim().toLocaleLowerCase("en"))))) {
+    throw new Error("Use a supported allergen name.");
+  }
   const requested = input.constraints ?? {};
   if (requested !== null && typeof requested !== "object") throw new Error("Dietary constraints must be a set of flags.");
   const vegan = diet === "vegan" || requested.vegan === true;
@@ -353,7 +359,8 @@ export function generateRecipe(input: RecipeInput): Recipe {
     eggFree && !vegan ? "eggless" : "",
     vegetarian && !vegan && diet !== "vegetarian" ? "veg" : "",
   ].filter(Boolean);
-  return {
+  const seafoodAlready = ingredients.some((item) => item.allergens.includes("fish") || item.allergens.includes("crustacean") || /\b(fish|salmon|prawn|shrimp)\b/i.test(item.name));
+  const recipe: Recipe = {
     id: [`${input.classicId}-${input.regionId}-${diet}-${spiceHeat}-${input.servings}`, ...extras].join("-"),
     classicId: input.classicId, regionId: input.regionId,
     title: `${context.profile.title} ${base.name}`,
@@ -369,6 +376,23 @@ export function generateRecipe(input: RecipeInput): Recipe {
     ...(base.methodNotes ? { methodNotes: base.methodNotes } : {}),
     ...(base.safetyNote ? { safetyNote: base.safetyNote, safetySource: base.safetySource || FOOD_SAFETY_SOURCE } : base.meat ? { safetyNote: "Use a clean food thermometer: chicken and minced meat should reach at least 75°C in the centre. Cooking times are estimates.", safetySource: FOOD_SAFETY_SOURCE } : {}),
   };
+  if (input.seed == null) return recipe;
+  return applySatFusion(recipe, {
+    seed: input.seed,
+    regionId: input.regionId,
+    diet,
+    spiceHeat,
+    glutenFree,
+    dairyFree,
+    vegan,
+    vegetarian,
+    eggFree,
+    avoid: input.avoidAllergens,
+    dislikes: input.dislikes,
+    servings: input.servings,
+    pantry: input.pantry,
+    seafoodAlready,
+  });
 }
 
 export function formatIngredientAmount(ingredientOrAmount: Pick<RecipeIngredient, "amount" | "unit"> | number, unit = ""): string {

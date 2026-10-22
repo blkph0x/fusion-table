@@ -2,6 +2,8 @@ import type { DietId, IngredientCategory, RecipeIngredient, RecipeStep, SpiceHea
 import type { MainIngredientOption, MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
 import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMainsForDiet } from "./meal-catalog.ts";
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
+import { getCut, type MeatCut } from "./cuts.ts";
+import { applySatFusion } from "./fusion-sat.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
@@ -65,6 +67,30 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   if (eggFree && main.id === "eggs") throw new Error("Eggs do not fit an egg-free preference. Select a compatible main ingredient.");
   const spiceHeat = input.spiceHeat ?? "medium";
   if (!HEAT_IDS.includes(spiceHeat)) throw new Error("Choose mild, medium or hot.");
+  let cutId: string | undefined;
+  if (input.cutId !== undefined && input.cutId !== "") {
+    if (typeof input.cutId !== "string") throw new Error("Choose a recognised cut, or leave it to match the method.");
+    const cut = getCut(input.cutId.trim());
+    if (!cut || cut.mainId !== main.id) throw new Error("Choose a recognised cut for this main, or leave it to match the method.");
+    cutId = cut.id;
+  }
+  let seed: number | undefined;
+  if (input.seed !== undefined && input.seed !== null) {
+    if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff) throw new Error("Choose a whole-number seed.");
+    seed = input.seed;
+  }
+  const supportedAvoid = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
+  let avoidAllergens: string[] | undefined;
+  if (input.avoidAllergens !== undefined) {
+    if (!Array.isArray(input.avoidAllergens)) throw new Error("List allergens by their supported names.");
+    avoidAllergens = input.avoidAllergens.map((name) => name.trim().toLocaleLowerCase("en")).filter(Boolean);
+    if (avoidAllergens.some((name) => !supportedAvoid.has(name))) throw new Error("Use a supported allergen name.");
+  }
+  let dislikes: string[] | undefined;
+  if (input.dislikes !== undefined) {
+    if (!Array.isArray(input.dislikes)) throw new Error("List dislikes as ingredient names.");
+    dislikes = input.dislikes.map((name) => name.trim()).filter(Boolean).slice(0, 40);
+  }
   if (!Number.isInteger(input.servings) || input.servings < 1 || input.servings > 12) throw new Error("Servings must be a whole number between 1 and 12.");
   if (input.pantry !== undefined) {
     if (typeof input.pantry === "string") {
@@ -73,7 +99,47 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
       throw new Error("The pantry must be text or a list of up to 100 ingredient names.");
     }
   }
-  return { mainId: main.id, methodId: input.methodId, regionId: input.regionId, sideId, servings: input.servings, diet, spiceHeat, ...(input.pantry !== undefined ? { pantry: input.pantry } : {}) };
+  return {
+    mainId: main.id, methodId: input.methodId, regionId: input.regionId, sideId, servings: input.servings, diet, spiceHeat,
+    ...(input.pantry !== undefined ? { pantry: input.pantry } : {}),
+    ...(cutId ? { cutId } : {}),
+    ...(seed !== undefined ? { seed } : {}),
+    ...(avoidAllergens ? { avoidAllergens } : {}),
+    ...(dislikes ? { dislikes } : {}),
+  };
+}
+
+const QUICK_METHODS = new Set(["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried"]);
+
+function withCut(plan: MainPlan, cut: MeatCut, method: string): MainPlan {
+  let preparation = plan.preparation;
+  let endpoint = plan.endpoint;
+  if (cut.form === "mince") {
+    preparation = "Keep the raw mince refrigerated until shaping or cooking. Do not wash raw meat or poultry.";
+    endpoint = "The centre must reach 75°C on a clean food thermometer. Mince is not a steak; check several pieces and cook longer if needed.";
+  } else if (cut.form === "whole") {
+    preparation = "Use the whole bird. Check the cavity is empty. Do not wash raw poultry. A whole bird takes longer than fillets.";
+    endpoint = "Check the thickest part of the thigh and the breast with a clean food thermometer: both must reach 75°C. Continue cooking if needed.";
+  } else if (cut.form === "offal") {
+    preparation = "Keep the liver cold until cooking and trim the ducts. Do not serve it rare.";
+    endpoint = "The centre must reach 75°C on a clean food thermometer.";
+  } else if (cut.form === "bone-in") {
+    preparation = `${plan.preparation} This cut is bone-in, so allow extra time and check next to the bone.`;
+  } else if (cut.form === "slow" && QUICK_METHODS.has(method)) {
+    preparation = `${plan.preparation} This is usually a slow-cooking cut. A quick method may leave it chewy; slice it thin or cook it longer. Check the packet.`;
+  }
+  const notes = [plan.ingredient.notes, cut.packetNote].filter(Boolean).join(" ");
+  const aliases = [...new Set([...(plan.ingredient.aliases ?? []), ...cut.aliases, cut.shoppingName])];
+  const safetyNote = endpoint === plan.endpoint || !plan.safetySource
+    ? plan.safetyNote
+    : `${endpoint} Timing is a guide: thickness, equipment and batch size change cooking time. Keep raw animal ingredients separate from ready-to-eat food and wash hands, utensils and work surfaces after handling them.`;
+  return {
+    ...plan,
+    preparation,
+    endpoint,
+    ...(safetyNote ? { safetyNote } : {}),
+    ingredient: { ...plan.ingredient, name: cut.shoppingName, notes, aliases },
+  };
 }
 
 function amount(value: number, servings: number): string {
@@ -274,7 +340,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const main = MAIN_INGREDIENTS.find((entry) => entry.id === mainId)!;
   const method = COOKING_METHODS.find((entry) => entry.id === methodId)!;
   const region = MEAL_REGIONS.find((entry) => entry.id === regionId)!;
-  const plan = mainPlan(main, methodId);
+  const chosen = input.cutId ? getCut(input.cutId) : undefined;
+  const plan = chosen ? withCut(mainPlan(main, methodId), chosen, methodId) : mainPlan(main, methodId);
   const profile = regionalProfile(regionId, glutenFree, spiceHeat);
   const side = sidePlan(sideId, glutenFree, servings);
   const gf = glutenFree;
@@ -372,8 +439,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : 15;
   const cookMinutes = Math.max(side.minutes, plan.minutes + (integrated ? 8 : 0)) + (servings > 6 && ["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried", "patties"].includes(methodId) ? plan.minutes : 0);
   const mainName = `${main.name} ${methodId === "schnitzel" ? "schnitzel" : methodId === "patties" ? "patties" : `· ${method.name.toLowerCase()}`}`;
-  return {
-    id: `meal-${mainId}-${methodId}-${regionId}-${sideId}-${diet}-${spiceHeat}-${servings}`,
+  const recipe: MealRecipe = {
+    id: `meal-${mainId}-${methodId}-${regionId}-${sideId}-${diet}-${spiceHeat}-${servings}${chosen ? `-${chosen.id}` : ""}`,
     classicId: `meal:${mainId}:${methodId}:${sideId}`,
     kind: "meal", mainId, methodId, sideId, regionId,
     title: `${region.name} ${mainName.toLocaleLowerCase("en")}`,
@@ -391,8 +458,28 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
       ...(spiceHeat === "mild" ? ["Mild reduces chilli; it does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand."] : ["Taste the sauce as it cooks; chilli and spice-blend strengths vary by brand."]),
       "Times are estimates for the specified cut and thickness. Cook sides alongside the main where equipment allows; additional batches take longer.",
       "Quantities scale to the requested servings. Water for cooking, soaking and batter is specified in the steps rather than the shopping list.",
+      ...(chosen ? [`Shopping name: ${chosen.shoppingName}. Check the packet. This name does not confirm a breed or a marble grade.`] : []),
     ],
     sourceLabel: "Template-generated · not kitchen-tested", generation: "authored",
     ...(plan.safetyNote ? { safetyNote: plan.safetyNote, safetySource: plan.safetySource } : {}),
   };
+  if (input.seed === undefined) return recipe;
+  const vegan = diet === "vegan" || requested.vegan === true;
+  return applySatFusion(recipe, {
+    seed: input.seed,
+    regionId,
+    diet,
+    spiceHeat,
+    glutenFree: gf,
+    dairyFree,
+    vegan,
+    vegetarian: vegan || diet === "vegetarian" || requested.vegetarian === true,
+    eggFree: vegan || requested.eggFree === true,
+    avoid: input.avoidAllergens,
+    dislikes: input.dislikes,
+    mainId,
+    methodId,
+    servings,
+    pantry: input.pantry,
+  });
 }
