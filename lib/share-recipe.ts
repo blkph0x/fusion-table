@@ -31,9 +31,25 @@ export interface ShareSpec {
   eggFree?: boolean;
 }
 
+/** UTF-8 base64url. The browser bundle has no Node Buffer. */
+function encodeBase64Url(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
+}
+
+function decodeBase64Url(token: string): string {
+  const padded = token.replaceAll("-", "+").replaceAll("_", "/") + "=".repeat((4 - (token.length % 4)) % 4);
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+  return new TextDecoder().decode(bytes);
+}
+
 export function encodeShare(spec: ShareSpec): string {
   const clean = normaliseShare(spec);
-  return Buffer.from(JSON.stringify(clean), "utf8").toString("base64url");
+  return encodeBase64Url(JSON.stringify(clean));
 }
 
 export function decodeShare(token: string): ShareSpec {
@@ -42,7 +58,7 @@ export function decodeShare(token: string): ShareSpec {
   }
   let parsed: unknown;
   try {
-    parsed = JSON.parse(Buffer.from(token, "base64url").toString("utf8"));
+    parsed = JSON.parse(decodeBase64Url(token));
   } catch {
     throw new Error("This link is not a Fusion Table recipe.");
   }
