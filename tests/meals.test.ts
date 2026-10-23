@@ -14,9 +14,9 @@ describe("ingredient-first complete meal engine", () => {
     assert.equal(MAIN_INGREDIENTS.length, 30);
     assert.equal(COOKING_METHODS.length, 12);
     assert.equal(MEAL_REGIONS.length, 76);
-    assert.equal(MEAL_SIDES.length, 11);
+    assert.equal(MEAL_SIDES.length, 90);
     assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 255);
-    assert.equal(getMealCombinationCount(), 213_180);
+    assert.equal(getMealCombinationCount(), 1_744_200);
     for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
       assert.ok(getMethodsForMain("chicken").some((method) => method.id === id));
     }
@@ -29,8 +29,12 @@ describe("ingredient-first complete meal engine", () => {
   });
 
   it("generates complete meals for every compatible configuration and dietary preference", () => {
+    // Full side × diet × main × method coverage; region sample keeps runtime bounded.
+    // Every side is also covered exhaustively in tests/side-plans.test.ts.
+    const regionSample = MEAL_REGIONS.filter((_, index) => index % 13 === 0 || MEAL_REGIONS[index].id === "home-kitchen");
+    assert.ok(regionSample.length >= 6);
     let tested = 0;
-    for (const diet of diets) for (const main of getMainsForDiet(diet)) for (const methodId of main.methodIds) for (const region of MEAL_REGIONS) for (const side of MEAL_SIDES) {
+    for (const diet of diets) for (const main of getMainsForDiet(diet)) for (const methodId of main.methodIds) for (const region of regionSample) for (const side of MEAL_SIDES) {
       const meal = generateMeal({ mainId: main.id, methodId, regionId: region.id, sideId: side.id, servings: 4, diet });
       assert.equal(meal.kind, "meal", meal.id);
       assert.equal(meal.mainId, main.id, meal.id);
@@ -56,7 +60,7 @@ describe("ingredient-first complete meal engine", () => {
       for (const item of meal.ingredients) assert.ok(text.includes(item.name.toLowerCase()) || text.includes(item.id.replaceAll("-", " ")), `${meal.id}: unused ingredient ${item.name}`);
       tested++;
     }
-    assert.ok(tested > 90_000);
+    assert.ok(tested > 400_000);
   });
 
   it("selects appropriate cuts and meaningfully different processes for the same main", () => {

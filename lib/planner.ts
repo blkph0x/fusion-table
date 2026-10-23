@@ -1,5 +1,6 @@
 import { CLASSICS, REGIONS, generateRecipe, parsePantry } from "./recipes.ts";
 import { generateMeal, MEAL_SIDES } from "./meals.ts";
+import { preferredSidesForRegion } from "./side-plans.ts";
 import { PLATES } from "./plates.ts";
 import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
@@ -459,25 +460,66 @@ export function swapSide(input: WeekPlanInput, plan: WeekPlan, day: number, side
 }
 
 /** Other side pairings that still match the recorded filters for this meal-kind dinner. */
-export function sideOptions(input: WeekPlanInput, plan: WeekPlan, day: number): { sideId: string; name: string }[] {
+export function sideOptions(input: WeekPlanInput, plan: WeekPlan, day: number): { sideId: string; name: string; suggested?: boolean }[] {
   const prepared = prepare(input);
   const current = requireDay(plan, day);
   if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) return [];
-  const options: { sideId: string; name: string }[] = [];
-  for (const side of MEAL_SIDES) {
-    if (side.id === current.recipe.sideId) continue;
+  const preferred = new Set(preferredSidesForRegion(current.recipe.regionId));
+  const options: { sideId: string; name: string; suggested?: boolean }[] = [];
+  const trySide = (side: (typeof MEAL_SIDES)[number]) => {
+    if (side.id === current.recipe!.sideId) return;
+    if (options.some((item) => item.sideId === side.id)) return;
     const slot: Slot = {
       kind: "meal",
-      classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${side.id}`,
-      regionId: current.recipe.regionId,
-      anchor: current.recipe.mainId,
-      mainId: current.recipe.mainId,
-      methodId: current.recipe.methodId,
+      classicId: `meal:${current.recipe!.mainId}:${current.recipe!.methodId}:${side.id}`,
+      regionId: current.recipe!.regionId,
+      anchor: current.recipe!.mainId!,
+      mainId: current.recipe!.mainId,
+      methodId: current.recipe!.methodId,
       sideId: side.id,
     };
-    if (!prepared.candidate(slot).recipe) continue;
-    options.push({ sideId: side.id, name: side.name });
-    if (options.length === 5) break;
+    if (!prepared.candidate(slot).recipe) return;
+    options.push({ sideId: side.id, name: side.name, ...(preferred.has(side.id) ? { suggested: true } : {}) });
+  };
+  for (const side of MEAL_SIDES) {
+    if (preferred.has(side.id)) trySide(side);
   }
-  return options;
+  for (const side of MEAL_SIDES) {
+    if (options.length >= 8) break;
+    trySide(side);
+  }
+  return options.slice(0, 8);
+}
+
+/**
+ * When a side is blocked by recorded filters, explain why and list safe alternatives.
+ * Keeps the main, method and region; only the accompaniment changes.
+ */
+export function explainBlockedSide(input: WeekPlanInput, plan: WeekPlan, day: number, sideId: string): { reason: string; alternatives: { sideId: string; name: string }[] } {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  const alternatives = sideOptions(input, plan, day).map(({ sideId: id, name }) => ({ sideId: id, name }));
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) {
+    return { reason: "Only ingredient-led dinners have a separate side you can change.", alternatives };
+  }
+  const side = MEAL_SIDES.find((item) => item.id === sideId);
+  if (!side) return { reason: "Choose a recognised side pairing.", alternatives };
+  const slot: Slot = {
+    kind: "meal",
+    classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${sideId}`,
+    regionId: current.recipe.regionId,
+    anchor: current.recipe.mainId,
+    mainId: current.recipe.mainId,
+    methodId: current.recipe.methodId,
+    sideId,
+  };
+  const chosen = prepared.candidate(slot);
+  const detail = chosen.reason ?? "blocked by your recorded filters";
+  const altNote = alternatives.length
+    ? ` Try ${alternatives.slice(0, 3).map((item) => item.name).join(", ")} instead — the main stays put.`
+    : " No other side matches your filters for this dinner.";
+  return {
+    reason: `${side.name} was not cooked (${detail}).${altNote}`,
+    alternatives,
+  };
 }

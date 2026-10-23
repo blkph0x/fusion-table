@@ -1,6 +1,7 @@
 import type { DietId } from "./recipe-types.ts";
 import type { MainIngredientOption, MealOption } from "./meal-types.ts";
 import { MEAL_REGION_OPTIONS } from "./region-pantry.ts";
+import { MEAL_SIDES as SIDE_OPTIONS } from "./side-plans.ts";
 
 export const COOKING_METHODS: readonly MealOption[] = [
   { id: "schnitzel", name: "Schnitzel", description: "Thin, crumbed pieces with a crisp shallow-fried crust.", emoji: "🍽️" },
@@ -52,19 +53,7 @@ export const MAIN_INGREDIENTS: readonly MainIngredientOption[] = [
 
 export const MEAL_REGIONS: readonly MealOption[] = MEAL_REGION_OPTIONS;
 
-export const MEAL_SIDES: readonly MealOption[] = [
-  { id: "rice-greens", name: "Rice & greens", description: "Fluffy long-grain rice with steamed green beans.", emoji: "🍚" },
-  { id: "potato-slaw", name: "Potatoes & slaw", description: "Golden potato cubes with a lemon-dressed cabbage and carrot slaw.", emoji: "🥔" },
-  { id: "couscous-veg", name: "Couscous & roast veg", description: "Couscous with peppers and courgette; quinoa for gluten-free meals.", emoji: "🥗" },
-  { id: "noodles-crunch", name: "Noodles & crunch", description: "Noodles with crunchy cucumber and carrot; rice noodles when gluten-free.", emoji: "🍜" },
-  { id: "flatbread-salad", name: "Flatbread & salad", description: "Warm flatbread with tomato and cucumber salad.", emoji: "🫓" },
-  { id: "lentil-salad", name: "Warm lentil salad", description: "Cooked lentils, baby spinach, tomato and cucumber.", emoji: "🌿" },
-  { id: "garden-salad", name: "Garden salad", description: "Lettuce, tomato and cucumber with a lemon olive-oil dressing.", emoji: "🥬" },
-  { id: "mashed-potato", name: "Mashed potato", description: "Creamy mash; olive-oil mash when dairy-free. Steamed peas on the side.", emoji: "🥔" },
-  { id: "roast-pumpkin", name: "Roast pumpkin", description: "Tray-roasted pumpkin with wilted spinach.", emoji: "🎃" },
-  { id: "steamed-broccoli", name: "Steamed broccoli", description: "Broccoli florets with lemon and a small pot of jasmine rice.", emoji: "🥦" },
-  { id: "garlic-bread", name: "Garlic bread & salad", description: "Garlic bread (wheat) with tomato salad; labelled gluten-free bread when filtered.", emoji: "🥖" },
-];
+export const MEAL_SIDES: readonly MealOption[] = SIDE_OPTIONS;
 
 export function getMethodsForMain(mainId: string): readonly MealOption[] {
   const main = MAIN_INGREDIENTS.find((item) => item.id === mainId);

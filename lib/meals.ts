@@ -7,6 +7,7 @@ import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
 import { buildRegionProfile } from "./region-pantry.ts";
+import { buildSidePlan } from "./side-plans.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
@@ -282,100 +283,7 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
 }
 
 function sidePlan(sideId: string, glutenFree: boolean, dairyFree: boolean, servings: number): SidePlan {
-  const gf = glutenFree;
-  const df = dairyFree;
-  const s = (title: string, detail: string, minutes: number): RecipeStep => ({ title, detail, minutes });
-  const oil = (quantity: number) => ingredient("olive-oil", "Olive oil", quantity, "tbsp", "grocery", [], undefined, ["olive oil"]);
-  const lemon = ingredient("lemon-juice", "Lemon juice", 30, "ml", "produce", [], "Freshly squeezed; measure the juice.");
-  if (sideId === "rice-greens") return {
-    side: "fluffy long-grain rice", vegetables: "steamed green beans",
-    ingredients: [ingredient("rice", "Long-grain rice", 300, "g", "grocery", [], "Dry weight.", ["rice", "long grain rice"]), ingredient("green-beans", "Green beans", 400, "g", "produce", [], "Trimmed.", ["green beans"])],
-    steps: [s("Start the rice", `Rinse ${amount(300, servings)} g long-grain rice. Add to a saucepan with ${amount(600, servings)} ml water, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.`, 20), s("Steam the green beans", `Trim ${amount(400, servings)} g green beans. Steam for 5–7 minutes until tender with a little bite; keep warm briefly while finishing the main.`, 7)],
-    equipment: ["Saucepan with lid", "Steamer or colander over a saucepan"], minutes: 22,
-  };
-  if (sideId === "potato-slaw") return {
-    side: "golden pan-roasted potatoes", vegetables: "lemon-dressed cabbage & carrot slaw",
-    ingredients: [ingredient("potatoes", "Potatoes", 800, "g", "produce", [], "Cut into 1.5 cm cubes."), ingredient("cabbage", "Cabbage", 250, "g", "produce", [], "Finely shredded."), ingredient("carrot", "Carrot", 200, "g", "produce", [], "Coarsely grated."), oil(3), lemon],
-    steps: [s("Cook the potatoes", `Cut ${amount(800, servings)} g potatoes into 1.5 cm cubes. Simmer in water for 8–10 minutes until just tender, then drain and steam-dry. Heat ${amount(2, servings)} tbsp olive oil in a wide pan and turn the potatoes over medium-high heat for 10–12 minutes until golden. Cook in batches if crowded.`, 25), s("Dress the slaw", `Combine ${amount(250, servings)} g finely shredded cabbage and ${amount(200, servings)} g grated carrot. Toss with ${amount(30, servings)} ml lemon juice and the remaining ${amount(1, servings)} tbsp olive oil allocated to this side.`, 5)], equipment: ["Saucepan", "Wide frying pan", "Mixing bowl", "Grater"], minutes: 25,
-  };
-  if (sideId === "couscous-veg") return {
-    side: gf ? "fluffy quinoa" : "fluffy couscous", vegetables: "pan-roasted pepper & courgette",
-    ingredients: [gf ? ingredient("quinoa", "Quinoa", 280, "g", "grocery", [], "Dry weight; replaces couscous for gluten-free meals.") : ingredient("couscous", "Couscous", 280, "g", "grocery", ["wheat"], "Dry weight."), ingredient("pepper", "Red pepper", 300, "g", "produce", [], "Deseeded and cut into 2 cm pieces.", ["capsicum", "red capsicum"]), ingredient("courgette", "Courgette (zucchini)", 300, "g", "produce", [], "Cut into 2 cm pieces.", ["courgette", "zucchini"]), oil(1.5)],
-    steps: [s(gf ? "Cook the quinoa" : "Fluff the couscous", gf ? `Rinse ${amount(280, servings)} g quinoa. Add ${amount(560, servings)} ml water, bring to a boil and simmer covered for about 15 minutes until the liquid is absorbed. Rest covered for 5 minutes, then fluff. Check the packet if it specifies a different ratio.` : `Put ${amount(280, servings)} g couscous in a heatproof bowl. Pour over ${amount(350, servings)} ml boiling water, cover for 5 minutes and fluff with a fork. Follow the packet if it requires a different water ratio.`, gf ? 22 : 7), s("Pan-roast the vegetables", `Heat ${amount(1.5, servings)} tbsp olive oil in a wide frying pan. Add ${amount(300, servings)} g chopped red pepper and ${amount(300, servings)} g chopped courgette. Cook over medium-high heat for 10–12 minutes, turning occasionally, until browned at the edges and tender. Use batches if needed.`, 12)], equipment: gf ? ["Saucepan with lid", "Wide frying pan"] : ["Heatproof bowl", "Wide frying pan"], minutes: gf ? 22 : 15,
-  };
-  if (sideId === "noodles-crunch") return {
-    side: gf ? "rice noodles" : "wheat noodles", vegetables: "crunchy cucumber & carrot",
-    ingredients: [gf ? ingredient("noodles", "Gluten-free rice noodles", 280, "g", "grocery", [], "Dry weight; choose a labelled gluten-free product.", ["gluten free rice noodles"]) : ingredient("noodles", "Egg-free wheat noodles", 280, "g", "grocery", ["wheat"], "Dry weight; check the label for egg and dairy.", ["egg free wheat noodles"]), ingredient("cucumber", "Cucumber", 300, "g", "produce", [], "Cut into thin batons."), ingredient("carrot", "Carrot", 200, "g", "produce", [], "Cut into thin matchsticks."), oil(1), lemon],
-    steps: [s("Cook the noodles", `Cook ${amount(280, servings)} g ${gf ? "gluten-free rice noodles" : "egg-free wheat noodles"} according to the packet; thickness and soaking requirements vary. Drain well, rinse only if the packet advises it, and toss with ${amount(1, servings)} tbsp olive oil to prevent sticking.`, 10), s("Add the crunch", `Cut ${amount(300, servings)} g cucumber into thin batons and ${amount(200, servings)} g carrot into matchsticks. Toss with ${amount(30, servings)} ml lemon juice. Keep this crunchy mixture separate until serving.`, 5)], equipment: ["Saucepan", "Colander", "Mixing bowl"], minutes: 15,
-  };
-  if (sideId === "flatbread-salad") return {
-    side: gf ? "warm gluten-free flatbread" : "warm flatbread", vegetables: "tomato & cucumber salad",
-    ingredients: [ingredient("flatbread", gf ? "Gluten-free vegan flatbread" : "Vegan wheat flatbread", 4, "", "grocery", gf ? [] : ["wheat"], "Choose a ready-cooked flatbread without milk or egg.", gf ? ["gluten free vegan flatbread"] : ["vegan wheat flatbread"]), ingredient("tomato", "Tomatoes", 350, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 300, "g", "produce", [], "Chopped."), oil(1), lemon],
-    steps: [s("Make the chopped salad", `Combine ${amount(350, servings)} g chopped tomatoes and ${amount(300, servings)} g chopped cucumber. Dress with ${amount(30, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil just before serving.`, 6), s("Warm the flatbread", `Warm ${amount(4, servings)} ${gf ? "gluten-free vegan" : "vegan wheat"} flatbreads in a dry frying pan for about 30–60 seconds per side, or as the packet directs. Keep wrapped in a clean tea towel.`, 5)], equipment: ["Mixing bowl", "Frying pan"], minutes: 10,
-  };
-  if (sideId === "lentil-salad") return {
-    side: "warm lentils", vegetables: "spinach, tomato & cucumber salad",
-    ingredients: [ingredient("lentils", "Canned green or brown lentils, drained", 600, "g", "grocery", [], "Already cooked; use drained weight.", ["lentils", "green lentils", "brown lentils"]), ingredient("spinach", "Baby spinach", 100, "g", "produce", [], "Washed."), ingredient("tomato", "Tomatoes", 250, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 250, "g", "produce", [], "Chopped."), oil(1), lemon],
-    steps: [s("Warm the lentils", `Drain and rinse ${amount(600, servings)} g already-cooked canned lentils (drained weight). Warm in a saucepan with ${amount(60, servings)} ml water for 4–5 minutes until steaming hot, then drain any excess. Do not use uncooked dried lentils here.`, 6), s("Toss the lentil salad", `Fold ${amount(100, servings)} g washed baby spinach into the warm lentils to wilt lightly. Add ${amount(250, servings)} g chopped tomatoes and ${amount(250, servings)} g chopped cucumber, then dress with ${amount(30, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil.`, 5)], equipment: ["Saucepan", "Mixing bowl"], minutes: 12,
-  };
-  if (sideId === "garden-salad") return {
-    side: "garden salad", vegetables: "lemon-dressed lettuce, tomato & cucumber",
-    ingredients: [ingredient("lettuce", "Cos or iceberg lettuce", 300, "g", "produce", [], "Washed and torn.", ["lettuce", "cos lettuce", "iceberg"]), ingredient("tomato", "Tomatoes", 300, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 250, "g", "produce", [], "Sliced."), oil(2), lemon],
-    steps: [s("Build the garden salad", `Tear ${amount(300, servings)} g washed lettuce into a bowl. Add ${amount(300, servings)} g chopped tomatoes and ${amount(250, servings)} g sliced cucumber.`, 5), s("Dress just before serving", `Toss with ${amount(30, servings)} ml lemon juice and ${amount(2, servings)} tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.`, 2)], equipment: ["Mixing bowl"], minutes: 7,
-  };
-  if (sideId === "mashed-potato") {
-    const dairy = !df;
-    return {
-      side: dairy ? "creamy mashed potato" : "olive-oil mashed potato",
-      vegetables: "steamed peas",
-      ingredients: [
-        ingredient("potatoes", "Potatoes", 900, "g", "produce", [], "Peeled and cut into even chunks."),
-        ingredient("peas", "Frozen peas", 300, "g", "produce", [], "Do not thaw before cooking.", ["peas", "green peas"]),
-        ...(dairy
-          ? [ingredient("milk", "Milk", 120, "ml", "grocery", ["milk"], "Warm before mashing.", ["milk"]), ingredient("butter", "Butter", 40, "g", "grocery", ["milk"], undefined, ["butter"])]
-          : [oil(3)]),
-      ],
-      steps: [
-        s("Boil and mash the potatoes", dairy
-          ? `Boil ${amount(900, servings)} g potatoes (peeled and cut into even chunks) in unsalted water until tender, about 15–18 minutes. Drain well. Mash with ${amount(120, servings)} ml warm milk and ${amount(40, servings)} g butter until smooth. Check the packet if using a ready mash mix.`
-          : `Boil ${amount(900, servings)} g potatoes (peeled and cut into even chunks) in unsalted water until tender, about 15–18 minutes. Drain well. Mash with ${amount(3, servings)} tbsp olive oil until smooth. No milk or butter is used for this dairy-free mash.`, 20),
-        s("Steam the peas", `Cook ${amount(300, servings)} g frozen peas in a little boiling water for 3–4 minutes until hot through. Drain and keep warm.`, 5),
-      ],
-      equipment: ["Saucepan", "Colander", "Potato masher"],
-      minutes: 25,
-    };
-  }
-  if (sideId === "roast-pumpkin") return {
-    side: "roast pumpkin wedges", vegetables: "wilted spinach",
-    // Distinct id from a pumpkin main so amounts and notes do not collide.
-    ingredients: [ingredient("side-pumpkin", "Pumpkin or butternut for the side", 800, "g", "produce", [], "Peeled and cut into 2 cm wedges for the side tray.", ["pumpkin", "butternut", "butternut squash"]), ingredient("spinach", "Baby spinach", 150, "g", "produce", [], "Washed."), oil(2), lemon],
-    steps: [s("Roast the pumpkin", `Toss ${amount(800, servings)} g pumpkin or butternut for the side (2 cm wedges) with ${amount(2, servings)} tbsp olive oil. Spread on a tray and roast at 200°C for 25–30 minutes until browned at the edges and soft through the centre.`, 30), s("Wilt the spinach", `In the last 2 minutes, tip ${amount(150, servings)} g washed baby spinach onto the hot tray or a warm pan until just wilted. Finish with ${amount(15, servings)} ml lemon juice.`, 3)], equipment: ["Oven tray", "Mixing bowl"], minutes: 32,
-  };
-  if (sideId === "steamed-broccoli") return {
-    side: "jasmine rice", vegetables: "steamed broccoli with lemon",
-    // Distinct id from a broccoli main so shopping notes do not collide.
-    ingredients: [ingredient("jasmine-rice", "Jasmine rice", 280, "g", "grocery", [], "Dry weight.", ["jasmine rice", "rice"]), ingredient("side-broccoli", "Broccoli for the side", 500, "g", "produce", [], "Cut into even florets for the side.", ["broccoli"]), oil(1), lemon],
-    steps: [s("Cook the jasmine rice", `Rinse ${amount(280, servings)} g jasmine rice. Cook with ${amount(420, servings)} ml water, covered, on the lowest heat for about 12 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.`, 18), s("Steam the broccoli", `Steam ${amount(500, servings)} g broccoli for the side (even florets) for 5–7 minutes until bright green with a little bite. Toss with ${amount(1, servings)} tbsp olive oil and ${amount(20, servings)} ml lemon juice.`, 7)], equipment: ["Saucepan with lid", "Steamer or colander over a saucepan"], minutes: 20,
-  };
-  if (sideId === "garlic-bread") return {
-    side: gf ? "gluten-free garlic bread" : "garlic bread",
-    vegetables: "tomato salad",
-    ingredients: [
-      // Ready garlic bread already carries garlic flavour. Do not add a separate
-      // garlic line here — regional sauces often list garlic in different units.
-      ingredient("garlic-bread", gf ? "Gluten-free garlic bread" : "Garlic bread", 4, "", "grocery", gf ? [] : ["wheat"], gf ? "Choose a labelled gluten-free product; check for milk." : "Wheat bakery product; check the packet for milk and sesame.", gf ? ["gluten free garlic bread"] : ["garlic bread", "garlic toast"]),
-      ingredient("tomato", "Tomatoes", 350, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]),
-      oil(1),
-      lemon,
-    ],
-    steps: [
-      s("Warm the garlic bread", `Warm ${amount(4, servings)} pieces of ${gf ? "labelled gluten-free" : "wheat"} garlic bread in a moderate oven or toaster oven as the packet directs, usually 8–10 minutes. Keep warm in a clean tea towel.`, 10),
-      s("Make the tomato salad", `Combine ${amount(350, servings)} g chopped tomatoes with ${amount(20, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil. Serve beside the bread, not on top of it, so the crust stays crisp.`, 4),
-    ],
-    equipment: ["Oven or toaster oven", "Mixing bowl"],
-    minutes: 12,
-  };
-  throw new Error("Choose a recognised side pairing.");
+  return buildSidePlan(sideId, glutenFree, dairyFree, servings);
 }
 
 function mergeIngredients(drafts: readonly DraftIngredient[], servings: number, pantry?: string | string[]): RecipeIngredient[] {

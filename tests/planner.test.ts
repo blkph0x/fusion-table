@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { chooseDinner, planWeek, sideOptions, swapDinner, swapSide } from "../lib/planner.ts";
+import { chooseDinner, explainBlockedSide, planWeek, sideOptions, swapDinner, swapSide } from "../lib/planner.ts";
 import { generateRecipe } from "../lib/recipes.ts";
 import { MEAL_SIDES } from "../lib/meals.ts";
 
@@ -158,6 +158,11 @@ describe("fusion week planner", () => {
     assert.throws(() => swapSide(filter, week, mealDay!.day, "steamed-broccoli"), /not cooked|recorded filters|dislike/i);
     const options = sideOptions({ days: 7, servings: 4, dislikes: ["broccoli"] }, week, mealDay!.day);
     assert.ok(!options.some((option) => option.sideId === "steamed-broccoli"));
+    assert.ok(options.length <= 8);
+    const blocked = explainBlockedSide(filter, week, mealDay!.day, "steamed-broccoli");
+    assert.match(blocked.reason, /not cooked|broccoli|filters|Try/i);
+    assert.ok(blocked.alternatives.every((item) => item.sideId !== "steamed-broccoli"));
+    assert.ok(blocked.alternatives.length > 0);
     const wheat = planWeek({ days: 3, servings: 2, avoidAllergens: ["wheat"], seed: 8 });
     const wheatMeal = wheat.days.find((day) => day.recipe?.kind === "meal");
     if (wheatMeal) {

@@ -6,7 +6,7 @@ import { CLASSICS, REGIONS, DIETS, generateRecipe } from "@/lib/recipes";
 import { BBQ_CLASSICS } from "@/lib/bbq-classics";
 import { BBQ_REGIONS } from "@/lib/bbq-regions";
 import { COOK_PACE_LABELS } from "@/lib/cook-pace";
-import { chooseDinner, planWeek, sideOptions, swapDinner, swapSide, type WeekPlan } from "@/lib/planner";
+import { chooseDinner, explainBlockedSide, planWeek, sideOptions, swapDinner, swapSide, type WeekPlan } from "@/lib/planner";
 import { SPICE_HEATS, type CookPace, type Recipe, type DietId, type SpiceHeat } from "@/lib/recipe-types";
 import { SHOP_LABELS, type LocationResult, type Shop, type ShopKind, type ShopResponse } from "@/lib/locations";
 import { fetchLocationResults, fetchNearbyShops } from "@/lib/location-client";
@@ -14,13 +14,14 @@ import { KitchenDesk } from "@/components/kitchen-desk";
 import { rememberConsumables, weekNeeds, weekShortfalls, type ShopNeed, type Stock, type VerdictId } from "@/lib/pantry";
 import { ingredientMatchesShop, suggestedShops } from "@/lib/shopping";
 import MealBuilder from "@/components/meal-builder";
+import { WeekDayPlate } from "@/components/week-day-plate";
 import { PriceCheck } from "@/components/price-check";
-import { CommunityDesk, CookNotes, NewsBell, WeekNote } from "@/components/community-panel";
+import { CommunityDesk, CookNotes, NewsBell } from "@/components/community-panel";
 import { ShopPrices } from "@/components/shop-prices";
 import { TrendsPage } from "@/components/trends-page";
 import { communityAdjustments, plateIdentity, scaleIngredients, type CommunityBoard, type PlateStanding } from "@/lib/community";
 import { areaKey } from "@/lib/price-memory";
-import { MAIN_INGREDIENTS, MEAL_REGIONS, COOKING_METHODS, generateMeal, getMealCombinationCount } from "@/lib/meals";
+import { MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, COOKING_METHODS, generateMeal, getMealCombinationCount } from "@/lib/meals";
 import type { MealInput } from "@/lib/meal-types";
 import { publicPath } from "@/lib/public-path";
 import { decodeShare, encodeShare, recipeFromShare, specFromRecipe, type ShareSpec } from "@/lib/share-recipe";
@@ -136,7 +137,9 @@ export default function Home() {
   const [avoidAllergens, setAvoidAllergens] = useState<string[]>([]);
   const [dislikeText, setDislikeText] = useState("");
   const [week, setWeek] = useState<WeekPlan | null>(null);
+  const [weekUndo, setWeekUndo] = useState<WeekPlan[]>([]);
   const [weekError, setWeekError] = useState("");
+  const [lockedDays, setLockedDays] = useState<number[]>([]);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [shareSpec, setShareSpec] = useState<ShareSpec | null>(null);
   const [formError, setFormError] = useState("");
@@ -326,41 +329,73 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     const dislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
     return { days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes, seed };
   }
+  function applyWeek(next: WeekPlan, options?: { clearUndo?: boolean }) {
+    setWeek((current) => {
+      if (current && !options?.clearUndo) setWeekUndo((stack) => [...stack.slice(-9), current]);
+      return next;
+    });
+    if (options?.clearUndo) setWeekUndo([]);
+  }
+  function undoWeekChange() {
+    setWeekUndo((stack) => {
+      const previous = stack[stack.length - 1];
+      if (previous) setWeek(previous);
+      return stack.slice(0, -1);
+    });
+    setWeekError("");
+    setToast("Undid the last randomise or swap.");
+  }
   function buildWeek(event?: FormEvent) {
     event?.preventDefault(); setWeekError("");
-    try { setWeek(planWeek(weekBrief(freshSeed()))); }
+    try {
+      applyWeek(planWeek(weekBrief(freshSeed())), { clearUndo: true });
+      setLockedDays([]);
+    }
     catch (error) { setWeekError(error instanceof Error ? error.message : "The week could not be planned."); }
   }
   function randomiseDay(day: number) {
-    if (!week) return;
+    if (!week || lockedDays.includes(day)) {
+      if (lockedDays.includes(day)) setWeekError("That dinner is locked. Unlock it if you want a different one.");
+      return;
+    }
     setWeekError("");
     try {
       const next = swapDinner(weekBrief(freshSeed()), week, day);
       const before = week.days.find((item) => item.day === day)?.recipe?.id;
-      setWeek(next);
+      applyWeek(next);
       if (next.days.find((item) => item.day === day)?.recipe?.id === before) setWeekError("No other template matches your filters for that day. Filters stay in place.");
     } catch (error) { setWeekError(error instanceof Error ? error.message : "That dinner could not be changed."); }
   }
   function changeSide(day: number, sideId: string) {
-    if (!week) return;
+    if (!week || lockedDays.includes(day)) {
+      if (lockedDays.includes(day)) setWeekError("That dinner is locked. Unlock it before changing the side.");
+      return;
+    }
     setWeekError("");
     try {
       const before = week.days.find((item) => item.day === day)?.recipe;
       const next = swapSide(weekBrief(freshSeed()), week, day, sideId);
       const after = next.days.find((item) => item.day === day)?.recipe;
-      setWeek(next);
-      if (!after || after.sideId === before?.sideId) setWeekError("That side could not be applied with your filters. Filters stay in place.");
+      applyWeek(next);
+      if (!after || after.sideId === before?.sideId) {
+        const hint = explainBlockedSide(weekBrief(freshSeed()), week, day, sideId);
+        setWeekError(hint.reason);
+      }
     } catch (error) {
-      setWeekError(error instanceof Error ? error.message : "That side could not be changed.");
+      const hint = explainBlockedSide(weekBrief(freshSeed()), week, day, sideId);
+      setWeekError(hint.reason || (error instanceof Error ? error.message : "That side could not be changed."));
     }
   }
   function pickDinner(day: number, classicIdToUse: string, regionIdToUse: string) {
-    if (!week) return;
+    if (!week || lockedDays.includes(day)) {
+      if (lockedDays.includes(day)) setWeekError("That dinner is locked. Unlock it if you want a different one.");
+      return;
+    }
     setWeekError("");
     try {
       const before = week.days.find((item) => item.day === day)?.recipe?.id;
       const next = chooseDinner(weekBrief(freshSeed()), week, day, classicIdToUse, regionIdToUse);
-      setWeek(next);
+      applyWeek(next);
       if (next.days.find((item) => item.day === day)?.recipe?.id === before) setWeekError("That choice does not match your recorded filters, so it was not used.");
     } catch (error) { setWeekError(error instanceof Error ? error.message : "That dinner could not be changed."); }
   }
@@ -543,7 +578,36 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
         </form>
         {week && weekShortfalls(pantry, week.shopping).length > 0 && <ul className="week-notes">{weekShortfalls(pantry, week.shopping).map((warning) => <li key={warning}>{warning}</li>)}</ul>}
         {week && <button className="button secondary" type="button" onClick={() => { const tracked = rememberConsumables(pantry, week.shopping); setPantry(tracked); setBuyList(weekNeeds(tracked, week.shopping)); setCookNote("Shopping list updated from the week. Oils, butter and flour stay on the pantry list. No shelf price is on file."); shoppingView(); }}>Shop what the pantry does not cover</button>}
-        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => <article key={day.day} className="week-day"><h3>Day {day.day}</h3>{day.recipe ? <><WeekNote recipe={day.recipe} board={community} /><img className="week-plate" src={plateSrc(day.recipe, null)} alt="" onError={keepImage} /><p><strong>{day.recipe.title}</strong></p>{day.recipe.kind === "meal" && day.recipe.components?.side && <p className="subtle-small">Side: {day.recipe.components.side}{day.recipe.components.vegetables ? ` with ${day.recipe.components.vegetables}` : ""}.</p>}<p>{day.recipe.sourceLabel}. {day.recipe.allergens.length ? `Lists ${day.recipe.allergens.join(", ")}.` : "No allergen is listed on this template."} Check the packet.</p><div className="week-day-actions"><button className="text-button" type="button" onClick={() => openPlanned(day.recipe!)}>Open recipe <ArrowRight size={14} /></button><button className="text-button" type="button" onClick={() => randomiseDay(day.day)}>Randomise</button></div>{day.recipe.kind === "meal" && (() => { const sides = sideOptions({ days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) }, week, day.day); return sides.length > 0 ? <div className="week-options" role="group" aria-label={`Change side for day ${day.day}`}><span>Change side</span>{sides.map((option) => <button key={option.sideId} type="button" onClick={() => changeSide(day.day, option.sideId)}>{option.name}</button>)}</div> : null; })()}{day.options.length > 0 && <div className="week-options"><span>Or try</span>{day.options.map((option) => <button key={`${option.classicId}:${option.regionId}`} type="button" onClick={() => pickDinner(day.day, option.classicId, option.regionId)}>{option.title}</button>)}</div>}</> : <p>{day.reason}</p>}</article>)}</div>
+        {week && <aside className="week-plan-summary" aria-label="Week plan summary">
+          <div className="week-plan-summary-inner">
+            <div>
+              <strong>This week</strong>
+              <p>Avoid: {avoidAllergens.length ? avoidAllergens.join(", ") : "none recorded"}. Dislikes: {dislikeText.trim() || "none"}. Diet: {diet}. No shelf prices — amounts only, never a fake Coles or ALDI total.</p>
+            </div>
+            <div className="week-plan-summary-actions">
+              {weekUndo.length > 0 && <button type="button" className="button secondary" onClick={undoWeekChange}>Undo last change</button>}
+              <span className="subtle-small">{MEAL_SIDES.length} sides in the catalogue · templates not kitchen-tested</span>
+            </div>
+          </div>
+        </aside>}
+        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => {
+          const brief = { days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) };
+          const sides = day.recipe?.kind === "meal" ? sideOptions(brief, week, day.day) : [];
+          return <WeekDayPlate
+            key={day.day}
+            day={day}
+            board={community}
+            plateSrc={plateSrc}
+            keepImage={keepImage}
+            locked={lockedDays.includes(day.day)}
+            sideChoices={sides}
+            onOpen={openPlanned}
+            onRandomise={() => randomiseDay(day.day)}
+            onChangeSide={(sideId) => changeSide(day.day, sideId)}
+            onPickDinner={(classicId, regionId) => pickDinner(day.day, classicId, regionId)}
+            onToggleLock={() => setLockedDays((current) => current.includes(day.day) ? current.filter((item) => item !== day.day) : [...current, day.day])}
+          />;
+        })}</div>
           <section><h2>Still to buy</h2><p className="subtle-small">Amounts the pantry does not cover. Oils, butter and flour are kept on the pantry list. No shelf price is on file.</p>{weekNeeds(pantry, week.shopping).length === 0 ? <p>The pantry covers this week.</p> : <ul>{weekNeeds(pantry, week.shopping).map((line) => <li key={`${line.id}-${line.unit}`}>{line.name} — {amount(line.amount, line.unit)}. {line.reason}</li>)}</ul>}</section>
           <ul className="week-notes">{week.notes.map((note) => <li key={note}>{note}</li>)}</ul>
           <button className="button secondary" type="button" onClick={() => downloadFile("fusion-table-week.json", JSON.stringify(week, null, 2), "application/json")}><Download size={16} /> Download week</button>
