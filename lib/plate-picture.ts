@@ -97,20 +97,21 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
   if (!endpoint) return null;
   const target = endpoint.includes("sdapi") ? endpoint : `${endpoint}/sdapi/v1/txt2img`;
   const names = recipe.ingredients.slice(0, 12).map((item) => item.name).join(", ");
-  const prompt = `Overhead photograph of one plated home-cooked meal on a ceramic plate, natural window light, wooden table, no text, no people, no hands. Dish: ${recipe.title}. Visible food: ${names}.`.slice(0, 700);
+  const prompt = `Realistic close-up food photograph of one finished home-cooked plate, natural window light, ceramic plate on a wooden table, sharp focus, appetising, no text, no logo, no people, no hands. The dish is ${recipe.title}. Visible food: ${names}.`.slice(0, 700);
   try {
     const response = await fetch(target, {
       method: "POST",
       redirect: "error",
-      signal: AbortSignal.timeout(20_000),
+      signal: AbortSignal.timeout(240_000),
       headers: { Accept: "application/json, image/png, image/jpeg", "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt,
-        negative_prompt: "text, watermark, logo, people, hands, raw poultry, raw mince",
-        steps: 20,
-        width: 768,
+        negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince",
+        steps: 4,
+        width: 512,
         height: 512,
-        cfg_scale: 7,
+        cfg_scale: 1,
+        scheduler: "karras",
       }),
     });
     if (!response.ok) return null;
