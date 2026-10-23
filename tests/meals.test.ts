@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, generateMeal, getMealCombinationCount, getMainsForDiet, getMethodsForMain, validateMealInput } from "../lib/meals.ts";
 import type { MealInput } from "../lib/meal-types.ts";
 import type { DietId, SpiceHeat } from "../lib/recipe-types.ts";
+import { signatureHeatId } from "../lib/region-pantry.ts";
 
 const base: MealInput = { mainId: "chicken", methodId: "schnitzel", regionId: "japanese", sideId: "rice-greens", servings: 4 };
 const diets: DietId[] = ["balanced", "vegetarian", "vegan", "gluten-free", "dairy-free"];
@@ -12,10 +13,10 @@ describe("ingredient-first complete meal engine", () => {
   it("counts only supported main/method/region/side configurations and exposes every promised chicken method", () => {
     assert.equal(MAIN_INGREDIENTS.length, 22);
     assert.equal(COOKING_METHODS.length, 12);
-    assert.equal(MEAL_REGIONS.length, 20);
+    assert.equal(MEAL_REGIONS.length, 63);
     assert.equal(MEAL_SIDES.length, 6);
     assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 195);
-    assert.equal(getMealCombinationCount(), 23_400);
+    assert.equal(getMealCombinationCount(), 73_710);
     for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
       assert.ok(getMethodsForMain("chicken").some((method) => method.id === id));
     }
@@ -189,9 +190,12 @@ describe("ingredient-first complete meal engine", () => {
     for (const region of MEAL_REGIONS) {
       const mild = generateMeal({ ...base, regionId: region.id, spiceHeat: "mild" });
       const hot = generateMeal({ ...base, regionId: region.id, spiceHeat: "hot" });
-      const chilliId: Record<string, string> = { korean: "gochujang", thai: "red-curry-paste", moroccan: "harissa", peruvian: "aji-amarillo", ethiopian: "berbere" };
-      const id = chilliId[region.id] ?? "chilli-flakes";
-      assert.ok(mild.ingredients.find((item) => item.id === id)!.amount < hot.ingredients.find((item) => item.id === id)!.amount, region.id);
+      const id = signatureHeatId(region.id);
+      assert.notEqual(id, "chilli-flakes", region.id);
+      const mildHeat = mild.ingredients.find((item) => item.id === id);
+      const hotHeat = hot.ingredients.find((item) => item.id === id);
+      assert.ok(mildHeat && hotHeat, region.id);
+      assert.ok(mildHeat.amount > 0 && mildHeat.amount < hotHeat.amount, region.id);
       assert.notEqual(mild.id, hot.id);
       assert.equal(mild.classicId, hot.classicId);
       assert.ok(mild.dietaryNotes.some((note) => note.includes("Mild")));

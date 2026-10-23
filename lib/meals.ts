@@ -4,6 +4,8 @@ import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, M
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 import { getCut, type MeatCut } from "./cuts.ts";
 import { applySatFusion } from "./fusion-sat.ts";
+import { foodWordHit } from "./food-words.ts";
+import { buildRegionProfile } from "./region-pantry.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
@@ -151,42 +153,18 @@ function describe(items: readonly DraftIngredient[], servings: number): string {
 }
 
 function regionalProfile(regionId: string, glutenFree: boolean, heat: SpiceHeat): RegionProfile {
-  const gf = glutenFree;
-  const hot = { mild: 0.25, medium: 1, hot: 1.75 }[heat];
-  const garlic = ingredient("garlic", "Garlic", 15, "g", "produce", [], "Peeled and finely minced.", ["garlic cloves"]);
-  const ginger = ingredient("ginger", "Fresh ginger", 15, "g", "produce", [], "Peeled and finely grated.", ["ginger"]);
-  const lemon = ingredient("lemon-juice", "Lemon juice", 30, "ml", "produce", [], "Freshly squeezed; measure the juice.");
-  const lime = ingredient("lime-juice", "Lime juice", 30, "ml", "produce", [], "Freshly squeezed; measure the juice.");
-  const herbs = (id: string, name: string) => ingredient(id, name, 15, "g", "produce", [], "Washed and finely chopped.", [id]);
-  const spice = (id: string, name: string, quantity = 1) => ingredient(id, name, quantity, "tsp");
-  const soy = ingredient("soy-sauce", gf ? "Gluten-free tamari" : "Soy sauce", 2, "tbsp", "grocery", gf ? ["soy"] : ["soy", "wheat"], gf ? "Choose a product explicitly labelled gluten-free." : undefined, gf ? ["gluten free tamari", "gluten-free soy sauce"] : ["soy sauce"]);
-  const vinegar = ingredient("rice-vinegar", "Rice vinegar", 1, "tbsp");
-  const sesame = ingredient("sesame-seeds", "Toasted sesame seeds", 1, "tbsp", "grocery", ["sesame"], "Use ready-toasted seeds.", ["toasted sesame seeds"]);
-  const profiles: Record<string, RegionProfile> = {
-    japanese: { sauce: "miso, ginger & spring onion sauce", aromatics: [garlic, ginger], seasonings: [ingredient("miso", gf ? "Gluten-free white miso" : "White miso", 1.5, "tbsp", "specialty", ["soy"], "Use a rice-based miso; check the label for other allergens.", gf ? ["gluten free white miso", "gluten-free miso"] : ["white miso", "rice miso"]), soy], finish: [vinegar, herbs("spring-onion", "Spring onion"), sesame], body: "stock" },
-    korean: { sauce: "gochujang & sesame sauce", aromatics: [garlic, ginger], seasonings: [ingredient("gochujang", gf ? "Gluten-free vegan gochujang" : "Vegan gochujang", 2 * hot, "tbsp", "specialty", gf ? ["soy"] : ["soy", "wheat"], "Choose a vegan product; heat varies by brand.", gf ? ["gluten free vegan gochujang", "gluten-free gochujang"] : ["vegan gochujang"]), soy], finish: [vinegar, herbs("spring-onion", "Spring onion"), sesame], body: "stock" },
-    thai: { sauce: "coconut, red curry & lime sauce", aromatics: [garlic, ginger], seasonings: [ingredient("red-curry-paste", gf ? "Gluten-free vegan red curry paste" : "Vegan red curry paste", 2 * hot, "tbsp", "specialty", [], "Choose a paste without fish sauce or shrimp; check allergens and heat.", gf ? ["gluten free vegan red curry paste"] : ["vegan red curry paste"])], finish: [lime, herbs("coriander", "Fresh coriander")], body: "coconut" },
-    mexican: { sauce: "smoky cumin, tomato & lime sauce", aromatics: [garlic], seasonings: [spice("cumin", "Ground cumin", 1.5), spice("smoked-paprika", "Smoked paprika", 1.5)], finish: [lime, herbs("coriander", "Fresh coriander")], body: "tomato" },
-    indian: { sauce: "ginger, garam masala & coconut sauce", aromatics: [garlic, ginger], seasonings: [spice("garam-masala", "Garam masala", 2), spice("turmeric", "Ground turmeric", 0.5)], finish: [lemon, herbs("coriander", "Fresh coriander")], body: "coconut" },
-    levantine: { sauce: "cumin, sumac & lemon sauce", aromatics: [garlic], seasonings: [spice("cumin", "Ground cumin", 1.5), spice("sumac", "Ground sumac", 1.5)], finish: [lemon, herbs("parsley", "Flat-leaf parsley")], body: "stock" },
-    italian: { sauce: "tomato, oregano & basil sauce", aromatics: [garlic], seasonings: [spice("oregano", "Dried oregano", 1.5)], finish: [lemon, herbs("basil", "Fresh basil")], body: "tomato" },
-    moroccan: { sauce: "harissa, cumin & lemon sauce", aromatics: [garlic], seasonings: [ingredient("harissa", "Harissa paste", 1.5 * hot, "tbsp", "specialty", [], "Check the label; chilli strength varies.", ["harissa"]), spice("cumin", "Ground cumin", 1.5), spice("cinnamon", "Ground cinnamon", 0.25)], finish: [lemon, herbs("parsley", "Flat-leaf parsley")], body: "tomato" },
-    greek: { sauce: "lemon, oregano & dill sauce", aromatics: [garlic], seasonings: [spice("oregano", "Dried oregano", 1.5)], finish: [lemon, herbs("dill", "Fresh dill")], body: "stock" },
-    spanish: { sauce: "smoked paprika & tomato sauce", aromatics: [garlic], seasonings: [spice("smoked-paprika", "Smoked paprika", 2)], finish: [ingredient("sherry-vinegar", "Sherry vinegar", 1, "tbsp", "grocery", ["sulphites"], "Check the product label for sulphites."), herbs("parsley", "Flat-leaf parsley")], body: "tomato" },
-    french: { sauce: "Dijon, thyme & lemon sauce", aromatics: [garlic], seasonings: [ingredient("dijon-mustard", "Dijon mustard", 1.5, "tbsp", "grocery", ["mustard"]), spice("thyme", "Dried thyme", 1)], finish: [lemon, herbs("parsley", "Flat-leaf parsley")], body: "stock" },
-    vietnamese: { sauce: "lemongrass, lime & mint sauce", aromatics: [garlic, ginger, ingredient("lemongrass", "Lemongrass", 20, "g", "produce", [], "Tender inner part only, very finely minced.")], seasonings: [soy], finish: [lime, herbs("mint", "Fresh mint")], body: "stock" },
-    chinese: { sauce: "ginger, five-spice & spring onion sauce", aromatics: [garlic, ginger], seasonings: [soy, spice("five-spice", "Chinese five-spice", 0.5)], finish: [vinegar, herbs("spring-onion", "Spring onion"), sesame], body: "stock" },
-    indonesian: { sauce: "ginger, turmeric & coconut sauce", aromatics: [garlic, ginger], seasonings: [soy, spice("turmeric", "Ground turmeric", 0.5), spice("ground-coriander", "Ground coriander", 1.5)], finish: [lime, herbs("coriander", "Fresh coriander")], body: "coconut" },
-    malaysian: { sauce: "lemongrass, coriander & coconut sauce", aromatics: [garlic, ginger, ingredient("lemongrass", "Lemongrass", 20, "g", "produce", [], "Tender inner part only, very finely minced.")], seasonings: [spice("ground-coriander", "Ground coriander", 2), spice("turmeric", "Ground turmeric", 0.5)], finish: [lime, herbs("coriander", "Fresh coriander")], body: "coconut" },
-    caribbean: { sauce: "allspice, thyme & lime sauce", aromatics: [garlic, ginger], seasonings: [spice("allspice", "Ground allspice", 1), spice("thyme", "Dried thyme", 1.5)], finish: [lime, herbs("spring-onion", "Spring onion")], body: "stock" },
-    peruvian: { sauce: "ají amarillo, cumin & lime sauce", aromatics: [garlic], seasonings: [ingredient("aji-amarillo", "Ají amarillo paste", 1.5 * hot, "tbsp", "specialty", [], "Choose a plain chilli paste and check allergens; strength varies."), spice("cumin", "Ground cumin", 1)], finish: [lime, herbs("coriander", "Fresh coriander")], body: "stock" },
-    ethiopian: { sauce: "berbere, ginger & tomato sauce", aromatics: [garlic, ginger], seasonings: [spice("berbere", "Berbere spice blend", 2 * hot)], finish: [lemon, herbs("parsley", "Flat-leaf parsley")], body: "tomato" },
-    turkish: { sauce: "paprika, sumac & tomato sauce", aromatics: [garlic], seasonings: [spice("paprika", "Sweet paprika", 1.5), spice("cumin", "Ground cumin", 1), spice("sumac", "Ground sumac", 1)], finish: [lemon, herbs("parsley", "Flat-leaf parsley")], body: "tomato" },
-    brazilian: { sauce: "garlic, paprika & coconut-lime sauce", aromatics: [garlic], seasonings: [spice("paprika", "Sweet paprika", 1.5)], finish: [lime, herbs("coriander", "Fresh coriander")], body: "coconut" },
-  };
-  const profile = profiles[regionId];
-  if (!["korean", "thai", "moroccan", "peruvian", "ethiopian"].includes(regionId)) profile.seasonings.push(spice("chilli-flakes", "Chilli flakes", { mild: 0.125, medium: 0.5, hot: 1 }[heat]));
-  return profile;
+  return buildRegionProfile(regionId, glutenFree, heat);
+}
+
+function hitsDislike(item: DraftIngredient, dislikes: readonly string[]): boolean {
+  return dislikes.some((token) => [item.name, ...(item.aliases ?? [])].some((label) => foodWordHit(label, token)));
+}
+
+/** A hard dislike removes that regional ingredient. It does not swap in another cuisine. */
+function withoutDislikes(profile: RegionProfile, dislikes: readonly string[]): RegionProfile {
+  if (dislikes.length === 0) return profile;
+  const keep = (items: DraftIngredient[]) => items.filter((item) => !hitsDislike(item, dislikes));
+  return { ...profile, aromatics: keep(profile.aromatics), seasonings: keep(profile.seasonings), finish: keep(profile.finish) };
 }
 
 const COOK_TIMES: Record<string, Record<string, number>> = {
@@ -327,7 +305,12 @@ function mergeIngredients(drafts: readonly DraftIngredient[], servings: number, 
       merged.set(draft.id, { ...previous, amount: previous.amount + draft.amount, allergens: [...new Set([...previous.allergens, ...draft.allergens].map(canonAllergen))], aliases: [...new Set([...(previous.aliases ?? []), ...(draft.aliases ?? [])])], notes: [...new Set([previous.notes, draft.notes].filter(Boolean))].join(" ") });
     } else merged.set(draft.id, { ...draft, allergens: draft.allergens.map(canonAllergen) });
   }
-  return [...merged.values()].map(({ aliases, ...entry }) => ({ ...entry, amount: Number((entry.amount * servings / 4).toFixed(4)), inPantry: [entry.name, ...(aliases ?? [])].some((term) => available.has(normalizeTerm(term))) }));
+  return [...merged.values()].map((entry) => ({
+    ...entry,
+    ...(entry.aliases ? { aliases: [...entry.aliases] } : {}),
+    amount: Number((entry.amount * servings / 4).toFixed(4)),
+    inPantry: [entry.name, ...(entry.aliases ?? [])].some((term) => available.has(normalizeTerm(term))),
+  }));
 }
 
 /** Build a complete meal from explicit compatible cuts, techniques, regional sauces and side plans. */
@@ -342,7 +325,7 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const region = MEAL_REGIONS.find((entry) => entry.id === regionId)!;
   const chosen = input.cutId ? getCut(input.cutId) : undefined;
   const plan = chosen ? withCut(mainPlan(main, methodId), chosen, methodId) : mainPlan(main, methodId);
-  const profile = regionalProfile(regionId, glutenFree, spiceHeat);
+  const profile = withoutDislikes(regionalProfile(regionId, glutenFree, spiceHeat), input.dislikes ?? []);
   const side = sidePlan(sideId, glutenFree, servings);
   const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);

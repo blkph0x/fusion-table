@@ -5,6 +5,7 @@
  */
 
 import { MEAT_CUTS } from "./cuts.ts";
+import { foldFoodWord } from "./food-words.ts";
 
 export type StockFlag = "IN_STOCK" | "OUT_OF_STOCK" | "UNKNOWN";
 
@@ -130,9 +131,7 @@ export function formatAudCents(cents: number | null | undefined): string | null 
 }
 
 function stem(token: string): string {
-  if (token.length > 5 && token.endsWith("oes")) return `${token.slice(0, -3)}o`;
-  if (token.length > 4 && token.endsWith("s") && !/(?:ss|us|is)$/.test(token)) return token.slice(0, -1);
-  return token;
+  return foldFoodWord(token);
 }
 
 /** Fold shop wording onto the words our list uses, without treating bare "fillet" as its own cut. */

@@ -177,4 +177,24 @@ describe("woolworths catalogue payload", () => {
     assert.equal(quote.matches.find((match) => match.selected)?.name, "Flat Iron Steak");
     assert.equal(quote.matches.find((match) => match.selected)?.priceCents, 2250);
   });
+
+  it("does not follow a Woolworths redirect onto another port or with credentials", async () => {
+    const oddPort = await lookupQuery("plain flour", async () => new Response("", {
+      status: 302,
+      headers: { location: "https://www.woolworths.com.au:8443/apis/ui/Search/products" },
+    }));
+    assert.match(oddPort.error ?? "", /somewhere else/);
+    const creds = await lookupQuery("plain rice", async () => new Response("", {
+      status: 302,
+      headers: { location: "https://user:secret@www.woolworths.com.au/apis/ui/Search/products" },
+    }));
+    assert.match(creds.error ?? "", /somewhere else/);
+  });
+
+  it("matches chillies to chilli and does not treat eggplant as eggs", () => {
+    const chilli = matchProducts("chilli", [{ name: "Fresh chillies", priceCents: 200, packageSize: "each", stockcode: "c", inStock: true, available: true }]);
+    assert.equal(chilli.find((match) => match.selected)?.name, "Fresh chillies");
+    const plant = matchProducts("eggplant", [{ name: "Free range eggs", priceCents: 500, packageSize: "12 pack", stockcode: "e", inStock: true, available: true }]);
+    assert.equal(plant.some((match) => match.selected), false);
+  });
 });

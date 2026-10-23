@@ -36,6 +36,32 @@ interface CachedCatalogue {
 }
 
 const cache = new Map<string, CachedCatalogue>();
+let catalogueInFlight = 0;
+const catalogueWaiters: (() => void)[] = [];
+const CATALOGUE_IN_FLIGHT = 8;
+const CATALOGUE_QUEUE = 16;
+
+function acquireCatalogueSlot(): Promise<void> {
+  if (catalogueInFlight < CATALOGUE_IN_FLIGHT) {
+    catalogueInFlight += 1;
+    return Promise.resolve();
+  }
+  if (catalogueWaiters.length >= CATALOGUE_QUEUE) {
+    return Promise.reject(new Error("The catalogue is busy. No price was invented."));
+  }
+  return new Promise((resolve) => {
+    catalogueWaiters.push(() => {
+      catalogueInFlight += 1;
+      resolve();
+    });
+  });
+}
+
+function releaseCatalogueSlot(): void {
+  catalogueInFlight = Math.max(0, catalogueInFlight - 1);
+  const next = catalogueWaiters.shift();
+  if (next) next();
+}
 
 export function cleanSearchQuery(raw: string): string {
   const query = raw.replace(/[\u0000-\u001f]/g, " ").replace(/\s+/g, " ").trim();
@@ -105,6 +131,8 @@ function sameHost(current: string, location: string): string | null {
   try {
     const next = new URL(location, current);
     if (next.protocol !== "https:" || next.hostname !== "www.woolworths.com.au") return null;
+    if (next.port !== "" && next.port !== "443") return null;
+    if (next.username !== "" || next.password !== "") return null;
     return next.toString();
   } catch {
     return null;
@@ -142,17 +170,22 @@ async function loadCatalogue(query: string, fetchImpl: typeof fetch, signal?: Ab
   const key = query.toLocaleLowerCase("en-AU");
   const hit = cache.get(key);
   if (hit && Date.now() - hit.at < CACHE_MS) return { ...hit };
-  const timeout = AbortSignal.timeout(12_000);
-  const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
-  const payload = await readJson(`${SEARCH_URL}?searchTerm=${encodeURIComponent(query)}`, fetchImpl, combined, 2);
-  const parsed = parseWoolworthsSearch(payload);
-  const stored: CachedCatalogue = { at: Date.now(), fetchedAt: new Date().toISOString(), ...parsed };
-  cache.set(key, stored);
-  if (cache.size > CACHE_LIMIT) {
-    const oldest = [...cache.entries()].sort((a, b) => a[1].at - b[1].at)[0];
-    if (oldest) cache.delete(oldest[0]);
+  await acquireCatalogueSlot();
+  try {
+    const timeout = AbortSignal.timeout(12_000);
+    const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
+    const payload = await readJson(`${SEARCH_URL}?searchTerm=${encodeURIComponent(query)}`, fetchImpl, combined, 2);
+    const parsed = parseWoolworthsSearch(payload);
+    const stored: CachedCatalogue = { at: Date.now(), fetchedAt: new Date().toISOString(), ...parsed };
+    cache.set(key, stored);
+    if (cache.size > CACHE_LIMIT) {
+      const oldest = [...cache.entries()].sort((a, b) => a[1].at - b[1].at)[0];
+      if (oldest) cache.delete(oldest[0]);
+    }
+    return stored;
+  } finally {
+    releaseCatalogueSlot();
   }
-  return stored;
 }
 
 function quoteError(error: unknown): string {

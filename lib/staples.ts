@@ -1,5 +1,6 @@
 import type { IngredientCategory } from "./recipe-types.ts";
 import type { DraftIngredient } from "./template-types.ts";
+import { MEAL_STAPLE_FAMILY } from "./region-pantry.ts";
 
 /**
  * Authored staple foods for every Fusion Table region.
@@ -13,7 +14,7 @@ export interface StapleOptions {
   dairyFree: boolean;
 }
 
-const RICE_IDS = new Set(["rice", "bbq-rice", "jasmine-rice", "basmati-rice", "short-grain-rice", "medium-grain-rice", "long-grain-rice", "mexican-rice", "brazilian-rice", "risotto-rice"]);
+const RICE_IDS = new Set(["rice", "bbq-rice", "jasmine-rice", "basmati-rice", "short-grain-rice", "medium-grain-rice", "long-grain-rice", "mexican-rice", "brazilian-rice", "risotto-rice", "sticky-rice", "samba-rice"]);
 const GENERIC_RICE_IDS = new Set(["rice", "bbq-rice"]);
 const BREAD_IDS = new Set(["bread", "flatbread", "flatbreads", "burger-bun", "burger-buns", "bbq-buns", "bbq-flatbread", "chapati", "staple-bread", "staple-flatbread"]);
 const NOODLE_IDS = new Set(["noodles", "staple-noodles", "rice-vermicelli"]);
@@ -142,7 +143,22 @@ const REGIONAL: Record<string, (options: StapleOptions) => DraftIngredient[]> = 
     item("maize-meal", "Maize meal (pap)", 200, "g", "grocery", [], "Plain maize meal for soft pap, not a wheat bread mix. Whisk into simmering water until thick, as the packet directs. Check the packet.", ["pap", "maize meal", "mealie meal"]),
     bread(options, "Plain wheat bread"),
   ],
+  sticky: () => [rice("sticky-rice", "Thai sticky rice", ["sticky rice", "glutinous rice", "sweet rice"])],
+  samba: () => [rice("samba-rice", "Sri Lankan samba rice", ["samba rice"])],
+  basmati: () => [rice("basmati-rice", "Basmati rice", ["basmati", "basmati rice"])],
+  "long-grain": () => [rice("long-grain-rice", "Long-grain rice", ["long grain rice", "white rice"])],
+  "rice-beans": () => [
+    rice("long-grain-rice", "Long-grain white rice", ["white rice", "long grain rice"]),
+    beans("black-beans", "Cooked black beans", ["black beans"]),
+  ],
 };
+
+for (const [regionId, family] of Object.entries(MEAL_STAPLE_FAMILY)) {
+  if (REGIONAL[regionId]) continue;
+  const build = REGIONAL[family];
+  if (!build) throw new Error(`Missing staple family for ${regionId}: ${family}`);
+  REGIONAL[regionId] = build;
+}
 
 export function staplesFor(regionId: string, options: StapleOptions): DraftIngredient[] {
   const build = REGIONAL[regionId];

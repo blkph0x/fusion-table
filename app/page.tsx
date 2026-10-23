@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCheck, ChefHat, ChevronDown, ChevronRight, Clock3, Compass, Download, ExternalLink, Globe2, Heart, Leaf, LoaderCircle, LocateFixed, MapPin, Menu, Minus, Navigation, Plus, Search, ShoppingBasket, SlidersHorizontal, Sparkles, Sprout, Star, Store, Utensils, Users, Wheat, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, CalendarDays, Check, CheckCheck, ChefHat, ChevronDown, ChevronRight, Clock3, Compass, Download, ExternalLink, Globe2, Heart, Leaf, LoaderCircle, LocateFixed, MapPin, Menu, Minus, Navigation, Plus, Search, Share2, ShoppingBasket, SlidersHorizontal, Sparkles, Sprout, Star, Store, Utensils, Users, Wheat, X } from "lucide-react";
 import { CLASSICS, REGIONS, DIETS, generateRecipe } from "@/lib/recipes";
 import { chooseDinner, planWeek, swapDinner, type WeekPlan } from "@/lib/planner";
 import type { Recipe, DietId, SpiceHeat } from "@/lib/recipe-types";
@@ -12,18 +12,52 @@ import { rememberConsumables, weekNeeds, weekShortfalls, type ShopNeed, type Sto
 import { ingredientMatchesShop, suggestedShops } from "@/lib/shopping";
 import MealBuilder from "@/components/meal-builder";
 import { PriceCheck } from "@/components/price-check";
-import { MAIN_INGREDIENTS, MEAL_REGIONS, COOKING_METHODS, getMealCombinationCount } from "@/lib/meals";
+import { CommunityDesk, CookNotes, NewsBell, WeekNote } from "@/components/community-panel";
+import { ShopPrices } from "@/components/shop-prices";
+import { TrendsPage } from "@/components/trends-page";
+import { communityAdjustments, plateIdentity, scaleIngredients, type CommunityBoard, type PlateStanding } from "@/lib/community";
+import { areaKey } from "@/lib/price-memory";
+import { MAIN_INGREDIENTS, MEAL_REGIONS, COOKING_METHODS, generateMeal, getMealCombinationCount } from "@/lib/meals";
+import type { MealInput } from "@/lib/meal-types";
+import { publicPath } from "@/lib/public-path";
+import { decodeShare, encodeShare, recipeFromShare, specFromRecipe, type ShareSpec } from "@/lib/share-recipe";
 
-type View = "discover" | "studio" | "week" | "shops" | "cookbook";
+type View = "discover" | "studio" | "week" | "shops" | "trends" | "cookbook";
 const AVOID_CHOICES = ["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "fish", "crustacean", "peanut", "tree-nut"] as const;
-type SavedRecipe = { recipe: Recipe; savedAt: string; notes: string; tested: boolean; rating: number };
+type SavedRecipe = { recipe: Recipe; savedAt: string; notes: string; tested: boolean; rating: number; token?: string };
 const STORAGE_KEY = "fusion-table-v1";
 const SHOP_FILTERS: (ShopKind | "all")[] = ["all", "supermarket", "produce", "butcher", "market", "specialty", "grocery", "fishmonger"];
 const INSPIRATIONS = [
-  { classicId: "pasta", regionId: "japanese", title: "Miso mushroom pasta", pairing: "Italy meets Japan", description: "Vegetarian pasta with miso and mushrooms.", image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/fusion-table-hero.png`, diet: "vegetarian" },
-  { classicId: "tacos", regionId: "korean", title: "Seoul-inspired tacos", pairing: "Mexico meets Korea", description: "Korean-style seasoning on a taco.", image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/korean-tacos.png`, diet: "vegan" },
-  { classicId: "roast", regionId: "moroccan", title: "A Moroccan-style roast", pairing: "Sunday roast meets Morocco", description: "A tray roast with Moroccan-style spices.", image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/moroccan-traybake.png`, diet: "vegan" },
+  { classicId: "pasta", regionId: "japanese", title: "Miso mushroom pasta", pairing: "Italy meets Japan", description: "Vegetarian pasta with miso and mushrooms.", image: "/images/fusion-table-hero.png", diet: "vegetarian" },
+  { classicId: "tacos", regionId: "korean", title: "Seoul-inspired tacos", pairing: "Mexico meets Korea", description: "Korean-style seasoning on a taco.", image: "/images/korean-tacos.png", diet: "vegan" },
+  { classicId: "roast", regionId: "moroccan", title: "A Moroccan-style roast", pairing: "Sunday roast meets Morocco", description: "A tray roast with Moroccan-style spices.", image: "/images/moroccan-traybake.png", diet: "vegan" },
 ] as const;
+const PLATE_FALLBACK = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#e7ecdf"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#315940" font-family="Georgia" font-size="28">Plate picture unavailable</text></svg>')}`;
+function keepImage(event: { currentTarget: HTMLImageElement }) {
+  const img = event.currentTarget;
+  const step = img.dataset.fallback || "";
+  if (step === "svg") return;
+  const spec = img.dataset.spec;
+  const file = img.dataset.file;
+  if (step !== "plate" && step !== "file" && spec && !img.src.includes("/api/plate")) {
+    img.dataset.fallback = "plate";
+    img.src = `${publicPath("/api/plate")}?t=${encodeURIComponent(spec)}`;
+    return;
+  }
+  if (step !== "file" && file && !img.src.includes(file)) {
+    img.dataset.fallback = "file";
+    img.src = publicPath(file);
+    return;
+  }
+  img.dataset.fallback = "svg";
+  img.src = PLATE_FALLBACK;
+}
+function inspirationSpec(item: typeof INSPIRATIONS[number]): string {
+  return encodeShare({ v: 1, kind: "classic", classicId: item.classicId, regionId: item.regionId, diet: item.diet, spiceHeat: "medium", servings: 2 });
+}
+function inspirationSrc(item: typeof INSPIRATIONS[number]): string {
+  return `${publicPath("/api/plate")}?t=${encodeURIComponent(inspirationSpec(item))}`;
+}
 const duration = (minutes: number) => minutes < 120 ? `${minutes} min` : `${Math.floor(minutes / 60)} hr${minutes % 60 ? ` ${minutes % 60} min` : ""}`;
 const amount = (value: number, unit: string) => `${Number(value.toFixed(2))} ${unit}`.trim();
 const recipeKey = (recipe: Recipe) => recipe.id;
@@ -92,6 +126,7 @@ export default function Home() {
   const [week, setWeek] = useState<WeekPlan | null>(null);
   const [weekError, setWeekError] = useState("");
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [shareSpec, setShareSpec] = useState<ShareSpec | null>(null);
   const [formError, setFormError] = useState("");
   const [advanced, setAdvanced] = useState(false);
   const [location, setLocation] = useState<LocationResult | null>(null);
@@ -123,6 +158,8 @@ const [shopFilter, setShopFilter] = useState<ShopKind | "all">("supermarket");
   const [cookNote, setCookNote] = useState("");
   const [buyList, setBuyList] = useState<ShopNeed[]>([]);
   const [tested, setTested] = useState(false);
+  const [community, setCommunity] = useState<CommunityBoard | null>(null);
+  const [useTry, setUseTry] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const shopRequest = useRef(0), locationRequest = useRef(0);
   const latestRadius = useRef(radius);
@@ -163,6 +200,35 @@ if (Array.isArray(data.pantry)) setPantry(data.pantry.filter((item: Stock) => it
   }, [saved, location, radius, pantry, verdicts, ratings, buyList, loaded]);
   /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(""), 5000); return () => clearTimeout(timer); }, [toast]);
+  useEffect(() => {
+    if (!loaded) return;
+    let cancel = false;
+    void fetch(publicPath("/api/community"), { cache: "no-store" }).then(async (response) => {
+      if (!response.ok) return;
+      const data = await response.json() as CommunityBoard;
+      if (!cancel && data && Array.isArray(data.plates)) setCommunity(data);
+    }).catch(() => undefined);
+    return () => { cancel = true; };
+  }, [loaded]);
+  useEffect(() => {
+    if (!loaded || typeof window === "undefined") return;
+    const token = new URLSearchParams(window.location.search).get("r");
+    if (!token) return;
+    try {
+      const spec = decodeShare(token);
+      const next = recipeFromShare(spec);
+      setShareSpec(spec);
+      showRecipe(next);
+      setBuilderMode(spec.kind === "meal" ? "meal" : "classic");
+      if (spec.kind === "classic" && spec.classicId) { setClassicId(spec.classicId); setRegionId(spec.regionId); }
+      setDiet(spec.diet); setSpiceHeat(spec.spiceHeat); setServings(spec.servings);
+      setView("studio");
+    } catch {
+      setToast("That shared link is not a recipe this site can open.");
+    }
+    // Open a shared recipe once the saved cookbook has loaded.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loaded]);
   useEffect(() => () => { shopAbort.current?.abort(); locationAbort.current?.abort(); }, []);
   const navigate = useCallback((next: View) => { setView(next); setMenuOpen(false); setCookingStep(null); window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
   const closeLocation = useCallback(() => {
@@ -223,10 +289,25 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     setLocation(null); setShopData(null); setShopsLoading(false); setShopError("");
     setSelectedShop(null); setShowMap(false); setRadiusChanged(false); setToast("Location cleared.");
   }
+  function openReport(plate: PlateStanding) {
+    const dietOk = DIETS.some((item) => item.id === plate.diet);
+    const heatOk = plate.spiceHeat === "mild" || plate.spiceHeat === "medium" || plate.spiceHeat === "hot";
+    if (!dietOk || !heatOk) { setToast("That report does not match a template on this site."); return; }
+    try {
+      const next = plate.kind === "meal"
+        ? generateMeal({ mainId: plate.mainId, methodId: plate.methodId, regionId: plate.regionId, sideId: plate.sideId, diet: plate.diet as DietId, spiceHeat: plate.spiceHeat as SpiceHeat, servings })
+        : generateRecipe({ classicId: plate.classicId, regionId: plate.regionId, diet: plate.diet as DietId, spiceHeat: plate.spiceHeat as SpiceHeat, servings });
+      showRecipe(next);
+      setShareSpec(specFromRecipe(next));
+      navigate("studio");
+    } catch {
+      setToast("That plate is still in the book, but this version of the templates could not open it.");
+    }
+  }
   function showRecipe(next: Recipe) {
     const entry = saved.find((item) => recipeKey(item.recipe) === recipeKey(next));
     const stars = entry?.rating || ratings[recipeKey(next)] || 0;
-    setRecipe(next); setNotes(entry?.notes || ""); setRating(stars); setTested(entry?.tested || false);
+    setUseTry(false); setRecipe(next); setNotes(entry?.notes || ""); setRating(stars); setTested(entry?.tested || false);
     if (stars > 0) setRatings((current) => current[recipeKey(next)] === stars ? current : { ...current, [recipeKey(next)]: stars });
   }
   function weekBrief(seed: number) {
@@ -259,7 +340,8 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     } catch (error) { setWeekError(error instanceof Error ? error.message : "That dinner could not be changed."); }
   }
   function openPlanned(recipeToOpen: Recipe) {
-    setRecipe(recipeToOpen);
+    try { setShareSpec(specFromRecipe(recipeToOpen, { avoid: avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) })); } catch { setShareSpec(null); }
+    setUseTry(false); setRecipe(recipeToOpen);
     if (recipeToOpen.kind === "meal") setBuilderMode("meal");
     else { setClassicId(recipeToOpen.classicId); setRegionId(recipeToOpen.regionId); setBuilderMode("classic"); }
     setDiet(recipeToOpen.diet); setSpiceHeat(recipeToOpen.spiceHeat); setServings(recipeToOpen.servings); setChecked([]);
@@ -270,22 +352,44 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     event?.preventDefault(); setFormError("");
     try {
       const dislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
-      const next = generateRecipe({
+      const spec: ShareSpec = {
+        v: 1, kind: "classic",
         classicId: preset?.classicId || classicId,
         regionId: preset?.regionId || regionId,
         diet: preset?.diet || diet,
-        servings,
-        spiceHeat,
+        spiceHeat, servings,
+        ...(preset ? {} : { seed: freshSeed(), ...(avoidAllergens.length ? { avoid: avoidAllergens } : {}), ...(dislikes.length ? { dislikes } : {}) }),
+      };
+      const next = generateRecipe({
+        classicId: spec.classicId || classicId,
+        regionId: spec.regionId,
+        diet: spec.diet,
+        servings: spec.servings,
+        spiceHeat: spec.spiceHeat,
         pantry: pantryText,
-        ...(preset ? {} : { seed: freshSeed(), avoidAllergens, dislikes }),
+        ...(spec.seed !== undefined ? { seed: spec.seed, avoidAllergens, dislikes } : {}),
       });
+      setShareSpec(spec);
       if (preset) { setClassicId(preset.classicId); setRegionId(preset.regionId); setDiet(preset.diet); }
       showRecipe(next); setChecked([]); setBuilderMode("classic"); setView("studio");
       if (location && !shopData && !shopsLoading) void findShops(location, radius);
       setTimeout(() => { recipeRef.current?.focus({ preventScroll: true }); recipeRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
     } catch (error) { setFormError(error instanceof Error ? error.message : "Please check your recipe choices."); }
   }
-  function receiveMeal(next: Recipe) {
+  function receiveMeal(next: Recipe, made?: MealInput) {
+    if (made) {
+      setShareSpec({
+        v: 1, kind: "meal", mainId: made.mainId, methodId: made.methodId, regionId: made.regionId,
+        ...(made.sideId ? { sideId: made.sideId } : {}),
+        ...(made.cutId ? { cutId: made.cutId } : {}),
+        diet: made.diet || next.diet, spiceHeat: made.spiceHeat || next.spiceHeat, servings: made.servings,
+        ...(made.seed !== undefined ? { seed: made.seed } : {}),
+        ...(made.avoidAllergens?.length ? { avoid: made.avoidAllergens } : {}),
+        ...(made.dislikes?.length ? { dislikes: made.dislikes } : {}),
+      });
+    } else {
+      try { setShareSpec(specFromRecipe(next)); } catch { setShareSpec(null); }
+    }
     showRecipe(next); setChecked([]); setView("studio");
     if (location && !shopData && !shopsLoading) void findShops(location, radius);
     setTimeout(() => { recipeRef.current?.focus({ preventScroll: true }); recipeRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
@@ -295,10 +399,14 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     if (isSaved) { setSaved((all) => all.filter((s) => recipeKey(s.recipe) !== key)); setToast("Recipe removed from your cookbook."); }
     else {
       if (saved.length >= 100) { setToast("Your cookbook has reached 100 recipes. Export a backup, then remove a recipe to make room."); return; }
-      setSaved((all) => [{ recipe, savedAt: new Date().toISOString(), notes: "", tested: false, rating: ratings[key] || 0 }, ...all]); setToast("Saved to your cookbook on this device.");
+      let token = "";
+      try { token = encodeShare(shareSpec ?? specFromRecipe(recipe, { avoid: avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) })); } catch { token = ""; }
+      setSaved((all) => [{ recipe, savedAt: new Date().toISOString(), notes: "", tested: false, rating: ratings[key] || 0, ...(token ? { token } : {}) }, ...all]); setToast("Saved to your cookbook on this device.");
     }
   }
   function openSaved(entry: SavedRecipe) {
+    if (entry.token) { try { setShareSpec(decodeShare(entry.token)); } catch { setShareSpec(null); } }
+    else { try { setShareSpec(specFromRecipe(entry.recipe)); } catch { setShareSpec(null); } }
     showRecipe(entry.recipe); setBuilderMode(entry.recipe.kind === "meal" ? "meal" : "classic"); setBuilderRevision((value) => value + 1);
     if (entry.recipe.kind !== "meal") { setClassicId(entry.recipe.classicId); setRegionId(entry.recipe.regionId); }
     setDiet(entry.recipe.diet); setSpiceHeat(entry.recipe.spiceHeat); setServings(entry.recipe.servings); setChecked([]); setView("studio");
@@ -335,14 +443,52 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
       {advanced && <div className="advanced-options"><label className="field"><span>Dietary preference</span><select aria-label="Dietary preference" value={diet} onChange={(e) => setDiet(e.target.value as DietId)}>{DIETS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label className="field"><span>Heat</span><select aria-label="Spice level" value={spiceHeat} onChange={(e) => setSpiceHeat(e.target.value as SpiceHeat)}><option value="mild">Mild</option><option value="medium">Medium</option><option value="hot">Hot</option></select></label><label className="field pantry-field"><span>Already in your pantry</span><input value={pantryText} onChange={(e) => setPantryText(e.target.value)} maxLength={500} placeholder="e.g. garlic, olive oil, rice" /><small>Separate ingredients with commas. Matching items come off your shopping list.</small></label></div>}{formError && <p className="error-message" role="alert">{formError}</p>}<p className="classic-count-note">{CLASSICS.length} classic structures × {REGIONS.length} regional profiles · {DIETS.length} dietary preferences. Each click uses a new seed, so the same classic and region can come back with a different finish. Hard filters stay. Authored templates, not kitchen-tested.</p></form>
     </section>;
   }
+  function plateSrc(target: Recipe, spec: ShareSpec | null): string {
+    try {
+      const chosen = spec ?? specFromRecipe(target, { avoid: avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) });
+      return `${publicPath("/api/plate")}?t=${encodeURIComponent(encodeShare(chosen))}`;
+    } catch {
+      return PLATE_FALLBACK;
+    }
+  }
+  function shareBar(current: Recipe) {
+    let token = "";
+    try { token = encodeShare(shareSpec ?? specFromRecipe(current, { avoid: avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) })); } catch { return null; }
+    const path = publicPath(`/r/${token}`);
+    const link = typeof window === "undefined" ? path : `${window.location.origin}${path}`;
+    const pdf = `${publicPath("/api/recipe-pdf")}?t=${encodeURIComponent(token)}`;
+    const text = `${current.title}. Template-generated, not kitchen-tested.`;
+    async function send() {
+      try {
+        if (navigator.share) { await navigator.share({ title: current.title, text, url: link }); return; }
+        await navigator.clipboard.writeText(link);
+        setToast("Link copied. Anyone with the link can open this recipe.");
+      } catch {
+        setToast(link);
+      }
+    }
+    return <div className="recipe-actions">
+      <a className="button secondary" href={pdf}>Save PDF <Download size={16} /></a>
+      <button type="button" className="button secondary" onClick={() => void send()}>Copy or share link <Share2 size={16} /></button>
+      <a className="text-button" href={`https://wa.me/?text=${encodeURIComponent(`${text} ${link}`)}`} target="_blank" rel="noreferrer">WhatsApp</a>
+      <a className="text-button" href={`mailto:?subject=${encodeURIComponent(current.title)}&body=${encodeURIComponent(`${text}\n${link}`)}`}>Email</a>
+      <a className="text-button" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(link)}`} target="_blank" rel="noreferrer">Post on X</a>
+      <a className="text-button" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`} target="_blank" rel="noreferrer">Facebook</a>
+    </div>;
+  }
   function recipeDetail() {
     if (!recipe) return <div className="empty-state"><div className="empty-icon"><ChefHat size={35} /></div><h3>Choose a meal to see the ingredients.</h3><p>Pick a main, a method, and a region. The result is a template with steps. It is not kitchen-tested. Check the packet.</p></div>;
+    const adjustments = communityAdjustments(plateIdentity(recipe), recipe.ingredients, community?.plates || []);
+    const shown = useTry ? scaleIngredients(recipe.ingredients, adjustments) : recipe.ingredients;
     return <article className="recipe-detail" ref={recipeRef} tabIndex={-1} aria-label={recipe.title}>
       <div className="recipe-heading"><div><span className="eyebrow">{recipeBaseName(recipe)} <span className="pair-x">×</span> {regionName(recipe.regionId)}</span><h2>{recipe.title}</h2><p>{recipe.description}</p><div className="recipe-meta"><span><Clock3 size={16} /> About {duration(recipe.totalMinutes)}</span><span><Users size={16} /> {recipe.servings} servings</span><span><Leaf size={16} /> {DIETS.find((d) => d.id === recipe.diet)?.name}</span><span className="meal-source-badge"><BookOpen size={12} /> {recipe.sourceLabel}</span></div></div><button className={`button secondary save-recipe ${isSaved ? "is-saved" : ""}`} onClick={saveRecipe}><Heart size={17} fill={isSaved ? "currentColor" : "none"} /> {isSaved ? "Saved to cookbook" : "Save recipe"}</button></div>
+      <figure className="recipe-plate"><img src={plateSrc(recipe, shareSpec)} alt={`Plate picture for ${recipe.title}`} onError={keepImage} /><figcaption>Each dish has its own picture, made on this computer from that recipe. Saved inspiration pictures are used for a few example plates. A local image model on 127.0.0.1 is used when FUSION_LOCAL_IMAGE_URL is set. Otherwise the plate is painted from the ingredient list. Not a photograph of a cooked dish.</figcaption></figure>
+      {shareBar(recipe)}
       {recipe.components && <div className="meal-components">{Object.entries(recipe.components).map(([label, value]) => <div className="meal-component" key={label}><small>{label}</small><strong>{value}</strong></div>)}</div>}
       <div className="fusion-note"><Sparkles size={21} /><div><strong>Why this fusion works</strong><p>{recipe.fusionNote}</p></div></div>
-      <div className="recipe-columns"><section className="ingredients-panel"><div className="subheading"><h3>What you will need</h3><span>{recipe.servings} servings</span></div><ul className="ingredient-list">{recipe.ingredients.map((ingredient) => <li key={ingredient.id}><span><strong>{ingredient.name}</strong>{ingredient.notes && <small>{ingredient.notes}</small>}{ingredient.inPantry && <small className="pantry-label">Named in your pantry note</small>}</span><em>{amount(ingredient.amount, ingredient.unit)}</em></li>)}</ul>{recipe.allergens.length > 0 && <p className="subtle-small">Contains: {recipe.allergens.join(", ")}. Check the packet.</p>}
+      <div className="recipe-columns"><section className="ingredients-panel"><div className="subheading"><h3>What you will need</h3><span>{recipe.servings} servings</span></div>{useTry && <p className="subtle-small">These amounts are a try beside the template. The template itself is unchanged and is still not kitchen-tested.</p>}<ul className="ingredient-list">{shown.map((ingredient) => <li key={ingredient.id}><span><strong>{ingredient.name}</strong>{ingredient.notes && <small>{ingredient.notes}</small>}{ingredient.inPantry && <small className="pantry-label">Named in your pantry note</small>}</span><em>{amount(ingredient.amount, ingredient.unit)}</em></li>)}</ul>{recipe.allergens.length > 0 && <p className="subtle-small">Contains: {recipe.allergens.join(", ")}. Check the packet.</p>}
         <KitchenDesk key={`${recipeKey(recipe)}:${pantry.map((item) => `${item.key}:${item.unit}:${item.onHand}`).join("|")}`} ingredients={recipe.ingredients.map((item) => ({ id: item.id, name: item.name, amount: item.amount, unit: item.unit }))} pantry={pantry} verdict={verdicts[recipeKey(recipe)] || ""} stars={ratings[recipeKey(recipe)] || 0} onPantry={setPantry} onVerdict={(next) => setVerdicts((current) => ({ ...current, [recipeKey(recipe)]: next }))} onStars={(next) => { const key = recipeKey(recipe); setRatings((current) => ({ ...current, [key]: next })); setRating(next); setSaved((all) => all.map((entry) => recipeKey(entry.recipe) === key ? { ...entry, rating: next } : entry)); }} onShopping={(lines, warnings) => { setCookNote(warnings.join(" ")); setBuyList(lines); shoppingView(); }} />
+        <CommunityDesk recipe={recipe} board={community} tried={useTry} onBoard={setCommunity} onToggleTry={() => setUseTry((current) => !current)} />
         {cookNote && <p className="subtle-small" role="status">{cookNote}</p>}
       </section>
       <section className="method-panel"><div className="subheading"><h3>Method</h3><button className="text-button" onClick={() => setCookingStep(0)}><Utensils size={15} /> Cooking mode</button></div><div className="method-timing"><span>Prep <strong>~{duration(recipe.prepMinutes)}</strong></span><span>Cook <strong>~{duration(recipe.cookMinutes)}</strong></span></div><p className="equipment-note"><strong>Equipment:</strong> {recipe.equipment.join(" · ")}</p><ol className="method-list">{recipe.steps.map((step, index) => <li key={index}><span className="step-number">{String(index + 1).padStart(2, "0")}</span><div><h4>{step.title}</h4><p>{step.detail}</p></div></li>)}</ol>{recipe.methodNotes?.length ? <section className="bbq-method-notes"><h4>Smoking, grilling & kitchen options</h4><ul>{recipe.methodNotes.map((note, index) => <li key={index}>{note}</li>)}</ul></section> : null}{recipe.safetyNote && <p className="recipe-source"><CheckCheck size={14} /><span>{recipe.safetyNote} {recipe.safetySource && <a href={recipe.safetySource} target="_blank" rel="noreferrer">Food safety guidance ↗</a>}</span></p>}<p className="recipe-source"><BookOpen size={14} /> {recipe.sourceLabel}. Timing is estimated; allow longer for larger batches.</p>{recipe.dietaryNotes.map((note, i) => <p className="subtle-small" key={i}>{note}</p>)}<div className="recipe-actions"><button className="button secondary" onClick={() => downloadFile(`${recipeKey(recipe)}.json`, JSON.stringify(recipe, null, 2), "application/json")}><Download size={15} /> Download recipe</button><button className="text-button" onClick={() => window.print()}>Print recipe</button></div></section></div>
@@ -351,11 +497,11 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
   }
 
   return <div className="site-shell"><a href="#main-content" className="skip-link">Skip to content</a>
-    <header className="site-header"><div className="header-inner"><button className="brand" onClick={() => navigate("discover")} aria-label="Fusion Table home"><span className="brand-mark"><Sprout size={25} strokeWidth={1.65} /></span><span>fusion<span className="brand-light">table</span></span></button><nav aria-label="Main navigation" className={menuOpen ? "main-nav nav-open" : "main-nav"}>{([["discover", "Discover"], ["studio", "Recipe studio"], ["week", "Week plan"], ["shops", "Local shops"], ["cookbook", "My cookbook"]] as [View, string][]).map(([id, label]) => <button key={id} className={view === id ? "active" : ""} onClick={() => id === "shops" ? shoppingView() : navigate(id)}>{label}{id === "cookbook" && saved.length > 0 && <span className="nav-count">{saved.length}</span>}</button>)}</nav><div className="header-actions"><a className="text-button" href="/downloads/MealPlannerAU.apk">Android app</a><button className="location-button" onClick={() => setLocationOpen(true)}><MapPin size={16} /><span>{location?.name || "Set your location"}</span><ChevronDown size={13} /></button><button className="icon-button mobile-menu" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button></div></div></header>
+    <header className="site-header"><div className="header-inner"><button className="brand" onClick={() => navigate("discover")} aria-label="Fusion Table home"><span className="brand-mark"><Sprout size={25} strokeWidth={1.65} /></span><span>fusion<span className="brand-light">table</span></span></button><nav aria-label="Main navigation" className={menuOpen ? "main-nav nav-open" : "main-nav"}>{([["discover", "Discover"], ["studio", "Recipe studio"], ["week", "Week plan"], ["shops", "Local shops"], ["trends", "Trends"], ["cookbook", "My cookbook"]] as [View, string][]).map(([id, label]) => <button key={id} className={view === id ? "active" : ""} onClick={() => id === "shops" ? shoppingView() : navigate(id)}>{label}{id === "cookbook" && saved.length > 0 && <span className="nav-count">{saved.length}</span>}</button>)}</nav><div className="header-actions"><NewsBell items={community?.news || []} /><a className="text-button" href="/downloads/MealPlannerAU.apk">Android app</a><button className="location-button" onClick={() => setLocationOpen(true)}><MapPin size={16} /><span>{location?.name || "Set your location"}</span><ChevronDown size={13} /></button><button className="icon-button mobile-menu" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button></div></div></header>
     <main id="main-content">
-      {view === "discover" && <><section className="hero"><div className="hero-copy"><span className="eyebrow"><span className="eyebrow-line" /> MEAL PLANNING</span><h1>Plan the meals.<br /><em>Shop one list.</em></h1><p>Choose the meals, tick what is already in the pantry, then shop at a supermarket. Recipes are templates and are not kitchen-tested. Check the packet. No shelf prices are added.</p><div className="hero-actions"><button className="button primary" onClick={() => composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}>Explore classics & BBQ <ArrowRight size={18} /></button><button className="text-button" onClick={() => navigate("week")}><CalendarDays size={17} /> Plan seven dinners</button><button className="text-button" onClick={shoppingView}><MapPin size={17} /> Explore local shops</button></div><div className="hero-footnote"><span className="little-leaves"><Leaf size={16} /><Sprout size={16} /><Wheat size={16} /></span><span>Templates, not kitchen tests. No shelf prices.</span></div></div><div className="hero-visual"><img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/images/fusion-table-hero.png`} alt="Miso mushroom tagliatelle with herbs and sesame in a sage ceramic bowl" fetchPriority="high" /><span className="photo-corner">TEMPLATE · NOT KITCHEN-TESTED</span><button className="dish-label" onClick={() => createRecipe(undefined, INSPIRATIONS[0])}><span className="dish-label-icon"><Utensils size={21} /></span><span><small>ITALY <span>×</span> JAPAN</small><strong>Miso mushroom pasta</strong></span><ArrowRight size={20} /></button><div className="round-stamp" aria-hidden="true"><span>CHECK THE</span><Sprout size={31} strokeWidth={1.3} /><span>PACKET</span></div></div></section>
+      {view === "discover" && <><section className="hero"><div className="hero-copy"><span className="eyebrow"><span className="eyebrow-line" /> MEAL PLANNING</span><h1>Plan the meals.<br /><em>Shop one list.</em></h1><p>Choose the meals, tick what is already in the pantry, then shop at a supermarket. Recipes are templates and are not kitchen-tested. Check the packet. No shelf prices are added.</p><div className="hero-actions"><button className="button primary" onClick={() => composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}>Explore classics & BBQ <ArrowRight size={18} /></button><button className="text-button" onClick={() => navigate("week")}><CalendarDays size={17} /> Plan seven dinners</button><button className="text-button" onClick={shoppingView}><MapPin size={17} /> Explore local shops</button></div><div className="hero-footnote"><span className="little-leaves"><Leaf size={16} /><Sprout size={16} /><Wheat size={16} /></span><span>Templates, not kitchen tests. No shelf prices.</span></div></div><div className="hero-visual"><img src={inspirationSrc(INSPIRATIONS[0])} alt="Miso mushroom tagliatelle with herbs and sesame in a sage ceramic bowl" fetchPriority="high" data-spec={inspirationSpec(INSPIRATIONS[0])} data-file={INSPIRATIONS[0].image} onError={keepImage} /><span className="photo-corner">TEMPLATE · NOT KITCHEN-TESTED</span><button className="dish-label" onClick={() => createRecipe(undefined, INSPIRATIONS[0])}><span className="dish-label-icon"><Utensils size={21} /></span><span><small>ITALY <span>×</span> JAPAN</small><strong>Miso mushroom pasta</strong></span><ArrowRight size={20} /></button><div className="round-stamp" aria-hidden="true"><span>CHECK THE</span><Sprout size={31} strokeWidth={1.3} /><span>PACKET</span></div></div></section>
         <div className="benefit-strip"><span><Globe2 size={19} /> {CLASSICS.length} classics and regional plates</span><span><SlidersHorizontal size={19} /> Filters stay in place</span><span><ShoppingBasket size={19} /> One shopping list</span></div>
-        <div className="page-width">{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">EXAMPLES</span><h2>A few plates to start from.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={item.image} alt={item.title} loading="lazy" /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Open template</span></div></button>)}</div></section><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">LOCAL SHOPS</span><h2>Supermarkets and food shops near you.</h2><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is added.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find local shops <ArrowRight size={16} /></button></section></div></>}
+        <div className="page-width">{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">EXAMPLES</span><h2>A few plates to start from.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={inspirationSrc(item)} alt={item.title} loading="lazy" data-spec={inspirationSpec(item)} data-file={item.image} onError={keepImage} /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Open template</span></div></button>)}</div></section><CookNotes board={community} onTrends={() => navigate("trends")} /><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">LOCAL SHOPS</span><h2>Supermarkets and food shops near you.</h2><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is added.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find local shops <ArrowRight size={16} /></button></section></div></>}
       {view === "studio" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><ChefHat size={15} /> RECIPE STUDIO</span><h1>Build a recipe.</h1><p>Pick a classic or a main, set servings and diet, then tick what you already have.</p></div>{studio()}{recipeDetail()}</div>}
       {view === "week" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><CalendarDays size={15} /> WEEK PLAN</span><h1>A different week each time.</h1><p>The same pantry can lead to different dinners. Plan the week, pick another idea, or press Randomise. Filters stay in place. Templates are not kitchen-tested. Check the packet. Nothing here has a shelf price.</p></div>
         <form className="week-layout" onSubmit={buildWeek}>
@@ -370,7 +516,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
         </form>
         {week && weekShortfalls(pantry, week.shopping).length > 0 && <ul className="week-notes">{weekShortfalls(pantry, week.shopping).map((warning) => <li key={warning}>{warning}</li>)}</ul>}
         {week && <button className="button secondary" type="button" onClick={() => { const tracked = rememberConsumables(pantry, week.shopping); setPantry(tracked); setBuyList(weekNeeds(tracked, week.shopping)); setCookNote("Shopping list updated from the week. Oils, butter and flour stay on the pantry list. No shelf price is on file."); shoppingView(); }}>Shop what the pantry does not cover</button>}
-        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => <article key={day.day} className="week-day"><h3>Day {day.day}</h3>{day.recipe ? <><p><strong>{day.recipe.title}</strong></p><p>{day.recipe.sourceLabel}. {day.recipe.allergens.length ? `Lists ${day.recipe.allergens.join(", ")}.` : "No allergen is listed on this template."} Check the packet.</p><div className="week-day-actions"><button className="text-button" type="button" onClick={() => openPlanned(day.recipe!)}>Open recipe <ArrowRight size={14} /></button><button className="text-button" type="button" onClick={() => randomiseDay(day.day)}>Randomise</button></div>{day.options.length > 0 && <div className="week-options"><span>Or try</span>{day.options.map((option) => <button key={`${option.classicId}:${option.regionId}`} type="button" onClick={() => pickDinner(day.day, option.classicId, option.regionId)}>{option.title}</button>)}</div>}</> : <p>{day.reason}</p>}</article>)}</div>
+        {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => <article key={day.day} className="week-day"><h3>Day {day.day}</h3>{day.recipe ? <><WeekNote recipe={day.recipe} board={community} /><img className="week-plate" src={plateSrc(day.recipe, null)} alt="" onError={keepImage} /><p><strong>{day.recipe.title}</strong></p><p>{day.recipe.sourceLabel}. {day.recipe.allergens.length ? `Lists ${day.recipe.allergens.join(", ")}.` : "No allergen is listed on this template."} Check the packet.</p><div className="week-day-actions"><button className="text-button" type="button" onClick={() => openPlanned(day.recipe!)}>Open recipe <ArrowRight size={14} /></button><button className="text-button" type="button" onClick={() => randomiseDay(day.day)}>Randomise</button></div>{day.options.length > 0 && <div className="week-options"><span>Or try</span>{day.options.map((option) => <button key={`${option.classicId}:${option.regionId}`} type="button" onClick={() => pickDinner(day.day, option.classicId, option.regionId)}>{option.title}</button>)}</div>}</> : <p>{day.reason}</p>}</article>)}</div>
           <section><h2>Still to buy</h2><p className="subtle-small">Amounts the pantry does not cover. Oils, butter and flour are kept on the pantry list. No shelf price is on file.</p>{weekNeeds(pantry, week.shopping).length === 0 ? <p>The pantry covers this week.</p> : <ul>{weekNeeds(pantry, week.shopping).map((line) => <li key={`${line.id}-${line.unit}`}>{line.name} — {amount(line.amount, line.unit)}. {line.reason}</li>)}</ul>}</section>
           <ul className="week-notes">{week.notes.map((note) => <li key={note}>{note}</li>)}</ul>
           <button className="button secondary" type="button" onClick={() => downloadFile("fusion-table-week.json", JSON.stringify(week, null, 2), "application/json")}><Download size={16} /> Download week</button>
@@ -431,6 +577,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
                 <button className="text-button" type="button" onClick={() => setBuyList([])}>Clear this buy list</button>
                 <button className="button secondary full" onClick={exportShopping}><Download size={15} /> Download shopping list</button>
                 <PriceCheck lines={buyList.map((line) => ({ id: line.id, name: line.name, amount: line.amount, unit: line.unit }))} shops={(shopData?.shops || []).map((shop) => ({ id: shop.id, name: shop.name, kind: shop.kind }))} />
+                <ShopPrices lines={buyList.map((line) => ({ id: line.id, name: line.name, amount: line.amount, unit: line.unit }))} shops={(shopData?.shops || []).map((shop) => ({ id: shop.id, name: shop.name, kind: shop.kind, website: shop.website }))} area={areaKey(`${location?.label || ""} ${location?.name || ""}`)} />
               </> : !recipe ? <div className="list-empty"><p>Open a recipe and choose I’m making this, or plan a week, to build the list.</p><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={14} /></button></div> : <>
                 <p className="subtle-small">{needed.length} ingredients · {recipe.servings} servings</p>
                 {!location && <p className="subtle-small">The list works without a location. Set one when you want nearby shops.</p>}
@@ -443,12 +590,14 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
                 </li>)}</ul>
                 <button className="button secondary full" onClick={exportShopping}><Download size={15} /> Download shopping list</button>
                 <PriceCheck lines={needed.map((line) => ({ id: line.id, name: line.name, amount: line.amount, unit: line.unit }))} shops={(shopData?.shops || []).map((shop) => ({ id: shop.id, name: shop.name, kind: shop.kind }))} />
+                <ShopPrices lines={needed.map((line) => ({ id: line.id, name: line.name, amount: line.amount, unit: line.unit }))} shops={(shopData?.shops || []).map((shop) => ({ id: shop.id, name: shop.name, kind: shop.kind, website: shop.website }))} area={areaKey(`${location?.label || ""} ${location?.name || ""}`)} />
               </>}
             </div>
           </aside>
         </div>
       </div>}
-      {view === "cookbook" && <div className="page-width inner-page"><div className="page-intro split-intro"><div><span className="eyebrow"><BookOpen size={15} /> YOUR PERSONAL COLLECTION</span><h1>Saved recipes</h1><p>Ratings and notes stay in this browser.</p></div>{saved.length > 0 && <button className="button secondary" onClick={() => downloadFile("fusion-table-cookbook.json", JSON.stringify(saved, null, 2), "application/json")}><Download size={16} /> Export cookbook</button>}</div><p className="device-note"><Heart size={14} /> Your cookbook is saved in this browser on this device.</p>{saved.length === 0 ? <div className="empty-state"><div className="empty-icon"><BookOpen size={35} /></div><h3>No saved recipes yet.</h3><p>Save a recipe, then add a star rating and whether you would make it again.</p><button className="button primary" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={16} /></button></div> : <div className="saved-grid">{saved.map((entry) => <article className="saved-card" key={recipeKey(entry.recipe)}><span className="eyebrow">{regionName(entry.recipe.regionId)} <span>×</span> {recipeBaseName(entry.recipe)}</span><h3>{entry.recipe.title}</h3><p>{entry.recipe.description}</p><div className="recipe-meta"><span><Clock3 size={14} /> About {duration(entry.recipe.totalMinutes)}</span><span><Users size={14} /> {entry.recipe.servings}</span></div>{entry.tested && <span className="tested-label"><CheckCheck size={13} /> Kitchen-tested by you</span>}{entry.rating > 0 && <span className="saved-stars">{"★".repeat(entry.rating)}{"☆".repeat(5 - entry.rating)}</span>}{verdicts[recipeKey(entry.recipe)] && <span className="saved-notes">{({ wont: "Won't have again", might: "Might have again", will: "Will have again", staple: "New staple" } as Record<string, string>)[verdicts[recipeKey(entry.recipe)]]}</span>}{entry.notes && <p className="saved-notes">“{entry.notes.slice(0, 130)}{entry.notes.length > 130 ? "…" : ""}”</p>}<div className="saved-card-actions"><button className="text-button" onClick={() => openSaved(entry)}>Open recipe <ArrowRight size={15} /></button><button className="icon-button" aria-label={`Remove ${entry.recipe.title}`} onClick={() => { setSaved((all) => all.filter((s) => recipeKey(s.recipe) !== recipeKey(entry.recipe))); setToast("Recipe removed from your cookbook."); }}><Heart size={17} fill="currentColor" /></button></div></article>)}</div>}</div>}
+      {view === "trends" && <TrendsPage board={community} onOpen={openReport} />}
+      {view === "cookbook" && <div className="page-width inner-page"><div className="page-intro split-intro"><div><span className="eyebrow"><BookOpen size={15} /> YOUR PERSONAL COLLECTION</span><h1>Saved recipes</h1><p>Ratings and notes stay in this browser.</p></div>{saved.length > 0 && <button className="button secondary" onClick={() => downloadFile("fusion-table-cookbook.json", JSON.stringify(saved, null, 2), "application/json")}><Download size={16} /> Export cookbook</button>}</div><p className="device-note"><Heart size={14} /> Your cookbook is saved in this browser on this device.</p>{saved.length === 0 ? <div className="empty-state"><div className="empty-icon"><BookOpen size={35} /></div><h3>No saved recipes yet.</h3><p>Save a recipe, then add a star rating and whether you would make it again.</p><button className="button primary" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={16} /></button></div> : <div className="saved-grid">{saved.map((entry) => <article className="saved-card" key={recipeKey(entry.recipe)}><img className="week-plate" src={entry.token ? `${publicPath("/api/plate")}?t=${encodeURIComponent(entry.token)}` : plateSrc(entry.recipe, null)} alt="" onError={keepImage} /><span className="eyebrow">{regionName(entry.recipe.regionId)} <span>×</span> {recipeBaseName(entry.recipe)}</span><h3>{entry.recipe.title}</h3><p>{entry.recipe.description}</p><div className="recipe-meta"><span><Clock3 size={14} /> About {duration(entry.recipe.totalMinutes)}</span><span><Users size={14} /> {entry.recipe.servings}</span></div>{entry.tested && <span className="tested-label"><CheckCheck size={13} /> Kitchen-tested by you</span>}{entry.rating > 0 && <span className="saved-stars">{"★".repeat(entry.rating)}{"☆".repeat(5 - entry.rating)}</span>}{verdicts[recipeKey(entry.recipe)] && <span className="saved-notes">{({ wont: "Won't have again", might: "Might have again", will: "Will have again", staple: "New staple" } as Record<string, string>)[verdicts[recipeKey(entry.recipe)]]}</span>}{entry.notes && <p className="saved-notes">“{entry.notes.slice(0, 130)}{entry.notes.length > 130 ? "…" : ""}”</p>}<div className="saved-card-actions"><button className="text-button" onClick={() => openSaved(entry)}>Open recipe <ArrowRight size={15} /></button><button className="icon-button" aria-label={`Remove ${entry.recipe.title}`} onClick={() => { setSaved((all) => all.filter((s) => recipeKey(s.recipe) !== recipeKey(entry.recipe))); setToast("Recipe removed from your cookbook."); }}><Heart size={17} fill="currentColor" /></button></div></article>)}</div>}</div>}
     </main>
     <footer className="site-footer"><div className="page-width footer-inner"><button className="brand" onClick={() => navigate("discover")}><Sprout size={24} strokeWidth={1.5} /><span>fusion<span className="brand-light">table</span></span></button><span>Meal plans and one shopping list.</span><div><button onClick={() => setAboutOpen(true)}>How it works</button><button onClick={shoppingView}>Find local shops</button><span className="footer-small">Templates are not kitchen-tested.</span></div></div></footer>
     {toast && <div className="toast" role="status"><Check size={17} />{toast}<button onClick={() => setToast("")} aria-label="Dismiss notification"><X size={14} /></button></div>}

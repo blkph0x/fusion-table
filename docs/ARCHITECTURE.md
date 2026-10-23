@@ -73,7 +73,7 @@ The cold platter is an **assembly recipe using commercially ready-to-eat smoked 
 
 `generateMeal(input)` accepts `mainId`, `methodId`, `regionId`, optional `sideId`, integer servings from 1–12, and optional diet/heat/pantry. `getMethodsForMain()` and `getMainsForDiet()` support guided controls. In this builder, incompatible main/diet choices fail explicitly rather than silently changing the main the visitor selected.
 
-The catalog has **195 compatible main/method pairs**, **20 regions** and **6 sides**, giving **23,400 supported main/method/region/side configurations**. Every meal includes a main, side, vegetables and sauce. Cut, preparation, quantities, cooking sequence and dietary alternatives follow the chosen method. For example, gluten-free quinoa uses quinoa cooking instructions rather than retaining a couscous method.
+The catalog has **195 compatible main/method pairs**, **63 regional profiles** and **6 sides**, giving **73,710 supported main/method/region/side configurations**. Each profile cooks with that region's own paste, heat, spices and herbs. Bird's eye chilli is on the plates that use it, not on every region. A week plan still draws from the curated plates, not this full matrix. Every meal includes a main, side, vegetables and sauce. Cut, preparation, quantities, cooking sequence and dietary alternatives follow the chosen method. For example, gluten-free quinoa uses quinoa cooking instructions rather than retaining a couscous method.
 
 Both engines are pure TypeScript and reusable without Cloudflare-specific routes. [Self-hosting](SELF_HOSTING.md) includes working calls for each.
 
@@ -105,6 +105,7 @@ Provider endpoints come only from server settings and must be HTTPS without embe
 | --- | --- |
 | Current form/recipe, checkmarks, filters and cooking step | React state in the active page. |
 | Saved full recipe snapshots, notes, ratings and cooked status | Browser `localStorage`, under `fusion-table-v1`. |
+| Shared cook reports, reasons, notices and shop prices | A JSON ledger on the host (`FUSION_DATA_DIR` or `data/community-ledger.json`). Reports do not change an unseeded template. A missing price is not stored as zero. |
 | Selected shopping location/radius | The same browser-local record. |
 | Provider caches/limits | Transient Worker-instance memory. |
 | Recipe/cookbook JSON and shopping CSV | Files explicitly downloaded by the visitor. |
@@ -115,7 +116,7 @@ Recipe composition sends no data to a remote recipe service. Map providers recei
 
 ## Builds, hosting and releases
 
-The GitHub source repository and published release assets are public. The original Sites deployment preserves its assigned project ID and public audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused and cookbook entries are browser-local.
+The GitHub source repository and published release assets are public. The original Sites deployment preserves its assigned project ID and public audience, controlled by the platform. No application-specific account system is implemented. D1/R2 are unused. Personal cookbook entries stay in the browser. Shared ratings, reasons and recorded shop prices are a JSON file on the host, not a cloud account.
 
 A clean checkout selects the portable runner and resolves helpers from tracked source. Use Node 22.13.0+, pnpm 11.25.0, and the committed lockfile. Ordinary development uses `pnpm install --frozen-lockfile`, `pnpm dev`, `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`. The managed Linux installer remains separate.
 
@@ -139,13 +140,21 @@ Nutrition or verified retailer inventory requires its own evidence, source and m
 
 ## Image provenance
 
-All three images were generated with the built-in Imagegen tool for this website and visually checked. They are 1536 × 1024 PNGs. No external stock photography or third-party logo assets were used for them. The following are recorded prompt briefs, not verbatim prompts:
+The example plates and eight exact meals use generated inspiration pictures. They were made for this website and are not photographs of cooked dishes. The three example plates are 1536 × 1024 PNGs. The meal pictures are JPEGs. No external stock photography or third-party logo assets were used. Any other dish, including a seeded finish, is painted on this computer from that recipe's ingredient list. The same recipe paints the same picture again. The following are recorded prompt briefs, not verbatim prompts:
 
 | Asset | Recorded generation brief |
 | --- | --- |
 | `public/images/fusion-table-hero.png` | Editorial natural-light food image of Japanese–Italian miso mushroom pasta: glossy tagliatelle, mushrooms, herbs and sesame in a sage ceramic bowl, with lemon and a small ingredient bowl on light oak. Landscape 3:2, elevated 45-degree view, food toward centre-right; no text, logos or people. |
 | `public/images/korean-tacos.png` | Editorial view of three vegan corn-tortilla tacos with gochujang-coated mushrooms and tofu, cabbage, scallions, sesame and coriander, on a sage plate and warm oak, from an elevated 45-degree angle. |
 | `public/images/moroccan-traybake.png` | Editorial vegan chickpea, cauliflower and carrot traybake with lemon, herbs, cumin and paprika, in a cream dish on warm oak with sage linen, from an elevated 45-degree angle. |
+| `public/images/meals/thai-chicken-curry.jpg` | Thai chicken curry with rice and greens in a cream bowl on warm oak. |
+| `public/images/meals/korean-beef-stirfry.jpg` | Korean beef stir-fry with rice and greens on a sage plate. |
+| `public/images/meals/japanese-salmon-grilled.jpg` | Grilled salmon with rice and greens on a pale plate. |
+| `public/images/meals/indian-chickpea-curry.jpg` | Chickpea curry with basmati rice in a cream bowl. |
+| `public/images/meals/mexican-chicken-grilled.jpg` | Sliced grilled chicken with salsa, rice and a green salad. |
+| `public/images/meals/levantine-chicken-grilled.jpg` | Grilled chicken with tomato-parsley salad, flatbread and lemon. |
+| `public/images/meals/ethiopian-lentil-braise.jpg` | Red lentil stew with injera on a round metal platter. |
+| `public/images/meals/vietnamese-chicken-grilled.jpg` | Grilled chicken with herbs, cucumber and rice. |
 
 These images illustrate the featured pairings. They do not establish that a recipe was cooked or photographed, and their garnishes or vegetables can differ from the generated recipe. For example, the Moroccan template uses potatoes, carrots, onion and chickpeas, while the inspiration image includes cauliflower. The structured ingredient list and method are the cooking instructions.
 

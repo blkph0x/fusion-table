@@ -5,6 +5,36 @@ import { planWeek } from "../lib/planner.ts";
 import { fusionAdmits, fusionSearch } from "../lib/fusion-sat.ts";
 import { generateRecipe } from "../lib/recipes.ts";
 
+it("blocks a plural chilli dislike and does not put fish on a vegan plate", () => {
+  const hot = fusionSearch({
+    seed: 7,
+    regionId: "thai",
+    diet: "balanced",
+    spiceHeat: "hot",
+    glutenFree: false,
+    dairyFree: false,
+    vegan: false,
+    vegetarian: false,
+    eggFree: false,
+    servings: 2,
+    dislikes: ["chillies"],
+  });
+  assert.equal(hot.names.some((name) => /chilli|sriracha/i.test(name)), false);
+  const vegan = fusionSearch({
+    seed: 8,
+    regionId: "thai",
+    diet: "vegan",
+    spiceHeat: "hot",
+    glutenFree: false,
+    dairyFree: true,
+    vegan: true,
+    vegetarian: true,
+    eggFree: true,
+    servings: 2,
+  });
+  assert.equal(vegan.names.some((name) => /fish|prawn|oyster|shrimp/i.test(name)), false);
+});
+
 const chickenThai = {
   mainId: "chicken",
   methodId: "schnitzel",
@@ -84,8 +114,13 @@ describe("seeded fusion plates", () => {
     for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
       const mild = generateMeal({ ...chickenThai, seed, spiceHeat: "mild" });
       assert.ok(added(mild).every((item) => !/sriracha|bird/i.test(item.name)));
+      assert.doesNotMatch(mild.title, /sriracha|bird/i);
       const hot = generateMeal({ ...chickenThai, seed, spiceHeat: "hot" });
-      assert.ok(added(hot).some((item) => /sriracha|bird/i.test(item.name)));
+      // The Thai plate already lists bird's eye. A hot search may add sriracha, or choose bird's eye again and keep the one line.
+      const birdLines = hot.ingredients.filter((item) => /bird/i.test(item.name));
+      assert.match(hot.title, /sriracha|bird/i);
+      assert.equal(birdLines.length, 1, `seed ${seed}`);
+      assert.ok(added(hot).some((item) => /sriracha/i.test(item.name)) || birdLines[0].id === "birds-eye-chilli", `seed ${seed}`);
       const vegan = generateMeal({ ...chickenThai, mainId: "tofu", methodId: "stir-fried", seed, diet: "vegan" });
       assert.ok(added(vegan).every((item) => !item.allergens.some((allergen) => ["fish", "crustacean", "milk", "egg"].includes(allergen))));
       assert.ok(added(vegan).every((item) => !/oyster|fish sauce|prawn|firm white fish/i.test(item.name)));

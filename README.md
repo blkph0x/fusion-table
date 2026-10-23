@@ -2,7 +2,7 @@
 
 **Familiar classics, proper barbecue methods, regional flavour and nearby places to shop.**
 
-Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions and a browser-local cookbook. Leaving the seed off still produces the same template. **Create my fusion**, and each new week, pass a new seed. A small SAT search on this device then chooses a finish: the same main can come back as a cold stir-fry, a hot stir-fry, a chopped salad, a wrap, or a broth, with a different sauce, heat, crunch and extra ingredient. The same seed repeats that finish. Hard filters stay in place. There is no cloud language model. A seeded plate is still template-generated and not kitchen-tested.
+Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions, a browser-local cookbook, and a shared cook's book of ratings and recorded shop prices. Leaving the seed off still produces the same template. **Create my fusion**, and each new week, pass a new seed. A small SAT search on this device then chooses a finish: the same main can come back as a cold stir-fry, a hot stir-fry, a chopped salad, a wrap, or a broth, with a different sauce, heat, crunch and extra ingredient. The same seed repeats that finish. Hard filters stay in place. There is no cloud language model. A seeded plate is still template-generated and not kitchen-tested.
 
 All application source, recipe catalogs, images, server routes, tests, build tooling and lockfiles are included in this repository.
 
@@ -16,6 +16,7 @@ Earlier homepage preview; the current source also includes the expanded catalog 
 - A seven-day plan with a seed is ordered by that seed, not by alphabetical region or classic. Each dinner can carry its own seeded finish.
 - The search is a small CDCL solver in the same propagate / learn / backjump shape as the local P versus NP research. It chooses one allowed finish. It does not prove anything about P versus NP, taste, or food safety.
 - Diet, allergen and hard-dislike filters are clauses. They are not relaxed. Poultry is still cooked to its endpoint. A cold plate, including a cold stir-fry, is cooked, then chilled. Added fish is cooked to at least 63°C. Added prawns are cooked until pink and opaque.
+- The ingredient-led builder has **63 regional profiles**: 195 supported main/method pairs × 63 regions × 6 sides = **73,710** configurations. Each profile uses its own curry paste or heat, spices and herbs, including bird's eye chilli only where that cuisine uses it. Names follow public culinary lists; the region link is authored. Week plans still use the curated plates, not every profile. These are templates, not kitchen-tested dishes.
 
 ## What's in v0.2.5
 
@@ -125,7 +126,7 @@ Local discovery searches a **1–25 km straight-line radius** around a selected 
 
 Every generated classic and ingredient meal adds that region's staple foods. A staple already on the plate is not added twice. Generic rice is renamed to the regional rice instead of a second rice. Gluten-free templates swap wheat breads, couscous, and chapati for labelled gluten-free alternatives. Ethiopian injera is named 100% teff and says to check the packet, because many injera mixes contain wheat. These staples are authored templates, not a traditional complete dish and not a packet check.
 
-`planWeek` fills 1–14 dinners from classics, barbecue templates, and a curated set of ingredient-led plates. It spreads region and meal style. Filters only tighten. The phone catalogue is a bounded export of those templates, not all 23,400 meal configurations written out in full.
+`planWeek` fills 1–14 dinners from classics, barbecue templates, and a curated set of ingredient-led plates. It spreads region and meal style. Filters only tighten. The phone catalogue is a bounded export of those templates, not all 73,710 meal configurations written out in full.
 
 Tick what is already at home, then choose **I’m making this**. Oils, butter, flour and similar cupboard items stay on the pantry list and are reduced as they are used. A shortfall is an amount still to buy, never a price. The week plan warns when the pantry will not cover the planned dinners. Star ratings, and “won’t have again”, “might have again”, “will have again” or “this is a new staple”, stay in this browser. Shop search lists supermarkets, grocers, butchers and markets. Petrol stations are left out.
 

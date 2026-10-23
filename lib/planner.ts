@@ -3,6 +3,7 @@ import { generateMeal } from "./meals.ts";
 import { PLATES } from "./plates.ts";
 import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
+import { foodWordHit } from "./food-words.ts";
 import { mix32 } from "./sat.ts";
 import type { DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
@@ -68,10 +69,6 @@ function normalise(value: string): string {
   return value.trim().toLocaleLowerCase("en").replace(/[’']/g, "").replace(/[^a-z0-9\s-]/g, " ").replace(/[–—-]/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function words(value: string): string[] {
-  return normalise(value).split(" ").filter(Boolean);
-}
-
 function constraintsFor(input: WeekPlanInput, avoid: Set<string>): RecipeConstraints {
   const extra = input.constraints ?? {};
   const vegan = extra.vegan === true || input.diet === "vegan";
@@ -85,8 +82,7 @@ function constraintsFor(input: WeekPlanInput, avoid: Set<string>): RecipeConstra
 }
 
 function wordHit(name: string, token: string): boolean {
-  if (normalise(name) === token) return true;
-  return words(name).some((word) => word === token || (word.endsWith("s") && word.slice(0, -1) === token));
+  return foodWordHit(name, token);
 }
 
 function disliked(recipe: Recipe, dislikes: string[]): boolean {

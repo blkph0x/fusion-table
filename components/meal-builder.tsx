@@ -8,7 +8,7 @@ import { MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, generateMeal, getMealCombin
 import type { MealInput } from "@/lib/meal-types";
 import type { DietId, Recipe, SpiceHeat } from "@/lib/recipe-types";
 
-type Props = { onCreated: (recipe: Recipe) => void; initialRecipe?: Recipe | null; avoidAllergens?: string[]; dislikes?: string[] };
+type Props = { onCreated: (recipe: Recipe, brief: MealInput) => void; initialRecipe?: Recipe | null; avoidAllergens?: string[]; dislikes?: string[] };
 
 function freshSeed(): number {
   const buf = new Uint32Array(1);
@@ -76,7 +76,8 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
   }
   function create(event: FormEvent) {
     event.preventDefault(); setError("");
-    try { onCreated(generateMeal({ ...input, seed: freshSeed(), avoidAllergens, dislikes })); }
+    const made: MealInput = { ...input, seed: freshSeed(), avoidAllergens, dislikes };
+    try { onCreated(generateMeal(made), made); }
     catch (err) { setError(err instanceof Error ? err.message : "Please check your meal choices."); }
   }
 

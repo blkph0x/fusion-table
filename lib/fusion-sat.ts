@@ -6,6 +6,7 @@
  */
 
 import type { DietId, IngredientCategory, Recipe, RecipeIngredient, SpiceHeat } from "./recipe-types.ts";
+import { foodWordHit } from "./food-words.ts";
 import { mix32, modelSatisfies, seededDecider, solveCnf, type Clause } from "./sat.ts";
 
 export interface FusionSpec {
@@ -71,13 +72,8 @@ function norm(value: string): string {
   return value.trim().toLocaleLowerCase("en").replace(/[’']/g, "").replace(/[^a-z0-9\s-]/g, " ").replace(/[–—-]/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function tokens(value: string): string[] {
-  return norm(value).split(" ").filter(Boolean);
-}
-
 function wordHit(name: string, token: string): boolean {
-  if (norm(name) === token) return true;
-  return tokens(name).some((word) => word === token || (word.endsWith("s") && word.slice(0, -1) === token));
+  return foodWordHit(name, token);
 }
 
 function disliked(labels: readonly string[], dislikes: readonly string[]): boolean {
@@ -116,11 +112,13 @@ function flags(spec: FusionSpec) {
   const crustFree = vegan || vegetarian || avoid.has("crustacean");
   const soyFree = avoid.has("soy");
   const seafoodAlready = spec.seafoodAlready === true || SEAFOOD_MAINS.has(spec.mainId ?? "");
-  return { avoid, vegan, vegetarian, glutenFree, fishFree, crustFree, soyFree, seafoodAlready };
+  const dairyFree = spec.dairyFree || vegan || spec.diet === "dairy-free";
+  const eggFree = spec.eggFree || vegan;
+  return { avoid, vegan, vegetarian, glutenFree, fishFree, crustFree, soyFree, seafoodAlready, dairyFree, eggFree };
 }
 
 function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
-  const { avoid, glutenFree, fishFree, crustFree, soyFree, seafoodAlready } = flags(spec);
+  const { avoid, glutenFree, fishFree, crustFree, soyFree, seafoodAlready, dairyFree, eggFree } = flags(spec);
   const mild = spec.spiceHeat === "mild";
   const hot = spec.spiceHeat === "hot";
   const gf = glutenFree;
@@ -248,6 +246,13 @@ function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
     if ((item.id === "extra_fish" || item.id === "extra_prawn") && seafoodAlready) return { ...item, forbidden: true };
     if (item.id === "extra_tofu" && SOY_MAINS.has(spec.mainId ?? "")) return { ...item, forbidden: true };
     if (item.id === "umami_oyster" && (spec.vegan || spec.vegetarian || spec.diet === "vegan" || spec.diet === "vegetarian")) return { ...item, forbidden: true };
+    if (!item.forbidden && item.picks.length > 0 && (dairyFree || eggFree)) {
+      const label = item.picks.flatMap((pick) => [pick.name, ...pick.blocks, ...pick.allergens, ...(pick.aliases ?? [])]).join(" ");
+      const dairy = /\b(milk|cheese|cheddar|butter|cream|yoghurt|yogurt|ghee|whey|buttermilk)\b/i.test(label)
+        && !/\b(coconut|soy|oat|almond|rice)\s+milk\b/i.test(label);
+      const egg = /\beggs?\b/i.test(label) && !/\b(eggplant|aubergine)\b/i.test(label);
+      if ((dairyFree && dairy) || (eggFree && egg)) return { ...item, forbidden: true };
+    }
     return item;
   });
 }
@@ -255,7 +260,7 @@ function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
 function openLane(options: readonly Option[], lane: string): Option[] {
   const group = options.filter((item) => item.lane === lane);
   const available = group.filter((item) => !item.forbidden);
-  return available.length > 0 ? available : group.filter((item) => item.plain);
+  return available.length > 0 ? available : group.filter((item) => item.plain && !item.forbidden);
 }
 
 interface Encoded {

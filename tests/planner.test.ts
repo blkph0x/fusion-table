@@ -126,5 +126,10 @@ describe("fusion week planner", () => {
     assert.match(stillLocked.days[0].reason || "", /not replaced/);
     const blocked = planWeek({ days: 3, servings: 4, dislikes: ["garlic"], seed: 6 });
     assert.deepEqual(blocked.unfilledDays, [1, 2, 3]);
+    const plural = planWeek({ days: 2, servings: 4, dislikes: ["chillies"], seed: 3 });
+    for (const day of plural.days) {
+      const names = (day.recipe?.ingredients ?? []).flatMap((item) => [item.name, ...(item.aliases ?? [])]).join(" ");
+      assert.equal(/chilli|chili/i.test(names), false);
+    }
   });
 });

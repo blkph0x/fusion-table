@@ -1,5 +1,6 @@
 import type { DietId } from "./recipe-types.ts";
 import type { MainIngredientOption, MealOption } from "./meal-types.ts";
+import { MEAL_REGION_OPTIONS } from "./region-pantry.ts";
 
 export const COOKING_METHODS: readonly MealOption[] = [
   { id: "schnitzel", name: "Schnitzel", description: "Thin, crumbed pieces with a crisp shallow-fried crust.", emoji: "🍽️" },
@@ -41,28 +42,7 @@ export const MAIN_INGREDIENTS: readonly MainIngredientOption[] = [
   { id: "broccoli", name: "Broccoli", description: "Florets and peeled stems, cooked with a little bite.", emoji: "🥦", category: "plant", methodIds: ["baked", "pan-fried", "air-fried", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"], ingredientAliases: ["broccoli"] },
 ];
 
-export const MEAL_REGIONS: readonly MealOption[] = [
-  { id: "japanese", name: "Japanese-inspired", description: "Miso, ginger, rice vinegar and spring onion.", emoji: "🇯🇵" },
-  { id: "korean", name: "Korean-inspired", description: "Gochujang, ginger, toasted sesame and rice vinegar.", emoji: "🇰🇷" },
-  { id: "thai", name: "Thai-inspired", description: "Red curry paste, coconut, lime and coriander.", emoji: "🇹🇭" },
-  { id: "mexican", name: "Mexican-inspired", description: "Smoked paprika, cumin, tomato, lime and coriander.", emoji: "🇲🇽" },
-  { id: "indian", name: "Indian-inspired", description: "Ginger, garam masala, turmeric and lemon.", emoji: "🇮🇳" },
-  { id: "levantine", name: "Levantine-inspired", description: "Cumin, sumac, lemon and parsley.", emoji: "🌿" },
-  { id: "italian", name: "Italian-inspired", description: "Tomato, oregano, basil and lemon.", emoji: "🇮🇹" },
-  { id: "moroccan", name: "Moroccan-inspired", description: "Harissa, cumin, cinnamon, lemon and parsley.", emoji: "🇲🇦" },
-  { id: "greek", name: "Greek-inspired", description: "Oregano, garlic, lemon and dill.", emoji: "🇬🇷" },
-  { id: "spanish", name: "Spanish-inspired", description: "Smoked paprika, tomato, sherry vinegar and parsley.", emoji: "🇪🇸" },
-  { id: "french", name: "French-inspired", description: "Dijon mustard, thyme, lemon and parsley.", emoji: "🇫🇷" },
-  { id: "vietnamese", name: "Vietnamese-inspired", description: "Lemongrass, ginger, lime and mint.", emoji: "🇻🇳" },
-  { id: "chinese", name: "Chinese-inspired", description: "Ginger, five-spice, soy and spring onion.", emoji: "🇨🇳" },
-  { id: "indonesian", name: "Indonesian-inspired", description: "Ginger, turmeric, soy, coconut and lime.", emoji: "🇮🇩" },
-  { id: "malaysian", name: "Malaysian-inspired", description: "Lemongrass, coriander, coconut and lime.", emoji: "🇲🇾" },
-  { id: "caribbean", name: "Caribbean-inspired", description: "Allspice, thyme, ginger and lime.", emoji: "🏝️" },
-  { id: "peruvian", name: "Peruvian-inspired", description: "Ají amarillo, cumin, lime and coriander.", emoji: "🇵🇪" },
-  { id: "ethiopian", name: "Ethiopian-inspired", description: "Berbere, ginger, tomato and lemon.", emoji: "🇪🇹" },
-  { id: "turkish", name: "Turkish-inspired", description: "Paprika, cumin, tomato, sumac and parsley.", emoji: "🇹🇷" },
-  { id: "brazilian", name: "Brazilian-inspired", description: "Garlic, paprika, coconut, lime and coriander.", emoji: "🇧🇷" },
-];
+export const MEAL_REGIONS: readonly MealOption[] = MEAL_REGION_OPTIONS;
 
 export const MEAL_SIDES: readonly MealOption[] = [
   { id: "rice-greens", name: "Rice & greens", description: "Fluffy long-grain rice with steamed green beans.", emoji: "🍚" },

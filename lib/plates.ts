@@ -1,4 +1,4 @@
-/** Curated ingredient-led plates. Not the full 23,400 matrix; each one is a compatible main, method, region and side. */
+/** Curated ingredient-led plates. Not the full 73,710 matrix; each one is a compatible main, method, region and side. The week planner uses these plates, not every regional profile. */
 export interface PlateSpec {
   regionId: string;
   mainId: string;

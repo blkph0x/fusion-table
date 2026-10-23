@@ -64,6 +64,9 @@ describe("regional staples", () => {
       assert.ok(main.methodIds.includes(plate.methodId), `${plate.mainId} ${plate.methodId}`);
       assert.ok(MEAL_SIDES.some((side) => side.id === plate.sideId));
     }
-    assert.equal(new Set(PLATES.map((plate) => plate.regionId)).size, MEAL_REGIONS.length);
+    const plateRegions = new Set(PLATES.map((plate) => plate.regionId));
+    assert.equal(plateRegions.size, 20);
+    assert.ok(MEAL_REGIONS.length > plateRegions.size);
+    assert.ok([...plateRegions].every((id) => regions.has(id)));
   });
 });

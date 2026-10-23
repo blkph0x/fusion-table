@@ -20,6 +20,13 @@ const DRY_SPICE_IDS = new Set([
   "cardamom", "cloves", "nutmeg", "ground-ginger", "curry-powder", "zaatar",
   "sweet-paprika", "garlic-powder", "onion-powder", "five-spice", "gf-five-spice", "dried-mint",
   "za-atar", "allspice", "star-anise", "dried-thyme", "dried-rosemary",
+  "berbere", "gochugaru", "shichimi", "kashmiri-chilli", "ceylon-chilli", "cayenne",
+  "hot-paprika", "pimenton-picante", "boukovo", "espelette-pepper", "pul-biber",
+  "aji-molido", "merken", "pepperberry", "lemon-myrtle", "sichuan-pepper", "sansho",
+  "timur", "grains-of-paradise", "advieh", "khmeli-suneli", "hawaij", "xawaash",
+  "tabil", "ras-el-hanout", "garam-masala", "panch-phoron", "mustard-seeds",
+  "fenugreek", "caraway", "dried-ginger", "ceylon-cinnamon", "celery-seed",
+  "mexican-oregano", "kasuri-methi", "annatto",
 ]);
 
 const DELI_IDS = new Set([
