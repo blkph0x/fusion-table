@@ -1,4 +1,4 @@
-import type { DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
+import type { CookPace, DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
 /** A main ingredient is never silently exchanged to satisfy a dietary preference. */
 export interface MealInput {
@@ -23,6 +23,11 @@ export interface MealInput {
    * Filters passed with the seed are not relaxed.
    */
   seed?: number;
+  /**
+   * Omitted keeps the authored timing, including the recipe id.
+   * Set adds a schedule note only.
+   */
+  cookPace?: CookPace;
   avoidAllergens?: string[];
   dislikes?: string[];
 }

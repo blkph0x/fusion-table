@@ -934,8 +934,13 @@ ul, ol { margin: 0; padding: 0; }
 .meal-settings:disabled { opacity: .7; }
 .meal-selection-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; color: #8d9b7e; border-bottom: 1px solid #e4e8d9; padding-bottom: 20px; margin-bottom: 22px; }
 .meal-selection-summary > span { display: flex; gap: 7px; align-items: center; color: #526b42; font-size: 12px; }
-.side-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.side-picker-header { margin: 8px 0 12px; }
+.side-picker-header h4 { margin: 0 0 6px; font-size: 14px; font-weight: 600; color: #3f5336; }
+.side-search { margin-bottom: 12px; }
+.side-choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-height: 420px; overflow: auto; padding-right: 4px; }
 .side-choice { display: flex; gap: 11px; align-items: flex-start; padding: 16px 13px; text-align: left; background: #fffefa; border: 1px solid #e2e5da; border-radius: 10px; cursor: pointer; transition: border-color .15s, background .15s, transform .15s; color: #456039; }
+.side-choice.suggested { border-color: #c5d4b3; background: #f7faf1; }
+.side-suggested-tag { display: inline-block; margin-top: 6px; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #6d8558; font-style: normal; }
 .side-choice > span:first-child { font-size: 24px; }
 .side-choice > span:nth-child(2) { flex: 1; }
 .side-choice strong { display: block; font-size: 12px; font-weight: 600; }
@@ -1036,8 +1041,10 @@ ul, ol { margin: 0; padding: 0; }
 .bbq-method-notes h4 { font: 400 25px Georgia, serif; color: #3d5533; margin: 0 0 12px; }
 .bbq-method-notes ul { margin: 0; padding-left: 20px; }
 .bbq-method-notes li { font-size: 13px; color: #66765b; line-height: 1.85; padding-left: 4px; margin-top: 12px; }
+.bbq-method-notes p { font-size: 13px; color: #66765b; line-height: 1.85; margin: 0; }
+.region-group-label { grid-column: 1 / -1; margin: 6px 0 0; font-size: 11px; letter-spacing: .12em; color: #7d8a6b; }
 .classic-count-note { font-size: 12px; color: #7d8a6b; margin: 20px 0 0; line-height: 1.8; }
-@media (max-width: 700px) { .builder-template-note { display: none; } .bbq-method-notes { padding: 17px; } .bbq-method-notes li { font-size: 12px; } }
+@media (max-width: 700px) { .builder-template-note { display: none; } .bbq-method-notes { padding: 17px; } .bbq-method-notes li, .bbq-method-notes p { font-size: 12px; } }
 
 .week-layout { display: grid; gap: 18px; }
 .week-controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; margin: 8px 0 18px; }
@@ -1049,9 +1056,26 @@ ul, ol { margin: 0; padding: 0; }
 .week-day p { margin: 0; color: #6d7b62; font-size: 13px; }
 .week-day-actions { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; }
 .week-options { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
-.week-options span { font-size: 12px; color: #516347; }
+.week-options span { font-size: 12px; color: #516347; font-weight: 600; letter-spacing: 0.02em; }
 .week-options button { border: 1px solid #d5decc; background: #f7f8f2; color: #314028; border-radius: 999px; padding: 6px 12px; font-size: 13px; cursor: pointer; text-align: left; }
 .week-options button:hover { border-color: #8aa37a; }
+.week-options button:disabled { opacity: 0.45; cursor: not-allowed; }
+.week-options button.suggested-side { border-color: #b7c9a4; background: #f3f7ec; }
+.week-plan-summary { position: sticky; top: 12px; z-index: 5; margin: 0 0 16px; border: 1px solid #d7e0cc; border-radius: 12px; background: rgba(248, 250, 243, 0.96); backdrop-filter: blur(6px); box-shadow: 0 8px 24px rgba(49, 64, 40, 0.06); }
+.week-plan-summary-inner { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: space-between; align-items: flex-start; padding: 14px 16px; }
+.week-plan-summary strong { display: block; color: #314028; margin-bottom: 4px; }
+.week-plan-summary p { margin: 0; color: #5d6d52; font-size: 13px; max-width: 52rem; }
+.week-plan-summary-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.plate-card { display: flex; flex-direction: column; gap: 8px; }
+.plate-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.plate-lock.is-locked { color: #7a5130; font-weight: 600; }
+.plate-locked { border-color: #c9b49a; background: #fbf7f0; }
+.plate-label { margin: 0; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #6d8558; font-weight: 600; }
+.plate-main-block { display: grid; gap: 4px; padding: 8px 0 4px; border-top: 1px solid #e6ebdd; border-bottom: 1px solid #e6ebdd; }
+.plate-side-block { margin-top: 6px; padding-top: 6px; border-top: 1px dashed #dde4d2; }
+.plate-side-options { margin-top: 8px; }
+.plate-side-empty { margin-top: 8px; }
+.builder-memory-note { margin: 0 0 10px; color: #5f7352; }
 .week-notes { font-size: 13px; color: #516347; }
 .week-notes li { margin: 6px 0; }
 .kitchen-desk { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e0e6d6; }

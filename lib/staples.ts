@@ -123,6 +123,7 @@ const REGIONAL: Record<string, (options: StapleOptions) => DraftIngredient[]> = 
   spanish: (options) => [potatoes(), bread(options, "Crusty white bread")],
   "spanish-plancha": (options) => REGIONAL.spanish(options),
   french: (options) => [bread(options, "Plain wheat bread"), potatoes()],
+  "home-style": (options) => [bread(options, "Plain wheat bread"), potatoes()],
   caribbean: () => [rice("long-grain-rice", "Long-grain rice", ["long grain rice", "white rice"]), beans("kidney-beans", "Cooked red kidney beans", ["kidney beans", "red beans"])],
   "jamaican-jerk": () => [
     rice("long-grain-rice", "Long-grain rice", ["long grain rice", "white rice"]),
@@ -182,8 +183,9 @@ function familySkip(stapleId: string, ids: Set<string>): boolean {
   if (NOODLE_IDS.has(stapleId) && [...ids].some((id) => NOODLE_IDS.has(id))) return true;
   if (GRAIN_SWAP_IDS.has(stapleId) && [...ids].some((id) => GRAIN_SWAP_IDS.has(id))) return true;
   if (stapleId === "potatoes" && ids.has("potatoes")) return true;
-  if ((stapleId === "chickpeas" || stapleId === "brown-lentils") && ids.has(stapleId === "brown-lentils" ? "lentils" : stapleId)) return true;
-  if (stapleId === "brown-lentils" && ids.has("brown-lentils")) return true;
+  if (stapleId === "chickpeas" && ids.has("chickpeas")) return true;
+  if (stapleId === "brown-lentils" && (ids.has("lentils") || ids.has("brown-lentils"))) return true;
+  if ((stapleId === "black-beans" || stapleId === "kidney-beans") && ids.has(stapleId)) return true;
   return false;
 }
 

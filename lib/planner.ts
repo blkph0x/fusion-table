@@ -1,5 +1,6 @@
 import { CLASSICS, REGIONS, generateRecipe, parsePantry } from "./recipes.ts";
-import { generateMeal } from "./meals.ts";
+import { generateMeal, MEAL_SIDES } from "./meals.ts";
+import { preferredSidesForRegion } from "./side-plans.ts";
 import { PLATES } from "./plates.ts";
 import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
@@ -426,4 +427,99 @@ export function chooseDinner(input: WeekPlanInput, plan: WeekPlan, day: number, 
   if (!recipe) return plan;
   const planned = plan.days.map((item) => item.day === day ? { day, recipe, options: [], reason: undefined } : item);
   return assemble(prepared, planned);
+}
+
+/**
+ * Change only the accompaniment on an ingredient-led meal.
+ * Classic remixes have no separate side slot — the plan is unchanged.
+ * A side that fails recorded filters is refused rather than cooked.
+ */
+export function swapSide(input: WeekPlanInput, plan: WeekPlan, day: number, sideId: string): WeekPlan {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  if (prepared.locks.has(day)) return plan;
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) return plan;
+  if (!MEAL_SIDES.some((side) => side.id === sideId)) throw new Error("Choose a recognised side pairing.");
+  if (current.recipe.sideId === sideId) return plan;
+
+  const slot: Slot = {
+    kind: "meal",
+    classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${sideId}`,
+    regionId: current.recipe.regionId,
+    anchor: current.recipe.mainId,
+    mainId: current.recipe.mainId,
+    methodId: current.recipe.methodId,
+    sideId,
+  };
+  const chosen = prepared.candidate(slot);
+  if (!chosen.recipe) {
+    throw new Error(`That side does not match your recorded filters (${chosen.reason ?? "blocked"}) and was not cooked.`);
+  }
+  const planned = plan.days.map((item) => item.day === day ? { day, recipe: chosen.recipe, options: [], reason: undefined } : item);
+  return assemble(prepared, planned);
+}
+
+/** Other side pairings that still match the recorded filters for this meal-kind dinner. */
+export function sideOptions(input: WeekPlanInput, plan: WeekPlan, day: number): { sideId: string; name: string; suggested?: boolean }[] {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) return [];
+  const preferred = new Set(preferredSidesForRegion(current.recipe.regionId));
+  const options: { sideId: string; name: string; suggested?: boolean }[] = [];
+  const trySide = (side: (typeof MEAL_SIDES)[number]) => {
+    if (side.id === current.recipe!.sideId) return;
+    if (options.some((item) => item.sideId === side.id)) return;
+    const slot: Slot = {
+      kind: "meal",
+      classicId: `meal:${current.recipe!.mainId}:${current.recipe!.methodId}:${side.id}`,
+      regionId: current.recipe!.regionId,
+      anchor: current.recipe!.mainId!,
+      mainId: current.recipe!.mainId,
+      methodId: current.recipe!.methodId,
+      sideId: side.id,
+    };
+    if (!prepared.candidate(slot).recipe) return;
+    options.push({ sideId: side.id, name: side.name, ...(preferred.has(side.id) ? { suggested: true } : {}) });
+  };
+  for (const side of MEAL_SIDES) {
+    if (preferred.has(side.id)) trySide(side);
+  }
+  for (const side of MEAL_SIDES) {
+    if (options.length >= 8) break;
+    trySide(side);
+  }
+  return options.slice(0, 8);
+}
+
+/**
+ * When a side is blocked by recorded filters, explain why and list safe alternatives.
+ * Keeps the main, method and region; only the accompaniment changes.
+ */
+export function explainBlockedSide(input: WeekPlanInput, plan: WeekPlan, day: number, sideId: string): { reason: string; alternatives: { sideId: string; name: string }[] } {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  const alternatives = sideOptions(input, plan, day).map(({ sideId: id, name }) => ({ sideId: id, name }));
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) {
+    return { reason: "Only ingredient-led dinners have a separate side you can change.", alternatives };
+  }
+  const side = MEAL_SIDES.find((item) => item.id === sideId);
+  if (!side) return { reason: "Choose a recognised side pairing.", alternatives };
+  const slot: Slot = {
+    kind: "meal",
+    classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${sideId}`,
+    regionId: current.recipe.regionId,
+    anchor: current.recipe.mainId,
+    mainId: current.recipe.mainId,
+    methodId: current.recipe.methodId,
+    sideId,
+  };
+  const chosen = prepared.candidate(slot);
+  const detail = chosen.reason ?? "blocked by your recorded filters";
+  const altNote = alternatives.length
+    ? ` Try ${alternatives.slice(0, 3).map((item) => item.name).join(", ")} instead — the main stays put.`
+    : " No other side matches your filters for this dinner.";
+  return {
+    reason: `${side.name} was not cooked (${detail}).${altNote}`,
+    alternatives,
+  };
 }

@@ -119,8 +119,9 @@ function flags(spec: FusionSpec) {
 
 function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
   const { avoid, glutenFree, fishFree, crustFree, soyFree, seafoodAlready, dairyFree, eggFree } = flags(spec);
-  const mild = spec.spiceHeat === "mild";
-  const hot = spec.spiceHeat === "hot";
+  // Gentle follows mild and fiery follows hot. No new SAT variable, so old seeds stay put.
+  const mild = spec.spiceHeat === "mild" || spec.spiceHeat === "gentle";
+  const hot = spec.spiceHeat === "hot" || spec.spiceHeat === "fiery";
   const gf = glutenFree;
   const heatBlocked = disliked(["chilli", "chili", "sriracha"], dislikes);
   const option = (id: string, lane: string, picks: Pick[], extraBlocks: string[] = [], plain = false): Option => {

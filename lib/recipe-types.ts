@@ -1,6 +1,33 @@
 export type IngredientCategory = "produce" | "butcher" | "fishmonger" | "grocery" | "specialty";
 export type DietId = "balanced" | "vegetarian" | "vegan" | "gluten-free" | "dairy-free";
-export type SpiceHeat = "mild" | "medium" | "hot";
+/** Gentle and fiery sit outside the original three. Mild, medium and hot amounts stay put. */
+export const SPICE_HEATS = ["gentle", "mild", "medium", "hot", "fiery"] as const;
+export type SpiceHeat = (typeof SPICE_HEATS)[number];
+
+export function isSpiceHeat(value: unknown): value is SpiceHeat {
+  return typeof value === "string" && (SPICE_HEATS as readonly string[]).includes(value);
+}
+
+/** Classic and barbecue chilli flakes. Mild, medium and hot stay 0, 0.25 and 0.75. */
+export function classicChilliAmount(heat: SpiceHeat): number {
+  if (heat === "gentle") return 0;
+  if (heat === "fiery") return 1.25;
+  return { mild: 0, medium: 0.25, hot: 0.75 }[heat];
+}
+
+/** Paste amounts. The mild, medium and hot numbers are returned unchanged. */
+export function pasteHeatAmount(
+  heat: SpiceHeat,
+  steps: { readonly mild: number; readonly medium: number; readonly hot: number },
+  gentle: number,
+  fiery: number,
+): number {
+  if (heat === "gentle") return gentle;
+  if (heat === "fiery") return fiery;
+  return steps[heat];
+}
+/** Omitted keeps the authored timing. Set only adds a schedule note. */
+export type CookPace = "quick" | "morning" | "lunch" | "long";
 
 export interface RecipeOption {
   id: string;
@@ -47,6 +74,11 @@ export interface RecipeInput {
   constraints?: RecipeConstraints;
   /** Omitted keeps the authored template. Set adds one seeded SAT finish. */
   seed?: number;
+  /**
+   * Omitted keeps the authored timing, including the recipe id.
+   * Set adds a schedule note only. It does not drop a thermometer endpoint.
+   */
+  cookPace?: CookPace;
   avoidAllergens?: string[];
   dislikes?: string[];
 }
@@ -73,6 +105,9 @@ export interface Recipe {
   sourceLabel: "Template-generated · not kitchen-tested";
   safetyNote?: string;
   safetySource?: string;
+  /** Present only when the caller asked for a cook session. */
+  cookPace?: CookPace;
+  sessionNote?: string;
   kind?: "classic" | "meal";
   mainId?: string;
   methodId?: string;

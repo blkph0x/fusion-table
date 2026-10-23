@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CLASSICS, DIETS, REGIONS, formatIngredientAmount, generateRecipe, parsePantry } from "../lib/recipes.ts";
-import type { DietId } from "../lib/recipe-types.ts";
+import type { DietId, SpiceHeat } from "../lib/recipe-types.ts";
 const ORIGINAL_CLASSICS = new Set(["pasta", "tacos", "risotto", "burgers", "roast", "fried-rice", "flatbread", "cottage-pie"]);
 
 describe("fusion recipe engine", () => {
@@ -69,7 +69,12 @@ describe("fusion recipe engine", () => {
       const id = region === "korean" ? "gochujang" : region === "thai" ? "red-curry-paste" : "harissa";
       assert.ok(mild.ingredients.find((item) => item.id === id)!.amount < hot.ingredients.find((item) => item.id === id)!.amount);
       assert.ok(mild.dietaryNotes.some((note) => note.includes("Mild")));
+      const gentle = generateRecipe({ classicId: "tacos", regionId: region, servings: 4, spiceHeat: "gentle" });
+      const fiery = generateRecipe({ classicId: "tacos", regionId: region, servings: 4, spiceHeat: "fiery" });
+      assert.ok(gentle.ingredients.find((item) => item.id === id)!.amount < mild.ingredients.find((item) => item.id === id)!.amount);
+      assert.ok(hot.ingredients.find((item) => item.id === id)!.amount < fiery.ingredients.find((item) => item.id === id)!.amount);
     }
+    assert.throws(() => generateRecipe({ classicId: "tacos", regionId: "korean", servings: 4, spiceHeat: "extra" as SpiceHeat }));
   });
 
   it("rejects unknown selections and unbounded or fractional servings", () => {
