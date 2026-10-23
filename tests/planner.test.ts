@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { chooseDinner, planWeek, swapDinner } from "../lib/planner.ts";
+import { chooseDinner, planWeek, sideOptions, swapDinner, swapSide } from "../lib/planner.ts";
 import { generateRecipe } from "../lib/recipes.ts";
+import { MEAL_SIDES } from "../lib/meals.ts";
 
 describe("fusion week planner", () => {
   it("fills seven different dinners and does not invent a price", () => {
@@ -130,6 +131,41 @@ describe("fusion week planner", () => {
     for (const day of plural.days) {
       const names = (day.recipe?.ingredients ?? []).flatMap((item) => [item.name, ...(item.aliases ?? [])]).join(" ");
       assert.equal(/chilli|chili/i.test(names), false);
+    }
+  });
+
+  it("swaps only the side on a meal-kind dinner and refuses a broccoli dislike on steamed broccoli", () => {
+    const brief = { days: 7, servings: 4, seed: 21 };
+    const week = planWeek(brief);
+    const mealDay = week.days.find((day) => day.recipe?.kind === "meal" && day.recipe.mainId !== "broccoli");
+    assert.ok(mealDay?.recipe?.mainId && mealDay.recipe.methodId && mealDay.recipe.sideId);
+    const other = MEAL_SIDES.find((side) => side.id !== mealDay!.recipe!.sideId && side.id !== "steamed-broccoli");
+    assert.ok(other);
+    const swapped = swapSide(brief, week, mealDay!.day, other!.id);
+    const after = swapped.days.find((day) => day.day === mealDay!.day)!.recipe!;
+    assert.equal(after.kind, "meal");
+    assert.equal(after.mainId, mealDay!.recipe!.mainId);
+    assert.equal(after.methodId, mealDay!.recipe!.methodId);
+    assert.equal(after.regionId, mealDay!.recipe!.regionId);
+    assert.equal(after.sideId, other!.id);
+    assert.notEqual(after.id, mealDay!.recipe!.id);
+    const classicDay = week.days.find((day) => day.recipe && day.recipe.kind !== "meal");
+    if (classicDay) {
+      const unchanged = swapSide(brief, week, classicDay.day, "garden-salad");
+      assert.equal(unchanged.days.find((day) => day.day === classicDay.day)?.recipe?.id, classicDay.recipe?.id);
+    }
+    const filter = { days: 7, servings: 4, seed: 21, dislikes: ["broccoli"] };
+    assert.throws(() => swapSide(filter, week, mealDay!.day, "steamed-broccoli"), /not cooked|recorded filters|dislike/i);
+    const options = sideOptions({ days: 7, servings: 4, dislikes: ["broccoli"] }, week, mealDay!.day);
+    assert.ok(!options.some((option) => option.sideId === "steamed-broccoli"));
+    const wheat = planWeek({ days: 3, servings: 2, avoidAllergens: ["wheat"], seed: 8 });
+    const wheatMeal = wheat.days.find((day) => day.recipe?.kind === "meal");
+    if (wheatMeal) {
+      const gfGarlic = swapSide({ days: 3, servings: 2, avoidAllergens: ["wheat"], seed: 8 }, wheat, wheatMeal.day, "garlic-bread");
+      const recipe = gfGarlic.days.find((day) => day.day === wheatMeal.day)?.recipe;
+      assert.ok(recipe);
+      assert.ok(!recipe!.allergens.includes("wheat"));
+      assert.match(recipe!.ingredients.find((item) => item.id === "garlic-bread")?.name || "", /gluten-free/i);
     }
   });
 });

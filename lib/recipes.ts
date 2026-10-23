@@ -1,5 +1,6 @@
-import type {
-  IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeOption, SpiceHeat,
+import {
+  classicChilliAmount, pasteHeatAmount, SPICE_HEATS,
+  type IngredientCategory, type Recipe, type RecipeIngredient, type RecipeInput, type RecipeOption, type SpiceHeat,
 } from "./recipe-types.ts";
 
 export type { DietId, IngredientCategory, Recipe, RecipeIngredient, RecipeInput, RecipeStep, SpiceHeat } from "./recipe-types.ts";
@@ -9,6 +10,7 @@ import { BBQ_CLASSICS, bbqBaseFor } from "./bbq-classics.ts";
 import { BBQ_REGIONS, bbqProfileFor } from "./bbq-regions.ts";
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
+import { applyCookPace, isCookPace } from "./cook-pace.ts";
 
 export const CLASSICS: RecipeOption[] = [
   { id: "pasta", name: "Creamy pasta", origin: "Italy", emoji: "🍝", description: "Silky sauce, golden mushrooms and a familiar bowl of comfort." },
@@ -32,6 +34,7 @@ export const REGIONS: RecipeOption[] = [
   { id: "italian", name: "Italian", emoji: "🇮🇹", description: "Tomato, oregano, basil and bright lemon." },
   { id: "moroccan", name: "Moroccan", emoji: "🇲🇦", description: "Ras el hanout, harissa, lemon and mint." },
   ...BBQ_REGIONS,
+  { id: "home-style", name: "Home kitchen", emoji: "🏠", description: "Thyme, oregano, bay, lemon and parsley. The weekday flavour, without a second regional paste." },
 ];
 
 export const DIETS: RecipeOption[] = [
@@ -57,7 +60,7 @@ const stock = (amount: number, gf: boolean) => ingredient("vegetable-stock", gf 
 
 function profileFor(regionId: string, glutenFree: boolean, heat: SpiceHeat): Profile {
   const gf = glutenFree;
-  const chilliAmount = { mild: 0, medium: 0.25, hot: 0.75 }[heat];
+  const chilliAmount = classicChilliAmount(heat);
   const chilli = chilliAmount ? [ingredient("chilli-flakes", "Chilli flakes", chilliAmount, "tsp", "grocery", [], "Add gradually to your taste.", ["chili flakes", "red pepper flakes", "chilli", "chili"])] : [];
   const ginger = () => produce("fresh-ginger", "Fresh ginger", 20, "g", "Finely grate.", ["ginger"]);
   const springOnion = () => produce("spring-onion", "Spring onions", 3, "", "Thinly slice.", ["scallions", "green onions", "spring onion"]);
@@ -73,13 +76,13 @@ function profileFor(regionId: string, glutenFree: boolean, heat: SpiceHeat): Pro
     },
     korean: {
       title: "Gochujang-sesame", tags: ["Sweet heat", "Sesame", "Tangy"],
-      warm: [ingredient("gochujang", gf ? "Gluten-free gochujang" : "Gochujang", { mild: 0.5, medium: 1.5, hot: 2.5 }[heat], "tbsp", "specialty", gf ? ["soy"] : ["soy", "wheat"], "Choose a vegan product. Mild still has some chilli heat; check the label.", [gf ? "gluten-free gochujang" : "gochujang"]), ingredient("soy-sauce", gf ? "Gluten-free tamari" : "Soy sauce", 1, "tbsp", "grocery", gf ? ["soy"] : ["soy", "wheat"]), ginger()],
+      warm: [ingredient("gochujang", gf ? "Gluten-free gochujang" : "Gochujang", pasteHeatAmount(heat, { mild: 0.5, medium: 1.5, hot: 2.5 }, 0.25, 3.5), "tbsp", "specialty", gf ? ["soy"] : ["soy", "wheat"], "Choose a vegan product. Mild still has some chilli heat; check the label.", [gf ? "gluten-free gochujang" : "gochujang"]), ingredient("soy-sauce", gf ? "Gluten-free tamari" : "Soy sauce", 1, "tbsp", "grocery", gf ? ["soy"] : ["soy", "wheat"]), ginger()],
       finish: [ingredient("rice-vinegar", "Rice vinegar", 1, "tbsp"), ingredient("sesame-oil", "Toasted sesame oil", 1, "tsp", "grocery", ["sesame"]), ingredient("sesame-seeds", "Sesame seeds", 1, "tbsp", "grocery", ["sesame"]), springOnion()],
       note: "Gochujang brings gentle sweetness and chilli warmth to the classic's savoury base. A rice-vinegar and sesame finish keeps it lively.",
     },
     thai: {
       title: "Red-curry & lime", tags: ["Aromatic", "Lime", "Fresh herbs"],
-      warm: [ingredient("red-curry-paste", gf ? "Gluten-free vegan red curry paste" : "Vegan red curry paste", { mild: 0.5, medium: 1, hot: 2 }[heat], "tbsp", "specialty", [], "Check for shrimp paste or fish sauce; choose a vegan-labelled paste. Mild still has chilli.", [gf ? "gluten-free vegan red curry paste" : "vegan red curry paste"]), ginger()],
+      warm: [ingredient("red-curry-paste", gf ? "Gluten-free vegan red curry paste" : "Vegan red curry paste", pasteHeatAmount(heat, { mild: 0.5, medium: 1, hot: 2 }, 0.25, 3), "tbsp", "specialty", [], "Check for shrimp paste or fish sauce; choose a vegan-labelled paste. Mild still has chilli.", [gf ? "gluten-free vegan red curry paste" : "vegan red curry paste"]), ginger()],
       finish: [lime(), coriander()],
       note: "Red-curry aromatics season the familiar base; lime zest and coriander are added at the end for freshness. This is a Thai-inspired adaptation.",
     },
@@ -109,9 +112,15 @@ function profileFor(regionId: string, glutenFree: boolean, heat: SpiceHeat): Pro
     },
     moroccan: {
       title: "Harissa & warm spice", tags: ["Warm spice", "Mint", "Lemon"],
-      warm: [ingredient("ras-el-hanout", "Ras el hanout", 2, "tsp", "specialty", [], "Choose an unsalted spice blend and check the label."), ingredient("harissa", "Harissa paste", { mild: 0.5, medium: 1, hot: 2 }[heat], "tsp", "specialty", [], "Choose a vegan paste; chilli strength varies by brand.")],
+      warm: [ingredient("ras-el-hanout", "Ras el hanout", 2, "tsp", "specialty", [], "Choose an unsalted spice blend and check the label."), ingredient("harissa", "Harissa paste", pasteHeatAmount(heat, { mild: 0.5, medium: 1, hot: 2 }, 0.25, 3), "tsp", "specialty", [], "Choose a vegan paste; chilli strength varies by brand.")],
       finish: [lemon(), produce("mint", "Fresh mint", 10, "g", "Finely slice.", ["mint"])],
       note: "Ras el hanout and a little harissa give the base rounded warmth. Fresh mint and lemon keep the result balanced.",
+    },
+    "home-style": {
+      title: "Home kitchen", tags: ["Weekday", "Herbs", "Lemon"],
+      warm: [ingredient("dried-thyme", "Dried thyme", 1, "tsp", "grocery", [], undefined, ["dried thyme", "thyme"]), ingredient("dried-oregano", "Dried oregano", 1, "tsp", "grocery", [], undefined, ["dried oregano", "oregano"]), ingredient("bay-leaf", "Bay leaf", 1, "", "grocery", [], "Lift it out before serving.", ["bay leaf", "bay leaves"]), ...chilli],
+      finish: [lemon(), produce("parsley", "Flat-leaf parsley", 15, "g", "Roughly chop.", ["parsley"])],
+      note: "This is the classic in its own kitchen: thyme, oregano, bay and lemon, without a second regional paste. It is still an authored template, not a kitchen-tested traditional recipe.",
     },
   };
   const profile = profiles[regionId] ?? bbqProfileFor(regionId, glutenFree ? "gluten-free" : "balanced", heat);
@@ -298,9 +307,11 @@ export function generateRecipe(input: RecipeInput): Recipe {
   const diet = input.diet ?? "balanced";
   if (!DIETS.some((option) => option.id === diet)) throw new Error("Choose a supported dietary preference.");
   const spiceHeat = input.spiceHeat ?? "medium";
-  if (!["mild", "medium", "hot"].includes(spiceHeat)) throw new Error("Choose mild, medium or hot spice.");
+  if (!SPICE_HEATS.includes(spiceHeat)) throw new Error("Choose gentle, mild, medium, hot or fiery spice.");
   if (input.pantry !== undefined && typeof input.pantry !== "string" && (!Array.isArray(input.pantry) || input.pantry.some((term) => typeof term !== "string"))) throw new Error("List pantry ingredients as text.");
   if (input.seed != null && (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff)) throw new Error("Choose a whole-number seed.");
+  if (input.cookPace !== undefined && !isCookPace(input.cookPace)) throw new Error("Choose a cook session: quick, morning, lunch or long.");
+  const { cookPace, ...brief } = input;
   const supportedAvoid = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
   if (input.avoidAllergens != null && (!Array.isArray(input.avoidAllergens) || input.avoidAllergens.some((name) => typeof name !== "string" || !supportedAvoid.has(name.trim().toLocaleLowerCase("en"))))) {
     throw new Error("Use a supported allergen name.");
@@ -313,7 +324,7 @@ export function generateRecipe(input: RecipeInput): Recipe {
   const glutenFree = diet === "gluten-free" || requested.glutenFree === true;
   const eggFree = vegan || requested.eggFree === true;
   const context: RecipeContext = {
-    input: { ...input, diet, spiceHeat }, vegan, vegetarian, dairyFree, glutenFree, eggFree,
+    input: { ...brief, diet, spiceHeat }, vegan, vegetarian, dairyFree, glutenFree, eggFree,
     profile: profileFor(input.regionId, glutenFree, spiceHeat),
   };
   const base = baseFor(context);
@@ -376,8 +387,7 @@ export function generateRecipe(input: RecipeInput): Recipe {
     ...(base.methodNotes ? { methodNotes: base.methodNotes } : {}),
     ...(base.safetyNote ? { safetyNote: base.safetyNote, safetySource: base.safetySource || FOOD_SAFETY_SOURCE } : base.meat ? { safetyNote: "Use a clean food thermometer: chicken and minced meat should reach at least 75°C in the centre. Cooking times are estimates.", safetySource: FOOD_SAFETY_SOURCE } : {}),
   };
-  if (input.seed == null) return recipe;
-  return applySatFusion(recipe, {
+  const finished = input.seed == null ? recipe : applySatFusion(recipe, {
     seed: input.seed,
     regionId: input.regionId,
     diet,
@@ -393,6 +403,7 @@ export function generateRecipe(input: RecipeInput): Recipe {
     pantry: input.pantry,
     seafoodAlready,
   });
+  return cookPace ? applyCookPace(finished, cookPace) : finished;
 }
 
 export function formatIngredientAmount(ingredientOrAmount: Pick<RecipeIngredient, "amount" | "unit"> | number, unit = ""): string {

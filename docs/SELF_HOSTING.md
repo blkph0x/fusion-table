@@ -108,7 +108,7 @@ A `workers.dev` deployment has its own audience and does not inherit the managed
 
 ### Classic and barbecue templates
 
-`lib/recipes.ts` exports the full `CLASSICS`, `REGIONS` and `DIETS` arrays and `generateRecipe()`. The original entries remain, with 20 new classics from `lib/bbq-classics.ts` and 16 profiles from `lib/bbq-regions.ts`.
+`lib/recipes.ts` exports the full `CLASSICS`, `REGIONS` and `DIETS` arrays and `generateRecipe()`. The original entries remain. `lib/bbq-classics.ts` adds the smoke and grill classics, including shotgun shells, ribs on a rack, foil-boat ribs, burnt ends, smoked meatloaf and a rotisserie roast. `lib/bbq-regions.ts` adds 16 profiles. Home kitchen is `home-style`.
 
 ```ts
 import { generateRecipe } from "./lib/recipes.ts";
@@ -123,7 +123,9 @@ const recipe = generateRecipe({
 });
 ```
 
-There are 28 × 24 = 672 classic/region pairings and 3,360 configurations with the 5 dietary choices. The generator validates inputs, selects a concrete dietary adaptation, scales four-serving quantities once, merges compatible ingredient entries, and returns cooking steps, equipment, method notes and applicable safety guidance. The same input returns the same full recipe.
+### Catalogue now
+
+There are 34 × 25 = 850 classic/region pairings and 4,250 configurations with the 5 dietary choices. The generator validates inputs, selects a concrete dietary adaptation, scales four-serving quantities once, merges compatible ingredient entries, and returns cooking steps, equipment, method notes and applicable safety guidance. The same input returns the same full recipe. An optional `cookPace` of `quick`, `morning`, `lunch` or `long` adds a schedule note only. Leave it off and the id, steps and minutes stay the same.
 
 Barbecue profiles supply separate warm and finishing ingredients. Templates use both in a deliberate sauce/dressing sequence, including protection against scorching sweet sauces. Cold-smoked platters use commercially ready-to-eat foods or fully cooked alternatives; there is no home raw-fish curing workflow. No smoking wood or fuel is required as a shopping ingredient.
 
@@ -147,7 +149,7 @@ const meal = generateMeal({
 });
 ```
 
-This engine retains the chosen main and rejects incompatible main/diet/method choices rather than silently replacing that ingredient. Its 195 compatible main/method pairs × 63 regions × 6 sides give 73,710 configurations. Each region uses its own paste, heat, spices and herbs. Serving/dietary/heat variants do not inflate that count.
+This engine retains the chosen main and rejects incompatible main/diet/method choices rather than silently replacing that ingredient. Its 255 compatible main/method pairs × 76 regions × 11 sides give 213,180 configurations. Spice is gentle, mild, medium, hot or fiery. Mild, medium and hot keep their previous amounts. Home kitchen is the weekday flavour. Each other region uses its own paste, heat, spices and herbs. Serving, dietary, heat and cook-session variants do not inflate that count.
 
 Both engines return typed ingredients, quantities, steps, estimated times, shopping categories and the exact source label **“Template-generated · not kitchen-tested”**. Keep that label in your own interface. Automated validity checks do not demonstrate taste or a completed kitchen trial.
 

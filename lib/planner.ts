@@ -1,5 +1,5 @@
 import { CLASSICS, REGIONS, generateRecipe, parsePantry } from "./recipes.ts";
-import { generateMeal } from "./meals.ts";
+import { generateMeal, MEAL_SIDES } from "./meals.ts";
 import { PLATES } from "./plates.ts";
 import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
@@ -426,4 +426,58 @@ export function chooseDinner(input: WeekPlanInput, plan: WeekPlan, day: number, 
   if (!recipe) return plan;
   const planned = plan.days.map((item) => item.day === day ? { day, recipe, options: [], reason: undefined } : item);
   return assemble(prepared, planned);
+}
+
+/**
+ * Change only the accompaniment on an ingredient-led meal.
+ * Classic remixes have no separate side slot — the plan is unchanged.
+ * A side that fails recorded filters is refused rather than cooked.
+ */
+export function swapSide(input: WeekPlanInput, plan: WeekPlan, day: number, sideId: string): WeekPlan {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  if (prepared.locks.has(day)) return plan;
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) return plan;
+  if (!MEAL_SIDES.some((side) => side.id === sideId)) throw new Error("Choose a recognised side pairing.");
+  if (current.recipe.sideId === sideId) return plan;
+
+  const slot: Slot = {
+    kind: "meal",
+    classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${sideId}`,
+    regionId: current.recipe.regionId,
+    anchor: current.recipe.mainId,
+    mainId: current.recipe.mainId,
+    methodId: current.recipe.methodId,
+    sideId,
+  };
+  const chosen = prepared.candidate(slot);
+  if (!chosen.recipe) {
+    throw new Error(`That side does not match your recorded filters (${chosen.reason ?? "blocked"}) and was not cooked.`);
+  }
+  const planned = plan.days.map((item) => item.day === day ? { day, recipe: chosen.recipe, options: [], reason: undefined } : item);
+  return assemble(prepared, planned);
+}
+
+/** Other side pairings that still match the recorded filters for this meal-kind dinner. */
+export function sideOptions(input: WeekPlanInput, plan: WeekPlan, day: number): { sideId: string; name: string }[] {
+  const prepared = prepare(input);
+  const current = requireDay(plan, day);
+  if (!current.recipe || current.recipe.kind !== "meal" || !current.recipe.mainId || !current.recipe.methodId) return [];
+  const options: { sideId: string; name: string }[] = [];
+  for (const side of MEAL_SIDES) {
+    if (side.id === current.recipe.sideId) continue;
+    const slot: Slot = {
+      kind: "meal",
+      classicId: `meal:${current.recipe.mainId}:${current.recipe.methodId}:${side.id}`,
+      regionId: current.recipe.regionId,
+      anchor: current.recipe.mainId,
+      mainId: current.recipe.mainId,
+      methodId: current.recipe.methodId,
+      sideId: side.id,
+    };
+    if (!prepared.candidate(slot).recipe) continue;
+    options.push({ sideId: side.id, name: side.name });
+    if (options.length === 5) break;
+  }
+  return options;
 }

@@ -1,9 +1,10 @@
-import type { DietId, IngredientCategory, RecipeIngredient, RecipeStep, SpiceHeat } from "./recipe-types.ts";
+import { SPICE_HEATS, type DietId, type IngredientCategory, type RecipeIngredient, type RecipeStep, type SpiceHeat } from "./recipe-types.ts";
 import type { MainIngredientOption, MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
 import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMainsForDiet } from "./meal-catalog.ts";
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 import { getCut, type MeatCut } from "./cuts.ts";
 import { applySatFusion } from "./fusion-sat.ts";
+import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
 import { buildRegionProfile } from "./region-pantry.ts";
 
@@ -36,9 +37,10 @@ interface SidePlan {
 }
 
 const DIET_IDS: readonly DietId[] = ["balanced", "vegetarian", "vegan", "gluten-free", "dairy-free"];
-const HEAT_IDS: readonly SpiceHeat[] = ["mild", "medium", "hot"];
+const HEAT_IDS: readonly SpiceHeat[] = SPICE_HEATS;
 const SLOW_METHODS = new Set(["braised", "curry"]);
-const LEGUMES = new Set(["chickpeas", "lentils", "butter-beans"]);
+const LEGUMES = new Set(["chickpeas", "lentils", "butter-beans", "black-beans", "kidney-beans"]);
+const DAIRY_MAINS = new Set(["halloumi", "paneer"]);
 const ROOTS = new Set(["pumpkin", "sweet-potato"]);
 
 function ingredient(id: string, name: string, amount: number, unit: string, category: IngredientCategory = "grocery", allergens: string[] = [], notes?: string, aliases?: readonly string[]): DraftIngredient {
@@ -65,10 +67,10 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   const dairyFree = diet === "dairy-free" || diet === "vegan" || requested.dairyFree === true;
   const eggFree = diet === "vegan" || requested.eggFree === true;
   if (!getMainsForDiet(diet).some((item) => item.id === main.id)) throw new Error(`${main.name} does not fit the ${diet} preference. Select a compatible main ingredient.`);
-  if (dairyFree && main.id === "halloumi") throw new Error(`${main.name} does not fit the dairy-free preference. Select a compatible main ingredient.`);
+  if (dairyFree && DAIRY_MAINS.has(main.id)) throw new Error(`${main.name} does not fit the dairy-free preference. Select a compatible main ingredient.`);
   if (eggFree && main.id === "eggs") throw new Error("Eggs do not fit an egg-free preference. Select a compatible main ingredient.");
   const spiceHeat = input.spiceHeat ?? "medium";
-  if (!HEAT_IDS.includes(spiceHeat)) throw new Error("Choose mild, medium or hot.");
+  if (!HEAT_IDS.includes(spiceHeat)) throw new Error("Choose gentle, mild, medium, hot or fiery.");
   let cutId: string | undefined;
   if (input.cutId !== undefined && input.cutId !== "") {
     if (typeof input.cutId !== "string") throw new Error("Choose a recognised cut, or leave it to match the method.");
@@ -93,6 +95,7 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
     if (!Array.isArray(input.dislikes)) throw new Error("List dislikes as ingredient names.");
     dislikes = input.dislikes.map((name) => name.trim()).filter(Boolean).slice(0, 40);
   }
+  if (input.cookPace !== undefined && !isCookPace(input.cookPace)) throw new Error("Choose a cook session: quick, morning, lunch or long.");
   if (!Number.isInteger(input.servings) || input.servings < 1 || input.servings > 12) throw new Error("Servings must be a whole number between 1 and 12.");
   if (input.pantry !== undefined) {
     if (typeof input.pantry === "string") {
@@ -106,6 +109,7 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
     ...(input.pantry !== undefined ? { pantry: input.pantry } : {}),
     ...(cutId ? { cutId } : {}),
     ...(seed !== undefined ? { seed } : {}),
+    ...(input.cookPace ? { cookPace: input.cookPace } : {}),
     ...(avoidAllergens ? { avoidAllergens } : {}),
     ...(dislikes ? { dislikes } : {}),
   };
@@ -190,6 +194,14 @@ const COOK_TIMES: Record<string, Record<string, number>> = {
   "sweet-potato": { baked: 35, "pan-fried": 18, "air-fried": 22, braised: 25, curry: 25, patties: 16, roasted: 35, steamed: 18 },
   courgette: { schnitzel: 10, baked: 22, "pan-fried": 10, "air-fried": 14, grilled: 10, "stir-fried": 8, braised: 18, curry: 18, patties: 16, roasted: 22, steamed: 8 },
   broccoli: { baked: 22, "pan-fried": 12, "air-fried": 15, "stir-fried": 10, braised: 18, curry: 18, patties: 16, roasted: 22, steamed: 9 },
+  duck: { schnitzel: 12, baked: 28, "pan-fried": 16, "air-fried": 18, poached: 22, grilled: 16, "stir-fried": 10, braised: 50, curry: 35, patties: 16, roasted: 35, steamed: 22 },
+  kangaroo: { schnitzel: 8, "pan-fried": 8, "air-fried": 10, grilled: 8, "stir-fried": 5, braised: 70, curry: 60, patties: 14, roasted: 16 },
+  tuna: { baked: 12, "pan-fried": 8, "air-fried": 10, grilled: 8, "stir-fried": 6, curry: 10, roasted: 12 },
+  sardines: { baked: 12, "pan-fried": 8, "air-fried": 10, grilled: 8, roasted: 14 },
+  "black-beans": { baked: 25, "pan-fried": 12, "air-fried": 16, braised: 20, curry: 20, patties: 16, roasted: 30 },
+  "kidney-beans": { baked: 25, "pan-fried": 12, braised: 20, curry: 20, patties: 16, roasted: 25 },
+  jackfruit: { baked: 30, "pan-fried": 15, "stir-fried": 12, braised: 25, curry: 25, roasted: 35 },
+  paneer: { schnitzel: 8, baked: 18, "pan-fried": 8, "air-fried": 12, grilled: 8, "stir-fried": 8, curry: 15, roasted: 18 },
 };
 
 function mainPlan(main: MainIngredientOption, method: string): MainPlan {
@@ -206,7 +218,7 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
   let allergens: string[] = [];
   let endpoint = "Cook until hot through and tender; check the thickest piece.";
   let safetySource: string | undefined;
-  if (["chicken", "turkey"].includes(id)) {
+  if (["chicken", "turkey", "duck"].includes(id)) {
     name = `${main.name} ${patty ? "mince" : slow || method === "roasted" ? "boneless skinless thigh" : "breast fillets"}`;
     preparation = patty ? "Keep the raw mince refrigerated until shaping." : schnitzel ? "Slice the breast horizontally and flatten between baking paper to an even 1 cm thickness. Do not wash raw poultry." : quickPieces ? "Slice across the grain into even 1 cm strips. Do not wash raw poultry." : slow ? "Trim and cut the thigh into 3 cm pieces. Do not wash raw poultry." : "Cut large pieces into individual portions no thicker than 2.5 cm, and pat dry with disposable kitchen paper. Do not wash raw poultry.";
     endpoint = "Check several thickest pieces with a clean food thermometer: the centre must reach 75°C. Continue cooking if needed.";
@@ -217,11 +229,16 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
     preparation = patty ? "Keep the raw mince refrigerated until shaping." : slow ? `Trim excess fat from the ${cut} and cut into even 3 cm cubes.` : schnitzel ? "Trim and flatten the steaks between baking paper to an even 8–10 mm thickness." : quickPieces ? "Slice the steak across the grain into thin 5 mm strips." : "Trim and portion the steaks to an even 2 cm thickness; pat dry.";
     endpoint = patty || schnitzel ? "The centre must reach 75°C on a clean food thermometer; check several pieces and cook longer if needed." : slow ? "Cook until fork-tender as well as at least 71°C in the centre; shoulder and chuck need time to soften. Extend the gentle simmer if still tough." : "Check the centre of the thickest pieces reaches at least 71°C for a medium result, then rest for 3 minutes before slicing.";
     safetySource = patty || schnitzel ? MEAL_SAFETY_SOURCES.poultryAndMince : MEAL_SAFETY_SOURCES.cookingTemperatures;
+  } else if (id === "kangaroo") {
+    name = patty ? "Kangaroo mince" : "Kangaroo steaks";
+    preparation = patty ? "Keep the raw mince refrigerated until shaping. Kangaroo is very lean." : slow ? "Trim and cut the steak into even 3 cm cubes. Kangaroo is very lean, so keep the simmer gentle and stop once it is fork-tender." : schnitzel ? "Trim and flatten the steaks between baking paper to an even 8–10 mm thickness. Kangaroo is very lean." : quickPieces ? "Slice the steak across the grain into thin 5 mm strips. Kangaroo is very lean; do not cook it past the endpoint." : "Trim and portion the steaks to an even 2 cm thickness and pat dry. Kangaroo is very lean; do not cook it past the endpoint.";
+    endpoint = patty || schnitzel ? "The centre must reach 75°C on a clean food thermometer; check several pieces and cook longer if needed." : slow ? "Cook until fork-tender as well as at least 71°C in the centre. Extend the gentle simmer if still tough, and add a splash of water if it dries." : "Check the centre of the thickest pieces reaches at least 71°C for a medium result, then rest for 3 minutes before slicing.";
+    safetySource = patty || schnitzel ? MEAL_SAFETY_SOURCES.poultryAndMince : MEAL_SAFETY_SOURCES.cookingTemperatures;
   } else if (main.category === "seafood") {
     allergens = id === "prawns" ? ["crustaceans"] : ["fish"];
-    name = id === "prawns" ? "Raw peeled, deveined prawns" : id === "salmon" ? "Boneless skinless salmon fillets" : "Firm boneless skinless white fish fillets";
-    preparation = id === "prawns" ? "Use thawed raw prawns, remove any remaining shells and veins, and pat dry." : patty ? "Check carefully for bones, then finely chop the raw fish with a knife. Keep chilled until shaping." : slow || quickPieces ? "Check carefully for bones and cut into chunky 3 cm pieces." : "Check carefully for bones and portion into fillets no thicker than 2.5 cm.";
-    endpoint = patty ? "The centre of each patty must reach 75°C on a clean food thermometer; cook longer if needed." : id === "prawns" ? "Cook until the prawns are opaque throughout and the thickest part reaches 63°C. Avoid overcooking once this endpoint is reached." : "Cook until the thickest part reaches 63°C on a clean food thermometer and the flesh is opaque and flakes easily.";
+    name = id === "prawns" ? "Raw peeled, deveined prawns" : id === "salmon" ? "Boneless skinless salmon fillets" : id === "tuna" ? "Boneless skinless tuna steaks" : id === "sardines" ? "Fresh sardines, gutted and scaled" : "Firm boneless skinless white fish fillets";
+    preparation = id === "prawns" ? "Use thawed raw prawns, remove any remaining shells and veins, and pat dry." : id === "sardines" ? "Use fresh sardines, not a cured or smoked pack. Gut and scale them if the fishmonger has not, rinse the cavity, pat dry, and check for remaining bones." : id === "tuna" ? (slow || quickPieces ? "Trim the steaks and cut into even 3 cm pieces. Check for bones. Do not serve the tuna rare." : "Trim the steaks to an even 2.5 cm thickness and pat dry. Check for bones. Do not serve the tuna rare.") : patty ? "Check carefully for bones, then finely chop the raw fish with a knife. Keep chilled until shaping." : slow || quickPieces ? "Check carefully for bones and cut into chunky 3 cm pieces." : "Check carefully for bones and portion into fillets no thicker than 2.5 cm.";
+    endpoint = patty ? "The centre of each patty must reach 75°C on a clean food thermometer; cook longer if needed." : id === "prawns" ? "Cook until the prawns are opaque throughout and the thickest part reaches 63°C. Avoid overcooking once this endpoint is reached." : id === "tuna" ? "Cook until the thickest part reaches 63°C on a clean food thermometer and the flesh is opaque. Do not serve it rare." : "Cook until the thickest part reaches 63°C on a clean food thermometer and the flesh is opaque and flakes easily.";
     safetySource = patty ? MEAL_SAFETY_SOURCES.poultryAndMince : MEAL_SAFETY_SOURCES.cookingTemperatures;
   } else if (id === "tofu" || id === "tempeh") {
     name = id === "tofu" ? "Plain firm tofu" : "Plain soy tempeh";
@@ -232,15 +249,23 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
     name = "Vegetarian-rennet halloumi"; quantity = 500; allergens = ["milk"];
     preparation = "Check that the halloumi uses vegetarian rennet. Drain, pat dry and slice 1 cm thick; it is already salty, so add no salt to the main.";
     endpoint = "Cook until golden at the edges and hot through; serve promptly while supple.";
+  } else if (id === "paneer") {
+    name = "Paneer"; quantity = 500; allergens = ["milk"];
+    preparation = "Use plain paneer, not a fried or syrup-soaked product. Drain, pat dry and cut into 2 cm cubes. It contains milk.";
+    endpoint = "Cook until golden at the edges and hot through. Paneer is already set; do not boil it hard or it toughens.";
   } else if (id === "eggs") {
     name = "Eggs"; quantity = 8; unit = ""; allergens = ["egg"];
     preparation = method === "curry" ? "Use clean, intact eggs and keep them whole in their shells for boiling. Discard any cracked or damaged egg." : "Use intact, clean eggs. Crack each into a separate cup before adding it to the pan or ramekin; discard any damaged egg.";
     endpoint = "Cook until both the whites and yolks are firm; extend the cooking time if the centre is still runny.";
     safetySource = MEAL_SAFETY_SOURCES.eggs;
   } else if (LEGUMES.has(id)) {
-    name = id === "chickpeas" ? "Canned chickpeas, drained" : id === "lentils" ? "Canned green or brown lentils, drained" : "Canned butter beans, drained";
-    preparation = "Use already-cooked canned pulses: the ingredient quantity is the drained weight. Drain, rinse and pat very dry." + (patty ? " Mash coarsely, leaving a little texture." : "");
+    name = id === "chickpeas" ? "Canned chickpeas, drained" : id === "lentils" ? "Canned green or brown lentils, drained" : id === "butter-beans" ? "Canned butter beans, drained" : id === "black-beans" ? "Canned black beans, drained" : "Canned red kidney beans, drained";
+    preparation = "Use already-cooked canned pulses: the ingredient quantity is the drained weight. Drain, rinse and pat very dry." + (id === "kidney-beans" ? " Use a can. Do not cook dried kidney beans from scratch in this short method." : "") + (patty ? " Mash coarsely, leaving a little texture." : "");
     endpoint = "Heat until steaming hot throughout; the pulses are already cooked. Do not substitute uncooked dried beans or lentils directly.";
+  } else if (id === "jackfruit") {
+    name = "Young green jackfruit in brine, drained"; quantity = 800; category = "grocery";
+    preparation = "Use young jackfruit packed in brine, not syrup and not ripe sweet jackfruit. Drain, rinse, and pull or cut it into even pieces. It is already processed; this method heats it through.";
+    endpoint = "Heat until steaming hot throughout and tender. Do not use jackfruit in syrup.";
   } else {
     const names: Record<string, string> = { mushrooms: schnitzel || method === "grilled" ? "Portobello mushrooms" : "Mushrooms", aubergine: "Aubergine (eggplant)", cauliflower: "Cauliflower", pumpkin: "Peeled pumpkin", "sweet-potato": "Peeled sweet potato", courgette: "Courgette (zucchini)", broccoli: "Broccoli" };
     name = names[id]; category = "produce";
@@ -256,8 +281,9 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
   return { ingredient: ingredient(id, name, quantity, unit, category, allergens, preparation, main.ingredientAliases), preparation, endpoint, minutes: COOK_TIMES[id][method], ...(safetyNote ? { safetyNote, safetySource } : {}) };
 }
 
-function sidePlan(sideId: string, glutenFree: boolean, servings: number): SidePlan {
+function sidePlan(sideId: string, glutenFree: boolean, dairyFree: boolean, servings: number): SidePlan {
   const gf = glutenFree;
+  const df = dairyFree;
   const s = (title: string, detail: string, minutes: number): RecipeStep => ({ title, detail, minutes });
   const oil = (quantity: number) => ingredient("olive-oil", "Olive oil", quantity, "tbsp", "grocery", [], undefined, ["olive oil"]);
   const lemon = ingredient("lemon-juice", "Lemon juice", 30, "ml", "produce", [], "Freshly squeezed; measure the juice.");
@@ -287,11 +313,69 @@ function sidePlan(sideId: string, glutenFree: boolean, servings: number): SidePl
     ingredients: [ingredient("flatbread", gf ? "Gluten-free vegan flatbread" : "Vegan wheat flatbread", 4, "", "grocery", gf ? [] : ["wheat"], "Choose a ready-cooked flatbread without milk or egg.", gf ? ["gluten free vegan flatbread"] : ["vegan wheat flatbread"]), ingredient("tomato", "Tomatoes", 350, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 300, "g", "produce", [], "Chopped."), oil(1), lemon],
     steps: [s("Make the chopped salad", `Combine ${amount(350, servings)} g chopped tomatoes and ${amount(300, servings)} g chopped cucumber. Dress with ${amount(30, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil just before serving.`, 6), s("Warm the flatbread", `Warm ${amount(4, servings)} ${gf ? "gluten-free vegan" : "vegan wheat"} flatbreads in a dry frying pan for about 30–60 seconds per side, or as the packet directs. Keep wrapped in a clean tea towel.`, 5)], equipment: ["Mixing bowl", "Frying pan"], minutes: 10,
   };
-  return {
+  if (sideId === "lentil-salad") return {
     side: "warm lentils", vegetables: "spinach, tomato & cucumber salad",
     ingredients: [ingredient("lentils", "Canned green or brown lentils, drained", 600, "g", "grocery", [], "Already cooked; use drained weight.", ["lentils", "green lentils", "brown lentils"]), ingredient("spinach", "Baby spinach", 100, "g", "produce", [], "Washed."), ingredient("tomato", "Tomatoes", 250, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 250, "g", "produce", [], "Chopped."), oil(1), lemon],
     steps: [s("Warm the lentils", `Drain and rinse ${amount(600, servings)} g already-cooked canned lentils (drained weight). Warm in a saucepan with ${amount(60, servings)} ml water for 4–5 minutes until steaming hot, then drain any excess. Do not use uncooked dried lentils here.`, 6), s("Toss the lentil salad", `Fold ${amount(100, servings)} g washed baby spinach into the warm lentils to wilt lightly. Add ${amount(250, servings)} g chopped tomatoes and ${amount(250, servings)} g chopped cucumber, then dress with ${amount(30, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil.`, 5)], equipment: ["Saucepan", "Mixing bowl"], minutes: 12,
   };
+  if (sideId === "garden-salad") return {
+    side: "garden salad", vegetables: "lemon-dressed lettuce, tomato & cucumber",
+    ingredients: [ingredient("lettuce", "Cos or iceberg lettuce", 300, "g", "produce", [], "Washed and torn.", ["lettuce", "cos lettuce", "iceberg"]), ingredient("tomato", "Tomatoes", 300, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]), ingredient("cucumber", "Cucumber", 250, "g", "produce", [], "Sliced."), oil(2), lemon],
+    steps: [s("Build the garden salad", `Tear ${amount(300, servings)} g washed lettuce into a bowl. Add ${amount(300, servings)} g chopped tomatoes and ${amount(250, servings)} g sliced cucumber.`, 5), s("Dress just before serving", `Toss with ${amount(30, servings)} ml lemon juice and ${amount(2, servings)} tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.`, 2)], equipment: ["Mixing bowl"], minutes: 7,
+  };
+  if (sideId === "mashed-potato") {
+    const dairy = !df;
+    return {
+      side: dairy ? "creamy mashed potato" : "olive-oil mashed potato",
+      vegetables: "steamed peas",
+      ingredients: [
+        ingredient("potatoes", "Potatoes", 900, "g", "produce", [], "Peeled and cut into even chunks."),
+        ingredient("peas", "Frozen peas", 300, "g", "produce", [], "Do not thaw before cooking.", ["peas", "green peas"]),
+        ...(dairy
+          ? [ingredient("milk", "Milk", 120, "ml", "grocery", ["milk"], "Warm before mashing.", ["milk"]), ingredient("butter", "Butter", 40, "g", "grocery", ["milk"], undefined, ["butter"])]
+          : [oil(3)]),
+      ],
+      steps: [
+        s("Boil and mash the potatoes", dairy
+          ? `Boil ${amount(900, servings)} g potatoes (peeled and cut into even chunks) in unsalted water until tender, about 15–18 minutes. Drain well. Mash with ${amount(120, servings)} ml warm milk and ${amount(40, servings)} g butter until smooth. Check the packet if using a ready mash mix.`
+          : `Boil ${amount(900, servings)} g potatoes (peeled and cut into even chunks) in unsalted water until tender, about 15–18 minutes. Drain well. Mash with ${amount(3, servings)} tbsp olive oil until smooth. No milk or butter is used for this dairy-free mash.`, 20),
+        s("Steam the peas", `Cook ${amount(300, servings)} g frozen peas in a little boiling water for 3–4 minutes until hot through. Drain and keep warm.`, 5),
+      ],
+      equipment: ["Saucepan", "Colander", "Potato masher"],
+      minutes: 25,
+    };
+  }
+  if (sideId === "roast-pumpkin") return {
+    side: "roast pumpkin wedges", vegetables: "wilted spinach",
+    // Distinct id from a pumpkin main so amounts and notes do not collide.
+    ingredients: [ingredient("side-pumpkin", "Pumpkin or butternut for the side", 800, "g", "produce", [], "Peeled and cut into 2 cm wedges for the side tray.", ["pumpkin", "butternut", "butternut squash"]), ingredient("spinach", "Baby spinach", 150, "g", "produce", [], "Washed."), oil(2), lemon],
+    steps: [s("Roast the pumpkin", `Toss ${amount(800, servings)} g pumpkin or butternut for the side (2 cm wedges) with ${amount(2, servings)} tbsp olive oil. Spread on a tray and roast at 200°C for 25–30 minutes until browned at the edges and soft through the centre.`, 30), s("Wilt the spinach", `In the last 2 minutes, tip ${amount(150, servings)} g washed baby spinach onto the hot tray or a warm pan until just wilted. Finish with ${amount(15, servings)} ml lemon juice.`, 3)], equipment: ["Oven tray", "Mixing bowl"], minutes: 32,
+  };
+  if (sideId === "steamed-broccoli") return {
+    side: "jasmine rice", vegetables: "steamed broccoli with lemon",
+    // Distinct id from a broccoli main so shopping notes do not collide.
+    ingredients: [ingredient("jasmine-rice", "Jasmine rice", 280, "g", "grocery", [], "Dry weight.", ["jasmine rice", "rice"]), ingredient("side-broccoli", "Broccoli for the side", 500, "g", "produce", [], "Cut into even florets for the side.", ["broccoli"]), oil(1), lemon],
+    steps: [s("Cook the jasmine rice", `Rinse ${amount(280, servings)} g jasmine rice. Cook with ${amount(420, servings)} ml water, covered, on the lowest heat for about 12 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.`, 18), s("Steam the broccoli", `Steam ${amount(500, servings)} g broccoli for the side (even florets) for 5–7 minutes until bright green with a little bite. Toss with ${amount(1, servings)} tbsp olive oil and ${amount(20, servings)} ml lemon juice.`, 7)], equipment: ["Saucepan with lid", "Steamer or colander over a saucepan"], minutes: 20,
+  };
+  if (sideId === "garlic-bread") return {
+    side: gf ? "gluten-free garlic bread" : "garlic bread",
+    vegetables: "tomato salad",
+    ingredients: [
+      // Ready garlic bread already carries garlic flavour. Do not add a separate
+      // garlic line here — regional sauces often list garlic in different units.
+      ingredient("garlic-bread", gf ? "Gluten-free garlic bread" : "Garlic bread", 4, "", "grocery", gf ? [] : ["wheat"], gf ? "Choose a labelled gluten-free product; check for milk." : "Wheat bakery product; check the packet for milk and sesame.", gf ? ["gluten free garlic bread"] : ["garlic bread", "garlic toast"]),
+      ingredient("tomato", "Tomatoes", 350, "g", "produce", [], "Chopped.", ["tomatoes", "tomato"]),
+      oil(1),
+      lemon,
+    ],
+    steps: [
+      s("Warm the garlic bread", `Warm ${amount(4, servings)} pieces of ${gf ? "labelled gluten-free" : "wheat"} garlic bread in a moderate oven or toaster oven as the packet directs, usually 8–10 minutes. Keep warm in a clean tea towel.`, 10),
+      s("Make the tomato salad", `Combine ${amount(350, servings)} g chopped tomatoes with ${amount(20, servings)} ml lemon juice and ${amount(1, servings)} tbsp olive oil. Serve beside the bread, not on top of it, so the crust stays crisp.`, 4),
+    ],
+    equipment: ["Oven or toaster oven", "Mixing bowl"],
+    minutes: 12,
+  };
+  throw new Error("Choose a recognised side pairing.");
 }
 
 function mergeIngredients(drafts: readonly DraftIngredient[], servings: number, pantry?: string | string[]): RecipeIngredient[] {
@@ -326,10 +410,10 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const chosen = input.cutId ? getCut(input.cutId) : undefined;
   const plan = chosen ? withCut(mainPlan(main, methodId), chosen, methodId) : mainPlan(main, methodId);
   const profile = withoutDislikes(regionalProfile(regionId, glutenFree, spiceHeat), input.dislikes ?? []);
-  const side = sidePlan(sideId, glutenFree, servings);
+  const side = sidePlan(sideId, glutenFree, dairyFree, servings);
   const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);
-  const slowMeat = main.category === "meat" && !["chicken", "turkey"].includes(mainId) && integrated;
+  const slowMeat = main.category === "meat" && !["chicken", "turkey", "duck"].includes(mainId) && integrated;
   const deferSides = integrated && plan.minutes > side.minutes + 5;
   const ingredients: DraftIngredient[] = [plan.ingredient, ...side.ingredients, ...profile.aromatics, ...profile.seasonings, ...profile.finish];
   const steps: RecipeStep[] = [];
@@ -401,8 +485,9 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     steps.push({ title: "Air-fry in batches", detail: `Preheat the air fryer to 190°C if the manufacturer recommends it. Pat the prepared ${main.name.toLowerCase()} dry and brush or toss with ${amount(mainOil, servings)} tbsp neutral cooking oil. Arrange in one uncrowded layer, using batches if needed. Cook for about ${range} minutes, turning or shaking halfway. Check early because air fryers vary. ${plan.endpoint} Allow extra time for additional batches; add the sauce after cooking.`, minutes: plan.minutes });
   } else if (methodId === "grilled") {
     equipment.add("Grill pan or barbecue");
-    steps.push({ title: "Grill the main", detail: `Heat a grill pan or barbecue to medium-high. Brush the prepared ${main.name.toLowerCase()} with ${amount(mainOil, servings)} tbsp neutral cooking oil. ${mainId === "prawns" ? "Thread prawns onto metal skewers to make them easier to turn. " : main.category === "seafood" ? "Use a fish basket or a well-oiled grill plate so the fillets stay intact. " : ""}Cook for about ${range} minutes total, turning carefully halfway and adjusting the heat if it scorches. ${plan.endpoint} Add the regional sauce after grilling so the seasoning does not burn.`, minutes: plan.minutes });
+    steps.push({ title: "Grill the main", detail: `Heat a grill pan or barbecue to medium-high. Brush the prepared ${main.name.toLowerCase()} with ${amount(mainOil, servings)} tbsp neutral cooking oil. ${mainId === "prawns" ? "Thread prawns onto metal skewers to make them easier to turn. " : mainId === "tuna" ? "Oil the grill plate so the steaks release. " : mainId === "sardines" ? "Use a fish basket so the sardines stay intact. " : main.category === "seafood" ? "Use a fish basket or a well-oiled grill plate so the fillets stay intact. " : ""}Cook for about ${range} minutes total, turning carefully halfway and adjusting the heat if it scorches. ${plan.endpoint} Add the regional sauce after grilling so the seasoning does not burn.`, minutes: plan.minutes });
     if (mainId === "prawns") equipment.add("Metal skewers");
+    if (mainId === "sardines") equipment.add("Fish basket");
   } else if (methodId === "stir-fried") {
     equipment.add("Wok or large frying pan");
     steps.push({ title: "Stir-fry the main", detail: `Heat a wok or large frying pan over medium-high heat. Add ${amount(mainOil, servings)} tbsp neutral cooking oil and the prepared ${main.name.toLowerCase()} in small batches. Stir-fry for about ${range} minutes per batch, turning frequently${mainId === "aubergine" || mainId === "cauliflower" || mainId === "broccoli" ? "; add a splash of water and cover briefly if the centre needs to soften" : ""}. ${plan.endpoint} Return cooked batches to the pan and toss gently with the warm regional sauce for 30 seconds.`, minutes: plan.minutes });
@@ -428,7 +513,9 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     kind: "meal", mainId, methodId, sideId, regionId,
     title: `${region.name} ${mainName.toLocaleLowerCase("en")}`,
     description: `${mainName} with ${side.side}, ${side.vegetables} and ${profile.sauce}. A complete meal built around your chosen main and cooking method.`,
-    fusionNote: `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.`,
+    fusionNote: region.id === "home-kitchen"
+      ? `Home-kitchen flavour: ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} This keeps the ${method.name.toLowerCase()} method and leaves out a second regional paste. It is an authored template, not a kitchen-tested traditional recipe.`
+      : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.`,
     components: { main: mainName, side: side.side, vegetables: side.vegetables, sauce: profile.sauce },
     prepMinutes, cookMinutes, totalMinutes: prepMinutes + cookMinutes, servings, diet, spiceHeat,
     ingredients: recipeIngredients, steps, equipment: [...equipment],
@@ -438,7 +525,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
       ...(glutenFree ? ["Use the explicitly gluten-free condiments, stock, crumbs, noodles or flatbread listed. The couscous side uses quinoa and its own cooking method."] : []),
       ...(stapled.served.length ? [`Regional staple on this plate: ${stapled.served.map((item) => item.name).join(", ")}. Template staple, not a kitchen-tested traditional dish. Check the packet.`] : []),
       ...(diet === "vegan" || diet === "vegetarian" ? ["The selected main is retained. Pastes, stock, noodles and bread are specified without animal additions; halloumi, when selected, must use vegetarian rennet."] : []),
-      ...(spiceHeat === "mild" ? ["Mild reduces chilli; it does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand."] : ["Taste the sauce as it cooks; chilli and spice-blend strengths vary by brand."]),
+      ...(mainId === "paneer" ? ["Paneer is a milk cheese. It is left out of vegan and dairy-free meals."] : []),
+      ...(spiceHeat === "mild" ? ["Mild reduces chilli; it does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand."] : spiceHeat === "gentle" ? ["Gentle uses less chilli than mild. It does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand."] : spiceHeat === "fiery" ? ["Fiery uses more chilli than hot. Paste and spice-blend strengths vary by brand; add it gradually."] : ["Taste the sauce as it cooks; chilli and spice-blend strengths vary by brand."]),
       "Times are estimates for the specified cut and thickness. Cook sides alongside the main where equipment allows; additional batches take longer.",
       "Quantities scale to the requested servings. Water for cooking, soaking and batter is specified in the steps rather than the shopping list.",
       ...(chosen ? [`Shopping name: ${chosen.shoppingName}. Check the packet. This name does not confirm a breed or a marble grade.`] : []),
@@ -446,9 +534,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     sourceLabel: "Template-generated · not kitchen-tested", generation: "authored",
     ...(plan.safetyNote ? { safetyNote: plan.safetyNote, safetySource: plan.safetySource } : {}),
   };
-  if (input.seed === undefined) return recipe;
   const vegan = diet === "vegan" || requested.vegan === true;
-  return applySatFusion(recipe, {
+  const finished = input.seed === undefined ? recipe : applySatFusion(recipe, {
     seed: input.seed,
     regionId,
     diet,
@@ -465,4 +552,5 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     servings,
     pantry: input.pantry,
   });
+  return input.cookPace ? applyCookPace(finished, input.cookPace) : finished;
 }

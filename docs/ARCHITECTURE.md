@@ -23,7 +23,7 @@ This is a standalone application repository. The original [research repository](
 | `lib/bbq-classics.ts` | 20 additional barbecue/smoking templates, specific cuts/substitutions, method notes and doneness guidance. |
 | `lib/bbq-regions.ts` | 16 additional regional profiles with warm/finish ingredients and dietary-aware labels. |
 | `lib/meal-types.ts` | Ingredient-led input and complete-meal types. |
-| `lib/meal-catalog.ts` | 22 mains, compatible methods, 20 profiles, 6 sides and count helpers. |
+| `lib/meal-catalog.ts` | 30 mains, compatible methods, regional profiles, 6 sides and count helpers. |
 | `lib/meals.ts` | Ingredient-led complete meals, selected-main preservation, scaling, substitutions and method instructions. |
 | `lib/locations.ts` | Location/shop types, validation, distances, normalisation and safe links. |
 | `lib/location-providers.ts` | Photon/Overpass clients, selection, timeouts, caches, cooldowns and error mapping. |
@@ -42,9 +42,15 @@ Starter database/connector helpers do not imply an active inventory connector, u
 
 ## Expanded classic and barbecue engine
 
-`generateRecipe(input)` accepts `classicId`, `regionId`, integer `servings` from 1–12, and optional `diet`, `spiceHeat` and `pantry`. All original 8 classics, 8 regions and 5 diets remain. The added 20 classics and 16 profiles expand the catalog to **28 classics × 24 regions = 672 pairings**, or **3,360 classic/region/diet configurations**. Serving, heat and pantry variants are not used to inflate those counts.
+`generateRecipe(input)` accepts `classicId`, `regionId`, integer `servings` from 1–12, and optional `diet`, `spiceHeat`, `pantry` and `cookPace`. All original 8 classics, 8 regions and 5 diets remain.
 
-The new classic set covers low-and-slow brisket, pulled protein and ribs; reverse-seared/flank steaks and lamb chops; skewers, sausages and wings; whole chicken and turkey breast; pork belly; hot-smoked/whole fish, prawns and ready-cooked octopus; vegetable trays, grain bowls, smoked dip and a ready-to-eat cold platter. The [README tables](../README.md#new-barbecue-and-smoking-classics) list every new classic and regional profile with its role.
+### Catalogue now
+
+The current catalogue is **34 classics × 25 regions = 850 pairings**, or **4,250 classic/region/diet configurations**. Twenty barbecue classics and 16 smoke-and-grill profiles came first. Six further classics cover shotgun shells, ribs on an upright rack, foil-boat ribs, burnt ends, smoked meatloaf, and a rotisserie or turned roast. Home kitchen (`home-style`) seasons a classic with thyme, oregano, bay, lemon and parsley, without a second regional paste. Serving, heat, pantry and cook-session variants are not used to inflate those counts.
+
+The earlier classic set covers low-and-slow brisket, pulled protein and ribs; reverse-seared and flank steaks and lamb chops; skewers, sausages and wings; whole chicken and turkey breast; pork belly; hot-smoked and whole fish, prawns and ready-cooked octopus; vegetable trays, grain bowls, smoked dip and a ready-to-eat cold platter. The [README tables](../README.md#new-barbecue-and-smoking-classics) list those profiles. [Catalogue now](../README.md#catalogue-now) is the current count.
+
+Optional `cookPace` is `quick`, `morning`, `lunch` or `long`. When it is omitted, the recipe is unchanged, including its id, steps and minutes. When it is set, only the id, `cookPace` and `sessionNote` change. A long smoke day is a schedule note. It does not rewrite a short plate into a 16-hour cook, and it does not lower a thermometer endpoint.
 
 ### Generation flow
 
@@ -69,11 +75,13 @@ Poultry and raw minced-meat sausage guidance uses a 75°C centre endpoint. Whole
 
 The cold platter is an **assembly recipe using commercially ready-to-eat smoked products or fully cooked alternatives**. It is not a home curing process and never treats cold smoke as sufficient cooking for raw fish. The template includes refrigeration/use-by handling and guidance for vulnerable people, with fully cooked alternatives. Smoked cheese uses appropriate ready-to-eat pasteurised products; plant versions use fully cooked ready-to-eat smoked tofu or the specified alternative.
 
+Shotgun shells, an upright rib rack, an open foil boat, burnt ends, smoked meatloaf and a rotisserie or turned roast are their own classics. Hot-and-fast is the cook-session pace, not another dish. Butcher paper, a foil wrap, a water spritz, and a snake or minion fire are equipment notes. They do not replace the thermometer. A foil boat holds the meat above a splash of water. It is not a sealed parcel and it is not the stock used in the regional sauce.
+
 ## Ingredient-led complete meals
 
-`generateMeal(input)` accepts `mainId`, `methodId`, `regionId`, optional `sideId`, integer servings from 1–12, and optional diet/heat/pantry. `getMethodsForMain()` and `getMainsForDiet()` support guided controls. In this builder, incompatible main/diet choices fail explicitly rather than silently changing the main the visitor selected.
+`generateMeal(input)` accepts `mainId`, `methodId`, `regionId`, optional `sideId`, integer servings from 1–12, and optional diet, heat, pantry and `cookPace`. `getMethodsForMain()` and `getMainsForDiet()` support guided controls. In this builder, incompatible main/diet choices fail explicitly rather than silently changing the main the visitor selected. An omitted cook session leaves the meal unchanged, including its id, steps and minutes.
 
-The catalog has **195 compatible main/method pairs**, **63 regional profiles** and **6 sides**, giving **73,710 supported main/method/region/side configurations**. Each profile cooks with that region's own paste, heat, spices and herbs. Bird's eye chilli is on the plates that use it, not on every region. A week plan still draws from the curated plates, not this full matrix. Every meal includes a main, side, vegetables and sauce. Cut, preparation, quantities, cooking sequence and dietary alternatives follow the chosen method. For example, gluten-free quinoa uses quinoa cooking instructions rather than retaining a couscous method.
+The catalog has **255 compatible main/method pairs**, **76 regional profiles** and **11 sides**, giving **213,180 supported main/method/region/side configurations**. Mains include duck (75°C, not served pink), kangaroo, tuna, fresh sardines, canned black beans, canned kidney beans, young jackfruit in brine, and paneer. Paneer is excluded from vegan and dairy-free meals. Spice runs gentle, mild, medium, hot and fiery. Mild, medium and hot keep their previous amounts, and gentle still lists the signature heat. Home kitchen is the weekday flavour, with no second regional paste. Each other profile cooks with that region's own paste, heat, spices and herbs. Bird's eye chilli is on the plates that use it, not on every region, and not on home kitchen. A week plan still draws from the curated plates, not this full matrix. Every meal includes a main, side, vegetables and sauce. Cut, preparation, quantities, cooking sequence and dietary alternatives follow the chosen method. For example, gluten-free quinoa uses quinoa cooking instructions rather than retaining a couscous method.
 
 Both engines are pure TypeScript and reusable without Cloudflare-specific routes. [Self-hosting](SELF_HOSTING.md) includes working calls for each.
 
