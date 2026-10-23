@@ -56,7 +56,7 @@ function inspirationSpec(item: typeof INSPIRATIONS[number]): string {
   return encodeShare({ v: 1, kind: "classic", classicId: item.classicId, regionId: item.regionId, diet: item.diet, spiceHeat: "medium", servings: 2 });
 }
 function inspirationSrc(item: typeof INSPIRATIONS[number]): string {
-  return `${publicPath("/api/plate")}?t=${encodeURIComponent(inspirationSpec(item))}`;
+  return publicPath(item.image);
 }
 const duration = (minutes: number) => minutes < 120 ? `${minutes} min` : `${Math.floor(minutes / 60)} hr${minutes % 60 ? ` ${minutes % 60} min` : ""}`;
 const amount = (value: number, unit: string) => `${Number(value.toFixed(2))} ${unit}`.trim();
