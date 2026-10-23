@@ -101,7 +101,8 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
   try {
     const response = await fetch(target, {
       method: "POST",
-      redirect: "error",
+      // workerd rejects redirect:"error". "manual" still does not follow a redirect.
+      redirect: "manual",
       signal: AbortSignal.timeout(240_000),
       headers: { Accept: "application/json, image/png, image/jpeg", "Content-Type": "application/json" },
       body: JSON.stringify({
