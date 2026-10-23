@@ -6,6 +6,7 @@ import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
 import { foodWordHit } from "./food-words.ts";
 import { mix32 } from "./sat.ts";
+import { exploreRegionProfile, dominantFlavourIds } from "./region-diversity.ts";
 import type { DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
 export const WEEK_NOTE =
@@ -118,6 +119,8 @@ type Usage = {
   anchor: Map<string, number>;
   kind: Map<string, number>;
   region: Map<string, number>;
+  /** Regional flavour ingredients already used this week (not mains/sides/staples). */
+  flavour: Map<string, number>;
 };
 
 type Prepared = {
@@ -129,8 +132,14 @@ type Prepared = {
   diet: DietId;
   avoidList: string[];
   eligible: Slot[];
-  candidate: (slot: Slot) => { recipe: Recipe | null; reason?: string };
+  candidate: (slot: Slot, soften?: readonly string[]) => { recipe: Recipe | null; reason?: string };
 };
+
+/** Structural / cooking ids that are not "flavour monotony" when they repeat. */
+const FLAVOUR_IGNORE = new Set([
+  "neutral-oil", "vegetable-stock", "onion", "passata", "coconut-milk",
+  "coating-flour", "breadcrumbs", "cornflour",
+]);
 
 function mix(seed: number, classicId: string, regionId: string): number {
   return mix32(seed, `${classicId}\0${regionId}`);
@@ -141,15 +150,54 @@ function cmp(left: number, right: number): number {
 }
 
 function emptyUsage(): Usage {
-  return { pair: new Map(), anchor: new Map(), kind: new Map(), region: new Map() };
+  return { pair: new Map(), anchor: new Map(), kind: new Map(), region: new Map(), flavour: new Map() };
 }
 
-function remember(usage: Usage, slot: Slot) {
+function remember(usage: Usage, slot: Slot, recipe?: Recipe | null) {
   const key = pairKey(slot.classicId, slot.regionId);
   usage.pair.set(key, (usage.pair.get(key) ?? 0) + 1);
   usage.anchor.set(slot.anchor, (usage.anchor.get(slot.anchor) ?? 0) + 1);
   usage.kind.set(slot.kind, (usage.kind.get(slot.kind) ?? 0) + 1);
   usage.region.set(slot.regionId, (usage.region.get(slot.regionId) ?? 0) + 1);
+  if (!recipe) return;
+  for (const id of flavourIdsOf(recipe)) {
+    usage.flavour.set(id, (usage.flavour.get(id) ?? 0) + 1);
+  }
+}
+
+function flavourIdsOf(recipe: Recipe): string[] {
+  try {
+    const profile = exploreRegionProfile(
+      recipe.regionId,
+      recipe.diet === "gluten-free",
+      recipe.spiceHeat ?? "medium",
+    );
+    const regionFlavour = new Set(dominantFlavourIds(profile));
+    return recipe.ingredients
+      .map((item) => item.id)
+      .filter((id) => !FLAVOUR_IGNORE.has(id) && !id.startsWith("sat-") && regionFlavour.has(id));
+  } catch {
+    return recipe.ingredients
+      .map((item) => item.id)
+      .filter((id) => !FLAVOUR_IGNORE.has(id) && !id.startsWith("sat-"));
+  }
+}
+
+function softenFrom(usage: Usage): string[] {
+  return [...usage.flavour.entries()]
+    .filter(([, count]) => count >= 1)
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([id]) => id)
+    .slice(0, 40);
+}
+
+function flavourCollision(recipe: Recipe, usage: Usage): number {
+  let score = 0;
+  for (const id of flavourIdsOf(recipe)) {
+    const seen = usage.flavour.get(id) ?? 0;
+    if (seen > 0) score += seen;
+  }
+  return score;
 }
 
 function slotFromRecipe(recipe: Recipe): Slot {
@@ -169,6 +217,7 @@ function slotFromRecipe(recipe: Recipe): Slot {
  * Variety bands come first, so a week does not repeat the same plate.
  * With no seed, ties stay alphabetical and the week is stable.
  * With a seed, ties inside a band follow that seed only. Alphabetical order is not the decider.
+ * Flavour collision is scored later when a seed is set (needs the built plate).
  */
 function rank(eligible: Slot[], usage: Usage, seed: number | undefined): Slot[] {
   return eligible.slice().sort((a, b) =>
@@ -179,6 +228,33 @@ function rank(eligible: Slot[], usage: Usage, seed: number | undefined): Slot[] 
     || (seed == null ? 0 : cmp(mix(seed, a.classicId, a.regionId), mix(seed, b.classicId, b.regionId)))
     || (seed == null ? a.regionId.localeCompare(b.regionId) || a.classicId.localeCompare(b.classicId) : 0)
   );
+}
+
+/** Among equally banded options, prefer the plate that reuses fewer already-heavy flavours. */
+function pickForDay(
+  ordered: Slot[],
+  usage: Usage,
+  candidate: Prepared["candidate"],
+  seed: number | undefined,
+): { slot: Slot; recipe: Recipe } | null {
+  const soften = seed == null ? [] : softenFrom(usage);
+  const window = seed == null ? ordered : ordered.slice(0, Math.min(16, ordered.length));
+  let best: { slot: Slot; recipe: Recipe; collision: number } | null = null;
+  for (const slot of window) {
+    const chosen = candidate(slot, soften);
+    if (!chosen.recipe) continue;
+    const collision = seed == null ? 0 : flavourCollision(chosen.recipe, usage);
+    if (!best || collision < best.collision) {
+      best = { slot, recipe: chosen.recipe, collision };
+      if (collision === 0) break;
+    }
+  }
+  if (best) return { slot: best.slot, recipe: best.recipe };
+  for (const slot of ordered) {
+    const chosen = candidate(slot, soften);
+    if (chosen.recipe) return { slot, recipe: chosen.recipe };
+  }
+  return null;
 }
 
 function prepare(input: WeekPlanInput): Prepared {
@@ -246,31 +322,55 @@ function prepare(input: WeekPlanInput): Prepared {
     cache.set(key, result);
     return result;
   }
-  function candidate(slot: Slot): { recipe: Recipe | null; reason?: string } {
+  function candidate(slot: Slot, soften: readonly string[] = []): { recipe: Recipe | null; reason?: string } {
     const base = baseOf(slot);
     if (!base.recipe || input.seed == null) return base;
-    const key = pairKey(slot.classicId, slot.regionId);
+    const softKey = soften.slice().sort().join(",");
+    const key = `${pairKey(slot.classicId, slot.regionId)}|${softKey}`;
     const cached = fusedCache.get(key);
     if (cached) return cached;
-    const seafoodAlready = base.recipe.allergens.includes("fish") || base.recipe.allergens.includes("crustacean");
-    const fused = applySatFusion(base.recipe, {
-      seed: mix(input.seed, slot.classicId, slot.regionId),
-      regionId: slot.regionId,
-      diet,
-      spiceHeat,
-      glutenFree: constraints.glutenFree === true,
-      dairyFree: constraints.dairyFree === true,
-      vegan: constraints.vegan === true || diet === "vegan",
-      vegetarian: constraints.vegetarian === true || diet === "vegetarian" || diet === "vegan",
-      eggFree: constraints.eggFree === true || diet === "vegan",
-      avoid: avoidList,
-      dislikes,
-      mainId: slot.mainId,
-      methodId: slot.methodId,
-      servings: input.servings,
-      pantry,
-      seafoodAlready,
-    });
+    const daySeed = mix(input.seed, slot.classicId, slot.regionId);
+    let fused: Recipe;
+    try {
+      // Rebuild with seed so regional pantry exploration and SAT run once together.
+      fused = slot.kind === "meal"
+        ? generateMeal({
+          mainId: slot.mainId ?? "", methodId: slot.methodId ?? "", regionId: slot.regionId, sideId: slot.sideId,
+          servings: input.servings, diet, spiceHeat, pantry, constraints,
+          seed: daySeed,
+          softenIngredients: [...soften],
+          avoidAllergens: avoidList,
+          dislikes,
+        })
+        : generateRecipe({
+          classicId: slot.classicId, regionId: slot.regionId, servings: input.servings, diet, spiceHeat, pantry, constraints,
+          seed: daySeed,
+          avoidAllergens: avoidList,
+          dislikes,
+        });
+    } catch (error) {
+      // Fall back to SAT-on-base if a seeded rebuild fails.
+      const seafoodAlready = base.recipe.allergens.includes("fish") || base.recipe.allergens.includes("crustacean");
+      fused = applySatFusion(base.recipe, {
+        seed: daySeed,
+        regionId: slot.regionId,
+        diet,
+        spiceHeat,
+        glutenFree: constraints.glutenFree === true,
+        dairyFree: constraints.dairyFree === true,
+        vegan: constraints.vegan === true || diet === "vegan",
+        vegetarian: constraints.vegetarian === true || diet === "vegetarian" || diet === "vegan",
+        eggFree: constraints.eggFree === true || diet === "vegan",
+        avoid: avoidList,
+        dislikes,
+        mainId: slot.mainId,
+        methodId: slot.methodId,
+        servings: input.servings,
+        pantry,
+        seafoodAlready,
+      });
+      void error;
+    }
     const reason = blocked(fused, avoid, dislikes);
     const result = reason ? { recipe: null, reason } : { recipe: fused };
     fusedCache.set(key, result);
@@ -289,13 +389,14 @@ function suggest(prepared: Prepared, planned: PlannedDinner[], day: number): Din
   const usage = emptyUsage();
   for (const other of planned) {
     if (other.day === day || !other.recipe) continue;
-    remember(usage, slotFromRecipe(other.recipe));
+    remember(usage, slotFromRecipe(other.recipe), other.recipe);
   }
   const current = planned.find((item) => item.day === day)?.recipe;
   const options: DinnerOption[] = [];
+  const soften = prepared.seed == null ? [] : softenFrom(usage);
   for (const slot of rank(prepared.eligible, usage, prepared.seed)) {
     if (current && slot.classicId === current.classicId && slot.regionId === current.regionId) continue;
-    const recipe = prepared.candidate(slot).recipe;
+    const recipe = prepared.candidate(slot, soften).recipe;
     if (!recipe) continue;
     options.push({ classicId: slot.classicId, regionId: slot.regionId, title: recipe.title });
     if (options.length === 3) break;
@@ -334,7 +435,13 @@ function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
     notes.push("Dinners mix classic remixes and ingredient-led plates, including each region's staple food. This is the best spread of those templates, not a claim that no other meal exists.");
   }
   if (prepared.seed != null) {
-    notes.push("This is one matching spread. Plan again, or randomise one dinner, for a different meal. Hard filters stay in place. The order follows the seed, not an alphabetical list. Each dinner's extra plate is one satisfying assignment of a seeded SAT search. The same seed repeats it. This is not a proof of taste or of P versus NP.");
+    notes.push("This is one matching spread. Plan again, or randomise one dinner, for a different meal. Hard filters stay in place. The order follows the seed, not an alphabetical list. Each dinner explores that region's pantry, then adds one satisfying assignment of a seeded SAT search. The same seed repeats it. This is not a proof of taste or of P versus NP.");
+    const reused = [...shopping.values()]
+      .filter((line) => line.days.length >= 3 && !FLAVOUR_IGNORE.has(line.id) && !line.id.startsWith("sat-"))
+      .map((line) => line.name);
+    if (reused.length) {
+      notes.push(`Pantry reuse across the week (intentional): ${reused.slice(0, 8).join(", ")}. Softened in later picks rather than banned.`);
+    }
   }
   notes.push("Shop suggestions elsewhere in Fusion Table are places to ask. Stock and prices stay unverified.");
   const { constraints, diet, avoidList } = prepared;
@@ -366,13 +473,14 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
   for (let day = 1; day <= prepared.days; day += 1) {
     const lock = prepared.locks.get(day);
     if (lock) {
-      const chosen = prepared.candidate({ kind: "classic", classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId });
+      const slot = { kind: "classic" as const, classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId };
+      const chosen = prepared.candidate(slot, softenFrom(usage));
       if (!chosen.recipe) {
         planned.push({ day, recipe: null, options: [], reason: `Locked choice does not match your recorded filters (${chosen.reason}) and was not replaced.` });
         continue;
       }
       planned.push({ day, recipe: chosen.recipe, options: [] });
-      remember(usage, { kind: "classic", classicId: lock.classicId, regionId: lock.regionId, anchor: lock.classicId });
+      remember(usage, slot, chosen.recipe);
       continue;
     }
     if (prepared.eligible.length === 0) {
@@ -380,18 +488,13 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
       continue;
     }
     const ordered = rank(prepared.eligible, usage, prepared.seed);
-    let placed = false;
-    for (const pair of ordered) {
-      const chosen = prepared.candidate(pair);
-      if (!chosen.recipe) continue;
-      planned.push({ day, recipe: chosen.recipe, options: [] });
-      remember(usage, pair);
-      placed = true;
-      break;
-    }
-    if (!placed) {
+    const picked = pickForDay(ordered, usage, prepared.candidate, prepared.seed);
+    if (!picked) {
       planned.push({ day, recipe: null, options: [], reason: "No template matches your recorded filters." });
+      continue;
     }
+    planned.push({ day, recipe: picked.recipe, options: [] });
+    remember(usage, picked.slot, picked.recipe);
   }
   return assemble(prepared, planned);
 }
@@ -404,14 +507,15 @@ export function swapDinner(input: WeekPlanInput, plan: WeekPlan, day: number): W
   const usage = emptyUsage();
   for (const other of plan.days) {
     if (other.day === day || !other.recipe) continue;
-    remember(usage, slotFromRecipe(other.recipe));
+    remember(usage, slotFromRecipe(other.recipe), other.recipe);
   }
+  const soften = prepared.seed == null ? [] : softenFrom(usage);
   const next = rank(prepared.eligible, usage, prepared.seed).find((slot) => {
     if (current.recipe && slot.classicId === current.recipe.classicId && slot.regionId === current.recipe.regionId) return false;
-    const recipe = prepared.candidate(slot).recipe;
+    const recipe = prepared.candidate(slot, soften).recipe;
     return !!recipe && recipe.id !== current.recipe?.id;
   });
-  const recipe = next ? prepared.candidate(next).recipe : null;
+  const recipe = next ? prepared.candidate(next, soften).recipe : null;
   if (!recipe || recipe.id === current.recipe?.id) return plan;
   const planned = plan.days.map((item) => item.day === day ? { day, recipe, options: [], reason: undefined } : item);
   return assemble(prepared, planned);

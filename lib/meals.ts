@@ -6,7 +6,7 @@ import { getCut, type MeatCut } from "./cuts.ts";
 import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
-import { buildRegionProfile } from "./region-pantry.ts";
+import { exploreRegionProfile } from "./region-diversity.ts";
 import { buildSidePlan } from "./side-plans.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
@@ -84,6 +84,13 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
     if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff) throw new Error("Choose a whole-number seed.");
     seed = input.seed;
   }
+  let softenIngredients: string[] | undefined;
+  if (input.softenIngredients !== undefined) {
+    if (!Array.isArray(input.softenIngredients) || !input.softenIngredients.every((id) => typeof id === "string")) {
+      throw new Error("softenIngredients must be a list of ingredient ids.");
+    }
+    softenIngredients = input.softenIngredients.map((id) => id.trim()).filter(Boolean).slice(0, 80);
+  }
   const supportedAvoid = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
   let avoidAllergens: string[] | undefined;
   if (input.avoidAllergens !== undefined) {
@@ -110,6 +117,7 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
     ...(input.pantry !== undefined ? { pantry: input.pantry } : {}),
     ...(cutId ? { cutId } : {}),
     ...(seed !== undefined ? { seed } : {}),
+    ...(softenIngredients ? { softenIngredients } : {}),
     ...(input.cookPace ? { cookPace: input.cookPace } : {}),
     ...(avoidAllergens ? { avoidAllergens } : {}),
     ...(dislikes ? { dislikes } : {}),
@@ -157,8 +165,17 @@ function describe(items: readonly DraftIngredient[], servings: number): string {
   return items.map((item) => `${amount(item.amount, servings)}${item.unit ? ` ${item.unit}` : ""} ${item.name.toLocaleLowerCase("en")}`).join(", ");
 }
 
-function regionalProfile(regionId: string, glutenFree: boolean, heat: SpiceHeat): RegionProfile {
-  return buildRegionProfile(regionId, glutenFree, heat);
+function regionalProfile(
+  regionId: string,
+  glutenFree: boolean,
+  heat: SpiceHeat,
+  seed?: number,
+  soften?: readonly string[],
+): RegionProfile {
+  return exploreRegionProfile(regionId, glutenFree, heat, {
+    ...(seed !== undefined ? { seed } : {}),
+    ...(soften && soften.length ? { soften } : {}),
+  });
 }
 
 function hitsDislike(item: DraftIngredient, dislikes: readonly string[]): boolean {
@@ -317,7 +334,10 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const region = MEAL_REGIONS.find((entry) => entry.id === regionId)!;
   const chosen = input.cutId ? getCut(input.cutId) : undefined;
   const plan = chosen ? withCut(mainPlan(main, methodId), chosen, methodId) : mainPlan(main, methodId);
-  const profile = withoutDislikes(regionalProfile(regionId, glutenFree, spiceHeat), input.dislikes ?? []);
+  const profile = withoutDislikes(
+    regionalProfile(regionId, glutenFree, spiceHeat, input.seed, input.softenIngredients),
+    input.dislikes ?? [],
+  );
   const side = sidePlan(sideId, glutenFree, dairyFree, servings);
   const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);
@@ -423,7 +443,7 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     description: `${mainName} with ${side.side}, ${side.vegetables} and ${profile.sauce}. A complete meal built around your chosen main and cooking method.`,
     fusionNote: region.id === "home-kitchen"
       ? `Home-kitchen flavour: ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} This keeps the ${method.name.toLowerCase()} method and leaves out a second regional paste. It is an authored template, not a kitchen-tested traditional recipe.`
-      : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.`,
+      : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.${input.seed !== undefined ? " Aromatics, spices and herbs were sampled from this region's pantry for this seed; the signature heat stays put." : ""}`,
     components: { main: mainName, side: side.side, vegetables: side.vegetables, sauce: profile.sauce },
     prepMinutes, cookMinutes, totalMinutes: prepMinutes + cookMinutes, servings, diet, spiceHeat,
     ingredients: recipeIngredients, steps, equipment: [...equipment],
