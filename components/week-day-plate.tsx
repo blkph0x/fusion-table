@@ -5,6 +5,7 @@ import { WeekNote } from "@/components/community-panel";
 import type { CommunityBoard } from "@/lib/community";
 import type { Recipe } from "@/lib/recipe-types";
 import type { WeekPlan } from "@/lib/planner";
+import type { ShareSpec } from "@/lib/share-recipe";
 import { MEAL_SIDES } from "@/lib/meals";
 
 type SideOption = { sideId: string; name: string; suggested?: boolean };
@@ -12,7 +13,7 @@ type SideOption = { sideId: string; name: string; suggested?: boolean };
 type Props = {
   day: WeekPlan["days"][number];
   board: CommunityBoard | null;
-  plateSrc: (recipe: Recipe, board: CommunityBoard | null) => string;
+  plateSrc: (recipe: Recipe, spec: ShareSpec | null) => string;
   keepImage: (event: { currentTarget: HTMLImageElement }) => void;
   locked: boolean;
   sideChoices: SideOption[];
