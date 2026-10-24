@@ -17,6 +17,16 @@ Prep text and builder cut lists now follow real butchery/cookery pairing instead
 | Beef mince + grilled | “2 cm thickness” steak wording |
 | Braised + brisket | Generic “chuck” cube language, not pull/shred |
 
+## Ship status
+
+| Item | Value |
+| --- | --- |
+| Web SHA | `1ce91a4` |
+| PR | https://github.com/blkph0x/fusion-table/pull/3 |
+| Live | https://gearsqueens.online/fusion/ @ `1ce91a4` |
+| Tests | **160** pass locally; CI Check and build green |
+| Android | Local `16a8f21` — no git remote |
+
 ## Fix
 
 New module `lib/cut-method.ts`:
