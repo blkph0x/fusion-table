@@ -18,6 +18,7 @@ import {
   type RegionTaste,
 } from "./region-pantry.ts";
 import { regionAllowsMarker, isStrongMarkerId } from "./region-affinity.ts";
+import { cleanActive, type CleanPrefs } from "./clean-prefs.ts";
 import type { SpiceHeat } from "./recipe-types.ts";
 import type { DraftIngredient } from "./template-types.ts";
 
@@ -25,6 +26,8 @@ export interface RegionProfileOptions {
   seed?: number;
   /** Ingredient ids already common this week; lower pick weight only. */
   soften?: readonly string[];
+  /** Soft cleaner-meal knobs — lower-bottle / leaner profiles. */
+  clean?: CleanPrefs;
 }
 
 type Profile = ReturnType<typeof buildRegionProfile>;
@@ -278,10 +281,13 @@ function pickCount(seed: number, salt: string, min: number, max: number): number
   return min + (mix32(seed, salt) % span);
 }
 
-function heatIds(region: RegionTaste, heatLevel: SpiceHeat): string[] {
+function heatIds(region: RegionTaste, heatLevel: SpiceHeat, clean?: CleanPrefs): string[] {
   const ids = [region.heat];
-  if (region.sideHeat) ids.push(region.sideHeat);
-  if ((heatLevel === "hot" || heatLevel === "fiery") && region.hotOnly) ids.push(region.hotOnly);
+  if (region.sideHeat && !(clean?.fewerBottles || clean?.cleanMode)) ids.push(region.sideHeat);
+  const hot = heatLevel === "hot" || heatLevel === "fiery";
+  // Prefer whole/fresh heat; keep hotOnly pastes for hot/fiery only when clean.
+  if (hot && region.hotOnly && !(clean?.fewerBottles || clean?.cleanMode)) ids.push(region.hotOnly);
+  else if (hot && region.hotOnly && clean?.allowSecondBottle) ids.push(region.hotOnly);
   return ids;
 }
 
@@ -334,16 +340,18 @@ export function exploreRegionProfile(
 
   const seed = options.seed;
   const soften = new Set(options.soften ?? []);
+  const clean = options.clean;
   const pools = familyPools(region);
-  const heats = heatIds(region, heatLevel);
+  const heats = heatIds(region, heatLevel, clean);
   const heatSet = new Set(heats);
+  const lean = cleanActive(clean);
 
   const aromaticPool = unique([...region.aromatics, ...pools.aromatics]);
   const aromaticTarget = pickCount(
     seed,
     "n-aro",
     1,
-    Math.min(3, Math.max(1, aromaticPool.length)),
+    Math.min(lean ? 2 : 3, Math.max(1, aromaticPool.length)),
   );
   // Soften ubiquitous garlic when the family has other aromatics; do not ban it.
   const softAromatics = new Set(soften);
@@ -370,8 +378,8 @@ export function exploreRegionProfile(
 
   const simmerPool = pools.simmer.filter((id) => !heatSet.has(id));
   const simmerCore = (region.simmer ?? []).filter((id) => !heatSet.has(id));
-  const simmerMin = simmerCore.length === 0 ? 0 : 1;
-  const simmerMax = Math.min(4, Math.max(simmerMin, simmerPool.length));
+  const simmerMin = simmerCore.length === 0 ? 0 : lean && (clean?.fewerBottles || clean?.cleanMode) ? 0 : 1;
+  const simmerMax = Math.min(lean ? 2 : 4, Math.max(simmerMin, simmerPool.length));
   const simmerTarget = pickCount(seed, "n-sim", simmerMin, simmerMax);
   const mustSimmer = simmerCore.length ? pickN(simmerCore, 1, seed, "core-sim", soften) : [];
   const simmer = unique([
@@ -389,12 +397,12 @@ export function exploreRegionProfile(
 
   const herbTarget = pools.herbs.length === 0
     ? 0
-    : pickCount(seed, "n-herb", 1, Math.min(2, pools.herbs.length));
+    : pickCount(seed, "n-herb", lean ? 1 : 1, Math.min(lean ? 2 : 2, pools.herbs.length));
   const herbs = pickN(pools.herbs, herbTarget, seed, "herb", soften);
 
   const finishTarget = pools.finish.length === 0
     ? 0
-    : pickCount(seed, "n-fin", 0, Math.min(2, pools.finish.length));
+    : pickCount(seed, "n-fin", 0, Math.min(lean ? 1 : 2, pools.finish.length));
   const finishExtras = pickN(pools.finish, finishTarget, seed, "fin", soften);
 
   try {

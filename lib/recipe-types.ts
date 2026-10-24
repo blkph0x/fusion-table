@@ -1,3 +1,5 @@
+import type { CleanPrefs } from "./clean-prefs.ts";
+
 export type IngredientCategory = "produce" | "butcher" | "fishmonger" | "grocery" | "specialty";
 export type DietId = "balanced" | "vegetarian" | "vegan" | "gluten-free" | "dairy-free";
 /** Gentle and fiery sit outside the original three. Mild, medium and hot amounts stay put. */
@@ -71,6 +73,8 @@ export interface RecipeInput {
   diet?: DietId;
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
+  /** Soft cleaner-meal knobs. Never relax hard exclusions. */
+  clean?: CleanPrefs;
   constraints?: RecipeConstraints;
   /** Omitted keeps the authored template. Set adds one seeded SAT finish. */
   seed?: number;
@@ -115,4 +119,14 @@ export interface Recipe {
   components?: { main: string; side: string; vegetables: string; sauce: string };
   generation?: "authored";
   methodNotes?: string[];
+  /** Soft clean-plate summary when cleaner prefs were applied. */
+  cleanSummary?: string;
+  cleanStats?: {
+    ingredientCount: number;
+    bottleCount: number;
+    stepCount: number;
+    produceCount: number;
+    equipmentCount: number;
+    score: number;
+  };
 }

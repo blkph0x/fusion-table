@@ -402,6 +402,7 @@ export function generateRecipe(input: RecipeInput): Recipe {
     servings: input.servings,
     pantry: input.pantry,
     seafoodAlready,
+    ...(input.clean ? { clean: input.clean } : {}),
   });
   return cookPace ? applyCookPace(finished, cookPace) : finished;
 }

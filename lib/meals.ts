@@ -7,7 +7,20 @@ import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
 import { exploreRegionProfile } from "./region-diversity.ts";
-import { buildSidePlan } from "./side-plans.ts";
+import { buildSidePlan, preferredSidesForRegion } from "./side-plans.ts";
+import {
+  applyCleanRounding,
+  applyPortionBalance,
+  balanceAnnotation,
+  cleanActive,
+  cleanlinessScore,
+  cleanSummaryNote,
+  consolidateDrafts,
+  mealCleanStats,
+  normalizeCleanPrefs,
+  orderSidesForClean,
+  tidySteps,
+} from "./clean-prefs.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
@@ -112,9 +125,16 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
       throw new Error("The pantry must be text or a list of up to 100 ingredient names.");
     }
   }
+  const clean = normalizeCleanPrefs(input.clean);
+  let resolvedSide = sideId;
+  if (cleanActive(clean) && (clean.moreVegetables || clean.cleanMode) && input.sideId === undefined) {
+    const ordered = orderSidesForClean(preferredSidesForRegion(input.regionId), clean);
+    if (ordered[0]) resolvedSide = ordered[0];
+  }
   return {
-    mainId: main.id, methodId: input.methodId, regionId: input.regionId, sideId, servings: input.servings, diet, spiceHeat,
+    mainId: main.id, methodId: input.methodId, regionId: input.regionId, sideId: resolvedSide, servings: input.servings, diet, spiceHeat,
     ...(input.pantry !== undefined ? { pantry: input.pantry } : {}),
+    ...(Object.keys(clean).length ? { clean } : {}),
     ...(cutId ? { cutId } : {}),
     ...(seed !== undefined ? { seed } : {}),
     ...(softenIngredients ? { softenIngredients } : {}),
@@ -171,10 +191,12 @@ function regionalProfile(
   heat: SpiceHeat,
   seed?: number,
   soften?: readonly string[],
+  clean?: ReturnType<typeof normalizeCleanPrefs>,
 ): RegionProfile {
   return exploreRegionProfile(regionId, glutenFree, heat, {
     ...(seed !== undefined ? { seed } : {}),
     ...(soften && soften.length ? { soften } : {}),
+    ...(clean && Object.keys(clean).length ? { clean } : {}),
   });
 }
 
@@ -333,11 +355,25 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const method = COOKING_METHODS.find((entry) => entry.id === methodId)!;
   const region = MEAL_REGIONS.find((entry) => entry.id === regionId)!;
   const chosen = input.cutId ? getCut(input.cutId) : undefined;
+  const clean = normalizeCleanPrefs(input.clean);
   const plan = chosen ? withCut(mainPlan(main, methodId), chosen, methodId) : mainPlan(main, methodId);
-  const profile = withoutDislikes(
-    regionalProfile(regionId, glutenFree, spiceHeat, input.seed, input.softenIngredients),
+  const rawProfile = withoutDislikes(
+    regionalProfile(regionId, glutenFree, spiceHeat, input.seed, input.softenIngredients, clean),
     input.dislikes ?? [],
   );
+  const consolidated = consolidateDrafts(
+    rawProfile.aromatics,
+    rawProfile.seasonings,
+    rawProfile.finish,
+    clean,
+    spiceHeat,
+  );
+  const profile: RegionProfile = {
+    ...rawProfile,
+    aromatics: consolidated.aromatics,
+    seasonings: consolidated.seasonings,
+    finish: consolidated.finish,
+  };
   const side = sidePlan(sideId, glutenFree, dairyFree, servings);
   const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);
@@ -346,11 +382,12 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const ingredients: DraftIngredient[] = [plan.ingredient, ...side.ingredients, ...profile.aromatics, ...profile.seasonings, ...profile.finish];
   const steps: RecipeStep[] = [];
   const equipment = new Set<string>(["Chopping board and knife", ...side.equipment]);
-  if (main.category === "meat" || main.category === "seafood") equipment.add("Food thermometer");
+  const needsThermometer = (main.category === "meat" || main.category === "seafood") && !!plan.endpoint;
+  if (needsThermometer) equipment.add("Food thermometer");
   const oil = (quantity: number) => ingredient("neutral-oil", "Neutral cooking oil", quantity, "tbsp", "grocery", [], "For example, rapeseed or sunflower oil.", ["neutral cooking oil", "rapeseed oil", "sunflower oil"]);
   const stock = (quantity: number) => ingredient("vegetable-stock", gf ? "Gluten-free vegetable stock" : "Vegetable stock", quantity, "ml", "grocery", ["celery"], "Prepared liquid stock; use a vegan product and check its label for allergens.", gf ? ["gluten free vegetable stock"] : ["vegetable stock"]);
   const crumbs = (quantity: number) => ingredient("breadcrumbs", gf ? "Gluten-free vegan breadcrumbs" : "Vegan breadcrumbs", quantity, "g", "grocery", gf ? [] : ["wheat"], "Choose crumbs without milk or egg.", gf ? ["gluten free vegan breadcrumbs"] : ["vegan breadcrumbs"]);
-  const mainOil = ["poached", "steamed"].includes(methodId) || mainId === "eggs" && methodId === "curry" ? 0 : ["schnitzel", "patties"].includes(methodId) ? 4 : 2;
+  const mainOil = ["poached", "steamed"].includes(methodId) || mainId === "eggs" && methodId === "curry" ? 0 : ["schnitzel", "patties"].includes(methodId) ? 4 : (cleanActive(clean) ? 1 : 2);
   if (mainOil) ingredients.push(oil(mainOil));
   const range = `${Math.max(3, plan.minutes - 3)}–${plan.minutes + 3}`;
   steps.push({ title: "Prepare your main", detail: `For ${servings} ${servings === 1 ? "person" : "people"}, prepare ${describe([plan.ingredient], servings)}. ${plan.preparation} Wash and prepare the side vegetables; measure the separate portions listed in the steps. ${servings > 6 ? "Use several trays or cook in batches for this larger meal; allow extra time and never crowd the pan or basket." : "Keep raw animal ingredients and their utensils separate from the salad and cooked food."}`, minutes: methodId === "patties" && main.category === "plant" ? 25 : 15 });
@@ -359,12 +396,19 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   if (!deferSides) steps.push(side.steps[0]);
 
   let body: DraftIngredient | undefined;
-  if (profile.body === "coconut") body = ingredient("coconut-milk", "Coconut milk", integrated ? 400 : 150, "ml", "grocery", [], "Unsweetened canned coconut milk.", ["coconut milk"]);
-  if (profile.body === "tomato") body = ingredient("passata", "Tomato passata", integrated ? 400 : 200, "ml", "grocery", [], "Plain sieved tomatoes.", ["passata", "tomato passata"]);
+  const skipBodyBottle = (clean.fewerBottles || clean.cleanMode) && !integrated && profile.body !== "stock";
+  if (!skipBodyBottle) {
+    if (profile.body === "coconut") body = ingredient("coconut-milk", "Coconut milk", integrated ? 400 : 150, "ml", "grocery", [], "Unsweetened canned coconut milk.", ["coconut milk"]);
+    if (profile.body === "tomato") body = ingredient("passata", "Tomato passata", integrated ? 400 : 200, "ml", "grocery", [], "Plain sieved tomatoes.", ["passata", "tomato passata"]);
+  }
   if (body) ingredients.push(body);
-  const sauceOil = 1;
-  ingredients.push(oil(sauceOil));
-  const sauceLiquid = integrated ? (slowMeat ? 700 : profile.body === "stock" ? 400 : 250) : profile.body === "stock" ? 120 : 60;
+  const sauceOil = cleanActive(clean) && !integrated ? 0.5 : 1;
+  if (sauceOil > 0) ingredients.push(oil(sauceOil));
+  const sauceLiquid = integrated
+    ? (slowMeat ? 700 : profile.body === "stock" ? 400 : 250)
+    : profile.body === "stock"
+      ? (cleanActive(clean) ? 80 : 120)
+      : (cleanActive(clean) ? 40 : 60);
   const liquid = stock(sauceLiquid);
   ingredients.push(liquid);
   const finish = `Remove from the heat and stir in ${describe(profile.finish, servings)}.`;
@@ -424,30 +468,63 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     steps.push({ title: "Pan-fry the main", detail: mainId === "eggs" ? `Heat ${amount(mainOil, servings)} tbsp neutral cooking oil in a non-stick frying pan over medium-low heat. Slide in the eggs, cover and cook gently for about 6–8 minutes. Turn carefully if necessary; cook until both whites and yolks are firm. Work in batches so the eggs have space.` : `Heat ${amount(mainOil, servings)} tbsp neutral cooking oil in a wide frying pan over medium heat. Add the prepared ${main.name.toLowerCase()} in one uncrowded layer. Cook for about ${range} minutes total, turning carefully to brown the surfaces. ${["aubergine", "cauliflower", "broccoli"].includes(mainId) ? "If the centre is still firm, add a splash of water, cover briefly to soften, then uncover to evaporate the water. " : ""}${plan.endpoint} Serve the regional sauce alongside.`, minutes: plan.minutes });
   }
 
-  if (deferSides) steps.push({ ...side.steps[0], title: `Near the end: ${side.steps[0].title.toLowerCase()}`, detail: `Begin this side during the final ${side.minutes} minutes of the main's simmer, once slow-cooking meat is nearly tender. ${side.steps[0].detail} Keep it hot and serve promptly with the finished main.` });
+  if (deferSides) {
+    steps.push({
+      ...side.steps[0],
+      title: `Near the end: ${side.steps[0].title.toLowerCase()}`,
+      detail: `Cook sides alongside the main: begin this side during the final ${side.minutes} minutes of the simmer, once slow-cooking meat is nearly tender. ${side.steps[0].detail} Keep it hot and serve promptly with the finished main.`,
+    });
+  } else if (cleanActive(clean) && !integrated) {
+    // Clearer parallel timeline when sides already started earlier.
+    const firstSide = steps.findIndex((step) => side.steps[0] && step.title === side.steps[0].title);
+    if (firstSide >= 0) {
+      steps[firstSide] = {
+        ...steps[firstSide],
+        detail: `Cook this side alongside the main so both finish together. ${steps[firstSide].detail}`,
+      };
+    }
+  }
   steps.push(...side.steps.slice(1));
   steps.push({ title: "Bring the meal together", detail: `Divide the ${side.side} and ${side.vegetables} between ${servings} ${servings === 1 ? "plate" : "plates"}. Add the ${method.name.toLowerCase()} ${main.name.toLowerCase()}${integrated ? " with its sauce" : ` and ${profile.sauce}`}. ${methodId === "schnitzel" || methodId === "patties" ? "Serve the sauce beside the main to preserve its crisp surface." : "Taste the cooked sauce before adding any extra seasoning."} Serve promptly.`, minutes: 3 });
   const stapled = applyStaples(ingredients, regionId, { glutenFree, dairyFree });
   if (stapled.served.length) steps.push({ title: "Plate the regional staple", detail: stapleStep(stapled.served, `${region.name} plate`) });
-  const recipeIngredients = mergeIngredients(stapled.ingredients, servings, input.pantry);
+  const tidied = cleanActive(clean)
+    ? tidySteps(steps, [...equipment], needsThermometer)
+    : { steps, equipment: [...equipment] };
+  let recipeIngredients = mergeIngredients(stapled.ingredients, servings, input.pantry);
+  if (cleanActive(clean)) {
+    recipeIngredients = applyCleanRounding(recipeIngredients, clean);
+    recipeIngredients = applyPortionBalance(recipeIngredients, clean);
+  }
+  // Soft ingredient budget: drop lowest-impact duplicate oils after merge when over cap.
+  if (cleanActive(clean) && recipeIngredients.length > 12) {
+    const oils = recipeIngredients.filter((item) => item.id === "neutral-oil");
+    if (oils.length > 1) {
+      const keep = oils[0];
+      const rest = recipeIngredients.filter((item) => item.id !== "neutral-oil");
+      recipeIngredients = [...rest, { ...keep, amount: oils.reduce((sum, item) => sum + item.amount, 0) }];
+    }
+  }
   const allergens = [...new Set(recipeIngredients.flatMap((entry) => entry.allergens))].sort();
   // Patty prep includes any plant precook/cooling and a separate 15-minute chill.
   const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : 15;
   const cookMinutes = Math.max(side.minutes, plan.minutes + (integrated ? 8 : 0)) + (servings > 6 && ["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried", "patties"].includes(methodId) ? plan.minutes : 0);
   const mainName = `${main.name} ${methodId === "schnitzel" ? "schnitzel" : methodId === "patties" ? "patties" : `· ${method.name.toLowerCase()}`}`;
+  const statsDraft = mealCleanStats({ ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment });
+  const score = cleanlinessScore({ ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment, methodId, sideId }, clean);
   const recipe: MealRecipe = {
-    id: `meal-${mainId}-${methodId}-${regionId}-${sideId}-${diet}-${spiceHeat}-${servings}${chosen ? `-${chosen.id}` : ""}`,
+    id: `meal-${mainId}-${methodId}-${regionId}-${sideId}-${diet}-${spiceHeat}-${servings}${chosen ? `-${chosen.id}` : ""}${cleanActive(clean) ? "-clean" : ""}`,
     classicId: `meal:${mainId}:${methodId}:${sideId}`,
     kind: "meal", mainId, methodId, sideId, regionId,
     title: `${region.name} ${mainName.toLocaleLowerCase("en")}`,
     description: `${mainName} with ${side.side}, ${side.vegetables} and ${profile.sauce}. A complete meal built around your chosen main and cooking method.`,
     fusionNote: region.id === "home-kitchen"
       ? `Home-kitchen flavour: ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} This keeps the ${method.name.toLowerCase()} method and leaves out a second regional paste. It is an authored template, not a kitchen-tested traditional recipe.`
-      : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.${input.seed !== undefined ? " Aromatics, spices and herbs were sampled from this region's pantry for this seed; the signature heat stays put." : ""}`,
+      : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.${input.seed !== undefined ? " Aromatics, spices and herbs were sampled from this region's pantry for this seed; the signature heat stays put." : ""}${cleanActive(clean) ? " Cleaner-meal soft prefs trimmed bottles and clutter where they could; hard filters stay." : ""}`,
     components: { main: mainName, side: side.side, vegetables: side.vegetables, sauce: profile.sauce },
     prepMinutes, cookMinutes, totalMinutes: prepMinutes + cookMinutes, servings, diet, spiceHeat,
-    ingredients: recipeIngredients, steps, equipment: [...equipment],
-    tags: [main.name, method.name, region.name, "Complete meal", diet, spiceHeat], allergens,
+    ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment,
+    tags: [main.name, method.name, region.name, "Complete meal", diet, spiceHeat, ...(cleanActive(clean) ? ["Cleaner plate"] : [])], allergens,
     dietaryNotes: [
       "Ingredient and allergen information is based on the specified products. Check every packet and prevent cross-contact when cooking for an allergy.",
       ...(glutenFree ? ["Use the explicitly gluten-free condiments, stock, crumbs, noodles or flatbread listed. The couscous side uses quinoa and its own cooking method."] : []),
@@ -458,9 +535,14 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
       "Times are estimates for the specified cut and thickness. Cook sides alongside the main where equipment allows; additional batches take longer.",
       "Quantities scale to the requested servings. Water for cooking, soaking and batter is specified in the steps rather than the shopping list.",
       ...(chosen ? [`Shopping name: ${chosen.shoppingName}. Check the packet. This name does not confirm a breed or a marble grade.`] : []),
+      ...(cleanActive(clean) ? [cleanSummaryNote(statsDraft, clean), balanceAnnotation(recipeIngredients)] : []),
     ],
     sourceLabel: "Template-generated · not kitchen-tested", generation: "authored",
     ...(plan.safetyNote ? { safetyNote: plan.safetyNote, safetySource: plan.safetySource } : {}),
+    ...(cleanActive(clean) ? {
+      cleanSummary: cleanSummaryNote(statsDraft, clean),
+      cleanStats: { ...statsDraft, score },
+    } : {}),
   };
   const vegan = diet === "vegan" || requested.vegan === true;
   const finished = input.seed === undefined ? recipe : applySatFusion(recipe, {
@@ -479,6 +561,20 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     methodId,
     servings,
     pantry: input.pantry,
+    clean,
   });
-  return input.cookPace ? applyCookPace(finished, input.cookPace) : finished;
+  const withPace = input.cookPace ? applyCookPace(finished, input.cookPace) : finished;
+  if (!cleanActive(clean)) return withPace;
+  const finalStats = mealCleanStats(withPace);
+  const finalScore = cleanlinessScore(withPace, clean);
+  return {
+    ...withPace,
+    cleanSummary: cleanSummaryNote(finalStats, clean),
+    cleanStats: { ...finalStats, score: finalScore },
+    dietaryNotes: [
+      ...withPace.dietaryNotes.filter((note) => !/Clean plate used|Rough plate split/i.test(note)),
+      cleanSummaryNote(finalStats, clean),
+      balanceAnnotation(withPace.ingredients),
+    ],
+  };
 }

@@ -22,6 +22,7 @@ import { TrendsPage } from "@/components/trends-page";
 import { communityAdjustments, plateIdentity, scaleIngredients, type CommunityBoard, type PlateStanding } from "@/lib/community";
 import { areaKey } from "@/lib/price-memory";
 import { MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, COOKING_METHODS, generateMeal, getMealCombinationCount } from "@/lib/meals";
+import { CLEAN_KNOB_LABELS, cleanActive, mealCleanStats, type CleanPrefs } from "@/lib/clean-prefs";
 import type { MealInput } from "@/lib/meal-types";
 import { publicPath } from "@/lib/public-path";
 import { decodeShare, encodeShare, recipeFromShare, specFromRecipe, type ShareSpec } from "@/lib/share-recipe";
@@ -136,6 +137,7 @@ export default function Home() {
   const [weekDays, setWeekDays] = useState(7);
   const [avoidAllergens, setAvoidAllergens] = useState<string[]>([]);
   const [dislikeText, setDislikeText] = useState("");
+  const [cleanPrefs, setCleanPrefs] = useState<CleanPrefs>({});
   const [week, setWeek] = useState<WeekPlan | null>(null);
   const [weekUndo, setWeekUndo] = useState<WeekPlan[]>([]);
   const [weekError, setWeekError] = useState("");
@@ -327,7 +329,34 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
   }
   function weekBrief(seed: number) {
     const dislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
-    return { days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes, seed };
+    return {
+      days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes, seed,
+      ...(cleanActive(cleanPrefs) ? { clean: cleanPrefs } : {}),
+    };
+  }
+  function toggleClean(key: keyof CleanPrefs) {
+    setCleanPrefs((current) => {
+      const next = { ...current };
+      if (next[key]) delete next[key];
+      else next[key] = true;
+      return next;
+    });
+  }
+  function cleanKnobs(idPrefix: string) {
+    return <div className="clean-knobs" role="group" aria-label="Cleaner meal preferences">
+      {(Object.keys(CLEAN_KNOB_LABELS) as (keyof typeof CLEAN_KNOB_LABELS)[]).map((key) => (
+        <label key={key} className={`clean-knob ${cleanPrefs[key] ? "on" : ""}`}>
+          <input
+            id={`${idPrefix}-${key}`}
+            type="checkbox"
+            checked={!!cleanPrefs[key]}
+            onChange={() => toggleClean(key)}
+          />
+          <span>{CLEAN_KNOB_LABELS[key]}</span>
+        </label>
+      ))}
+      <p className="subtle-small">Soft prefs only. Diet, allergens and hard dislikes are never relaxed.</p>
+    </div>;
   }
   function applyWeek(next: WeekPlan, options?: { clearUndo?: boolean }) {
     setWeek((current) => {
@@ -427,6 +456,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
         servings: spec.servings,
         spiceHeat: spec.spiceHeat,
         pantry: pantryText,
+        ...(cleanActive(cleanPrefs) ? { clean: cleanPrefs } : {}),
         ...(spec.seed !== undefined ? { seed: spec.seed, avoidAllergens, dislikes } : {}),
         ...(spec.cookPace ? { cookPace: spec.cookPace } : {}),
       });
@@ -490,7 +520,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
 
   function studio(compact = false) {
     const mealDislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);
-    return <section className="studio-shell" ref={composerRef} id="recipe-studio" aria-label="Create a meal or remix a classic"><div className="studio-mode-tabs" aria-label="Recipe starting point"><button className={builderMode === "meal" ? "active" : ""} onClick={() => setBuilderMode("meal")} aria-pressed={builderMode === "meal"}><ChefHat size={16} /> Build a meal</button><button className={builderMode === "classic" ? "active" : ""} onClick={() => setBuilderMode("classic")} aria-pressed={builderMode === "classic"}><Utensils size={16} /> Classics & BBQ</button></div>{builderMode === "meal" ? <MealBuilder key={builderRevision} onCreated={receiveMeal} initialRecipe={recipe} avoidAllergens={avoidAllergens} dislikes={mealDislikes} /> : composer(compact)}</section>;
+    return <section className="studio-shell" ref={composerRef} id="recipe-studio" aria-label="Create a meal or remix a classic"><div className="studio-mode-tabs" aria-label="Recipe starting point"><button className={builderMode === "meal" ? "active" : ""} onClick={() => setBuilderMode("meal")} aria-pressed={builderMode === "meal"}><ChefHat size={16} /> Build a meal</button><button className={builderMode === "classic" ? "active" : ""} onClick={() => setBuilderMode("classic")} aria-pressed={builderMode === "classic"}><Utensils size={16} /> Classics & BBQ</button></div>{builderMode === "meal" ? <MealBuilder key={builderRevision} onCreated={receiveMeal} initialRecipe={recipe} avoidAllergens={avoidAllergens} dislikes={mealDislikes} clean={cleanPrefs} onCleanChange={setCleanPrefs} /> : composer(compact)}</section>;
   }
   function composer(compact = false) {
     return <section className={`composer ${compact ? "compact" : ""}`} aria-label="Remix a classic recipe">
@@ -502,7 +532,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
         <div className="field serving-field"><span>Servings</span><div className="stepper"><button type="button" onClick={() => setServings((n) => Math.max(1, n - 1))} disabled={servings <= 1} aria-label="Fewer servings"><Minus size={15} /></button><span>{servings} <Users size={15} /></span><button type="button" onClick={() => setServings((n) => Math.min(12, n + 1))} disabled={servings >= 12} aria-label="More servings"><Plus size={15} /></button></div></div>
         <button className="button primary compose-submit" type="submit"><Sparkles size={17} /> {regionId === "home-style" ? "Create this plate" : "Create my fusion"} <ArrowRight size={18} /></button>
       </div><div className="compose-options"><button type="button" className="text-button" onClick={() => setAdvanced(!advanced)} aria-expanded={advanced}><SlidersHorizontal size={15} /> Diet, heat, session & pantry <ChevronDown className={advanced ? "rotated" : ""} size={14} /></button><span><Leaf size={14} /> Diet, heat, cook session, and pantry stay under your control.</span></div>
-      {advanced && <div className="advanced-options"><label className="field"><span>Dietary preference</span><select aria-label="Dietary preference" value={diet} onChange={(e) => setDiet(e.target.value as DietId)}>{DIETS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label className="field"><span>Heat</span><select aria-label="Spice level" value={spiceHeat} onChange={(e) => setSpiceHeat(e.target.value as SpiceHeat)}><option value="gentle">Gentle</option><option value="mild">Mild</option><option value="medium">Medium</option><option value="hot">Hot</option><option value="fiery">Fiery</option></select></label><label className="field"><span>Cook session</span><select aria-label="Cook session" value={cookPace} onChange={(e) => setCookPace(e.target.value as CookPace | "")}><option value="">Template timing</option>{(Object.keys(COOK_PACE_LABELS) as CookPace[]).map((pace) => <option key={pace} value={pace}>{COOK_PACE_LABELS[pace]}</option>)}</select><small>Optional. Steps and temperatures stay as written. A long smoke day is a schedule note, not a new clock.</small></label><label className="field pantry-field"><span>Already in your pantry</span><input value={pantryText} onChange={(e) => setPantryText(e.target.value)} maxLength={500} placeholder="e.g. garlic, olive oil, rice" /><small>Separate ingredients with commas. Matching items come off your shopping list.</small></label></div>}{formError && <p className="error-message" role="alert">{formError}</p>}<p className="classic-count-note">{CLASSICS.length} classic structures × {REGIONS.length} regional profiles · {DIETS.length} dietary preferences. That covers everyday plates, smoke and grill, and a home-kitchen flavour with no second regional paste. The meal builder has {getMealCombinationCount().toLocaleString("en-AU")} combinations, from a quick cook to a long smoke day. Each click uses a new seed, so the same classic and region can come back with a different finish. A cook session only adds a schedule note. Hard filters stay. Authored templates, not kitchen-tested. If a plate has no saved picture, one is painted on this computer.</p></form>
+      {advanced && <div className="advanced-options"><label className="field"><span>Dietary preference</span><select aria-label="Dietary preference" value={diet} onChange={(e) => setDiet(e.target.value as DietId)}>{DIETS.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}</select></label><label className="field"><span>Heat</span><select aria-label="Spice level" value={spiceHeat} onChange={(e) => setSpiceHeat(e.target.value as SpiceHeat)}><option value="gentle">Gentle</option><option value="mild">Mild</option><option value="medium">Medium</option><option value="hot">Hot</option><option value="fiery">Fiery</option></select></label><label className="field"><span>Cook session</span><select aria-label="Cook session" value={cookPace} onChange={(e) => setCookPace(e.target.value as CookPace | "")}><option value="">Template timing</option>{(Object.keys(COOK_PACE_LABELS) as CookPace[]).map((pace) => <option key={pace} value={pace}>{COOK_PACE_LABELS[pace]}</option>)}</select><small>Optional. Steps and temperatures stay as written. A long smoke day is a schedule note, not a new clock.</small></label><label className="field pantry-field"><span>Already in your pantry</span><input value={pantryText} onChange={(e) => setPantryText(e.target.value)} maxLength={500} placeholder="e.g. garlic, olive oil, rice" /><small>Separate ingredients with commas. Matching items come off your shopping list.</small></label><div className="field clean-field"><span>Cleaner plate</span>{cleanKnobs("classic")}</div></div>}{formError && <p className="error-message" role="alert">{formError}</p>}<p className="classic-count-note">{CLASSICS.length} classic structures × {REGIONS.length} regional profiles · {DIETS.length} dietary preferences. That covers everyday plates, smoke and grill, and a home-kitchen flavour with no second regional paste. The meal builder has {getMealCombinationCount().toLocaleString("en-AU")} combinations, from a quick cook to a long smoke day. Each click uses a new seed, so the same classic and region can come back with a different finish. A cook session only adds a schedule note. Hard filters stay. Authored templates, not kitchen-tested. If a plate has no saved picture, one is painted on this computer.</p></form>
     </section>;
   }
   function plateSrc(target: Recipe, spec: ShareSpec | null): string {
@@ -542,8 +572,9 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     if (!recipe) return <div className="empty-state"><div className="empty-icon"><ChefHat size={35} /></div><h3>Choose a meal to see the ingredients.</h3><p>Pick a main, a method, and a region. The result is a template with steps. It is not kitchen-tested. Check the packet.</p></div>;
     const adjustments = communityAdjustments(plateIdentity(recipe), recipe.ingredients, community?.plates || []);
     const shown = useTry ? scaleIngredients(recipe.ingredients, adjustments) : recipe.ingredients;
+    const stats = recipe.cleanStats ?? mealCleanStats(recipe);
     return <article className="recipe-detail" ref={recipeRef} tabIndex={-1} aria-label={recipe.title}>
-      <div className="recipe-heading"><div><span className="eyebrow">{recipeBaseName(recipe)} <span className="pair-x">×</span> {regionName(recipe.regionId)}</span><h2>{recipe.title}</h2><p>{recipe.description}</p><div className="recipe-meta"><span><Clock3 size={16} /> About {duration(recipe.totalMinutes)}</span>{recipe.cookPace && <span><Clock3 size={16} /> {COOK_PACE_LABELS[recipe.cookPace]}</span>}<span><Users size={16} /> {recipe.servings} servings</span><span><Leaf size={16} /> {DIETS.find((d) => d.id === recipe.diet)?.name}</span><span className="meal-source-badge"><BookOpen size={12} /> {recipe.sourceLabel}</span></div></div><button className={`button secondary save-recipe ${isSaved ? "is-saved" : ""}`} onClick={saveRecipe}><Heart size={17} fill={isSaved ? "currentColor" : "none"} /> {isSaved ? "Saved to cookbook" : "Save recipe"}</button></div>
+      <div className="recipe-heading"><div><span className="eyebrow">{recipeBaseName(recipe)} <span className="pair-x">×</span> {regionName(recipe.regionId)}</span><h2>{recipe.title}</h2><p>{recipe.description}</p><div className="recipe-meta"><span><Clock3 size={16} /> About {duration(recipe.totalMinutes)}</span>{recipe.cookPace && <span><Clock3 size={16} /> {COOK_PACE_LABELS[recipe.cookPace]}</span>}<span><Users size={16} /> {recipe.servings} servings</span><span><Leaf size={16} /> {DIETS.find((d) => d.id === recipe.diet)?.name}</span><span className="meal-source-badge"><BookOpen size={12} /> {recipe.sourceLabel}</span></div><div className="clean-stats" aria-label="Plate clutter counts"><span>{stats.ingredientCount} ingredients</span><span>{stats.stepCount} steps</span><span>{stats.bottleCount} bottle{stats.bottleCount === 1 ? "" : "s"}</span>{recipe.cleanSummary && <span className="clean-summary-pill">{recipe.cleanSummary}</span>}</div></div><button className={`button secondary save-recipe ${isSaved ? "is-saved" : ""}`} onClick={saveRecipe}><Heart size={17} fill={isSaved ? "currentColor" : "none"} /> {isSaved ? "Saved to cookbook" : "Save recipe"}</button></div>
       <figure className="recipe-plate"><img src={plateSrc(recipe, shareSpec)} alt={`Plate picture for ${recipe.title}`} onError={keepImage} /><figcaption>Each dish has its own picture, made on this computer from that recipe. Saved inspiration pictures are used for a few example plates. A local image model on 127.0.0.1 is used when FUSION_LOCAL_IMAGE_URL is set. Otherwise the plate is painted from the ingredient list. Not a photograph of a cooked dish.</figcaption></figure>
       {shareBar(recipe)}
       {recipe.components && <div className="meal-components">{Object.entries(recipe.components).map(([label, value]) => <div className="meal-component" key={label}><small>{label}</small><strong>{value}</strong></div>)}</div>}
@@ -573,6 +604,7 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
             <button className="button primary" type="submit"><CalendarDays size={17} /> Plan my week</button>
           </div>
           <div className="avoid-row" role="group" aria-label="Allergens to avoid">{AVOID_CHOICES.map((name) => <label key={name} className="text-button"><input type="checkbox" checked={avoidAllergens.includes(name)} onChange={() => setAvoidAllergens((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name])} /> {name}</label>)}</div>
+          <div className="week-clean-block"><span className="eyebrow">Cleaner week</span>{cleanKnobs("week")}</div>
           <p className="subtle-small">Uses the diet, spice, servings and pantry from Recipe studio. Press Plan my week again for a different spread. Wheat or gluten uses the gluten-free template. A recorded allergen is left out rather than cooked around. Check the packet. These plates are template-generated and not kitchen-tested.</p>
           {weekError && <p className="error-message" role="alert">{weekError}</p>}
         </form>
@@ -591,7 +623,11 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
           </div>
         </aside>}
         {week && <div className="week-layout"><div className="week-days">{week.days.map((day) => {
-          const brief = { days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens, dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean) };
+          const brief = {
+            days: weekDays, servings, diet, spiceHeat, pantry: pantryText, avoidAllergens,
+            dislikes: dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean),
+            ...(cleanActive(cleanPrefs) ? { clean: cleanPrefs } : {}),
+          };
           const sides = day.recipe?.kind === "meal" ? sideOptions(brief, week, day.day) : [];
           return <WeekDayPlate
             key={day.day}

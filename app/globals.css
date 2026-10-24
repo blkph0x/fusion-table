@@ -139,6 +139,15 @@ ul, ol { margin: 0; padding: 0; }
 .compose-options .text-button { font-size: 10px; color: #7b8c68; padding: 3px 0; }
 .advanced-options { display: grid; grid-template-columns: 1fr 1fr; gap: 21px; border-top: 1px solid #dfe5d5; margin-top: 19px; padding-top: 20px; }
 .pantry-field { grid-column: 1 / -1; }
+.clean-field { grid-column: 1 / -1; }
+.clean-knobs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.clean-knob { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border: 1px solid #d5deca; background: #fffefa; border-radius: 4px; font-size: 11px; color: #5f6f54; cursor: pointer; }
+.clean-knob.on { border-color: var(--forest); background: #eef4e6; color: var(--forest); font-weight: 600; }
+.clean-knob input { accent-color: var(--forest); }
+.clean-stats { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12px; color: #5f6f54; }
+.clean-stats span { padding: 4px 9px; border: 1px solid #dfe5d5; border-radius: 999px; background: #f7f9f2; }
+.clean-summary-pill { max-width: 100%; border-color: #c5d4b4 !important; background: #eef4e6 !important; }
+.week-clean-block { margin: 14px 0; padding: 12px 0 4px; border-top: 1px solid #e4eadc; }
 .diet-options, .diet-pills { display: flex; flex-wrap: wrap; gap: 7px; }
 .diet-options button, .diet-pills button, .pill { padding: 7px 12px; border: 1px solid #d5deca; background: var(--paper); border-radius: 30px; font-size: 10px; color: #7b896e; }
 .diet-options button.active, .diet-options button[aria-pressed="true"], .diet-pills button.active, .diet-pills button[aria-pressed="true"] { border-color: var(--forest); background: var(--forest); color: white; }

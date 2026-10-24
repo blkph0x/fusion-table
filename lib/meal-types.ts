@@ -1,3 +1,4 @@
+import type { CleanPrefs } from "./clean-prefs.ts";
 import type { CookPace, DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
 /** A main ingredient is never silently exchanged to satisfy a dietary preference. */
@@ -10,6 +11,8 @@ export interface MealInput {
   diet?: DietId;
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
+  /** Soft cleaner-meal knobs. Never relax hard exclusions. */
+  clean?: CleanPrefs;
   /** Extra tighten-only flags. They do not replace the selected main. */
   constraints?: RecipeConstraints;
   /**
