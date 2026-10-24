@@ -8,7 +8,7 @@ describe("expanded side catalogue", () => {
   it("exposes ninety distinct sides and keeps combination maths honest", () => {
     assert.equal(MEAL_SIDES.length, 90);
     assert.equal(new Set(MEAL_SIDES.map((side) => side.id)).size, 90);
-    assert.equal(getMealCombinationCount(), 1_744_200);
+    assert.equal(getMealCombinationCount(), 1_819_440);
     assert.ok(MEAL_SIDES.every((side) => side.name && side.description && side.emoji));
   });
 

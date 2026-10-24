@@ -12,12 +12,12 @@ const instructions = (recipe: ReturnType<typeof generateMeal>) => recipe.steps.m
 describe("ingredient-first complete meal engine", () => {
   it("counts only supported main/method/region/side configurations and exposes every promised chicken method", () => {
     assert.equal(MAIN_INGREDIENTS.length, 30);
-    assert.equal(COOKING_METHODS.length, 12);
+    assert.equal(COOKING_METHODS.length, 13);
     assert.equal(MEAL_REGIONS.length, 76);
     assert.equal(MEAL_SIDES.length, 90);
-    assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 255);
-    assert.equal(getMealCombinationCount(), 1_744_200);
-    for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
+    assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 266);
+    assert.equal(getMealCombinationCount(), 1_819_440);
+    for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "smoked", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
       assert.ok(getMethodsForMain("chicken").some((method) => method.id === id));
     }
     assert.deepEqual(getMethodsForMain("missing"), []);
@@ -201,7 +201,7 @@ describe("ingredient-first complete meal engine", () => {
       const temperature = ["chicken", "turkey", "duck"].includes(main.id) || ["patties", "schnitzel"].includes(methodId) && main.category === "meat" || methodId === "patties" ? "75°C" : main.category === "seafood" ? "63°C" : "71°C";
       assert.ok(instructions(meal).includes(temperature), meal.id);
       assert.ok(meal.safetyNote?.includes(temperature), meal.id);
-      assert.match(meal.safetySource!, /^https:\/\/www\.(foodstandards|foodauthority\.nsw)\.gov\.au\//);
+      assert.match(meal.safetySource!, /^https:\/\/www\.(foodstandards|foodauthority\.nsw|fsis\.usda)\.gov(?:\.au)?\//);
       assert.ok(meal.equipment.includes("Food thermometer"), meal.id);
     }
     for (const method of getMethodsForMain("eggs")) {

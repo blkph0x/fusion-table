@@ -149,7 +149,7 @@ const meal = generateMeal({
 });
 ```
 
-This engine retains the chosen main and rejects incompatible main/diet/method choices rather than silently replacing that ingredient. Its 255 compatible main/method pairs × 76 regions × 90 sides give 1,744,200 configurations. Spice is gentle, mild, medium, hot or fiery. Mild, medium and hot keep their previous amounts. Home kitchen is the weekday flavour. Each other region uses its own paste, heat, spices and herbs. Serving, dietary, heat and cook-session variants do not inflate that count.
+This engine retains the chosen main and rejects incompatible main/diet/method choices rather than silently replacing that ingredient. Its 266 compatible main/method pairs × 76 regions × 90 sides give 1,819,440 configurations. Spice is gentle, mild, medium, hot or fiery. Mild, medium and hot keep their previous amounts. Home kitchen is the weekday flavour. Each other region uses its own paste, heat, spices and herbs. Serving, dietary, heat and cook-session variants do not inflate that count.
 
 Both engines return typed ingredients, quantities, steps, estimated times, shopping categories and the exact source label **“Template-generated · not kitchen-tested”**. Keep that label in your own interface. Automated validity checks do not demonstrate taste or a completed kitchen trial.
 

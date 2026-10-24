@@ -129,7 +129,7 @@ describe("cut-aware prep wording", () => {
 describe("matrix coverage of every cut form", () => {
   it("every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs", () => {
     const methods = [
-      "schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled",
+      "schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "smoked",
       "stir-fried", "braised", "curry", "patties", "roasted", "steamed",
     ];
     for (const cut of MEAT_CUTS) {

@@ -4,6 +4,7 @@ import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, M
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 import { getCut, type MeatCut } from "./cuts.ts";
 import { assertCutForMethod, prepareCut } from "./cut-method.ts";
+import { defaultSmokePlan, mainAllowsSmoke, smokeMismatchMessage } from "./smoke-method.ts";
 import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
@@ -25,6 +26,7 @@ import {
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
 export { cutsForMethod, cutAllowedForMethod } from "./cut-method.ts";
+export { mainAllowsSmoke, SMOKE_MAINS, NEVER_SMOKE_MAINS, SMOKE_STAPLE_CUTS } from "./smoke-method.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
 
 type DraftIngredient = Omit<RecipeIngredient, "inPantry"> & { aliases?: readonly string[] };
@@ -73,6 +75,7 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   if (!main) throw new Error("Choose a recognised main ingredient.");
   if (!COOKING_METHODS.some((item) => item.id === input.methodId)) throw new Error("Choose a recognised cooking method.");
   if (!main.methodIds.includes(input.methodId)) throw new Error(`${main.name} is not available with that cooking method. Choose one of its suggested methods.`);
+  if (input.methodId === "smoked" && !mainAllowsSmoke(main.id)) throw new Error(smokeMismatchMessage(main.id));
   if (!MEAL_REGIONS.some((item) => item.id === input.regionId)) throw new Error("Choose a recognised flavour region.");
   const sideId = input.sideId ?? "rice-greens";
   if (!MEAL_SIDES.some((item) => item.id === sideId)) throw new Error("Choose a recognised side pairing.");
@@ -151,7 +154,10 @@ function withCut(plan: MainPlan, cut: MeatCut, method: string): MainPlan {
   }
   const preparation = affinity.preparation;
   const endpoint = affinity.endpoint;
-  const minutes = plan.minutes + (affinity.minutesBump ?? 0);
+  // Smoked cut plans carry absolute minutes in minutesBump; other methods add a bump.
+  const minutes = method === "smoked" && affinity.minutesBump
+    ? affinity.minutesBump
+    : plan.minutes + (affinity.minutesBump ?? 0);
   const notes = [preparation, cut.packetNote].filter(Boolean).join(" ");
   const aliases = [...new Set([...(plan.ingredient.aliases ?? []), ...cut.aliases, cut.shoppingName])];
   const safetyNote = endpoint === plan.endpoint || !plan.safetySource
@@ -202,41 +208,42 @@ function withoutDislikes(profile: RegionProfile, dislikes: readonly string[]): R
 }
 
 const COOK_TIMES: Record<string, Record<string, number>> = {
-  chicken: { schnitzel: 12, baked: 25, "pan-fried": 15, "air-fried": 18, poached: 20, grilled: 16, "stir-fried": 9, braised: 40, curry: 25, patties: 15, roasted: 30, steamed: 20 },
-  turkey: { schnitzel: 12, baked: 25, "pan-fried": 15, "air-fried": 18, poached: 22, grilled: 16, "stir-fried": 9, braised: 50, curry: 30, patties: 15, roasted: 30, steamed: 22 },
-  beef: { schnitzel: 10, "pan-fried": 12, "air-fried": 14, grilled: 12, "stir-fried": 7, braised: 120, curry: 110, patties: 14, roasted: 22 },
-  lamb: { "pan-fried": 12, "air-fried": 14, grilled: 12, "stir-fried": 7, braised: 110, curry: 100, patties: 14, roasted: 24 },
-  pork: { schnitzel: 12, baked: 25, "pan-fried": 14, "air-fried": 16, grilled: 14, "stir-fried": 8, braised: 110, curry: 100, patties: 15, roasted: 25 },
-  salmon: { baked: 16, "pan-fried": 10, "air-fried": 12, poached: 12, grilled: 12, "stir-fried": 8, curry: 12, patties: 14, roasted: 16, steamed: 12 },
+  chicken: { schnitzel: 12, baked: 25, "pan-fried": 15, "air-fried": 18, poached: 20, grilled: 16, smoked: 90, "stir-fried": 9, braised: 40, curry: 25, patties: 15, roasted: 30, steamed: 20 },
+  turkey: { schnitzel: 12, baked: 25, "pan-fried": 15, "air-fried": 18, poached: 22, grilled: 16, smoked: 120, "stir-fried": 9, braised: 50, curry: 30, patties: 15, roasted: 30, steamed: 22 },
+  beef: { schnitzel: 10, "pan-fried": 12, "air-fried": 14, grilled: 12, smoked: 360, "stir-fried": 7, braised: 120, curry: 110, patties: 14, roasted: 22 },
+  lamb: { "pan-fried": 12, "air-fried": 14, grilled: 12, smoked: 300, "stir-fried": 7, braised: 110, curry: 100, patties: 14, roasted: 24 },
+  pork: { schnitzel: 12, baked: 25, "pan-fried": 14, "air-fried": 16, grilled: 14, smoked: 240, "stir-fried": 8, braised: 110, curry: 100, patties: 15, roasted: 25 },
+  salmon: { baked: 16, "pan-fried": 10, "air-fried": 12, poached: 12, grilled: 12, smoked: 45, "stir-fried": 8, curry: 12, patties: 14, roasted: 16, steamed: 12 },
   "white-fish": { schnitzel: 10, baked: 18, "pan-fried": 10, "air-fried": 12, poached: 12, grilled: 12, curry: 12, patties: 14, roasted: 18, steamed: 12 },
   prawns: { "pan-fried": 6, "air-fried": 8, poached: 6, grilled: 6, "stir-fried": 6, curry: 7, steamed: 7 },
-  tofu: { schnitzel: 12, baked: 25, "pan-fried": 12, "air-fried": 18, grilled: 12, "stir-fried": 10, braised: 20, curry: 18, patties: 14, roasted: 25, steamed: 12 },
-  tempeh: { schnitzel: 12, baked: 25, "pan-fried": 12, "air-fried": 18, grilled: 12, "stir-fried": 10, braised: 20, curry: 20, patties: 14, roasted: 25, steamed: 18 },
+  tofu: { schnitzel: 12, baked: 25, "pan-fried": 12, "air-fried": 18, grilled: 12, smoked: 40, "stir-fried": 10, braised: 20, curry: 18, patties: 14, roasted: 25, steamed: 12 },
+  tempeh: { schnitzel: 12, baked: 25, "pan-fried": 12, "air-fried": 18, grilled: 12, smoked: 45, "stir-fried": 10, braised: 20, curry: 20, patties: 14, roasted: 25, steamed: 18 },
   halloumi: { schnitzel: 8, baked: 15, "pan-fried": 6, "air-fried": 10, grilled: 6, roasted: 15 },
   eggs: { baked: 18, "pan-fried": 8, poached: 8, curry: 20, steamed: 18 },
   chickpeas: { baked: 25, "pan-fried": 12, "air-fried": 16, braised: 20, curry: 20, patties: 16, roasted: 30 },
   lentils: { braised: 15, curry: 15, patties: 16 },
   "butter-beans": { baked: 25, "pan-fried": 12, braised: 20, curry: 20, patties: 16, roasted: 25 },
-  mushrooms: { schnitzel: 12, baked: 22, "pan-fried": 12, "air-fried": 15, grilled: 12, "stir-fried": 9, braised: 25, curry: 20, patties: 16, roasted: 25, steamed: 12 },
+  mushrooms: { schnitzel: 12, baked: 22, "pan-fried": 12, "air-fried": 15, grilled: 12, smoked: 50, "stir-fried": 9, braised: 25, curry: 20, patties: 16, roasted: 25, steamed: 12 },
   aubergine: { schnitzel: 14, baked: 30, "pan-fried": 18, "air-fried": 20, grilled: 16, "stir-fried": 15, braised: 30, curry: 25, roasted: 30, steamed: 18 },
   cauliflower: { schnitzel: 14, baked: 30, "pan-fried": 15, "air-fried": 20, grilled: 16, "stir-fried": 12, braised: 25, curry: 25, patties: 16, roasted: 30, steamed: 12 },
   pumpkin: { baked: 35, "pan-fried": 18, "air-fried": 22, braised: 25, curry: 25, patties: 16, roasted: 35, steamed: 18 },
   "sweet-potato": { baked: 35, "pan-fried": 18, "air-fried": 22, braised: 25, curry: 25, patties: 16, roasted: 35, steamed: 18 },
   courgette: { schnitzel: 10, baked: 22, "pan-fried": 10, "air-fried": 14, grilled: 10, "stir-fried": 8, braised: 18, curry: 18, patties: 16, roasted: 22, steamed: 8 },
   broccoli: { baked: 22, "pan-fried": 12, "air-fried": 15, "stir-fried": 10, braised: 18, curry: 18, patties: 16, roasted: 22, steamed: 9 },
-  duck: { schnitzel: 12, baked: 28, "pan-fried": 16, "air-fried": 18, poached: 22, grilled: 16, "stir-fried": 10, braised: 50, curry: 35, patties: 16, roasted: 35, steamed: 22 },
+  duck: { schnitzel: 12, baked: 28, "pan-fried": 16, "air-fried": 18, poached: 22, grilled: 16, smoked: 150, "stir-fried": 10, braised: 50, curry: 35, patties: 16, roasted: 35, steamed: 22 },
   kangaroo: { schnitzel: 8, "pan-fried": 8, "air-fried": 10, grilled: 8, "stir-fried": 5, braised: 70, curry: 60, patties: 14, roasted: 16 },
   tuna: { baked: 12, "pan-fried": 8, "air-fried": 10, grilled: 8, "stir-fried": 6, curry: 10, roasted: 12 },
   sardines: { baked: 12, "pan-fried": 8, "air-fried": 10, grilled: 8, roasted: 14 },
   "black-beans": { baked: 25, "pan-fried": 12, "air-fried": 16, braised: 20, curry: 20, patties: 16, roasted: 30 },
   "kidney-beans": { baked: 25, "pan-fried": 12, braised: 20, curry: 20, patties: 16, roasted: 25 },
-  jackfruit: { baked: 30, "pan-fried": 15, "stir-fried": 12, braised: 25, curry: 25, roasted: 35 },
+  jackfruit: { baked: 30, "pan-fried": 15, smoked: 60, "stir-fried": 12, braised: 25, curry: 25, roasted: 35 },
   paneer: { schnitzel: 8, baked: 18, "pan-fried": 8, "air-fried": 12, grilled: 8, "stir-fried": 8, curry: 15, roasted: 18 },
 };
 
 function mainPlan(main: MainIngredientOption, method: string): MainPlan {
   const id = main.id;
   const slow = SLOW_METHODS.has(method);
+  const smoked = method === "smoked";
   const patty = method === "patties";
   const quickPieces = method === "stir-fried";
   const schnitzel = method === "schnitzel";
@@ -248,6 +255,20 @@ function mainPlan(main: MainIngredientOption, method: string): MainPlan {
   let allergens: string[] = [];
   let endpoint = "Cook until hot through and tender; check the thickest piece.";
   let safetySource: string | undefined;
+  if (smoked) {
+    const smoke = defaultSmokePlan(id);
+    if (!smoke) throw new Error(smokeMismatchMessage(id));
+    name = smoke.shoppingName;
+    if (id === "salmon") { allergens = ["fish"]; category = "fishmonger"; }
+    if (id === "tofu" || id === "tempeh") allergens = ["soy"];
+    if (id === "jackfruit" || LEGUMES.has(id)) category = "grocery";
+    if (["mushrooms", "aubergine"].includes(id)) category = "produce";
+    preparation = smoke.preparation;
+    endpoint = smoke.endpoint;
+    safetySource = smoke.safetySource;
+    const safetyNote = `${endpoint} Timing is a guide: cut thickness, smoker temperature and weather change cooking time. Use fuel-burning smokers outdoors only. Keep raw animal ingredients separate from ready-to-eat food and wash hands, utensils and work surfaces after handling them.`;
+    return { ingredient: ingredient(id, name, quantity, unit, category, allergens, preparation, main.ingredientAliases), preparation, endpoint, minutes: smoke.minutes, safetyNote, safetySource };
+  }
   if (["chicken", "turkey", "duck"].includes(id)) {
     name = `${main.name} ${patty ? "mince" : slow || method === "roasted" ? "boneless skinless thigh" : "breast fillets"}`;
     preparation = patty ? "Keep the raw mince refrigerated until shaping." : schnitzel ? "Slice the breast horizontally and flatten between baking paper to an even 1 cm thickness. Do not wash raw poultry." : quickPieces ? "Slice across the grain into even 1 cm strips. Do not wash raw poultry." : slow ? "Trim and cut the thigh into 3 cm pieces. Do not wash raw poultry." : "Cut large pieces into individual portions no thicker than 2.5 cm, and pat dry with disposable kitchen paper. Do not wash raw poultry.";
@@ -367,8 +388,9 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const side = sidePlan(sideId, glutenFree, dairyFree, servings);
   const gf = glutenFree;
   const integrated = SLOW_METHODS.has(methodId);
+  const smoking = methodId === "smoked";
   const slowMeat = main.category === "meat" && !["chicken", "turkey", "duck"].includes(mainId) && integrated;
-  const deferSides = integrated && plan.minutes > side.minutes + 5;
+  const deferSides = (integrated || smoking) && plan.minutes > side.minutes + 5;
   const ingredients: DraftIngredient[] = [plan.ingredient, ...side.ingredients, ...profile.aromatics, ...profile.seasonings, ...profile.finish];
   const steps: RecipeStep[] = [];
   const equipment = new Set<string>(["Chopping board and knife", ...side.equipment]);
@@ -377,7 +399,7 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const oil = (quantity: number) => ingredient("neutral-oil", "Neutral cooking oil", quantity, "tbsp", "grocery", [], "For example, rapeseed or sunflower oil.", ["neutral cooking oil", "rapeseed oil", "sunflower oil"]);
   const stock = (quantity: number) => ingredient("vegetable-stock", gf ? "Gluten-free vegetable stock" : "Vegetable stock", quantity, "ml", "grocery", ["celery"], "Prepared liquid stock; use a vegan product and check its label for allergens.", gf ? ["gluten free vegetable stock"] : ["vegetable stock"]);
   const crumbs = (quantity: number) => ingredient("breadcrumbs", gf ? "Gluten-free vegan breadcrumbs" : "Vegan breadcrumbs", quantity, "g", "grocery", gf ? [] : ["wheat"], "Choose crumbs without milk or egg.", gf ? ["gluten free vegan breadcrumbs"] : ["vegan breadcrumbs"]);
-  const mainOil = ["poached", "steamed"].includes(methodId) || mainId === "eggs" && methodId === "curry" ? 0 : ["schnitzel", "patties"].includes(methodId) ? 4 : (cleanActive(clean) ? 1 : 2);
+  const mainOil = ["poached", "steamed", "smoked"].includes(methodId) || mainId === "eggs" && methodId === "curry" ? 0 : ["schnitzel", "patties"].includes(methodId) ? 4 : (cleanActive(clean) ? 1 : 2);
   if (mainOil) ingredients.push(oil(mainOil));
   const range = `${Math.max(3, plan.minutes - 3)}–${plan.minutes + 3}`;
   steps.push({ title: "Prepare your main", detail: `For ${servings} ${servings === 1 ? "person" : "people"}, prepare ${describe([plan.ingredient], servings)}. ${plan.preparation} Wash and prepare the side vegetables; measure the separate portions listed in the steps. ${servings > 6 ? "Use several trays or cook in batches for this larger meal; allow extra time and never crowd the pan or basket." : "Keep raw animal ingredients and their utensils separate from the salad and cooked food."}`, minutes: methodId === "patties" && main.category === "plant" ? 25 : 15 });
@@ -450,6 +472,33 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     steps.push({ title: "Grill the main", detail: `Heat a grill pan or barbecue to medium-high. Brush the prepared ${main.name.toLowerCase()} with ${amount(mainOil, servings)} tbsp neutral cooking oil. ${mainId === "prawns" ? "Thread prawns onto metal skewers to make them easier to turn. " : mainId === "tuna" ? "Oil the grill plate so the steaks release. " : mainId === "sardines" ? "Use a fish basket so the sardines stay intact. " : main.category === "seafood" ? "Use a fish basket or a well-oiled grill plate so the fillets stay intact. " : ""}Cook for about ${range} minutes total, turning carefully halfway and adjusting the heat if it scorches. ${plan.endpoint} Add the regional sauce after grilling so the seasoning does not burn.`, minutes: plan.minutes });
     if (mainId === "prawns") equipment.add("Metal skewers");
     if (mainId === "sardines") equipment.add("Fish basket");
+  } else if (methodId === "smoked") {
+    equipment.add("Outdoor smoker or covered barbecue with an indirect zone");
+    equipment.add("Food thermometer");
+    equipment.add("Lidded roasting dish or butcher paper rated for cooking");
+    const longJoint = plan.minutes >= 180;
+    const plantSmoke = main.category === "plant";
+    steps.push({
+      title: "Start the hot smoke",
+      detail: plantSmoke
+        ? `Stabilise an outdoor smoker or covered barbecue at 120–140°C with an indirect zone (no flames under the food). Put the prepared ${main.name.toLowerCase()} in the indirect zone. Hot-smoke for about ${range} minutes, checking early if pieces are thin. ${plan.endpoint} Keep the regional sauce separate so sugars do not burn on the grate.`
+        : `Use the smoker outdoors only. Stabilise the cooking chamber at 120–140°C and monitor grate temperature with a separate probe. Put the prepared ${main.name.toLowerCase()} in the indirect zone with a centre probe. Smoke for the first ${longJoint ? "2–3 hours" : "half of the cook"} until the surface has developed a dry bark; keep the cooker steadily hot. Never burn wood or a smoking tray in an ordinary indoor oven.`,
+      minutes: longJoint ? Math.min(180, plan.minutes) : Math.max(20, Math.round(plan.minutes * 0.55)),
+    });
+    if (longJoint && !plantSmoke) {
+      steps.push({
+        title: "Manage the stall and finish",
+        detail: `When the surface is set and the centre stalls (often around 70–75°C), wrap the joint with a splash of hot water in a tightly covered roasting dish or butcher paper. Continue at 130–140°C until ${plan.endpoint} Total smoke time is about ${range} minutes for this piece; thicker joints need longer. ${deferSides ? `During the final ${side.minutes} minutes, prepare the sides so they finish near service. ` : ""}`,
+        minutes: Math.max(60, plan.minutes - 180),
+      });
+    }
+    steps.push({
+      title: "Rest, then slice or pull",
+      detail: plantSmoke
+        ? `Lift the ${main.name.toLowerCase()} carefully. ${plan.endpoint} Serve with the regional sauce at the table.`
+        : `Rest the smoked ${main.name.toLowerCase()} ${longJoint ? "20–30 minutes" : "10–15 minutes"} loosely covered. Then slice across the grain, pull apart, or portion between bones as the cut allows. ${plan.endpoint} Offer the regional sauce separately so any bark stays intact.`,
+      minutes: longJoint ? 25 : 12,
+    });
   } else if (methodId === "stir-fried") {
     equipment.add("Wok or large frying pan");
     steps.push({ title: "Stir-fry the main", detail: `Heat a wok or large frying pan over medium-high heat. Add ${amount(mainOil, servings)} tbsp neutral cooking oil and the prepared ${main.name.toLowerCase()} in small batches. Stir-fry for about ${range} minutes per batch, turning frequently${mainId === "aubergine" || mainId === "cauliflower" || mainId === "broccoli" ? "; add a splash of water and cover briefly if the centre needs to soften" : ""}. ${plan.endpoint} Return cooked batches to the pan and toss gently with the warm regional sauce for 30 seconds.`, minutes: plan.minutes });
@@ -497,7 +546,7 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   }
   const allergens = [...new Set(recipeIngredients.flatMap((entry) => entry.allergens))].sort();
   // Patty prep includes any plant precook/cooling and a separate 15-minute chill.
-  const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : 15;
+  const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : methodId === "smoked" ? 25 : 15;
   const cookMinutes = Math.max(side.minutes, plan.minutes + (integrated ? 8 : 0)) + (servings > 6 && ["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried", "patties"].includes(methodId) ? plan.minutes : 0);
   const mainName = `${main.name} ${methodId === "schnitzel" ? "schnitzel" : methodId === "patties" ? "patties" : `· ${method.name.toLowerCase()}`}`;
   const statsDraft = mealCleanStats({ ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment });

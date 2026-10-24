@@ -4,6 +4,7 @@
  */
 
 import { cutsForMain as allCutsForMain, getCut, type CutForm, type MeatCut } from "./cuts.ts";
+import { cutAllowedForSmoke, prepareSmokeCut, smokeMismatchMessage } from "./smoke-method.ts";
 
 export type CookingMethodId =
   | "schnitzel"
@@ -12,6 +13,7 @@ export type CookingMethodId =
   | "air-fried"
   | "poached"
   | "grilled"
+  | "smoked"
   | "stir-fried"
   | "braised"
   | "curry"
@@ -27,16 +29,17 @@ const OVEN = new Set<string>(["baked", "roasted"]);
 /**
  * Forms allowed for each method. A missing form is rejected in validation
  * and hidden in the meal builder cut picker.
+ * Smoked is further restricted by smoke staple cut ids (never mince).
  */
 export const FORM_METHODS: Readonly<Record<CutForm, readonly string[]>> = {
-  fillet: ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "stir-fried", "braised", "curry", "roasted", "steamed"],
+  fillet: ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "smoked", "stir-fried", "braised", "curry", "roasted", "steamed"],
   steak: ["schnitzel", "baked", "pan-fried", "air-fried", "grilled", "stir-fried", "braised", "curry", "roasted"],
   mince: ["patties", "baked", "pan-fried", "air-fried", "grilled", "stir-fried", "braised", "curry", "roasted"],
-  "bone-in": ["baked", "pan-fried", "air-fried", "grilled", "braised", "curry", "roasted", "steamed", "poached"],
-  whole: ["baked", "roasted", "braised", "curry", "steamed", "poached"],
+  "bone-in": ["baked", "pan-fried", "air-fried", "grilled", "smoked", "braised", "curry", "roasted", "steamed", "poached"],
+  whole: ["baked", "roasted", "smoked", "braised", "curry", "steamed", "poached"],
   offal: ["pan-fried", "air-fried", "grilled", "braised", "curry", "baked", "roasted"],
-  slow: ["braised", "curry", "patties", "roasted", "baked", "stir-fried"],
-  slice: ["pan-fried", "air-fried", "grilled", "stir-fried", "baked", "roasted", "braised", "curry"],
+  slow: ["braised", "curry", "patties", "roasted", "baked", "smoked", "stir-fried"],
+  slice: ["pan-fried", "air-fried", "grilled", "smoked", "stir-fried", "baked", "roasted", "braised", "curry"],
 };
 
 /** Cuts that pull/shred when braised rather than stay as neat cubes. */
@@ -61,6 +64,7 @@ const SAUSAGE_IDS = new Set(["beef-sausage", "lamb-sausage", "pork-sausage"]);
 export function cutAllowedForMethod(cut: MeatCut, methodId: string): boolean {
   const allowed = FORM_METHODS[cut.form];
   if (!allowed.includes(methodId)) return false;
+  if (methodId === "smoked") return cutAllowedForSmoke(cut);
   // Schnitzel needs a flattenable boneless piece — not drumsticks, racks, or sausages.
   if (methodId === "schnitzel") {
     if (cut.form === "bone-in" || cut.form === "whole" || cut.form === "slow" || cut.form === "mince") return false;
@@ -100,6 +104,12 @@ function isPoultry(cut: MeatCut): boolean {
  */
 export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
   if (!cutAllowedForMethod(cut, methodId)) return null;
+  if (methodId === "smoked") {
+    const smoke = prepareSmokeCut(cut);
+    if (!smoke) return null;
+    // Absolute smoke minutes for this cut (withCut replaces plan.minutes when bump is tagged absolute via large value + flag).
+    return { preparation: smoke.preparation, endpoint: smoke.endpoint, minutesBump: smoke.minutes };
+  }
   const name = cut.shoppingName.toLocaleLowerCase("en");
   const poultry = isPoultry(cut);
   const wash = poultryNote(cut);
@@ -293,14 +303,18 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
 
 export function cutMethodMismatchMessage(cut: MeatCut, methodId: string): string {
   const method = methodId.replace(/-/g, " ");
+  if (methodId === "smoked") return smokeMismatchMessage(cut.mainId, cut.id);
   if (cut.form === "slow" && STEAK_QUICK.has(methodId)) {
-    return `${cut.shoppingName} is a slow-cooking cut — it does not suit ${method} as steaks. Choose braised, curry, patties (grind), or a steak cut.`;
+    return `${cut.shoppingName} is a slow-cooking cut — it does not suit ${method} as steaks. Choose braised, curry, smoked, patties (grind), or a steak cut.`;
   }
   if (cut.form === "whole" && (STEAK_QUICK.has(methodId) || methodId === "patties" || methodId === "stir-fried")) {
-    return `A whole bird does not suit ${method}. Choose roasted, baked or braised, or pick breast/thigh fillets.`;
+    return `A whole bird does not suit ${method}. Choose roasted, baked, smoked or braised, or pick breast/thigh fillets.`;
   }
   if (cut.form === "mince" && methodId === "schnitzel") {
     return `Mince cannot be crumbed as schnitzel steaks. Choose patties, or pick a steak or fillet cut.`;
+  }
+  if (cut.form === "mince" && methodId === "smoked") {
+    return `Mince is not hot-smoked as a joint. Choose patties, or pick brisket, ribs or another smoke staple.`;
   }
   return `${cut.shoppingName} is not a sensible cut for ${method}. Choose a cut that matches the technique, or leave the cut blank.`;
 }
