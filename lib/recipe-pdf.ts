@@ -1,3 +1,4 @@
+import { COOK_PACE_LABELS } from "./cook-pace.ts";
 import type { Recipe } from "./recipe-types.ts";
 
 /** A text recipe file. No native PDF library, so Windows and Linux builds stay the same. */
@@ -5,7 +6,7 @@ export function recipePdf(recipe: Recipe): Uint8Array {
   const lines: Array<{ text: string; size: number }> = [
     { text: recipe.title, size: 18 },
     { text: "Template-generated · not kitchen-tested. Check the packet.", size: 10 },
-    { text: `${recipe.servings} servings · about ${recipe.totalMinutes} minutes · ${recipe.diet} · ${recipe.spiceHeat}`, size: 11 },
+    { text: `${recipe.servings} servings · about ${recipe.totalMinutes} minutes · ${recipe.diet} · ${recipe.spiceHeat}${recipe.cookPace ? ` · ${COOK_PACE_LABELS[recipe.cookPace]}` : ""}`, size: 11 },
     { text: recipe.description, size: 11 },
     { text: "Ingredients", size: 14 },
     ...recipe.ingredients.map((item) => ({
@@ -18,6 +19,7 @@ export function recipePdf(recipe: Recipe): Uint8Array {
       { text: step.detail, size: 11 },
     ]),
   ];
+  if (recipe.sessionNote) lines.push({ text: `Cook session. ${recipe.sessionNote}`, size: 10 });
   if (recipe.safetyNote) lines.push({ text: recipe.safetyNote, size: 10 });
   lines.push({ text: "Shared from Fusion Table. This file is the template, not a kitchen test.", size: 10 });
 

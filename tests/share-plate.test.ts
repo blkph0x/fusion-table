@@ -59,6 +59,20 @@ describe("shared recipes, pictures and PDF", () => {
     const seededMeal = await renderPlate(generateMeal({ mainId: "chicken", methodId: "curry", regionId: "thai", sideId: "rice-greens", servings: 2, diet: "balanced", spiceHeat: "hot", seed: 4 }), { model: false });
     assert.equal(seededMeal.contentType, "image/png");
     assert.notEqual(Buffer.compare(Buffer.from(seededMeal.bytes), saved), 0);
+    for (const classicId of ["shotgun-shells", "ribs-on-the-rack", "foil-boat-ribs", "burnt-ends", "smoked-meatloaf", "rotisserie-roast"]) {
+      const plate = await renderPlate(generateRecipe({ classicId, regionId: "home-style", diet: "balanced", servings: 4, spiceHeat: "medium" }), { model: false });
+      assert.equal(plate.contentType, "image/png", classicId);
+      assert.equal(plate.bytes[0], 0x89, classicId);
+      assert.match(plate.note, /Painted on this computer/, classicId);
+    }
+    const homeMeal = await renderPlate(generateMeal({ mainId: "chickpeas", methodId: "braised", regionId: "home-kitchen", sideId: "lentil-salad", servings: 2, diet: "vegan", spiceHeat: "medium" }), { model: false });
+    assert.equal(homeMeal.contentType, "image/png");
+    assert.match(homeMeal.note, /Painted on this computer|Drawn by the local image model/);
+    const paced = generateRecipe({ classicId: "bbq-ribs", regionId: "texas-bbq", servings: 4, diet: "balanced", spiceHeat: "medium", cookPace: "morning", seed: 9 });
+    const rebuilt = recipeFromShare(decodeShare(encodeShare(specFromRecipe(paced))));
+    assert.equal(rebuilt.id, paced.id);
+    assert.equal(rebuilt.cookPace, "morning");
+    assert.deepEqual(rebuilt.steps, paced.steps);
   });
 
   it("fills an empty public-file signal from disk and refuses a path outside the site", async () => {

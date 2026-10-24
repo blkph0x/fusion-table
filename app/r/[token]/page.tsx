@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { COOK_PACE_LABELS } from "@/lib/cook-pace";
 import { publicPath } from "@/lib/public-path";
 import { decodeShare, recipeFromShare } from "@/lib/share-recipe";
 
@@ -56,7 +57,7 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
       <img src={plate} alt={`Plate picture for ${recipe.title}`} />
       <figcaption>Each dish has its own picture, made on the computer that hosts this site. It is not a photograph of a cooked dish.</figcaption>
     </figure>
-    <p className="recipe-meta">{recipe.servings} servings · about {recipe.totalMinutes} minutes · {recipe.diet} · {recipe.spiceHeat}</p>
+    <p className="recipe-meta">{recipe.servings} servings · about {recipe.totalMinutes} minutes · {recipe.diet} · {recipe.spiceHeat}{recipe.cookPace ? ` · ${COOK_PACE_LABELS[recipe.cookPace]}` : ""}</p>
     <div className="recipe-actions">
       <a className="button primary" href={pdf}>Save PDF</a>
       <a className="button secondary" href={publicPath(`/?r=${encodeURIComponent(token)}`)}>Open in the planner</a>
@@ -69,6 +70,8 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
     <section>
       <h2>Method</h2>
       <ol className="method-list">{recipe.steps.map((step, index) => <li key={`${step.title}-${index}`}><span className="step-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{step.title}</h3><p>{step.detail}</p></div></li>)}</ol>
+      {recipe.sessionNote && <section className="bbq-method-notes"><h2>Cook session</h2><p>{recipe.sessionNote}</p></section>}
+      {recipe.methodNotes?.length ? <section className="bbq-method-notes"><h2>Smoking, grilling & kitchen options</h2><ul>{recipe.methodNotes.map((note) => <li key={note}>{note}</li>)}</ul></section> : null}
       {recipe.safetyNote && <p>{recipe.safetyNote}</p>}
     </section>
   </main>;
