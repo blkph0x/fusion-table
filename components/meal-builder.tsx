@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Check, ChefHat, ChevronDown, Globe2, Leaf, Search, Sparkles, Utensils } from "lucide-react";
 import { DIETS } from "@/lib/recipes";
 import { COOK_PACE_LABELS } from "@/lib/cook-pace";
@@ -70,11 +70,23 @@ const CATEGORIES = [{ id: "all", name: "All ingredients" }, { id: "meat", name: 
 export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens = [], dislikes = [], clean = {}, onCleanChange }: Props) {
   const seed = initialRecipe?.kind === "meal" ? initialRecipe : null;
   const remembered = !seed ? readMemory() : null;
-  const [step, setStep] = useState(seed ? 3 : remembered?.mainId && remembered?.methodId ? 3 : 0);
-  const [mainId, setMainId] = useState(seed?.mainId || remembered?.mainId || "");
-  const [methodId, setMethodId] = useState(seed?.methodId || remembered?.methodId || "");
-  const [regionId, setRegionId] = useState(seed?.regionId || remembered?.regionId || "japanese");
-  const [sideId, setSideId] = useState(seed?.sideId || remembered?.sideId || "rice-greens");
+  const startMain = seed?.mainId || remembered?.mainId || "";
+  const startMethodRaw = seed?.methodId || remembered?.methodId || "";
+  const methodOk = !startMethodRaw || !startMain || getMethodsForMain(startMain).some((item) => item.id === startMethodRaw);
+  const startMethod = methodOk ? startMethodRaw : "";
+  const startSide = (() => {
+    const side = seed?.sideId || remembered?.sideId || "rice-greens";
+    return MEAL_SIDES.some((item) => item.id === side) ? side : "rice-greens";
+  })();
+  const startRegion = (() => {
+    const region = seed?.regionId || remembered?.regionId || "japanese";
+    return MEAL_REGIONS.some((item) => item.id === region) ? region : "japanese";
+  })();
+  const [step, setStep] = useState(seed ? 3 : startMain && startMethod ? 3 : startMain && !methodOk ? 1 : 0);
+  const [mainId, setMainId] = useState(startMain);
+  const [methodId, setMethodId] = useState(startMethod);
+  const [regionId, setRegionId] = useState(startRegion);
+  const [sideId, setSideId] = useState(startSide);
   const [diet, setDiet] = useState<DietId>(seed?.diet || remembered?.diet || "balanced");
   const [spiceHeat, setSpiceHeat] = useState<SpiceHeat>(seed?.spiceHeat || remembered?.spiceHeat || "medium");
   const [cookPace, setCookPace] = useState<CookPace | "">(seed?.cookPace || remembered?.cookPace || "");
@@ -89,17 +101,6 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
   const [error, setError] = useState("");
   const [rememberedNote, setRememberedNote] = useState(!!remembered?.mainId && !seed);
   const panelRef = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (seed || !remembered?.mainId) return;
-    if (!MAIN_INGREDIENTS.some((item) => item.id === remembered.mainId)) return;
-    if (remembered.methodId && !getMethodsForMain(remembered.mainId!).some((item) => item.id === remembered.methodId)) {
-      setMethodId("");
-      setStep(1);
-    }
-    if (remembered.sideId && !MEAL_SIDES.some((item) => item.id === remembered.sideId)) setSideId("rice-greens");
-    if (remembered.regionId && !MEAL_REGIONS.some((item) => item.id === remembered.regionId)) setRegionId("japanese");
-  }, []);
 
   const allowedMains = getMainsForDiet(diet);
   const visibleMains = useMemo(() => {

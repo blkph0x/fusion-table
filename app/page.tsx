@@ -234,12 +234,15 @@ if (Array.isArray(data.pantry)) setPantry(data.pantry.filter((item: Stock) => it
     try {
       const spec = decodeShare(token);
       const next = recipeFromShare(spec);
+      // Hydrate studio once from ?r= after cookbook load (external URL sync).
+      /* eslint-disable react-hooks/set-state-in-effect -- one-shot share-link open */
       setShareSpec(spec);
       showRecipe(next);
       setBuilderMode(spec.kind === "meal" ? "meal" : "classic");
       if (spec.kind === "classic" && spec.classicId) { setClassicId(spec.classicId); setRegionId(spec.regionId); }
       setDiet(spec.diet); setSpiceHeat(spec.spiceHeat); setServings(spec.servings);
       setView("studio");
+      /* eslint-enable react-hooks/set-state-in-effect */
     } catch {
       setToast("That shared link is not a recipe this site can open.");
     }
