@@ -8,6 +8,7 @@
 import type { DietId, IngredientCategory, Recipe, RecipeIngredient, SpiceHeat } from "./recipe-types.ts";
 import { foodWordHit } from "./food-words.ts";
 import { mix32, modelSatisfies, seededDecider, solveCnf, type Clause } from "./sat.ts";
+import { regionAllowsFusionOption } from "./region-affinity.ts";
 
 export interface FusionSpec {
   seed: number;
@@ -237,10 +238,15 @@ function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
     option("aroma_none", "aroma", [], [], true),
   ].map((item) => {
     if (item.forbidden) return item;
+    if (!regionAllowsFusionOption(spec.regionId, item.id)) return { ...item, forbidden: true };
     if (item.id === "heat_sriracha" || item.id === "heat_birds" || item.id === "heat_both") {
       if (mild || heatBlocked) return { ...item, forbidden: true };
     }
-    if (item.id === "heat_none" && hot && !heatBlocked) return { ...item, forbidden: true };
+    if (item.id === "heat_none" && hot && !heatBlocked) {
+      // Only force a chilli pick when this region is allowed one in the SAT catalogue.
+      const regionalHeat = ["heat_sriracha", "heat_birds", "heat_both"].some((id) => regionAllowsFusionOption(spec.regionId, id));
+      if (regionalHeat) return { ...item, forbidden: true };
+    }
     if ((item.id === "umami_oyster" || item.id === "umami_fish" || item.id === "extra_fish") && fishFree) return { ...item, forbidden: true };
     if (item.id === "extra_prawn" && crustFree) return { ...item, forbidden: true };
     if ((item.id === "umami_soy" || item.id === "umami_miso" || item.id === "extra_tofu") && soyFree) return { ...item, forbidden: true };

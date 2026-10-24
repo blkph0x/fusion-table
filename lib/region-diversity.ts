@@ -17,6 +17,7 @@ import {
   buildRegionProfile,
   type RegionTaste,
 } from "./region-pantry.ts";
+import { regionAllowsMarker, isStrongMarkerId } from "./region-affinity.ts";
 import type { SpiceHeat } from "./recipe-types.ts";
 import type { DraftIngredient } from "./template-types.ts";
 
@@ -222,6 +223,11 @@ function unique(ids: readonly string[]): string[] {
   return [...new Set(ids.filter((id) => PANTRY_BY_ID.has(id)))];
 }
 
+function allowForRegion(regionId: string, id: string): boolean {
+  if (!isStrongMarkerId(id)) return true;
+  return regionAllowsMarker(regionId, id);
+}
+
 function familyPools(region: RegionTaste): SlotPools {
   const siblings = REGION_TASTES.filter((entry) => entry.staple === region.staple);
   const aromatics: string[] = [];
@@ -237,12 +243,13 @@ function familyPools(region: RegionTaste): SlotPools {
     acids.push(sibling.acid);
   }
   const extra = FAMILY_EXTRA[region.staple] ?? {};
+  const keep = (ids: readonly string[]) => unique(ids).filter((id) => allowForRegion(region.id, id));
   return {
-    aromatics: unique([...aromatics, ...(extra.aromatics ?? [])]),
-    simmer: unique([...simmer, ...(extra.simmer ?? [])]),
-    herbs: unique([...herbs, ...(extra.herbs ?? [])]),
-    finish: unique([...finish, ...(extra.finish ?? [])]),
-    acids: unique([...acids, ...(extra.acids ?? [])]),
+    aromatics: keep([...aromatics, ...(extra.aromatics ?? [])]),
+    simmer: keep([...simmer, ...(extra.simmer ?? [])]),
+    herbs: keep([...herbs, ...(extra.herbs ?? [])]),
+    finish: keep([...finish, ...(extra.finish ?? [])]),
+    acids: keep([...acids, ...(extra.acids ?? [])]),
   };
 }
 

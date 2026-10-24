@@ -212,7 +212,7 @@ const DEFS: readonly SideDef[] = [
   },
   {
     option: { id: "kimchi-rice", name: "Kimchi rice bowl", description: "Steamed rice with a small serve of kimchi and cucumber. Sesame optional finish is omitted here.", emoji: "🇰🇷" },
-    regionHints: ["korean", "japanese", "japanese-curry"],
+    regionHints: ["korean"],
     build: (_gf, _df, servings) => ({
       side: "steamed short-grain rice", vegetables: "kimchi & cucumber",
       ingredients: [ingredient("rice", "Short-grain rice", 300, "g", "grocery", [], "Dry weight.", ["rice", "sushi rice", "short grain rice"]), ingredient("kimchi", "Kimchi", 200, "g", "specialty", [], "Check the label for seafood, gluten and sesame.", ["kimchi"]), ingredient("cucumber", "Cucumber", 200, "g", "produce", [], "Sliced.")],
@@ -574,7 +574,7 @@ const DEFS: readonly SideDef[] = [
   },
   {
     option: { id: "miso-aubergine-rice", name: "Miso aubergine & rice", description: "Steamed rice with miso-glazed aubergine.", emoji: "🍆" },
-    regionHints: ["japanese","japanese-curry","korean","taiwanese"],
+    regionHints: ["japanese", "japanese-curry"],
     build: (_gf, _df, servings) => ({
       side: "steamed rice",
       vegetables: "miso aubergine",
@@ -586,7 +586,7 @@ const DEFS: readonly SideDef[] = [
   },
   {
     option: { id: "soba-greens", name: "Soba & greens", description: "Buckwheat soba with wilted greens; rice noodles when gluten-free.", emoji: "🍜" },
-    regionHints: ["japanese","japanese-curry","korean"],
+    regionHints: ["japanese", "japanese-curry"],
     build: (gf, _df, servings) => ({
       side: gf ? "rice noodles" : "soba noodles",
       vegetables: "wilted greens",
@@ -1255,6 +1255,11 @@ export function preferredSidesForRegion(regionId: string): readonly string[] {
   const hits = DEFS.filter((d) => d.regionHints.includes(regionId)).map((d) => d.option.id);
   if (hits.length > 0) return hits;
   return ["rice-greens", "garden-salad", "roast-veg-tray"];
+}
+
+/** Authored side ↔ region affinities for strong markers (kimchi, miso soba, …). */
+export function sideRegionHints(sideId: string): readonly string[] {
+  return BY_ID.get(sideId)?.regionHints ?? [];
 }
 
 export function sideRegionCoverage(): { sideId: string; regionCount: number }[] {

@@ -9,7 +9,7 @@ export interface PlateSpec {
 export const PLATES: readonly PlateSpec[] = [
   { regionId: "japanese", mainId: "salmon", methodId: "grilled", sideId: "rice-greens" },
   { regionId: "japanese", mainId: "chicken", methodId: "pan-fried", sideId: "sesame-spinach" },
-  { regionId: "japanese", mainId: "tofu", methodId: "stir-fried", sideId: "kimchi-rice" },
+  { regionId: "japanese", mainId: "tofu", methodId: "stir-fried", sideId: "sesame-spinach" },
   { regionId: "japanese", mainId: "white-fish", methodId: "steamed", sideId: "steamed-broccoli" },
   { regionId: "japanese", mainId: "eggs", methodId: "pan-fried", sideId: "rice-greens" },
   { regionId: "japanese", mainId: "mushrooms", methodId: "stir-fried", sideId: "sesame-spinach" },
