@@ -3,6 +3,7 @@ import type { MainIngredientOption, MealInput, MealRecipe, NormalizedMealInput }
 import { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMainsForDiet } from "./meal-catalog.ts";
 import { applyStaples, canonAllergen, stapleStep } from "./staples.ts";
 import { getCut, type MeatCut } from "./cuts.ts";
+import { assertCutForMethod, prepareCut } from "./cut-method.ts";
 import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
@@ -23,6 +24,7 @@ import {
 } from "./clean-prefs.ts";
 
 export { COOKING_METHODS, MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SAFETY_SOURCES, MEAL_SIDES, getMethodsForMain, getMainsForDiet, getMealCombinationCount } from "./meal-catalog.ts";
+export { cutsForMethod, cutAllowedForMethod } from "./cut-method.ts";
 export type { MealInput, MealRecipe, NormalizedMealInput } from "./meal-types.ts";
 
 type DraftIngredient = Omit<RecipeIngredient, "inPantry"> & { aliases?: readonly string[] };
@@ -88,9 +90,7 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   let cutId: string | undefined;
   if (input.cutId !== undefined && input.cutId !== "") {
     if (typeof input.cutId !== "string") throw new Error("Choose a recognised cut, or leave it to match the method.");
-    const cut = getCut(input.cutId.trim());
-    if (!cut || cut.mainId !== main.id) throw new Error("Choose a recognised cut for this main, or leave it to match the method.");
-    cutId = cut.id;
+    cutId = assertCutForMethod(input.cutId.trim(), main.id, input.methodId);
   }
   let seed: number | undefined;
   if (input.seed !== undefined && input.seed !== null) {
@@ -144,26 +144,15 @@ export function validateMealInput(input: MealInput): NormalizedMealInput {
   };
 }
 
-const QUICK_METHODS = new Set(["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried"]);
-
 function withCut(plan: MainPlan, cut: MeatCut, method: string): MainPlan {
-  let preparation = plan.preparation;
-  let endpoint = plan.endpoint;
-  if (cut.form === "mince") {
-    preparation = "Keep the raw mince refrigerated until shaping or cooking. Do not wash raw meat or poultry.";
-    endpoint = "The centre must reach 75°C on a clean food thermometer. Mince is not a steak; check several pieces and cook longer if needed.";
-  } else if (cut.form === "whole") {
-    preparation = "Use the whole bird. Check the cavity is empty. Do not wash raw poultry. A whole bird takes longer than fillets.";
-    endpoint = "Check the thickest part of the thigh and the breast with a clean food thermometer: both must reach 75°C. Continue cooking if needed.";
-  } else if (cut.form === "offal") {
-    preparation = "Keep the liver cold until cooking and trim the ducts. Do not serve it rare.";
-    endpoint = "The centre must reach 75°C on a clean food thermometer.";
-  } else if (cut.form === "bone-in") {
-    preparation = `${plan.preparation} This cut is bone-in, so allow extra time and check next to the bone.`;
-  } else if (cut.form === "slow" && QUICK_METHODS.has(method)) {
-    preparation = `${plan.preparation} This is usually a slow-cooking cut. A quick method may leave it chewy; slice it thin or cook it longer. Check the packet.`;
+  const affinity = prepareCut(cut, method);
+  if (!affinity) {
+    throw new Error(`Choose a recognised cut for this main, or leave it to match the method.`);
   }
-  const notes = [plan.ingredient.notes, cut.packetNote].filter(Boolean).join(" ");
+  const preparation = affinity.preparation;
+  const endpoint = affinity.endpoint;
+  const minutes = plan.minutes + (affinity.minutesBump ?? 0);
+  const notes = [preparation, cut.packetNote].filter(Boolean).join(" ");
   const aliases = [...new Set([...(plan.ingredient.aliases ?? []), ...cut.aliases, cut.shoppingName])];
   const safetyNote = endpoint === plan.endpoint || !plan.safetySource
     ? plan.safetyNote
@@ -172,6 +161,7 @@ function withCut(plan: MainPlan, cut: MeatCut, method: string): MainPlan {
     ...plan,
     preparation,
     endpoint,
+    minutes,
     ...(safetyNote ? { safetyNote } : {}),
     ingredient: { ...plan.ingredient, name: cut.shoppingName, notes, aliases },
   };
