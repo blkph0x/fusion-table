@@ -1,4 +1,5 @@
-import type { DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
+import type { CleanPrefs } from "./clean-prefs.ts";
+import type { CookPace, DietId, Recipe, RecipeConstraints, SpiceHeat } from "./recipe-types.ts";
 
 /** A main ingredient is never silently exchanged to satisfy a dietary preference. */
 export interface MealInput {
@@ -10,6 +11,8 @@ export interface MealInput {
   diet?: DietId;
   spiceHeat?: SpiceHeat;
   pantry?: string | string[];
+  /** Soft cleaner-meal knobs. Never relax hard exclusions. */
+  clean?: CleanPrefs;
   /** Extra tighten-only flags. They do not replace the selected main. */
   constraints?: RecipeConstraints;
   /**
@@ -19,10 +22,21 @@ export interface MealInput {
   cutId?: string;
   /**
    * Omitted: the same choices always build the same template.
-   * Set: a seeded SAT search chooses a finish. The same seed repeats it.
-   * Filters passed with the seed are not relaxed.
+   * Set: explore the regional pantry, then a seeded SAT search chooses a finish.
+   * The same seed repeats it. Filters passed with the seed are not relaxed.
    */
   seed?: number;
+  /**
+   * Flavour ingredient ids already heavy in the week plan.
+   * Only used with a seed: lowers pick weight during pantry exploration.
+   * Does not ban an ingredient, so intentional pantry reuse can still land.
+   */
+  softenIngredients?: string[];
+  /**
+   * Omitted keeps the authored timing, including the recipe id.
+   * Set adds a schedule note only.
+   */
+  cookPace?: CookPace;
   avoidAllergens?: string[];
   dislikes?: string[];
 }

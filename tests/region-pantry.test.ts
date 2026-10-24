@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import type { SpiceHeat } from "../lib/recipe-types.ts";
 import { generateMeal } from "../lib/meals.ts";
 import { PLATES } from "../lib/plates.ts";
 import {
@@ -23,14 +24,14 @@ const NOT_BIRDS_EYE = [
 
 const BANNED_NAME = /fish sauce|oyster|belacan|shrimp paste|dried shrimp|prahok|ngapi/i;
 
-function plateItems(regionId: string, glutenFree = false, heat: "mild" | "medium" | "hot" = "medium") {
+function plateItems(regionId: string, glutenFree = false, heat: SpiceHeat = "medium") {
   const profile = buildRegionProfile(regionId, glutenFree, heat);
   return [...profile.aromatics, ...profile.seasonings, ...profile.finish];
 }
 
 describe("region pantry", () => {
   it("links every catalogue item to a region, and puts bird's eye only on cuisines that use it", () => {
-    assert.equal(REGION_TASTES.length, 63);
+    assert.equal(REGION_TASTES.length, 76);
     assert.equal(PANTRY_SOURCES.herbsAndSpices, "https://en.wikipedia.org/wiki/List_of_culinary_herbs_and_spices");
     assert.equal(PANTRY_SOURCES.chilliPastes, "https://en.wikipedia.org/wiki/Chili_sauce");
     assert.ok(PANTRY_ITEMS.length >= 120);
@@ -114,8 +115,18 @@ describe("region pantry", () => {
       const hot = plateItems(region.id, false, "hot").find((item) => item.id === id)!;
       assert.ok(mild.amount > 0 && mild.amount < hot.amount, region.id);
     }
+    assert.equal(plateItems("ethiopian", false, "gentle").some((item) => item.id === "mitmita"), false);
     assert.equal(plateItems("ethiopian", false, "medium").some((item) => item.id === "mitmita"), false);
     assert.equal(plateItems("ethiopian", false, "hot").some((item) => item.id === "mitmita"), true);
+    assert.equal(plateItems("ethiopian", false, "fiery").some((item) => item.id === "mitmita"), true);
+    for (const region of REGION_TASTES) {
+      const id = signatureHeatId(region.id);
+      const gentle = plateItems(region.id, false, "gentle").find((item) => item.id === id)!;
+      const mild = plateItems(region.id, false, "mild").find((item) => item.id === id)!;
+      const hot = plateItems(region.id, false, "hot").find((item) => item.id === id)!;
+      const fiery = plateItems(region.id, false, "fiery").find((item) => item.id === id)!;
+      assert.ok(gentle.amount > 0 && gentle.amount < mild.amount && hot.amount < fiery.amount, region.id);
+    }
     const cantonese = plateItems("cantonese").map((item) => item.id);
     assert.ok(cantonese.includes("white-pepper"));
     assert.equal(cantonese.some((id) => /oyster/i.test(id)), false);
