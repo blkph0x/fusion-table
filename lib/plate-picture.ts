@@ -199,7 +199,7 @@ function foodKind(name: string): FoodKind {
   if (/^black pepper$|ground black pepper|white pepper/.test(text)) return "skip";
   if (/rice|noodle|pasta|couscous|bread|tortilla|wrap|potato|injera|teff|quinoa|polenta|flatbread/.test(text)) return "starch";
   if (/sauce|curry|paste|coconut milk|coconut cream|yoghurt|yogurt|miso|gravy|passata|tahini/.test(text)) return "sauce";
-  if (/chicken|beef|lamb|pork|fish|salmon|prawn|shrimp|tofu|tempeh|egg|halloumi|turkey|mince/.test(text)) return "protein";
+  if (/chicken|beef|lamb|pork|fish|salmon|prawn|shrimp|tofu|tempeh|egg|halloumi|turkey|mince|duck|kangaroo|tuna|sardine|paneer|jackfruit|black bean|kidney bean/.test(text)) return "protein";
   if (/herb|coriander|cilantro|parsley|mint|basil|chilli|chili|sesame|spring onion|scallion|lemon|lime|dill|thyme|rosemary|onion/.test(text)) return "herb";
   return "veg";
 }
@@ -235,7 +235,7 @@ function drawProtein(rgb: Uint8Array, name: string, cx: number, cy: number, rand
     for (let piece = 0; piece < 4; piece += 1) fillEllipseRotated(rgb, cx - 10 + piece * 16, cy + (piece % 2) * 10, 14, 6, piece * 0.6, colour);
     return;
   }
-  if (/fish|salmon/.test(text)) {
+  if (/fish|salmon|tuna|sardine/.test(text)) {
     fillEllipseRotated(rgb, cx + 8, cy, 48, 18, -0.25, colour);
     return;
   }
@@ -244,7 +244,7 @@ function drawProtein(rgb: Uint8Array, name: string, cx: number, cy: number, rand
     fillEllipse(rgb, cx + 2, cy + 1, 8, 8, [214, 168, 42]);
     return;
   }
-  const pieces = /tofu|tempeh|halloumi/.test(text) ? 3 : 4;
+  const pieces = /tofu|tempeh|halloumi|paneer|jackfruit/.test(text) ? 3 : 4;
   for (let piece = 0; piece < pieces; piece += 1) {
     fillEllipse(rgb, cx - 16 + (piece % 2) * 28, cy - 16 + Math.floor(piece / 2) * 24, 16, 11, colour);
   }
@@ -257,9 +257,9 @@ function foodColour(name: string, rand: () => number): Rgb {
     : /herb|coriander|cilantro|parsley|mint|lime|salad|spinach|broccoli|cabbage|basil|bean/.test(text) ? [62, 122, 58]
     : /lemon|turmeric|corn|mango|egg/.test(text) ? [214, 170, 48]
     : /rice|noodle|bread|tortilla|potato|pasta|couscous|wrap|injera|quinoa/.test(text) ? [214, 190, 132]
-    : /beef|lamb|pork/.test(text) ? [122, 72, 52]
-    : /salmon|fish|prawn|shrimp/.test(text) ? [196, 112, 78]
-    : /chicken|turkey|tofu|mushroom|tempeh|halloumi/.test(text) ? [168, 122, 74]
+    : /beef|lamb|pork|kangaroo/.test(text) ? [122, 72, 52]
+    : /salmon|fish|prawn|shrimp|tuna|sardine/.test(text) ? [196, 112, 78]
+    : /chicken|turkey|duck|tofu|mushroom|tempeh|halloumi|paneer/.test(text) ? [168, 122, 74]
     : /sauce|coconut|cream|yoghurt|yogurt|cheese|miso|curry|paste/.test(text) ? [168, 86, 42]
     : [108, 124, 70];
   return [base[0] + jitter, base[1] + jitter, base[2] + jitter];

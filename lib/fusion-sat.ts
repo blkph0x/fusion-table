@@ -8,6 +8,8 @@
 import type { DietId, IngredientCategory, Recipe, RecipeIngredient, SpiceHeat } from "./recipe-types.ts";
 import { foodWordHit } from "./food-words.ts";
 import { mix32, modelSatisfies, seededDecider, solveCnf, type Clause } from "./sat.ts";
+import { regionAllowsFusionOption } from "./region-affinity.ts";
+import { cleanSatForbidden, cleanSatPreferNone, type CleanPrefs } from "./clean-prefs.ts";
 
 export interface FusionSpec {
   seed: number;
@@ -27,6 +29,8 @@ export interface FusionSpec {
   pantry?: string | string[];
   /** True when the base recipe already lists fish or crustacea. */
   seafoodAlready?: boolean;
+  /** Soft cleaner-meal knobs. Never relax hard exclusions. */
+  clean?: CleanPrefs;
 }
 
 export interface FusionWitness {
@@ -119,8 +123,9 @@ function flags(spec: FusionSpec) {
 
 function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
   const { avoid, glutenFree, fishFree, crustFree, soyFree, seafoodAlready, dairyFree, eggFree } = flags(spec);
-  const mild = spec.spiceHeat === "mild";
-  const hot = spec.spiceHeat === "hot";
+  // Gentle follows mild and fiery follows hot. No new SAT variable, so old seeds stay put.
+  const mild = spec.spiceHeat === "mild" || spec.spiceHeat === "gentle";
+  const hot = spec.spiceHeat === "hot" || spec.spiceHeat === "fiery";
   const gf = glutenFree;
   const heatBlocked = disliked(["chilli", "chili", "sriracha"], dislikes);
   const option = (id: string, lane: string, picks: Pick[], extraBlocks: string[] = [], plain = false): Option => {
@@ -236,10 +241,16 @@ function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
     option("aroma_none", "aroma", [], [], true),
   ].map((item) => {
     if (item.forbidden) return item;
+    if (!regionAllowsFusionOption(spec.regionId, item.id)) return { ...item, forbidden: true };
+    if (cleanSatForbidden(item.id, spec.clean, spec.spiceHeat)) return { ...item, forbidden: true };
     if (item.id === "heat_sriracha" || item.id === "heat_birds" || item.id === "heat_both") {
       if (mild || heatBlocked) return { ...item, forbidden: true };
     }
-    if (item.id === "heat_none" && hot && !heatBlocked) return { ...item, forbidden: true };
+    if (item.id === "heat_none" && hot && !heatBlocked) {
+      // Only force a chilli pick when this region is allowed one in the SAT catalogue.
+      const regionalHeat = ["heat_sriracha", "heat_birds", "heat_both"].some((id) => regionAllowsFusionOption(spec.regionId, id));
+      if (regionalHeat) return { ...item, forbidden: true };
+    }
     if ((item.id === "umami_oyster" || item.id === "umami_fish" || item.id === "extra_fish") && fishFree) return { ...item, forbidden: true };
     if (item.id === "extra_prawn" && crustFree) return { ...item, forbidden: true };
     if ((item.id === "umami_soy" || item.id === "umami_miso" || item.id === "extra_tofu") && soyFree) return { ...item, forbidden: true };
@@ -257,10 +268,19 @@ function buildOptions(spec: FusionSpec, dislikes: readonly string[]): Option[] {
   });
 }
 
-function openLane(options: readonly Option[], lane: string): Option[] {
+function openLane(options: readonly Option[], lane: string, clean?: CleanPrefs, spiceHeat?: SpiceHeat): Option[] {
   const group = options.filter((item) => item.lane === lane);
-  const available = group.filter((item) => !item.forbidden);
-  return available.length > 0 ? available : group.filter((item) => item.plain && !item.forbidden);
+  let available = group.filter((item) => !item.forbidden);
+  if (available.length === 0) available = group.filter((item) => item.plain && !item.forbidden);
+  if (cleanSatPreferNone(lane, clean, spiceHeat)) {
+    const none = available.filter((item) => item.plain || item.id.endsWith("_none"));
+    if (none.length > 0) return none;
+  }
+  if ((clean?.moreVegetables || clean?.cleanMode) && lane === "fresh") {
+    const fresh = available.filter((item) => item.id.startsWith("fresh_") && item.id !== "fresh_none");
+    if (fresh.length > 0) return fresh;
+  }
+  return available;
 }
 
 interface Encoded {
@@ -272,7 +292,8 @@ interface Encoded {
 
 function encode(spec: FusionSpec, dislikes: readonly string[]): Encoded {
   const lanes = ["form", "acid", "heat", "umami", "fresh", "crunch", "extra", "aroma"];
-  const chosen = lanes.flatMap((lane) => openLane(buildOptions(spec, dislikes), lane));
+  const built = buildOptions(spec, dislikes);
+  const chosen = lanes.flatMap((lane) => openLane(built, lane, spec.clean, spec.spiceHeat));
   const byId = new Map(chosen.map((item, index) => [item.id, index + 1]));
   const clauses: Clause[] = [];
   for (const lane of lanes) {

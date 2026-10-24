@@ -23,6 +23,12 @@ export const BBQ_CLASSICS: RecipeOption[] = [
   { id: "charred-octopus", name: "Charred octopus-style plate", origin: "Grill cooking", emoji: "🐙", description: "Fully cooked octopus or king oyster mushrooms, charred and served with warm potatoes." },
   { id: "grilled-flank-steak", name: "Flank, skirt & sirloin grill", origin: "Grill cooking", emoji: "🥩", description: "Thin steaks sliced across the grain, or a substantial mushroom-and-bean plate." },
   { id: "bbq-lamb-chops", name: "BBQ lamb chops & leg steaks", origin: "Grill cooking", emoji: "🍖", description: "Measured-thickness chops or tofu steaks with potatoes, greens and a regional dressing." },
+  { id: "shotgun-shells", name: "Shotgun shells", origin: "Barbecue", emoji: "🍝", description: "Jumbo pasta shells stuffed with sausage or beans, hot-smoked until the filling is cooked through." },
+  { id: "ribs-on-the-rack", name: "Ribs on the rack", origin: "Barbecue", emoji: "🍖", description: "Ribs stood upright on a rib rack, or tempeh and mushroom strips stood in a tin, over indirect heat." },
+  { id: "foil-boat-ribs", name: "Foil-boat ribs", origin: "Barbecue", emoji: "🍖", description: "Ribs or plant strips in an open foil boat, bark up, with a splash of liquid so they are not submerged." },
+  { id: "burnt-ends", name: "Burnt ends", origin: "Barbecue", emoji: "🔥", description: "Cubes of brisket point, or mushroom and tempeh cubes, finished in a pan of sauce off the direct flame." },
+  { id: "smoked-meatloaf", name: "Smoked meatloaf", origin: "Barbecue", emoji: "🍞", description: "A mince loaf or a lentil-and-bean loaf, hot-smoked and checked in the centre." },
+  { id: "rotisserie-roast", name: "Rotisserie roast", origin: "Grill cooking", emoji: "🍗", description: "A boneless loin turned on a spit, or a cauliflower turned on a rack, over indirect heat." },
 ];
 
 export const BBQ_SOURCES = {
@@ -198,6 +204,7 @@ function assemble(context: RecipeContext, plan: Plan): BaseRecipe {
     ]),
     `Ordinary oven alternative: ${plan.oven} The listed smoked paprika gives smoky seasoning; an ordinary oven does not hot-smoke food.`,
     "Regional pastes and finishing ingredients are used in a separate cooked sauce and dressing. Do not expose a sweet sauce to prolonged direct flames.",
+    "Hot-and-fast is a hotter pace, not another dish. Butcher paper, a foil wrap, a water spritz, and a snake or minion fire are equipment choices. Follow the appliance manual. None of them replaces the thermometer. This template does not cold-smoke or cure raw food at home.",
     ...(plan.notes ?? []),
     "Timings are estimates for the specified thickness. Read all steps first and prepare the sides near the end of long cooks. Scale quantities by servings, but check each piece independently; batch size does not scale the cooking time linearly.",
   ];
@@ -208,7 +215,7 @@ function assemble(context: RecipeContext, plan: Plan): BaseRecipe {
     equipment: [...new Set([...plan.equipment, ...side.equipment, "Small saucepan", "Clean chopping board and knife", "Food thermometer", ...(plan.mode === "smoke" ? ["Grate-level thermometer", "Outdoor smoker or indirect barbecue (oven alternative provided)"] : [])])],
     meat: plan.meat,
     ...(plan.safety ? { safetyNote: `${plan.safety} Keep raw food separate from ready-to-eat ingredients. Keep cold foods at 5°C or colder and hot food above 60°C until serving; refrigerate leftovers promptly in shallow containers.`, safetySource: plan.source ?? BBQ_SOURCES.foodSafety } : { safetyNote: "Use already-cooked canned pulses and follow prepared proteins' package directions. Keep cold ingredients at 5°C or colder and hot food above 60°C until serving. Refrigerate leftovers promptly in shallow containers.", safetySource: BBQ_SOURCES.foodSafety }),
-    dietaryNotes: ["This is an authored fusion template, not a kitchen-tested barbecue schedule. Doneness and cut thickness take priority over estimated timing.", ...(context.glutenFree ? ["Use labelled gluten-free bread, stock, sausages and prepared products. Clean shared grills and utensils before cooking."] : []), ...(plan.cold && !context.vegetarian ? ["Commercial cold smoking is not a cooking or sterilising step. Ready-to-eat smoked seafood remains a higher-risk chilled food even inside its use-by date."] : plan.cold ? ["Use the specified commercially prepared ready-to-eat product and follow its label; keep cold ingredients refrigerated until serving."] : [])],
+    dietaryNotes: [`This is an authored ${context.input.regionId === "home-style" ? "home-kitchen" : "fusion"} template, not a kitchen-tested barbecue schedule. Doneness and cut thickness take priority over estimated timing.`, ...(context.glutenFree ? ["Use labelled gluten-free bread, stock, sausages and prepared products. Clean shared grills and utensils before cooking."] : []), ...(plan.cold && !context.vegetarian ? ["Commercial cold smoking is not a cooking or sterilising step. Ready-to-eat smoked seafood remains a higher-risk chilled food even inside its use-by date."] : plan.cold ? ["Use the specified commercially prepared ready-to-eat product and follow its label; keep cold ingredients refrigerated until serving."] : [])],
     methodNotes,
   };
 }
@@ -457,6 +464,189 @@ export function bbqBaseFor(context: RecipeContext): BaseRecipe | undefined {
       oven: vegetarian ? "Roast tofu at 210°C conventional /190°C fan for 25–30 minutes, turning halfway." : "Sear chops in an ovenproof pan for 2 minutes per side, then roast at 200°C conventional /180°C fan for 8–12 minutes to 71°C; rest 3 minutes.",
       notes: vegetarian ? [] : ["Lamb-leg-steak alternative: use the same weight of 2 cm leg steaks. Grill 4–6 minutes per side, check 71°C and rest 3 minutes. Pork-loin-chop alternative: use 2.5 cm chops of the same total weight, grill 5–7 minutes per side and finish indirectly as needed to 71°C; rest 3 minutes. These quick-cooking cuts are not substitutes for slow-smoking shoulder."],
     });
+
+    case "shotgun-shells": {
+      const shells = item(
+        "jumbo-shells",
+        glutenFree ? "Gluten-free jumbo pasta shells" : "Jumbo pasta shells",
+        12,
+        "",
+        "grocery",
+        glutenFree ? [] : ["wheat"],
+        glutenFree ? "Large cannelloni or jumbo shells explicitly labelled gluten-free. Many pasta shells contain wheat." : "Large cannelloni or jumbo pasta shells. Check the packet for wheat.",
+        glutenFree ? ["gluten-free jumbo pasta shells"] : ["jumbo pasta shells", "cannelloni shells"],
+      );
+      const filling = vegetarian
+        ? beans(500)
+        : item(
+          "sausage-meat",
+          glutenFree ? "Gluten-free raw pork sausage meat" : dairyFree ? "Dairy-free raw pork sausage meat" : "Raw pork sausage meat",
+          650,
+          "g",
+          "butcher",
+          glutenFree ? [] : ["wheat"],
+          "Sausage meat, or sausages with the casings removed. For gluten-free or dairy-free, the packet must say so.",
+          glutenFree ? ["gluten-free raw pork sausage meat"] : dairyFree ? ["dairy-free raw pork sausage meat"] : ["raw pork sausage meat", "pork sausage meat"],
+        );
+      return assemble(context, {
+        name: vegetarian ? "bean-stuffed jumbo pasta shells" : "sausage shotgun shells",
+        description: vegetarian ? "Jumbo pasta shells are filled with seasoned beans and hot-smoked until tender." : "Jumbo pasta shells are filled with sausage meat and hot-smoked until the centre is cooked.",
+        prep: 25, cook: vegetarian ? 50 : 75, side: "slaw-buns", mode: "smoke", meat: !vegetarian, finishAfterSides: true,
+        ingredients: [shells, filling, veg("brown-onion", "Brown onion", 120, "Finely dice.")],
+        equipment: ["Saucepan", "Heatproof tray", "Piping bag or teaspoon"],
+        safety: vegetarian ? undefined : MINCE, source: BBQ_SOURCES.temperatures,
+        steps: [
+          step("Soften the shells", `Boil the jumbo pasta shells for 2 minutes, or follow the packet if it asks for a different start. Drain and cool until you can handle them. Do not cook dry pasta with smoke alone.`, 12),
+          step("Fill the shells", vegetarian
+            ? `Mash the drained cannellini beans with the diced onion. ${rub(context, "the bean filling")} Spoon it into the jumbo pasta shells. Stand the shells upright in a single layer on a heatproof tray.`
+            : `Mix the raw pork sausage meat with the diced onion. ${rub(context, "the sausage filling")} Spoon it into the jumbo pasta shells and press the filling in so there are no large gaps. Stand the shells upright in a single layer on a heatproof tray. A strip of streaky bacon around each shell is optional and is pork; leave it off if you are not eating pork.`, 15),
+          step("Hot-smoke the shells", vegetarian
+            ? `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the jumbo pasta shells for 35–50 minutes, until the shells are tender and the bean filling is hot throughout. Start the slaw during the final 15 minutes. ${PLANT}`
+            : `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the jumbo pasta shells for 45–70 minutes. The centre of the sausage filling must reach at least 75°C. Check several shells with a clean food thermometer. Start the slaw during the final 15 minutes.`, vegetarian ? 50 : 70),
+          step("Sauce after cooking", "Spoon the regional sauce over the shells only after they leave the heat. Do not put a sweet glaze on them for the whole smoke."),
+        ],
+        oven: vegetarian
+          ? "Bake the filled jumbo pasta shells at 180°C conventional / 160°C fan for 25–35 minutes, until the shells are tender and the bean filling is hot throughout."
+          : "Bake the filled jumbo pasta shells at 180°C conventional / 160°C fan for 25–40 minutes, until the sausage centre reaches 75°C.",
+        notes: vegetarian
+          ? ["This is the plant shotgun shell: jumbo pasta shells and beans. It is not a sausage filling."]
+          : ["This template leaves cheese out of the filling so the same shells can stay dairy-free. Optional bacon is pork and is not part of the measured shopping list."],
+      });
+    }
+
+    case "ribs-on-the-rack": return assemble(context, vegetarian ? {
+      name: "upright tempeh & mushroom strips", description: "Tempeh and mushroom strips stand upright over indirect heat, rather than lying in a covered tray.", prep: 20, cook: 50, side: "slaw-buns", mode: "smoke",
+      ingredients: [tempeh(context, 600), veg("king-oyster", "King oyster mushrooms", 400, "Slice lengthways 1.5 cm thick.")],
+      equipment: ["Loaf tin or upright rack", "Heatproof tray"],
+      steps: [
+        step("Cut upright strips", `Cut the tempeh into 1.5 cm strips and slice the mushrooms lengthways. ${rub(context, "the tempeh and mushroom strips")}`, 15),
+        step("Stand them in the rack", `Stand the tempeh and mushroom strips upright in a loaf tin or rack, with space between them, not stacked flat. Hot-smoke at 130–140°C for 35–50 minutes, until the tempeh is hot throughout and the mushrooms are tender. Follow any longer tempeh packet direction. Start the slaw during the final 15 minutes. ${PLANT}`, 50),
+        step("Sauce after cooking", "Lift the strips out and spoon the regional sauce over them after they leave the heat.", 4),
+      ],
+      oven: "Stand the tempeh and mushroom strips upright in a loaf tin and bake at 180°C conventional / 160°C fan for 30–40 minutes, until hot and tender.",
+      notes: ["Upright rack: the strips stay vertical. This is not the flat covered-rib method and not the open foil boat."],
+    } : {
+      name: small ? "covered oven ribs" : "ribs on an upright rack", description: "A rack of ribs stands upright over indirect heat so the surfaces brown without being stacked.", prep: 25, cook: small ? 150 : 300, side: "slaw-buns", mode: small ? "grill" : "smoke", meat: true,
+      ingredients: [meat("pork-ribs", "Pork spare ribs", 1400, "Trim loose fat and remove the tough membrane if present. Use a portion of a rack for smaller servings.")],
+      equipment: ["Vertical rib rack", "Covered roasting dish", "Tongs", "Probe thermometer"], safety: LONG_CUT,
+      steps: [
+        step("Prepare the ribs", `Remove the tough membrane if present. ${rub(context, "the ribs")}`, 20),
+        step(small ? "Cover the small portion" : "Stand the ribs on the rack", small
+          ? `Put the scaled rack portion in a snug dish with ${q(150, context)} ml water, cover tightly and cook at 160°C conventional / 140°C fan for 1.5–2.5 hours. Check from 90 minutes and continue until a probe slides between the bones. An upright rack is for a full rack at 4 or more servings; this smaller piece uses the covered oven.`
+          : "Stabilise the outdoor smoker at 120–140°C. Stand the ribs upright in a rib rack in the indirect zone, bone side facing the same way, not stacked flat and not in a foil parcel. Smoke for 4–6 hours. Spritz the surface with a little water if it dries. There is no clock that replaces the probe.", small ? 150 : 300),
+        step("Check, rest and sauce", `${LONG_CUT} Rest 10 minutes, then cut into portions. Spoon the cooked regional sauce on after cooking. This upright rack is not the open foil boat and not a flat covered tray.`, 10),
+      ],
+      oven: "Cover the listed rack with 150 ml water and cook at 160°C conventional / 140°C fan for 2.5–3.5 hours until probe-tender. The upright rack is the outdoor method for 4 or more servings.",
+      notes: ["Upright rib rack, indirect heat, unwrapped. Fat can drip away. This is not the flat covered-rib method and not the open foil boat.", "Choose 4 or more servings for the upright rack. Smaller portions use the covered-oven route and still finish probe-tender, usually 90–96°C."],
+    });
+
+    case "foil-boat-ribs": return assemble(context, vegetarian ? {
+      name: "tempeh & mushroom foil boat", description: "Tempeh and mushroom strips sit in an open foil boat above a splash of liquid, not submerged.", prep: 20, cook: 50, side: "slaw-buns", mode: "smoke",
+      ingredients: [tempeh(context, 600), veg("king-oyster", "King oyster mushrooms", 400, "Slice lengthways 1.5 cm thick.")],
+      equipment: ["Cooking foil", "Heatproof tray"],
+      steps: [
+        step("Build an open boat", `Cut the tempeh into strips and slice the mushrooms lengthways. ${rub(context, "the tempeh and mushroom strips")} Shape a double layer of cooking foil into an open boat on a tray.`, 15),
+        step("Cook above the liquid", `Lay the tempeh and mushroom strips in the boat in one layer. Add ${q(80, context)} ml hot water so they sit above the liquid, not submerged. Leave the foil open. Hot-smoke at 130–140°C for 35–50 minutes, until the tempeh is hot throughout and the mushrooms are tender. Follow any longer tempeh packet direction. ${PLANT}`, 50),
+        step("Sauce after cooking", "Lift the strips out of the liquid and spoon the regional sauce over them after they leave the heat. Do not seal the boat for the whole cook.", 4),
+      ],
+      oven: "Use the same open foil boat at 180°C conventional / 160°C fan for 30–40 minutes. Keep the strips above the water, not submerged.",
+      notes: ["Open foil boat: the strips sit above a splash of water, not submerged. This is not the upright rib rack and not a sealed parcel."],
+    } : {
+      name: small ? "covered oven ribs" : "foil-boat ribs", description: "Ribs cook bark-up in an open foil boat with a splash of liquid, not swimming in it.", prep: 25, cook: small ? 150 : 300, side: "slaw-buns", mode: small ? "grill" : "smoke", meat: true,
+      ingredients: [meat("pork-ribs", "Pork spare ribs", 1400, "Trim loose fat and remove the tough membrane if present. Use a portion of a rack for smaller servings.")],
+      equipment: ["Cooking foil", "Covered roasting dish", "Tongs", "Probe thermometer"], safety: LONG_CUT,
+      steps: [
+        step("Prepare the ribs", `Remove the tough membrane if present. ${rub(context, "the ribs")}`, 20),
+        step(small ? "Cover the small portion" : "Float the ribs in an open boat", small
+          ? `Put the scaled rack portion in a snug dish with ${q(150, context)} ml water, cover tightly and cook at 160°C conventional / 140°C fan for 1.5–2.5 hours. Check from 90 minutes and continue until a probe slides between the bones. The open foil boat is for a full rack at 4 or more servings.`
+          : `Stabilise the outdoor smoker at 120–140°C. Lay the ribs bone-side down in an open foil boat, bark up. Add ${q(100, context)} ml hot water so the meat sits above the liquid, not submerged. Leave the foil open so the surface can form a bark. Cook indirectly for 4–6 hours. Do not seal the foil into a tight parcel for the whole cook.`, small ? 150 : 300),
+        step("Check, rest and sauce", `${LONG_CUT} Rest 10 minutes, then cut into portions. Spoon the cooked regional sauce on after cooking. This open foil boat is not the upright rib rack.`, 10),
+      ],
+      oven: "For the listed rack, use an open foil boat with 100 ml water at 160°C conventional / 140°C fan for 2.5–3.5 hours until probe-tender, bark up and not submerged. Smaller portions use the covered dish in the steps.",
+      notes: ["Open foil boat: bark up, a splash of water, meat not submerged. Do not seal the foil for the whole cook, or the bark will steam away. This is not the upright rib rack.", "Choose 4 or more servings for the foil boat. Smaller portions use the covered-oven route and still finish probe-tender, usually 90–96°C."],
+    });
+
+    case "burnt-ends": return assemble(context, vegetarian ? {
+      name: "sauced mushroom & tempeh cubes", description: "Tempeh and mushroom cubes are smoked, then finished in a pan off the direct flame.", prep: 20, cook: 55, side: "slaw-buns", mode: "smoke",
+      ingredients: [tempeh(context, 500), veg("king-oyster", "King oyster mushrooms", 450, "Cut into 3 cm cubes.")],
+      equipment: ["Heatproof tray", "Foil pan or small roasting dish"],
+      steps: [
+        step("Cube the plant pieces", `Cut the tempeh and mushrooms into 3 cm cubes. ${rub(context, "the tempeh and mushroom cubes")}`, 15),
+        step("Smoke, then finish in a pan", `Hot-smoke the cubes in one layer at 130–140°C for 25 minutes. Move them into a pan with ${q(60, context)} ml hot water, off any direct flame, for another 15–25 minutes, until the tempeh is hot throughout and the mushrooms are tender. Fold in the regional sauce only after it has been cooked. Follow any longer tempeh packet direction. ${PLANT}`, 50),
+        step("Serve the cubes", "Spoon the sauced tempeh and mushroom cubes into the buns. Keep the pan above 60°C until it is served, then refrigerate leftovers promptly.", 5),
+      ],
+      oven: "Roast the tempeh and mushroom cubes at 200°C conventional / 180°C fan for 25 minutes, then finish in a covered pan with the scaled water for 15 minutes. Add the sauce off the heat.",
+      notes: ["These are pan-finished cubes, not a whole roast. Sweet sauce stays off the direct flame."],
+    } : {
+      name: small ? "oven burnt ends" : "brisket burnt ends", description: "A brisket point is cooked until it can be cubed, then finished in a pan of sauce.", prep: 25, cook: small ? 160 : 300, side: "slaw-buns", mode: small ? "grill" : "smoke", meat: true,
+      ingredients: [meat("brisket-point", "Beef brisket point", 1200, "The thicker point, unrolled. This is not a whole packer. Smaller servings use the covered-oven method.")],
+      equipment: ["Heatproof tray", "Foil pan", "Probe thermometer"], safety: LONG_CUT,
+      steps: [
+        step("Prepare the point", `Trim loose fat and leave some surface fat. ${rub(context, "the brisket point")}`, 20),
+        step(small ? "Braise the small point" : "Smoke the point", small
+          ? `Put the scaled point in a snug dish with ${q(200, context)} ml water, cover tightly and cook at 160°C conventional / 140°C fan for 2–3 hours, checking from 90 minutes, until a probe slides in.`
+          : "Stabilise the outdoor smoker at 120–140°C. Smoke the point indirectly for 3–4 hours, until the surface has a bark and the centre has passed 71°C and is approaching tenderness.", small ? 150 : 210),
+        step("Cube and finish in the pan", `${LONG_CUT} Rest 15 minutes, cut into 3 cm cubes and put them in a pan with ${q(80, context)} ml hot water. Fold in the cooked regional sauce off the direct flame. Return the pan to indirect heat for 45–90 minutes, until the cubes are probe-tender, usually 90–96°C. Do not burn the sauce over an open flame.`, small ? 40 : 90),
+      ],
+      oven: "Cover a 1.2 kg point with 200 ml water and braise at 160°C conventional / 140°C fan for 3–4 hours, then cube and finish in the sauce pan until probe-tender. This timing is not a whole packer.",
+      notes: ["Burnt ends are the point, cubed and sauced, not sliced brisket. The 1.2 kg piece is not a 16-hour packer cook. Sweet sauce stays off the direct flame.", "Choose 4 or more servings for the outdoor smoke. Smaller portions use the covered oven and still finish probe-tender, usually 90–96°C."],
+    });
+
+    case "smoked-meatloaf": {
+      const crumbs = glutenFree
+        ? item("meatloaf-crumbs", "Gluten-free breadcrumbs", 80, "g", "grocery", [], "Explicitly labelled gluten-free. Check the packet for milk if you also need dairy-free.", ["gluten-free breadcrumbs"])
+        : dairyFree
+          ? item("meatloaf-crumbs", "Dairy-free breadcrumbs", 80, "g", "grocery", ["wheat"], "Check the label for milk and for wheat.", ["dairy-free breadcrumbs"])
+          : item("meatloaf-crumbs", "Breadcrumbs", 80, "g", "grocery", ["wheat"], "Plain breadcrumbs. Check the packet.", ["breadcrumbs"]);
+      return assemble(context, vegetarian ? {
+        name: "smoked lentil & bean loaf", description: "A lentil and bean loaf takes a short hot-smoke and is sliced hot.", prep: 25, cook: 55, side: "potato-greens", mode: "smoke",
+        ingredients: [item("lentils", "Canned lentils, drained", 500, "g", "grocery", [], "Already cooked; the quantity is drained weight.", ["lentils", "canned lentils"]), beans(400), item("cornflour", "Cornflour (corn starch)", 30, "g", "grocery", [], "Use pure maize starch, not wheat starch."), veg("brown-onion", "Brown onion", 150, "Finely dice.")],
+        equipment: ["Loaf tin", "Mixing bowl"],
+        steps: [
+          step("Mix the lentil loaf", `Mash the drained lentils and cannellini beans with the diced onion and cornflour until the mixture holds. ${rub(context, "the lentil and bean mixture")} Press it into a loaf tin.`, 20),
+          step("Hot-smoke the loaf", `Hot-smoke at 140–149°C for 40–55 minutes, until the lentil and bean loaf is hot throughout and a skewer comes out hot. Follow a longer time if the centre is still cool. ${PLANT} Start the potatoes during the final 25 minutes.`, 55),
+          step("Rest and slice", "Rest the loaf for 10 minutes, then slice and add the regional sauce.", 10),
+        ],
+        oven: "Bake the lentil and bean loaf at 180°C conventional / 160°C fan for 35–45 minutes, until hot throughout.",
+        notes: ["This is a lentil and bean loaf, not a mince loaf."],
+      } : {
+        name: "smoked mince loaf", description: "A mince loaf cooks with gentle smoke and is checked in several places in the centre.", prep: 25, cook: 90, side: "potato-greens", mode: "smoke", meat: true,
+        ingredients: [item("beef-mince", "Beef mince", 800, "g", "butcher", [], "Keep it chilled until mixing.", ["beef mince", "ground beef"]), crumbs, item("egg", "Eggs", 2, "", "grocery", ["egg"], "Used to bind the loaf."), veg("brown-onion", "Brown onion", 150, "Finely dice.")],
+        equipment: ["Loaf tin", "Mixing bowl", "Probe thermometer"], safety: MINCE, source: BBQ_SOURCES.temperatures,
+        steps: [
+          step("Mix the loaf", `Combine the chilled beef mince, diced onion, breadcrumbs and eggs. ${rub(context, "the mixture")} Press it into a loaf tin without packing it into a dense brick. Wash hands and utensils before the sides.`, 20),
+          step("Hot-smoke to 75°C", `Hot-smoke at 140–149°C for 60–90 minutes. ${MINCE} Check the centre in several places. Start the potatoes during the final 25 minutes.`, 90),
+          step("Rest and slice", "Rest for 10 minutes, slice, and add the regional sauce. Keep the loaf hot for service.", 10),
+        ],
+        oven: "Bake at 180°C conventional / 160°C fan for 45–70 minutes, until the centre reaches 75°C.",
+        notes: ["Mince is done at 75°C in the centre, not at a steak temperature. A pink smoke ring is not a doneness check."],
+      });
+    }
+
+    case "rotisserie-roast": return assemble(context, vegetarian ? {
+      name: "turned cauliflower roast", description: "A whole cauliflower is turned on a rack over indirect heat so it browns evenly.", prep: 20, cook: 60, side: "bean-salad", mode: "grill",
+      ingredients: [veg("whole-cauliflower", "Cauliflower", 1200, "One medium head for 4 servings; use wedges for a smaller portion.")],
+      equipment: ["Roasting rack", "Lidded barbecue or oven"],
+      steps: [
+        step("Prepare the cauliflower", `${small ? "Cut the listed cauliflower into large wedges." : "Trim the outer leaves and keep the head intact."} ${rub(context, "the cauliflower")}`, 15),
+        step("Turn it as it roasts", `Roast over indirect 180–200°C heat. Turn the cauliflower a quarter turn every 15 minutes, or use a rotisserie spit if the head is secured and the manufacturer allows it. Cook for ${small ? "30–40" : "45–60"} minutes, until a knife enters the centre easily. Start the bean salad during the final 12 minutes. ${PLANT}`, 60),
+        step("Rest and sauce", "Rest 5 minutes, cut into wedges and add the regional sauce.", 5),
+      ],
+      oven: "Roast at 200°C conventional / 180°C fan, turning the tray a quarter turn every 15 minutes, for 40–55 minutes for a whole head or 25–35 minutes for wedges.",
+      notes: ["Turned roast: the cauliflower moves so the surfaces brown evenly. This is not a steak reverse-sear."],
+    } : {
+      name: "rotisserie pork loin", description: "A boneless loin turns over indirect heat, then rests before slicing.", prep: 20, cook: 90, side: "potato-greens", mode: "grill", meat: true,
+      ingredients: [item("pork-loin", "Boneless pork loin roast", 1000, "g", "butcher", [], "One unrolled piece about 6–8 cm thick. Not a thin chop.", ["boneless pork loin", "pork loin roast"])],
+      equipment: ["Rotisserie spit or roasting rack", "Lidded barbecue", "Probe thermometer"], safety: WHOLE_CUT, source: BBQ_SOURCES.temperatures,
+      steps: [
+        step("Prepare the loin", `${rub(context, "the boneless pork loin")} Tie it into an even shape if one end is much thinner. Keep it chilled until the cooker is ready.`, 15),
+        step("Turn over indirect heat", `Set a lidded barbecue for indirect 160–180°C heat. Secure the loin on a rotisserie spit, or put it on a rack and turn the tray a quarter turn every 15 minutes if you have no spit. Cook for about 60–90 minutes. ${WHOLE_CUT} Start the potatoes during the final 25 minutes.`, 90),
+        step("Rest and slice", "Rest for at least 3 minutes, then slice. Add the regional sauce after slicing. This turned roast is not the reverse-seared steak and not a thin chop on a hot grill.", 8),
+      ],
+      oven: "Roast at 180°C conventional / 160°C fan for 60–90 minutes, turning the tray every 15 minutes, until the centre reaches 71°C. Rest for at least 3 minutes. Smoked paprika supplies the smoky seasoning; an ordinary oven does not turn a spit over a fire.",
+      notes: ["Rotisserie or turned roast, indirect heat. The endpoint is 71°C in the centre, then a rest of at least 3 minutes. It is not a low-and-slow shoulder and not a reverse-seared steak."],
+    });
+
     default: return undefined;
   }
 }

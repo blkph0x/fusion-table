@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { CATALOGUE_LABEL, shopAsk, type PriceQuote } from "@/lib/catalogue";
 import { audToCents, catalogueSearchPhrases, formatAudCents } from "@/lib/product-match";
 
@@ -45,7 +45,7 @@ export function PriceCheck({ lines, shops }: { lines: Line[]; shops: ShopRef[] }
   const [quotes, setQuotes] = useState<PriceQuote[]>([]);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState("");
-  const [recorded, setRecorded] = useState<RecordedPrice[]>([]);
+  const [recorded, setRecorded] = useState<RecordedPrice[]>(() => (typeof window === "undefined" ? [] : loadRecorded()));
   const [draftShop, setDraftShop] = useState("");
   const [draftName, setDraftName] = useState("");
   const [draftPrice, setDraftPrice] = useState<Record<string, string>>({});
@@ -67,8 +67,6 @@ export function PriceCheck({ lines, shops }: { lines: Line[]; shops: ShopRef[] }
     }
     return count ? cents : null;
   }, [recorded, lines]);
-
-  useEffect(() => { setRecorded(loadRecorded()); }, []);
 
   async function check() {
     if (!lines.length || busy) return;

@@ -62,7 +62,7 @@ export async function fillEmptyPublicFile(response: Response): Promise<Response>
   const file = await readPublishedFile(pathname);
   if (!file) return response;
   await response.body?.cancel().catch(() => undefined);
-  return new Response(file.bytes, {
+  return new Response(Uint8Array.from(file.bytes), {
     status: 200,
     headers: {
       "Content-Type": file.contentType,

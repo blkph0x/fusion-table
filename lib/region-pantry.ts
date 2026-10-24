@@ -35,7 +35,7 @@ export interface PantryItem {
   allergens: readonly string[];
   aliases: readonly string[];
   notes?: string;
-  /** Mild 0.25, medium 1, hot 1.75. Mild stays above zero so the heat is still listed. */
+  /** Gentle 0.1, mild 0.25, medium 1, hot 1.75, fiery 2.5. Gentle stays above zero so the heat is still listed. */
   scalesWithHeat?: boolean;
   glutenFree?: {
     name: string;
@@ -59,7 +59,7 @@ export interface RegionTaste {
   /** The heat the mild/hot comparison tracks. Always scaled. */
   heat: string;
   sideHeat?: string;
-  /** Added only at hot, still a real pantry item. */
+  /** Added at hot and at fiery. Hot itself is unchanged. Still a real pantry item. */
   hotOnly?: string;
   acid: string;
   herbs?: readonly string[];
@@ -422,6 +422,19 @@ export const REGION_TASTES: readonly RegionTaste[] = [
   { id: "australian", name: "Australian-inspired", emoji: "🇦🇺", description: "Lemon myrtle, Tasmanian pepperberry, thyme and lemon.", sauce: "lemon myrtle & pepperberry sauce", body: "stock", staple: "french", aromatics: ["garlic"], simmer: ["lemon-myrtle", "thyme"], heat: "pepperberry", acid: "lemon-juice", herbs: ["parsley"] },
   { id: "oaxacan", name: "Oaxacan-inspired", emoji: "🇲🇽", description: "Ancho chilli, cinnamon, cocoa, sesame, cumin and Mexican oregano.", sauce: "ancho, cocoa & sesame sauce", body: "tomato", staple: "mexican", aromatics: ["garlic"], simmer: ["cinnamon", "cumin", "cocoa", "mexican-oregano"], heat: "ancho-chilli", acid: "lime-juice", herbs: ["coriander"], finish: ["sesame-seeds"] },
   { id: "cuban", name: "Cuban-inspired", emoji: "🇨🇺", description: "Cumin, oregano, bay, orange, lime and a little cayenne.", sauce: "cumin, orange & lime sauce", body: "stock", staple: "rice-beans", aromatics: ["garlic", "bay-leaves"], simmer: ["cumin", "oregano", "orange-juice"], heat: "cayenne", amounts: { cayenne: 0.25 }, acid: "lime-juice", herbs: ["coriander"] },
+  { id: "home-kitchen", name: "Home kitchen", emoji: "🏠", description: "Thyme, bay, oregano, black pepper, lemon and parsley. The weekday flavour, without a second regional paste.", sauce: "thyme, bay & lemon sauce", body: "stock", staple: "french", aromatics: ["garlic", "bay-leaves"], simmer: ["thyme", "oregano"], heat: "black-pepper", acid: "lemon-juice", herbs: ["parsley"] },
+  { id: "syrian", name: "Syrian-inspired", emoji: "🇸🇾", description: "Pul biber, sumac, allspice, cinnamon, lemon and dried mint.", sauce: "pul biber, sumac & lemon sauce", body: "stock", staple: "levantine", aromatics: ["garlic"], simmer: ["sumac", "allspice", "cinnamon"], heat: "pul-biber", acid: "lemon-juice", herbs: ["parsley"], finish: ["dried-mint"] },
+  { id: "afghan", name: "Afghan-inspired", emoji: "🇦🇫", description: "Cumin, coriander, cardamom, cayenne, lemon and dried mint.", sauce: "cumin, cardamom & dried mint sauce", body: "tomato", staple: "basmati", aromatics: ["garlic", "ginger"], simmer: ["cumin", "ground-coriander", "cardamom"], heat: "cayenne", acid: "lemon-juice", herbs: ["coriander"], finish: ["dried-mint"] },
+  { id: "pakistani", name: "Pakistani-inspired", emoji: "🇵🇰", description: "Cumin, coriander, turmeric, sweet paprika, green chilli and dried fenugreek.", sauce: "cumin, green chilli & fenugreek sauce", body: "tomato", staple: "indian", aromatics: ["garlic", "ginger"], simmer: ["cumin", "ground-coriander", "turmeric", "paprika"], heat: "green-chilli", acid: "lemon-juice", herbs: ["coriander"], finish: ["kasuri-methi"] },
+  { id: "gujarati", name: "Gujarati-inspired", emoji: "🇮🇳", description: "Mustard seeds, cumin, turmeric, palm sugar, Kashmiri chilli and lime.", sauce: "mustard seed, palm sugar & lime sauce", body: "stock", staple: "indian", aromatics: ["garlic", "ginger", "mustard-seeds"], simmer: ["cumin", "turmeric", "ground-coriander", "palm-sugar"], heat: "kashmiri-chilli", acid: "lime-juice", herbs: ["coriander"] },
+  { id: "shanghainese", name: "Shanghainese-inspired", emoji: "🇨🇳", description: "Soy, five-spice, star anise, palm sugar, ginger and white pepper.", sauce: "soy, star anise & five-spice sauce", body: "stock", staple: "chinese", aromatics: ["garlic", "ginger", "star-anise"], simmer: ["soy-sauce", "five-spice", "palm-sugar"], heat: "white-pepper", acid: "rice-vinegar", herbs: ["spring-onion"] },
+  { id: "yunnan", name: "Yunnan-inspired", emoji: "🇨🇳", description: "Dried red chilli, mint, garlic, lime and coriander.", sauce: "mint, lime & dried chilli sauce", body: "stock", staple: "chinese", aromatics: ["garlic", "ginger"], heat: "dried-red-chilli", acid: "lime-juice", herbs: ["mint", "coriander"] },
+  { id: "japanese-curry", name: "Japanese curry-inspired", emoji: "🇯🇵", description: "Mild curry powder, turmeric, soy, ginger and a little cayenne.", sauce: "curry powder, soy & ginger sauce", body: "stock", staple: "japanese", aromatics: ["garlic", "ginger"], simmer: ["curry-powder", "turmeric", "soy-sauce"], heat: "cayenne", amounts: { cayenne: 0.25 }, acid: "rice-vinegar", herbs: ["spring-onion"] },
+  { id: "creole", name: "Creole-inspired", emoji: "🇺🇸", description: "Cayenne, sweet paprika, thyme, oregano, bay and tomato.", sauce: "cayenne, paprika & tomato sauce", body: "tomato", staple: "long-grain", aromatics: ["garlic", "bay-leaves"], simmer: ["paprika", "thyme", "oregano"], heat: "cayenne", acid: "lemon-juice", herbs: ["parsley"] },
+  { id: "mozambican", name: "Mozambican-inspired", emoji: "🇲🇿", description: "Piri-piri, paprika, ginger, coconut and lemon.", sauce: "piri-piri, paprika & coconut sauce", body: "coconut", staple: "long-grain", aromatics: ["garlic", "ginger"], simmer: ["paprika"], heat: "piri-piri", acid: "lemon-juice", herbs: ["coriander"] },
+  { id: "yucatecan", name: "Yucatecan-inspired", emoji: "🇲🇽", description: "Annatto, cumin, allspice, Mexican oregano, orange, lime and cayenne.", sauce: "annatto, allspice & lime sauce", body: "stock", staple: "mexican", aromatics: ["garlic"], simmer: ["annatto", "cumin", "allspice", "mexican-oregano", "orange-juice"], heat: "cayenne", amounts: { cayenne: 0.5 }, acid: "lime-juice", herbs: ["coriander"] },
+  { id: "puerto-rican", name: "Puerto Rican-inspired", emoji: "🇵🇷", description: "Annatto, cumin, oregano, bay, lime and black pepper.", sauce: "annatto, oregano & lime sauce", body: "stock", staple: "rice-beans", aromatics: ["garlic", "bay-leaves"], simmer: ["annatto", "cumin", "oregano"], heat: "black-pepper", acid: "lime-juice", herbs: ["coriander"] },
+  { id: "nordic", name: "Nordic-inspired", emoji: "🇸🇪", description: "Dill, caraway, allspice, bay, lemon and white pepper.", sauce: "dill, caraway & lemon sauce", body: "stock", staple: "french", aromatics: ["garlic", "bay-leaves"], simmer: ["caraway", "allspice"], heat: "white-pepper", acid: "lemon-juice", herbs: ["dill", "parsley"] },
 ];
 
 const PANTRY_BY_ID = new Map(PANTRY_ITEMS.map((item) => [item.id, item]));
@@ -484,12 +497,19 @@ export const MEAL_STAPLE_FAMILY: Readonly<Record<string, string>> = Object.fromE
   REGION_TASTES.map((region) => [region.id, region.staple]),
 );
 
+/** Mild, medium and hot stay 0.25, 1 and 1.75. Gentle and fiery are extra steps. */
+function signatureHeatFactor(heatLevel: SpiceHeat): number {
+  if (heatLevel === "gentle") return 0.1;
+  if (heatLevel === "fiery") return 2.5;
+  return { mild: 0.25, medium: 1, hot: 1.75 }[heatLevel];
+}
+
 function toDraft(id: string, glutenFree: boolean, heatLevel: SpiceHeat, region: RegionTaste): DraftIngredient {
   const item = PANTRY_BY_ID.get(id);
   if (!item) throw new Error(`Unknown pantry item: ${id}.`);
   const chosen = glutenFree && item.glutenFree ? item.glutenFree : item;
   const base = region.amounts?.[id] ?? item.amount;
-  const factor = item.scalesWithHeat ? { mild: 0.25, medium: 1, hot: 1.75 }[heatLevel] : 1;
+  const factor = item.scalesWithHeat ? signatureHeatFactor(heatLevel) : 1;
   const amount = Number((base * factor).toFixed(4));
   if (!(amount > 0)) throw new Error(`Amount for ${id} must be above zero.`);
   return {
@@ -518,7 +538,7 @@ export function buildRegionProfile(regionId: string, glutenFree: boolean, heatLe
     ...(region.simmer ?? []),
     region.heat,
     ...(region.sideHeat ? [region.sideHeat] : []),
-    ...(heatLevel === "hot" && region.hotOnly ? [region.hotOnly] : []),
+    ...((heatLevel === "hot" || heatLevel === "fiery") && region.hotOnly ? [region.hotOnly] : []),
   ];
   return {
     sauce: region.sauce,

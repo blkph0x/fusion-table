@@ -1,0 +1,81 @@
+{
+  "label": "before-c7ab814",
+  "generatedAt": "2026-10-24T01:05:25.052Z",
+  "seedsPerRegion": 12,
+  "westernKimchiPct": 0,
+  "westernSamples": 84,
+  "satSrirachaItalianPct": 55,
+  "satSrirachaThaiPct": 70,
+  "satMisoItalianPct": 15,
+  "satFishItalianPct": 22.5,
+  "weekKimchiDays": 0,
+  "weekKimchiNonKorean": 0,
+  "weekDays": 280,
+  "weekKimchiPct": 0,
+  "byRegion": {
+    "italian": {
+      "kimchi": 0,
+      "sriracha": 58.3,
+      "fish-sauce": 16.7,
+      "miso": 8.3,
+      "gochujang": 0,
+      "soy": 50
+    },
+    "mexican": {
+      "kimchi": 0,
+      "sriracha": 58.3,
+      "fish-sauce": 33.3,
+      "miso": 25,
+      "gochujang": 0,
+      "soy": 25
+    },
+    "australian": {
+      "kimchi": 0,
+      "sriracha": 75,
+      "fish-sauce": 25,
+      "miso": 33.3,
+      "gochujang": 0,
+      "soy": 25
+    },
+    "home-kitchen": {
+      "kimchi": 0,
+      "sriracha": 66.7,
+      "fish-sauce": 16.7,
+      "miso": 25,
+      "gochujang": 0,
+      "soy": 33.3
+    },
+    "korean": {
+      "kimchi": 0,
+      "sriracha": 83.3,
+      "fish-sauce": 33.3,
+      "miso": 33.3,
+      "gochujang": 100,
+      "soy": 100
+    },
+    "japanese": {
+      "kimchi": 0,
+      "sriracha": 58.3,
+      "fish-sauce": 25,
+      "miso": 75,
+      "gochujang": 0,
+      "soy": 50
+    },
+    "thai": {
+      "kimchi": 0,
+      "sriracha": 58.3,
+      "fish-sauce": 8.3,
+      "miso": 16.7,
+      "gochujang": 0,
+      "soy": 66.7
+    },
+    "vietnamese": {
+      "kimchi": 0,
+      "sriracha": 50,
+      "fish-sauce": 8.3,
+      "miso": 66.7,
+      "gochujang": 0,
+      "soy": 100
+    }
+  }
+}
