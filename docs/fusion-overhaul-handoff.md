@@ -2,6 +2,9 @@
 
 **Date:** 26 October 2026  
 **Branch:** `cursor/fusion-overhaul-91e1`  
+**PR:** https://github.com/blkph0x/fusion-table/pull/5  
+**Live SHA:** `765cfea` (host `deploy/fusion-overhaul-91e1`)  
+**Rollback:** `56fc5d6`  
 **Brief:** store `docs/fusion-overhaul-brief.md`
 
 ## Short analysis (then shipped)
@@ -55,5 +58,7 @@ Hard exclusions, region affinity, cut×method and smoke allowlists unchanged.
 
 ## Deploy / rollback
 
-- Deploy web from this branch tip to `https://gearsqueens.online/fusion/` (SSH `10.1.1.111`).
-- Rollback: previous live SHA was **`56fc5d6`** (`cursor/smoke-method-affinity-91e1`).
+- Live: https://gearsqueens.online/fusion/ — MOTW hero + randomised “Tonight’s ideas” verified HTTP 200 @ **`765cfea`**.
+- Host branch: `deploy/fusion-overhaul-91e1` (no ff-merge of `main`; basePath `/fusion` restored on host only).
+- Rollback: checkout/redeploy **`56fc5d6`** (`deploy/smoke-method-affinity-91e1`).
+- Android: local commit `c29b83d` on `cursor/fusion-overhaul-91e1` (no git remote); APK not rebuilt this push.
