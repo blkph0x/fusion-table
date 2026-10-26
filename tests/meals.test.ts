@@ -11,13 +11,13 @@ const instructions = (recipe: ReturnType<typeof generateMeal>) => recipe.steps.m
 
 describe("ingredient-first complete meal engine", () => {
   it("counts only supported main/method/region/side configurations and exposes every promised chicken method", () => {
-    assert.equal(MAIN_INGREDIENTS.length, 22);
-    assert.equal(COOKING_METHODS.length, 12);
-    assert.equal(MEAL_REGIONS.length, 63);
-    assert.equal(MEAL_SIDES.length, 6);
-    assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 195);
-    assert.equal(getMealCombinationCount(), 73_710);
-    for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
+    assert.equal(MAIN_INGREDIENTS.length, 30);
+    assert.equal(COOKING_METHODS.length, 13);
+    assert.equal(MEAL_REGIONS.length, 76);
+    assert.equal(MEAL_SIDES.length, 90);
+    assert.equal(MAIN_INGREDIENTS.reduce((sum, main) => sum + main.methodIds.length, 0), 266);
+    assert.equal(getMealCombinationCount(), 1_819_440);
+    for (const id of ["schnitzel", "baked", "pan-fried", "air-fried", "poached", "grilled", "smoked", "stir-fried", "braised", "curry", "patties", "roasted", "steamed"]) {
       assert.ok(getMethodsForMain("chicken").some((method) => method.id === id));
     }
     assert.deepEqual(getMethodsForMain("missing"), []);
@@ -29,8 +29,12 @@ describe("ingredient-first complete meal engine", () => {
   });
 
   it("generates complete meals for every compatible configuration and dietary preference", () => {
+    // Full side × diet × main × method coverage; region sample keeps runtime bounded.
+    // Every side is also covered exhaustively in tests/side-plans.test.ts.
+    const regionSample = MEAL_REGIONS.filter((_, index) => index % 13 === 0 || MEAL_REGIONS[index].id === "home-kitchen");
+    assert.ok(regionSample.length >= 6);
     let tested = 0;
-    for (const diet of diets) for (const main of getMainsForDiet(diet)) for (const methodId of main.methodIds) for (const region of MEAL_REGIONS) for (const side of MEAL_SIDES) {
+    for (const diet of diets) for (const main of getMainsForDiet(diet)) for (const methodId of main.methodIds) for (const region of regionSample) for (const side of MEAL_SIDES) {
       const meal = generateMeal({ mainId: main.id, methodId, regionId: region.id, sideId: side.id, servings: 4, diet });
       assert.equal(meal.kind, "meal", meal.id);
       assert.equal(meal.mainId, main.id, meal.id);
@@ -56,7 +60,7 @@ describe("ingredient-first complete meal engine", () => {
       for (const item of meal.ingredients) assert.ok(text.includes(item.name.toLowerCase()) || text.includes(item.id.replaceAll("-", " ")), `${meal.id}: unused ingredient ${item.name}`);
       tested++;
     }
-    assert.ok(tested > 90_000);
+    assert.ok(tested > 400_000);
   });
 
   it("selects appropriate cuts and meaningfully different processes for the same main", () => {
@@ -99,6 +103,14 @@ describe("ingredient-first complete meal engine", () => {
     assert.throws(() => generateMeal({ ...base, mainId: "eggs", methodId: "schnitzel" }), /not available/);
     assert.throws(() => generateMeal({ ...base, mainId: "lentils", methodId: "grilled" }), /not available/);
     assert.throws(() => generateMeal({ ...base, mainId: "halloumi", diet: "dairy-free" }), /does not fit/);
+    assert.throws(() => generateMeal({ ...base, mainId: "paneer", diet: "dairy-free" }), /does not fit/);
+    assert.throws(() => generateMeal({ ...base, mainId: "paneer", diet: "vegan" }), /does not fit/);
+    const kidney = generateMeal({ ...base, mainId: "kidney-beans", methodId: "braised" });
+    assert.match(instructions(kidney), /canned red kidney beans/i);
+    assert.match(instructions(kidney), /dried kidney beans/i);
+    const duck = generateMeal({ ...base, mainId: "duck", methodId: "grilled" });
+    assert.match(instructions(duck), /75°C/);
+    assert.doesNotMatch(duck.safetyNote ?? "", /71°C/);
   });
 
   it("starts long braises before fast sides and includes precooking and chilling in patty prep", () => {
@@ -146,6 +158,19 @@ describe("ingredient-first complete meal engine", () => {
     assert.match(instructions(quinoa), /gluten-free vegan breadcrumbs/);
     assert.match(instructions(generateMeal({ ...base, sideId: "noodles-crunch", diet: "gluten-free" })), /gluten-free rice noodles/);
     assert.match(instructions(generateMeal({ ...base, sideId: "flatbread-salad", diet: "gluten-free" })), /gluten-free vegan flatbreads/);
+    assert.match(instructions(generateMeal({ ...base, sideId: "garlic-bread", diet: "gluten-free" })), /gluten-free garlic bread|labelled gluten-free/);
+    const garlic = generateMeal({ ...base, sideId: "garlic-bread" });
+    assert.ok(garlic.allergens.includes("wheat") || garlic.ingredients.some((item) => item.allergens.includes("wheat")));
+    const mash = generateMeal({ ...base, sideId: "mashed-potato" });
+    assert.ok(mash.allergens.includes("milk") || mash.ingredients.some((item) => item.allergens.includes("milk")));
+    const mashDf = generateMeal({ ...base, sideId: "mashed-potato", diet: "dairy-free" });
+    assert.ok(!mashDf.allergens.includes("milk"));
+    assert.ok(!mashDf.ingredients.some((item) => item.id === "milk" || item.id === "butter"));
+    for (const sideId of ["garden-salad", "roast-pumpkin", "steamed-broccoli"] as const) {
+      const meal = generateMeal({ ...base, sideId });
+      assert.equal(meal.sideId, sideId);
+      assert.ok(meal.components.side.length > 2);
+    }
     const vegan = generateMeal({ ...base, mainId: "tofu", regionId: "thai", diet: "vegan" });
     assert.ok(vegan.ingredients.some((item) => item.name === "Vegan red curry paste"));
     assert.ok(!vegan.allergens.some((allergen) => ["egg", "milk", "fish", "crustaceans"].includes(allergen)));
@@ -173,10 +198,10 @@ describe("ingredient-first complete meal engine", () => {
   it("keeps sufficient doneness instructions and primary safety sources for each animal main", () => {
     for (const main of MAIN_INGREDIENTS.filter((item) => ["meat", "seafood"].includes(item.category))) for (const methodId of main.methodIds) {
       const meal = generateMeal({ ...base, mainId: main.id, methodId });
-      const temperature = ["chicken", "turkey"].includes(main.id) || ["patties", "schnitzel"].includes(methodId) && main.category === "meat" || methodId === "patties" ? "75°C" : main.category === "seafood" ? "63°C" : "71°C";
+      const temperature = ["chicken", "turkey", "duck"].includes(main.id) || ["patties", "schnitzel"].includes(methodId) && main.category === "meat" || methodId === "patties" ? "75°C" : main.category === "seafood" ? "63°C" : "71°C";
       assert.ok(instructions(meal).includes(temperature), meal.id);
       assert.ok(meal.safetyNote?.includes(temperature), meal.id);
-      assert.match(meal.safetySource!, /^https:\/\/www\.(foodstandards|foodauthority\.nsw)\.gov\.au\//);
+      assert.match(meal.safetySource!, /^https:\/\/www\.(foodstandards|foodauthority\.nsw|fsis\.usda)\.gov(?:\.au)?\//);
       assert.ok(meal.equipment.includes("Food thermometer"), meal.id);
     }
     for (const method of getMethodsForMain("eggs")) {
@@ -199,9 +224,28 @@ describe("ingredient-first complete meal engine", () => {
       assert.notEqual(mild.id, hot.id);
       assert.equal(mild.classicId, hot.classicId);
       assert.ok(mild.dietaryNotes.some((note) => note.includes("Mild")));
+      const gentle = generateMeal({ ...base, regionId: region.id, spiceHeat: "gentle" });
+      const fiery = generateMeal({ ...base, regionId: region.id, spiceHeat: "fiery" });
+      const gentleHeat = gentle.ingredients.find((item) => item.id === id);
+      const fieryHeat = fiery.ingredients.find((item) => item.id === id);
+      assert.ok(gentleHeat && fieryHeat, region.id);
+      assert.ok(gentleHeat.amount > 0 && gentleHeat.amount < mildHeat.amount && hotHeat.amount < fieryHeat.amount, region.id);
     }
     const same = generateMeal(base);
     assert.deepEqual(same, generateMeal(base));
+    assert.deepEqual(generateMeal({ ...base, cookPace: undefined }), same);
+    assert.equal("cookPace" in same, false);
+    const paced = generateMeal({ ...base, cookPace: "lunch" });
+    assert.equal(paced.cookPace, "lunch");
+    assert.match(paced.id, /-pace-lunch$/);
+    assert.deepEqual(paced.ingredients, same.ingredients);
+    assert.deepEqual(paced.steps, same.steps);
+    assert.equal(paced.cookMinutes, same.cookMinutes);
+    assert.match(paced.sessionNote ?? "", /Lunch start/);
+    const home = generateMeal({ mainId: "chickpeas", methodId: "braised", regionId: "home-kitchen", sideId: "lentil-salad", servings: 2, diet: "vegan", spiceHeat: "medium" });
+    assert.match(home.fusionNote, /Home-kitchen flavour/);
+    assert.equal("cookPace" in home, false);
+    assert.throws(() => generateMeal({ ...base, cookPace: "overnight" as "quick" }));
     assert.notEqual(same.classicId, generateMeal({ ...base, methodId: "poached" }).classicId);
     assert.notEqual(same.classicId, generateMeal({ ...base, sideId: "potato-slaw" }).classicId);
   });

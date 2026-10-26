@@ -92,12 +92,58 @@ function readStill(recipe: Recipe): PlatePicture | null {
   return null;
 }
 
+/** Stable cache key from plate identity + visible ingredients (not a generic stock slug). */
+export function platePictureKey(recipe: Recipe): string {
+  const bits = [
+    recipe.kind === "meal" ? "meal" : "classic",
+    recipe.regionId || "",
+    recipe.mainId || recipe.classicId || "",
+    recipe.methodId || "",
+    recipe.sideId || "",
+    recipe.title || "",
+    ...recipe.ingredients.slice(0, 16).map((item) => item.id),
+  ];
+  return bits.join("|").toLowerCase().replace(/[^a-z0-9.|_-]+/g, "-").slice(0, 240);
+}
+
+/** Prompt built from the actual recipe — title, method, region, sides and visible ingredients. */
+export function platePicturePrompt(recipe: Recipe): string {
+  const method = recipe.methodId ? recipe.methodId.replace(/-/g, " ") : "";
+  const region = recipe.regionId ? recipe.regionId.replace(/-/g, " ") : "";
+  const main = recipe.mainId ? recipe.mainId.replace(/-/g, " ") : "";
+  const side = recipe.sideId ? recipe.sideId.replace(/-/g, " ") : "";
+  const components = recipe.kind === "meal" && "components" in recipe
+    ? (recipe as { components?: { main?: string; side?: string; vegetables?: string; sauce?: string } }).components
+    : undefined;
+  const plateBits = [
+    components?.main,
+    components?.side,
+    components?.vegetables,
+    components?.sauce,
+  ].filter(Boolean).join("; ");
+  const visible = recipe.ingredients
+    .filter((item) => !/stock|oil|salt|water|flour|breadcrumb|cornflour/i.test(item.id))
+    .slice(0, 10)
+    .map((item) => item.name)
+    .join(", ");
+  const cue = [
+    recipe.title,
+    method && `${method} cooking`,
+    region && `${region}-inspired flavours`,
+    main && `main: ${main}`,
+    side && `side: ${side}`,
+    plateBits && `on the plate: ${plateBits}`,
+    visible && `visible ingredients: ${visible}`,
+  ].filter(Boolean).join(". ");
+  return `Realistic close-up food photograph of one finished home-cooked dinner plate, natural window light, ceramic plate on a wooden table, sharp focus, appetising, steam optional, no text, no logo, no people, no hands, no raw meat. Depict this exact meal — not a generic stock dish. ${cue}`.slice(0, 900);
+}
+
 async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
   const endpoint = localImageEndpoint(process.env.FUSION_LOCAL_IMAGE_URL);
   if (!endpoint) return null;
   const target = endpoint.includes("sdapi") ? endpoint : `${endpoint}/sdapi/v1/txt2img`;
-  const names = recipe.ingredients.slice(0, 12).map((item) => item.name).join(", ");
-  const prompt = `Realistic close-up food photograph of one finished home-cooked plate, natural window light, ceramic plate on a wooden table, sharp focus, appetising, no text, no logo, no people, no hands. The dish is ${recipe.title}. Visible food: ${names}.`.slice(0, 700);
+  const prompt = platePicturePrompt(recipe);
+  const identity = platePictureKey(recipe);
   try {
     const response = await fetch(target, {
       method: "POST",
@@ -107,12 +153,14 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
       headers: { Accept: "application/json, image/png, image/jpeg", "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt,
-        negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince",
+        negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince, wrong cuisine, generic buffet, stock photo collage",
         steps: 4,
         width: 512,
         height: 512,
         cfg_scale: 1,
         scheduler: "karras",
+        // Seed the local model from the plate identity so the same meal redraws consistently.
+        seed: Math.abs([...identity].reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0)),
       }),
     });
     if (!response.ok) return null;
@@ -145,8 +193,7 @@ type FoodKind = "starch" | "protein" | "sauce" | "herb" | "veg" | "skip";
 
 export function paintPlate(recipe: Recipe): Uint8Array {
   const rgb = new Uint8Array(WIDTH * HEIGHT * 3);
-  const names = recipe.ingredients.map((item) => item.name).join("|");
-  const rand = mulberry32(fnv(`${recipe.id}|${names}`));
+  const rand = mulberry32(fnv(platePictureKey(recipe)));
   for (let y = 0; y < HEIGHT; y += 1) {
     for (let x = 0; x < WIDTH; x += 1) {
       const grain = Math.round(Math.sin(y / 7) * 5) + ((x * 3 + y) % 9) - 4;
@@ -199,7 +246,7 @@ function foodKind(name: string): FoodKind {
   if (/^black pepper$|ground black pepper|white pepper/.test(text)) return "skip";
   if (/rice|noodle|pasta|couscous|bread|tortilla|wrap|potato|injera|teff|quinoa|polenta|flatbread/.test(text)) return "starch";
   if (/sauce|curry|paste|coconut milk|coconut cream|yoghurt|yogurt|miso|gravy|passata|tahini/.test(text)) return "sauce";
-  if (/chicken|beef|lamb|pork|fish|salmon|prawn|shrimp|tofu|tempeh|egg|halloumi|turkey|mince/.test(text)) return "protein";
+  if (/chicken|beef|lamb|pork|fish|salmon|prawn|shrimp|tofu|tempeh|egg|halloumi|turkey|mince|duck|kangaroo|tuna|sardine|paneer|jackfruit|black bean|kidney bean/.test(text)) return "protein";
   if (/herb|coriander|cilantro|parsley|mint|basil|chilli|chili|sesame|spring onion|scallion|lemon|lime|dill|thyme|rosemary|onion/.test(text)) return "herb";
   return "veg";
 }
@@ -235,7 +282,7 @@ function drawProtein(rgb: Uint8Array, name: string, cx: number, cy: number, rand
     for (let piece = 0; piece < 4; piece += 1) fillEllipseRotated(rgb, cx - 10 + piece * 16, cy + (piece % 2) * 10, 14, 6, piece * 0.6, colour);
     return;
   }
-  if (/fish|salmon/.test(text)) {
+  if (/fish|salmon|tuna|sardine/.test(text)) {
     fillEllipseRotated(rgb, cx + 8, cy, 48, 18, -0.25, colour);
     return;
   }
@@ -244,7 +291,7 @@ function drawProtein(rgb: Uint8Array, name: string, cx: number, cy: number, rand
     fillEllipse(rgb, cx + 2, cy + 1, 8, 8, [214, 168, 42]);
     return;
   }
-  const pieces = /tofu|tempeh|halloumi/.test(text) ? 3 : 4;
+  const pieces = /tofu|tempeh|halloumi|paneer|jackfruit/.test(text) ? 3 : 4;
   for (let piece = 0; piece < pieces; piece += 1) {
     fillEllipse(rgb, cx - 16 + (piece % 2) * 28, cy - 16 + Math.floor(piece / 2) * 24, 16, 11, colour);
   }
@@ -257,9 +304,9 @@ function foodColour(name: string, rand: () => number): Rgb {
     : /herb|coriander|cilantro|parsley|mint|lime|salad|spinach|broccoli|cabbage|basil|bean/.test(text) ? [62, 122, 58]
     : /lemon|turmeric|corn|mango|egg/.test(text) ? [214, 170, 48]
     : /rice|noodle|bread|tortilla|potato|pasta|couscous|wrap|injera|quinoa/.test(text) ? [214, 190, 132]
-    : /beef|lamb|pork/.test(text) ? [122, 72, 52]
-    : /salmon|fish|prawn|shrimp/.test(text) ? [196, 112, 78]
-    : /chicken|turkey|tofu|mushroom|tempeh|halloumi/.test(text) ? [168, 122, 74]
+    : /beef|lamb|pork|kangaroo/.test(text) ? [122, 72, 52]
+    : /salmon|fish|prawn|shrimp|tuna|sardine/.test(text) ? [196, 112, 78]
+    : /chicken|turkey|duck|tofu|mushroom|tempeh|halloumi|paneer/.test(text) ? [168, 122, 74]
     : /sauce|coconut|cream|yoghurt|yogurt|cheese|miso|curry|paste/.test(text) ? [168, 86, 42]
     : [108, 124, 70];
   return [base[0] + jitter, base[1] + jitter, base[2] + jitter];

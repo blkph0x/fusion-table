@@ -1,4 +1,4 @@
-import type { DietId, IngredientCategory, RecipeOption, SpiceHeat } from "./recipe-types.ts";
+import { classicChilliAmount, type DietId, type IngredientCategory, type RecipeOption, type SpiceHeat } from "./recipe-types.ts";
 import type { DraftIngredient, Profile } from "./template-types.ts";
 
 /**
@@ -79,7 +79,7 @@ function vinegar(kind: "cider" | "rice" | "red-wine" | "sherry", amount: number,
 
 export function bbqProfileFor(regionId: string, diet: DietId, heat: SpiceHeat): Profile | undefined {
   const gf = diet === "gluten-free";
-  const heatAmount = { mild: 0, medium: 0.25, hot: 0.75 }[heat];
+  const heatAmount = classicChilliAmount(heat);
   const chilli = () => heatAmount ? [spice("chilli-flakes", "Chilli flakes", heatAmount, ["chili flakes", "red pepper flakes", "chilli", "chili"])] : [];
   const ketchup = (amount = 2) => condiment("bbq-tomato-ketchup", "Tomato ketchup", amount, "tbsp", gf, [], "Reserve for finishing; use plain tomato ketchup rather than a prepared barbecue sauce.");
 

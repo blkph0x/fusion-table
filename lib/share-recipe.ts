@@ -1,11 +1,12 @@
 import { getCut } from "./cuts.ts";
 import { MEAL_REGIONS, generateMeal } from "./meals.ts";
 import type { MealInput } from "./meal-types.ts";
-import type { DietId, Recipe, RecipeConstraints, RecipeInput, SpiceHeat } from "./recipe-types.ts";
+import { SPICE_HEATS, type CookPace, type DietId, type Recipe, type RecipeConstraints, type RecipeInput, type SpiceHeat } from "./recipe-types.ts";
+import { isCookPace } from "./cook-pace.ts";
 import { CLASSICS, DIETS, REGIONS, generateRecipe } from "./recipes.ts";
 
 const DIET_IDS = new Set<DietId>(DIETS.map((item) => item.id as DietId));
-const HEATS = new Set<SpiceHeat>(["mild", "medium", "hot"]);
+const HEATS = new Set<SpiceHeat>(SPICE_HEATS);
 const AVOID = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
 const WORD = /^[a-z0-9][a-z0-9 '.-]{0,39}$/i;
 
@@ -22,6 +23,7 @@ export interface ShareSpec {
   spiceHeat: SpiceHeat;
   servings: number;
   seed?: number;
+  cookPace?: CookPace;
   avoid?: string[];
   dislikes?: string[];
   glutenFree?: boolean;
@@ -82,6 +84,7 @@ export function recipeFromShare(spec: ShareSpec): Recipe {
         spiceHeat: clean.spiceHeat,
         ...(clean.cutId ? { cutId: clean.cutId } : {}),
         ...(clean.seed !== undefined ? { seed: clean.seed } : {}),
+        ...(clean.cookPace ? { cookPace: clean.cookPace } : {}),
         ...(clean.avoid?.length ? { avoidAllergens: clean.avoid } : {}),
         ...(clean.dislikes?.length ? { dislikes: clean.dislikes } : {}),
         ...(constraintsOf(clean) ? { constraints: constraintsOf(clean) } : {}),
@@ -95,6 +98,7 @@ export function recipeFromShare(spec: ShareSpec): Recipe {
       diet: clean.diet,
       spiceHeat: clean.spiceHeat,
       ...(clean.seed !== undefined ? { seed: clean.seed } : {}),
+      ...(clean.cookPace ? { cookPace: clean.cookPace } : {}),
       ...(clean.avoid?.length ? { avoidAllergens: clean.avoid } : {}),
       ...(clean.dislikes?.length ? { dislikes: clean.dislikes } : {}),
       ...(constraintsOf(clean) ? { constraints: constraintsOf(clean) } : {}),
@@ -109,6 +113,8 @@ export function recipeFromShare(spec: ShareSpec): Recipe {
 export function specFromRecipe(recipe: Recipe, extra?: { avoid?: string[]; dislikes?: string[] }): ShareSpec {
   const seedMatch = recipe.id.match(/-sat-(\d+)$/);
   const seed = seedMatch ? Number(seedMatch[1]) : undefined;
+  const paceMatch = recipe.id.match(/-pace-(quick|morning|lunch|long)(?:-|$)/);
+  const cookPace = recipe.cookPace ?? (paceMatch && isCookPace(paceMatch[1]) ? paceMatch[1] : undefined);
   const flags = constraintsFromId(recipe.id);
   const common = {
     v: 1 as const,
@@ -117,6 +123,7 @@ export function specFromRecipe(recipe: Recipe, extra?: { avoid?: string[]; disli
     spiceHeat: recipe.spiceHeat,
     servings: recipe.servings,
     ...(seed !== undefined ? { seed } : {}),
+    ...(cookPace ? { cookPace } : {}),
     ...flags,
     ...(extra?.avoid?.length ? { avoid: extra.avoid } : {}),
     ...(extra?.dislikes?.length ? { dislikes: extra.dislikes } : {}),
@@ -167,6 +174,10 @@ function normaliseShare(input: ShareSpec): ShareSpec {
   if (input.seed !== undefined) {
     if (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff) throw new Error("This link is not a Fusion Table recipe.");
     spec.seed = input.seed;
+  }
+  if (input.cookPace !== undefined) {
+    if (!isCookPace(input.cookPace)) throw new Error("This link is not a Fusion Table recipe.");
+    spec.cookPace = input.cookPace;
   }
   if (input.kind === "classic") {
     if (typeof input.classicId !== "string" || !CLASSICS.some((item) => item.id === input.classicId)) throw new Error("This link is not a Fusion Table recipe.");

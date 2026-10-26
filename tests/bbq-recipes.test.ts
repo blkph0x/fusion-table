@@ -14,6 +14,7 @@ const BBQ_IDS = [
   "grill-roasted-whole-fish", "smoked-grain-bowl", "bbq-wings", "smoked-pork-belly",
   "grill-roasted-whole-chicken", "smoked-turkey-breast", "grilled-prawns", "charred-octopus",
   "grilled-flank-steak", "bbq-lamb-chops",
+  "shotgun-shells", "ribs-on-the-rack", "foil-boat-ribs", "burnt-ends", "smoked-meatloaf", "rotisserie-roast",
 ];
 const BBQ_REGION_IDS = [
   "texas-bbq", "carolina-bbq", "kansas-city-bbq", "argentine-asado", "korean-bbq", "japanese-yakitori",
@@ -108,6 +109,12 @@ describe("deterministic barbecue and smoking expansion", () => {
       "grilled-flank-steak": /flank/i,
       "bbq-lamb-chops": /lamb.*chops/i,
       "grilled-prawns": /prawns|shrimp/i,
+      "shotgun-shells": /sausage/i,
+      "ribs-on-the-rack": /ribs/i,
+      "foil-boat-ribs": /ribs/i,
+      "burnt-ends": /brisket/i,
+      "smoked-meatloaf": /mince/i,
+      "rotisserie-roast": /pork loin/i,
     };
     for (const [classicId, pattern] of Object.entries(cuts)) {
       const recipe = recipeFor(classicId);
@@ -123,16 +130,16 @@ describe("deterministic barbecue and smoking expansion", () => {
   });
 
   it("uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood", () => {
-    for (const classicId of ["grilled-skewers", "bbq-sausages", "bbq-wings", "grill-roasted-whole-chicken", "smoked-turkey-breast", "charred-octopus"]) {
+    for (const classicId of ["grilled-skewers", "bbq-sausages", "bbq-wings", "grill-roasted-whole-chicken", "smoked-turkey-breast", "charred-octopus", "shotgun-shells", "smoked-meatloaf"]) {
       assert.match(instructions(recipeFor(classicId)), /75\s?°C/, classicId);
     }
     for (const classicId of ["hot-smoked-fish", "grill-roasted-whole-fish", "grilled-prawns"]) {
       assert.match(instructions(recipeFor(classicId)), /63\s?°C/, classicId);
     }
-    for (const classicId of ["reverse-seared-steak", "grilled-flank-steak", "bbq-lamb-chops"]) {
+    for (const classicId of ["reverse-seared-steak", "grilled-flank-steak", "bbq-lamb-chops", "rotisserie-roast"]) {
       assert.match(instructions(recipeFor(classicId)), /71\s?°C/, classicId);
     }
-    for (const classicId of ["smoked-brisket", "bbq-pulled-protein", "bbq-ribs"]) {
+    for (const classicId of ["smoked-brisket", "bbq-pulled-protein", "bbq-ribs", "ribs-on-the-rack", "foil-boat-ribs", "burnt-ends"]) {
       const recipe = recipeFor(classicId);
       assert.match(instructions(recipe), /9[0-6](?:[–-]9[0-6])?\s?°C/, classicId);
       assert.match(instructions(recipe), /tender|probe/i, classicId);
@@ -202,6 +209,12 @@ describe("deterministic barbecue and smoking expansion", () => {
       "charred-octopus": /mushroom.*beans|beans.*mushroom/i,
       "grilled-flank-steak": /mushroom|portobello/i,
       "bbq-lamb-chops": /tofu/i,
+      "shotgun-shells": /jumbo pasta shells/i,
+      "ribs-on-the-rack": /tempeh.*mushroom|mushroom.*tempeh/i,
+      "foil-boat-ribs": /tempeh.*mushroom|mushroom.*tempeh/i,
+      "burnt-ends": /tempeh.*mushroom|mushroom.*tempeh/i,
+      "smoked-meatloaf": /lentil/i,
+      "rotisserie-roast": /cauliflower/i,
     };
     const animalCuts = /\b(?:chicken|turkey|poultry|pork|beef|lamb|salmon|trout|mackerel|prawns?|shrimp|octopus|tentacles?|giblets?|breasts?|thighs?|wings?|brisket)\b/i;
     for (const classicId of BBQ_IDS) for (const region of REGIONS) for (const diet of ["vegetarian", "vegan"] as const) {
@@ -251,6 +264,9 @@ describe("deterministic barbecue and smoking expansion", () => {
         ["bbq-pulled-protein", "pork-shoulder", 1200],
         ["bbq-ribs", "pork-ribs", 1400],
         ["smoked-pork-belly", "pork-belly", 1000],
+        ["ribs-on-the-rack", "pork-ribs", 1400],
+        ["foil-boat-ribs", "pork-ribs", 1400],
+        ["burnt-ends", "brisket-point", 1200],
       ];
       for (const [classicId, ingredientId, baseGrams] of slowCuts) {
         const small = recipeFor(classicId, "balanced", "texas-bbq", servings);
@@ -320,5 +336,33 @@ describe("deterministic barbecue and smoking expansion", () => {
     assert.equal(ingredientMatchesShop(fish, butcher), false);
     for (const item of [beef, fish, provolone]) assert.equal(ingredientMatchesShop(item, generic), false);
     assert.equal(spiceShop.inventoryStatus, "unverified");
+  });
+
+  it("leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set", () => {
+    const plain = generateRecipe({ classicId: "pasta", regionId: "japanese", servings: 2, spiceHeat: "medium" });
+    assert.deepEqual(generateRecipe({ classicId: "pasta", regionId: "japanese", servings: 2, spiceHeat: "medium", cookPace: undefined }), plain);
+    assert.equal("cookPace" in plain, false);
+    const brisket = recipeFor("smoked-brisket");
+    const long = generateRecipe({ classicId: "smoked-brisket", regionId: "texas-bbq", servings: 4, diet: "balanced", spiceHeat: "medium", cookPace: "long" });
+    assert.equal(long.cookPace, "long");
+    assert.match(long.id, /-pace-long$/);
+    assert.deepEqual(long.ingredients, brisket.ingredients);
+    assert.deepEqual(long.steps, brisket.steps);
+    assert.equal(long.cookMinutes, brisket.cookMinutes);
+    assert.match(long.sessionNote ?? "", /12–16 hours/);
+    assert.match(instructions(long), /90–96\s?°C/);
+    assert.match(long.sessionNote ?? "", /probe-tender/);
+    const quick = generateRecipe({ classicId: "grilled-prawns", regionId: "texas-bbq", servings: 4, diet: "balanced", spiceHeat: "medium", cookPace: "quick" });
+    assert.match(instructions(quick), /63\s?°C/);
+    assert.equal(quick.cookMinutes, recipeFor("grilled-prawns").cookMinutes);
+    const home = generateRecipe({ classicId: "pasta", regionId: "home-style", servings: 4, diet: "vegan", spiceHeat: "medium" });
+    assert.match(home.fusionNote, /own kitchen/);
+    assert.equal(home.allergens.includes("milk"), false);
+    const shells = generateRecipe({ classicId: "shotgun-shells", regionId: "home-style", servings: 4, diet: "gluten-free", pantry: "pasta, jumbo pasta shells, sausages" });
+    const shell = shells.ingredients.find((item) => item.id === "jumbo-shells");
+    assert.ok(shell);
+    assert.equal(shell.inPantry, false);
+    assert.equal(generateRecipe({ classicId: "shotgun-shells", regionId: "home-style", servings: 4, diet: "gluten-free", pantry: shell.name }).ingredients.find((item) => item.id === "jumbo-shells")?.inPantry, true);
+    assert.throws(() => generateRecipe({ classicId: "pasta", regionId: "japanese", servings: 2, cookPace: "overnight" as "quick" }));
   });
 });

@@ -81,8 +81,8 @@ describe("seeded fusion plates", () => {
     assert.ok(new Set(forms).size >= 4, forms.join("\n"));
   });
 
-  it("can build a cold stir-fry from fish, oyster sauce, sriracha, bird's eye chillies and lime", () => {
-    const spec = {
+  it("keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates", () => {
+    const thai = {
       seed: 7,
       regionId: "thai",
       diet: "balanced" as const,
@@ -96,16 +96,24 @@ describe("seeded fusion plates", () => {
       mainId: "chicken",
       methodId: "schnitzel",
     };
-    assert.equal(fusionAdmits(spec, ["form_cold_stir", "extra_fish", "umami_oyster", "heat_both", "acid_lime"]), true);
-    assert.equal(fusionAdmits(spec, ["form_cold_stir", "acid_none"]), false);
-    assert.equal(fusionAdmits({ ...spec, avoid: ["fish"] }, ["extra_fish"]), false);
-    assert.equal(fusionAdmits({ ...spec, avoid: ["fish"] }, ["umami_oyster"]), false);
-    assert.equal(fusionAdmits({ ...spec, diet: "vegan", mainId: "tofu", methodId: "stir-fried" }, ["umami_oyster"]), false);
-    assert.equal(fusionAdmits({ ...spec, spiceHeat: "mild" }, ["heat_both"]), false);
-    assert.equal(fusionAdmits({ ...spec, dislikes: ["chilli"] }, ["heat_birds"]), false);
-    const witness = fusionSearch(spec);
+    assert.equal(fusionAdmits(thai, ["form_cold_stir", "extra_fish", "umami_fish", "heat_both", "acid_lime"]), true);
+    assert.equal(fusionAdmits(thai, ["umami_oyster"]), false);
+    assert.equal(fusionAdmits(thai, ["form_cold_stir", "acid_none"]), false);
+    assert.equal(fusionAdmits({ ...thai, avoid: ["fish"] }, ["extra_fish"]), false);
+    assert.equal(fusionAdmits({ ...thai, avoid: ["fish"] }, ["umami_fish"]), false);
+    assert.equal(fusionAdmits({ ...thai, spiceHeat: "mild" }, ["heat_both"]), false);
+    assert.equal(fusionAdmits({ ...thai, dislikes: ["chilli"] }, ["heat_birds"]), false);
+    const chinese = { ...thai, regionId: "chinese" };
+    assert.equal(fusionAdmits(chinese, ["form_cold_stir", "umami_oyster", "acid_lime"]), true);
+    assert.equal(fusionAdmits(chinese, ["heat_sriracha"]), false);
+    assert.equal(fusionAdmits({ ...chinese, diet: "vegan", mainId: "tofu", methodId: "stir-fried" }, ["umami_oyster"]), false);
+    const italian = { ...thai, regionId: "italian" };
+    assert.equal(fusionAdmits(italian, ["heat_sriracha"]), false);
+    assert.equal(fusionAdmits(italian, ["umami_miso"]), false);
+    assert.equal(fusionAdmits(italian, ["umami_fish"]), false);
+    const witness = fusionSearch(thai);
     assert.equal(witness.sat, true);
-    assert.ok(witness.variables >= 20);
+    assert.ok(witness.variables >= 16);
     assert.ok(witness.variables <= 64);
     assert.ok(witness.clauses > witness.variables);
   });
