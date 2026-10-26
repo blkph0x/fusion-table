@@ -24,6 +24,7 @@ import { areaKey } from "@/lib/price-memory";
 import { MAIN_INGREDIENTS, MEAL_REGIONS, MEAL_SIDES, COOKING_METHODS, generateMeal, getMealCombinationCount } from "@/lib/meals";
 import { CLEAN_KNOB_LABELS, cleanActive, mealCleanStats, type CleanPrefs } from "@/lib/clean-prefs";
 import type { MealInput } from "@/lib/meal-types";
+import { buildHomeDiscover } from "@/lib/home-suggestions";
 import { publicPath } from "@/lib/public-path";
 import { decodeShare, encodeShare, recipeFromShare, specFromRecipe, type ShareSpec } from "@/lib/share-recipe";
 
@@ -125,6 +126,7 @@ function Modal({ title, close, children }: { title: string; close: () => void; c
 
 export default function Home() {
   const [view, setView] = useState<View>("discover");
+  const [homeLoadSeed, setHomeLoadSeed] = useState(1);
   const [builderMode, setBuilderMode] = useState<"meal" | "classic">("classic");
   const [builderRevision, setBuilderRevision] = useState(0);
   const [classicId, setClassicId] = useState("pasta");
@@ -217,6 +219,24 @@ if (Array.isArray(data.pantry)) setPantry(data.pantry.filter((item: Stock) => it
   }, [saved, location, radius, pantry, verdicts, ratings, buyList, loaded]);
   /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(""), 5000); return () => clearTimeout(timer); }, [toast]);
+  // Randomise front-page meal suggestions once per browser load (MOTW stays week-stable).
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- one-shot load shuffle */
+    setHomeLoadSeed((Date.now() ^ (Math.floor(Math.random() * 0xffffffff))) >>> 0 || 1);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+  const homeDiscover = useMemo(() => buildHomeDiscover({ loadSeed: homeLoadSeed || 1, suggestionCount: 6 }), [homeLoadSeed]);
+  const motwShare = homeDiscover.mealOfWeek.recipe;
+  const motwToken = useMemo(() => {
+    try {
+      return encodeShare(specFromRecipe(motwShare));
+    } catch {
+      return "";
+    }
+  }, [motwShare]);
+  const motwImage = motwToken
+    ? `${publicPath("/api/plate")}?t=${encodeURIComponent(motwToken)}`
+    : publicPath("/images/fusion-table-hero.png");
   useEffect(() => {
     if (!loaded) return;
     let cancel = false;
@@ -440,6 +460,22 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
     setBuilderRevision((value) => value + 1);
     setView("studio");
   }
+  function openHomeMeal(recipeToOpen: Recipe, token?: string) {
+    try {
+      setShareSpec(token ? decodeShare(token) : specFromRecipe(recipeToOpen));
+    } catch {
+      try { setShareSpec(specFromRecipe(recipeToOpen)); } catch { setShareSpec(null); }
+    }
+    showRecipe(recipeToOpen);
+    setBuilderMode("meal");
+    setBuilderRevision((value) => value + 1);
+    setDiet(recipeToOpen.diet);
+    setSpiceHeat(recipeToOpen.spiceHeat);
+    setServings(recipeToOpen.servings);
+    setChecked([]);
+    setView("studio");
+    setTimeout(() => { recipeRef.current?.focus({ preventScroll: true }); recipeRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+  }
   function createRecipe(event?: FormEvent, preset?: typeof INSPIRATIONS[number]) {
     event?.preventDefault(); setFormError("");
     try {
@@ -595,9 +631,9 @@ setLocation(place); setLocationOpen(false); setShopFilter("supermarket"); setSho
   return <div className="site-shell"><a href="#main-content" className="skip-link">Skip to content</a>
     <header className="site-header"><div className="header-inner"><button className="brand" onClick={() => navigate("discover")} aria-label="Fusion Table home"><span className="brand-mark"><Sprout size={25} strokeWidth={1.65} /></span><span>fusion<span className="brand-light">table</span></span></button><nav aria-label="Main navigation" className={menuOpen ? "main-nav nav-open" : "main-nav"}>{([["discover", "Discover"], ["studio", "Recipe studio"], ["week", "Week plan"], ["shops", "Local shops"], ["trends", "Trends"], ["cookbook", "My cookbook"]] as [View, string][]).map(([id, label]) => <button key={id} className={view === id ? "active" : ""} onClick={() => id === "shops" ? shoppingView() : navigate(id)}>{label}{id === "cookbook" && saved.length > 0 && <span className="nav-count">{saved.length}</span>}</button>)}</nav><div className="header-actions"><NewsBell items={community?.news || []} /><a className="text-button" href="/downloads/MealPlannerAU.apk">Android app</a><button className="location-button" onClick={() => setLocationOpen(true)}><MapPin size={16} /><span>{location?.name || "Set your location"}</span><ChevronDown size={13} /></button><button className="icon-button mobile-menu" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button></div></div></header>
     <main id="main-content">
-      {view === "discover" && <><section className="hero"><div className="hero-copy"><span className="eyebrow"><span className="eyebrow-line" /> MEAL PLANNING</span><h1>Plan the meals.<br /><em>Shop one list.</em></h1><p>Choose the meals, tick what is already in the pantry, then shop at a supermarket. Recipes are templates and are not kitchen-tested. Check the packet. No shelf prices are added.</p><div className="hero-actions"><button className="button primary" onClick={() => composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}>Explore classics & BBQ <ArrowRight size={18} /></button><button className="text-button" onClick={() => navigate("week")}><CalendarDays size={17} /> Plan seven dinners</button><button className="text-button" onClick={shoppingView}><MapPin size={17} /> Explore local shops</button></div><div className="hero-footnote"><span className="little-leaves"><Leaf size={16} /><Sprout size={16} /><Wheat size={16} /></span><span>Templates, not kitchen tests. No shelf prices.</span></div></div><div className="hero-visual"><img src={inspirationSrc(INSPIRATIONS[0])} alt="Miso mushroom tagliatelle with herbs and sesame in a sage ceramic bowl" fetchPriority="high" data-spec={inspirationSpec(INSPIRATIONS[0])} data-file={INSPIRATIONS[0].image} onError={keepImage} /><span className="photo-corner">TEMPLATE · NOT KITCHEN-TESTED</span><button className="dish-label" onClick={() => createRecipe(undefined, INSPIRATIONS[0])}><span className="dish-label-icon"><Utensils size={21} /></span><span><small>ITALY <span>×</span> JAPAN</small><strong>Miso mushroom pasta</strong></span><ArrowRight size={20} /></button><div className="round-stamp" aria-hidden="true"><span>CHECK THE</span><Sprout size={31} strokeWidth={1.3} /><span>PACKET</span></div></div></section>
-        <div className="benefit-strip"><span><Globe2 size={19} /> {CLASSICS.length} classics and regional plates</span><span><SlidersHorizontal size={19} /> Filters stay in place</span><span><ShoppingBasket size={19} /> One shopping list</span></div>
-        <div className="page-width">{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">EXAMPLES</span><h2>A few plates to start from.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={inspirationSrc(item)} alt={item.title} loading="lazy" data-spec={inspirationSpec(item)} data-file={item.image} onError={keepImage} /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Open template</span></div></button>)}</div></section><CookNotes board={community} onTrends={() => navigate("trends")} /><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">LOCAL SHOPS</span><h2>Supermarkets and food shops near you.</h2><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is added.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find local shops <ArrowRight size={16} /></button></section></div></>}
+      {view === "discover" && <><section className="hero hero-motw"><div className="hero-copy"><span className="eyebrow"><span className="eyebrow-line" /> MEAL OF THE WEEK</span><h1>{homeDiscover.mealOfWeek.title}</h1><p className="motw-lead">Simple, wholesome and quick to cook — protein, veg and a proper side, scored from the plate itself. Templates are not kitchen-tested. Check the packet.</p><ul className="motw-score" aria-label="Why this plate"><li><strong>{homeDiscover.mealOfWeek.score.total}</strong><span>week score</span></li><li><strong>~{duration(homeDiscover.mealOfWeek.score.totalMinutes)}</strong><span>total time</span></li><li><strong>{homeDiscover.mealOfWeek.score.ingredientCount}</strong><span>ingredients</span></li></ul><div className="hero-actions"><button className="button primary" onClick={() => openHomeMeal(homeDiscover.mealOfWeek.recipe, motwToken || undefined)}>Open this plate <ArrowRight size={18} /></button><button className="text-button" onClick={() => navigate("week")}><CalendarDays size={17} /> Plan seven dinners</button><button className="text-button" onClick={() => composerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}><ChefHat size={17} /> Build your own</button></div><div className="hero-footnote"><span className="little-leaves"><Leaf size={16} /><Sprout size={16} /><Wheat size={16} /></span><span>Templates, not kitchen tests. No shelf prices.</span></div></div><div className="hero-visual"><img src={motwImage} alt={homeDiscover.mealOfWeek.title} fetchPriority="high" data-spec={motwToken} data-file="/images/fusion-table-hero.png" onError={keepImage} /><span className="photo-corner">MEAL OF THE WEEK · TEMPLATE</span><button className="dish-label" onClick={() => openHomeMeal(homeDiscover.mealOfWeek.recipe, motwToken || undefined)}><span className="dish-label-icon"><Sparkles size={21} /></span><span><small>THIS WEEK&apos;S PICK</small><strong>{homeDiscover.mealOfWeek.title}</strong></span><ArrowRight size={20} /></button><div className="round-stamp" aria-hidden="true"><span>CHECK THE</span><Sprout size={31} strokeWidth={1.3} /><span>PACKET</span></div></div></section>
+        <div className="benefit-strip"><span><Globe2 size={19} /> {getMealCombinationCount().toLocaleString("en-AU")} meal combinations</span><span><Sparkles size={19} /> Fresh suggestions each visit</span><span><ShoppingBasket size={19} /> One shopping list</span></div>
+        <div className="page-width"><section className="inspiration-section suggestion-section"><div className="section-heading"><div><span className="eyebrow">TONIGHT&apos;S IDEAS</span><h2>Fresh plates for this visit.</h2><p>Shuffled from the curated set every time you load Discover. Open one, or build your own below.</p></div><button className="text-button" onClick={() => setHomeLoadSeed((Date.now() ^ (Math.floor(Math.random() * 0xffffffff))) >>> 0 || 1)}>Shuffle again <ArrowRight size={17} /></button></div><div className="inspiration-grid suggestion-grid">{homeDiscover.suggestions.map((item) => <button className="inspiration-card suggestion-card" key={`${item.plate.regionId}-${item.plate.mainId}-${item.plate.methodId}-${item.plate.sideId}-${item.title}`} onClick={() => openHomeMeal(item.recipe, item.shareToken)}><div className="card-image"><img src={`${publicPath("/api/plate")}?t=${encodeURIComponent(item.shareToken)}`} alt={item.title} loading="lazy" data-spec={item.shareToken} data-file="/images/fusion-table-hero.png" onError={keepImage} /><span className="card-pairing">{item.regionLabel}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Clock3 size={13} /> ~{duration(item.totalMinutes)}<span>·</span> Open template</span></div></button>)}</div></section>{studio(true)}<section className="inspiration-section"><div className="section-heading"><div><span className="eyebrow">CLASSIC FUSIONS</span><h2>A few remixes to start from.</h2></div><button className="text-button" onClick={() => navigate("studio")}>Open the recipe studio <ArrowRight size={17} /></button></div><div className="inspiration-grid">{INSPIRATIONS.map((item) => <button className="inspiration-card" key={item.classicId} onClick={() => createRecipe(undefined, item)}><div className="card-image"><img src={inspirationSrc(item)} alt={item.title} loading="lazy" data-spec={inspirationSpec(item)} data-file={item.image} onError={keepImage} /><span className="card-pairing">{item.pairing}</span><span className="card-open"><ArrowRight size={19} /></span></div><div className="card-copy"><h3>{item.title}</h3><p>{item.description}</p><span className="card-tag"><Leaf size={13} /> {item.diet === "vegan" ? "Plant-based" : "Vegetarian"}<span>·</span> Open template</span></div></button>)}</div></section><CookNotes board={community} onTrends={() => navigate("trends")} /><section className="neighbourhood-banner"><div className="neighbourhood-art" aria-hidden="true"><Store size={64} strokeWidth={1} /><span><Sprout size={24} /></span></div><div><span className="eyebrow">LOCAL SHOPS</span><h2>Supermarkets and food shops near you.</h2><p>Supermarkets, grocers, butchers and markets. Petrol stations are left out. No shelf price is added.</p></div><button className="button primary" onClick={shoppingView}><MapPin size={17} /> Find local shops <ArrowRight size={16} /></button></section></div></>}
       {view === "studio" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><ChefHat size={15} /> RECIPE STUDIO</span><h1>Build a recipe.</h1><p>Pick a classic or a main, a regional flavour or home kitchen, then set servings, diet and an optional cook session.</p></div>{studio()}{recipeDetail()}</div>}
       {view === "week" && <div className="page-width inner-page"><div className="page-intro"><span className="eyebrow"><CalendarDays size={15} /> WEEK PLAN</span><h1>A different week each time.</h1><p>The same pantry can lead to different dinners. Plan the week, pick another idea, or press Randomise. Filters stay in place. Templates are not kitchen-tested. Check the packet. Nothing here has a shelf price.</p></div>
         <form className="week-layout" onSubmit={buildWeek}>

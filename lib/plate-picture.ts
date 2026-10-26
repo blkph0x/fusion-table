@@ -92,12 +92,58 @@ function readStill(recipe: Recipe): PlatePicture | null {
   return null;
 }
 
+/** Stable cache key from plate identity + visible ingredients (not a generic stock slug). */
+export function platePictureKey(recipe: Recipe): string {
+  const bits = [
+    recipe.kind === "meal" ? "meal" : "classic",
+    recipe.regionId || "",
+    recipe.mainId || recipe.classicId || "",
+    recipe.methodId || "",
+    recipe.sideId || "",
+    recipe.title || "",
+    ...recipe.ingredients.slice(0, 16).map((item) => item.id),
+  ];
+  return bits.join("|").toLowerCase().replace(/[^a-z0-9.|_-]+/g, "-").slice(0, 240);
+}
+
+/** Prompt built from the actual recipe — title, method, region, sides and visible ingredients. */
+export function platePicturePrompt(recipe: Recipe): string {
+  const method = recipe.methodId ? recipe.methodId.replace(/-/g, " ") : "";
+  const region = recipe.regionId ? recipe.regionId.replace(/-/g, " ") : "";
+  const main = recipe.mainId ? recipe.mainId.replace(/-/g, " ") : "";
+  const side = recipe.sideId ? recipe.sideId.replace(/-/g, " ") : "";
+  const components = recipe.kind === "meal" && "components" in recipe
+    ? (recipe as { components?: { main?: string; side?: string; vegetables?: string; sauce?: string } }).components
+    : undefined;
+  const plateBits = [
+    components?.main,
+    components?.side,
+    components?.vegetables,
+    components?.sauce,
+  ].filter(Boolean).join("; ");
+  const visible = recipe.ingredients
+    .filter((item) => !/stock|oil|salt|water|flour|breadcrumb|cornflour/i.test(item.id))
+    .slice(0, 10)
+    .map((item) => item.name)
+    .join(", ");
+  const cue = [
+    recipe.title,
+    method && `${method} cooking`,
+    region && `${region}-inspired flavours`,
+    main && `main: ${main}`,
+    side && `side: ${side}`,
+    plateBits && `on the plate: ${plateBits}`,
+    visible && `visible ingredients: ${visible}`,
+  ].filter(Boolean).join(". ");
+  return `Realistic close-up food photograph of one finished home-cooked dinner plate, natural window light, ceramic plate on a wooden table, sharp focus, appetising, steam optional, no text, no logo, no people, no hands, no raw meat. Depict this exact meal — not a generic stock dish. ${cue}`.slice(0, 900);
+}
+
 async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
   const endpoint = localImageEndpoint(process.env.FUSION_LOCAL_IMAGE_URL);
   if (!endpoint) return null;
   const target = endpoint.includes("sdapi") ? endpoint : `${endpoint}/sdapi/v1/txt2img`;
-  const names = recipe.ingredients.slice(0, 12).map((item) => item.name).join(", ");
-  const prompt = `Realistic close-up food photograph of one finished home-cooked plate, natural window light, ceramic plate on a wooden table, sharp focus, appetising, no text, no logo, no people, no hands. The dish is ${recipe.title}. Visible food: ${names}.`.slice(0, 700);
+  const prompt = platePicturePrompt(recipe);
+  const identity = platePictureKey(recipe);
   try {
     const response = await fetch(target, {
       method: "POST",
@@ -107,12 +153,14 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
       headers: { Accept: "application/json, image/png, image/jpeg", "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt,
-        negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince",
+        negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince, wrong cuisine, generic buffet, stock photo collage",
         steps: 4,
         width: 512,
         height: 512,
         cfg_scale: 1,
         scheduler: "karras",
+        // Seed the local model from the plate identity so the same meal redraws consistently.
+        seed: Math.abs([...identity].reduce((h, c) => ((h << 5) - h + c.charCodeAt(0)) | 0, 0)),
       }),
     });
     if (!response.ok) return null;
@@ -145,8 +193,7 @@ type FoodKind = "starch" | "protein" | "sauce" | "herb" | "veg" | "skip";
 
 export function paintPlate(recipe: Recipe): Uint8Array {
   const rgb = new Uint8Array(WIDTH * HEIGHT * 3);
-  const names = recipe.ingredients.map((item) => item.name).join("|");
-  const rand = mulberry32(fnv(`${recipe.id}|${names}`));
+  const rand = mulberry32(fnv(platePictureKey(recipe)));
   for (let y = 0; y < HEIGHT; y += 1) {
     for (let x = 0; x < WIDTH; x += 1) {
       const grain = Math.round(Math.sin(y / 7) * 5) + ((x * 3 + y) % 9) - 4;

@@ -498,7 +498,7 @@ export function applySatFusion<T extends Recipe>(recipe: T, spec: FusionSpec): T
   return {
     ...recipe,
     id: `${recipe.id}-sat-${spec.seed}`,
-    title: `${recipe.title} · ${titleTail}`,
+    title: `${recipe.title} — ${titleTail}`,
     description: `${recipe.description} Seeded plate: ${titleTail}.`,
     fusionNote: `${recipe.fusionNote} The extras on this plate were chosen by a seeded SAT search (seed ${spec.seed}, ${encoded.names.length} variables, ${encoded.clauses.length} clauses, ${solved.decisions} decisions, ${solved.conflicts} conflicts). Hard diet, allergen and dislike filters are clauses. The same seed repeats this plate. Another click uses a new seed. This is not a live model, not kitchen-tested, and not guaranteed allergy-safe. It is not a proof about P versus NP. Check the packet.`,
     ingredients: [...recipe.ingredients, ...additions],

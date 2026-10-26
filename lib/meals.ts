@@ -9,6 +9,7 @@ import { applySatFusion } from "./fusion-sat.ts";
 import { applyCookPace, isCookPace } from "./cook-pace.ts";
 import { foodWordHit } from "./food-words.ts";
 import { exploreRegionProfile } from "./region-diversity.ts";
+import { mealName } from "./meal-name.ts";
 import { buildSidePlan, preferredSidesForRegion } from "./side-plans.ts";
 import {
   applyCleanRounding,
@@ -549,14 +550,22 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const prepMinutes = methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : methodId === "smoked" ? 25 : 15;
   const cookMinutes = Math.max(side.minutes, plan.minutes + (integrated ? 8 : 0)) + (servings > 6 && ["schnitzel", "pan-fried", "air-fried", "grilled", "stir-fried", "patties"].includes(methodId) ? plan.minutes : 0);
   const mainName = `${main.name} ${methodId === "schnitzel" ? "schnitzel" : methodId === "patties" ? "patties" : `· ${method.name.toLowerCase()}`}`;
+  // Dish title stays on the main (not the butcher shopping name); cut stays on the ingredient line.
+  const plateTitle = mealName({
+    regionId,
+    mainId,
+    methodId,
+    sideId,
+    sauceHint: profile.sauce,
+  });
   const statsDraft = mealCleanStats({ ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment });
   const score = cleanlinessScore({ ingredients: recipeIngredients, steps: tidied.steps, equipment: tidied.equipment, methodId, sideId }, clean);
   const recipe: MealRecipe = {
     id: `meal-${mainId}-${methodId}-${regionId}-${sideId}-${diet}-${spiceHeat}-${servings}${chosen ? `-${chosen.id}` : ""}${cleanActive(clean) ? "-clean" : ""}`,
     classicId: `meal:${mainId}:${methodId}:${sideId}`,
     kind: "meal", mainId, methodId, sideId, regionId,
-    title: `${region.name} ${mainName.toLocaleLowerCase("en")}`,
-    description: `${mainName} with ${side.side}, ${side.vegetables} and ${profile.sauce}. A complete meal built around your chosen main and cooking method.`,
+    title: plateTitle,
+    description: `${plateTitle}. ${mainName} with ${side.side}, ${side.vegetables} and ${profile.sauce}. A complete meal built around your chosen main and cooking method.`,
     fusionNote: region.id === "home-kitchen"
       ? `Home-kitchen flavour: ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} This keeps the ${method.name.toLowerCase()} method and leaves out a second regional paste. It is an authored template, not a kitchen-tested traditional recipe.`
       : `This original fusion combination pairs the ${method.name.toLowerCase()} technique with ${region.description.charAt(0).toLowerCase() + region.description.slice(1)} It is inspired by regional flavours, not presented as a traditional recipe.${input.seed !== undefined ? " Aromatics, spices and herbs were sampled from this region's pantry for this seed; the signature heat stays put." : ""}${cleanActive(clean) ? " Cleaner-meal soft prefs trimmed bottles and clutter where they could; hard filters stay." : ""}`,

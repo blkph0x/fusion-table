@@ -60,20 +60,21 @@ const FAMILY_EXTRA: Readonly<Record<string, Partial<SlotPools>>> = {
     aromatics: ["ginger", "galangal", "lemongrass", "kaffir-lime-leaves", "shallot"],
     simmer: ["turmeric", "ground-coriander", "palm-sugar", "cumin"],
     herbs: ["coriander", "thai-basil", "mint", "laksa-leaf"],
-    finish: ["palm-sugar"],
+    finish: ["palm-sugar", "peanuts", "sesame-oil"],
     acids: ["lime-juice", "tamarind"],
   },
   sticky: {
     aromatics: ["lemongrass", "galangal"],
     simmer: ["palm-sugar", "ground-coriander"],
     herbs: ["coriander", "mint", "thai-basil"],
+    finish: ["palm-sugar", "peanuts"],
     acids: ["lime-juice", "tamarind"],
   },
   vietnamese: {
     aromatics: ["ginger", "lemongrass", "shallot"],
     simmer: ["soy-sauce", "five-spice"],
     herbs: ["mint", "coriander", "perilla", "thai-basil"],
-    finish: ["sesame-oil"],
+    finish: ["sesame-oil", "sesame-seeds"],
     acids: ["lime-juice", "rice-vinegar"],
   },
   chinese: {
@@ -87,12 +88,14 @@ const FAMILY_EXTRA: Readonly<Record<string, Partial<SlotPools>>> = {
     aromatics: ["galangal", "lemongrass", "ginger"],
     simmer: ["kecap-manis", "turmeric", "ground-coriander"],
     herbs: ["coriander", "laksa-leaf"],
+    finish: ["palm-sugar", "peanuts"],
     acids: ["lime-juice", "tamarind"],
   },
   malaysian: {
     aromatics: ["galangal", "lemongrass", "ginger"],
     simmer: ["turmeric", "ground-coriander", "tamarind", "cumin"],
     herbs: ["coriander", "laksa-leaf"],
+    finish: ["palm-sugar", "peanuts"],
     acids: ["lime-juice", "tamarind"],
   },
   mexican: {
@@ -113,7 +116,7 @@ const FAMILY_EXTRA: Readonly<Record<string, Partial<SlotPools>>> = {
     aromatics: ["sumac"],
     simmer: ["cumin", "sumac", "allspice", "cinnamon", "dried-mint"],
     herbs: ["parsley", "mint", "coriander"],
-    finish: ["zaatar", "dried-mint"],
+    finish: ["zaatar", "dried-mint", "sesame-seeds"],
     acids: ["lemon-juice"],
   },
   italian: {
@@ -126,30 +129,35 @@ const FAMILY_EXTRA: Readonly<Record<string, Partial<SlotPools>>> = {
     aromatics: ["cinnamon"],
     simmer: ["cumin", "cinnamon", "ras-el-hanout", "ground-coriander", "paprika"],
     herbs: ["parsley", "coriander", "mint"],
+    finish: ["sesame-seeds", "dried-mint"],
     acids: ["lemon-juice"],
   },
   greek: {
     aromatics: ["oregano"],
     simmer: ["oregano", "thyme", "cumin"],
     herbs: ["dill", "parsley", "mint"],
+    finish: ["sesame-seeds", "dried-mint"],
     acids: ["lemon-juice"],
   },
   spanish: {
     aromatics: ["saffron", "bay-leaves"],
     simmer: ["smoked-paprika", "saffron", "paprika", "oregano"],
     herbs: ["parsley"],
+    finish: ["sesame-seeds"],
     acids: ["sherry-vinegar", "lemon-juice"],
   },
   french: {
     aromatics: ["bay-leaves", "thyme"],
     simmer: ["dijon-mustard", "thyme", "tarragon"],
     herbs: ["parsley", "tarragon"],
+    finish: ["dijon-mustard"],
     acids: ["lemon-juice", "red-wine-vinegar"],
   },
   caribbean: {
     aromatics: ["ginger", "allspice"],
     simmer: ["allspice", "thyme", "paprika", "nutmeg"],
     herbs: ["culantro", "coriander", "spring-onion"],
+    finish: ["palm-sugar"],
     acids: ["lime-juice", "orange-juice"],
   },
   "jamaican-jerk": {
@@ -400,10 +408,15 @@ export function exploreRegionProfile(
     : pickCount(seed, "n-herb", lean ? 1 : 1, Math.min(lean ? 2 : 2, pools.herbs.length));
   const herbs = pickN(pools.herbs, herbTarget, seed, "herb", soften);
 
-  const finishTarget = pools.finish.length === 0
+  // Fuller condiment use: prefer at least one finish when the family has any,
+  // but never re-pick ids already on the plate (no silent doubles / swaps).
+  const used = new Set([...aromatics, ...simmer, ...heats, acid, ...herbs]);
+  const finishPool = pools.finish.filter((id) => !used.has(id));
+  const finishMin = finishPool.length === 0 ? 0 : lean ? 0 : 1;
+  const finishTarget = finishPool.length === 0
     ? 0
-    : pickCount(seed, "n-fin", 0, Math.min(lean ? 1 : 2, pools.finish.length));
-  const finishExtras = pickN(pools.finish, finishTarget, seed, "fin", soften);
+    : pickCount(seed, "n-fin", finishMin, Math.min(lean ? 1 : 2, finishPool.length));
+  const finishExtras = pickN(finishPool, finishTarget, seed, "fin", soften);
 
   try {
     return {
