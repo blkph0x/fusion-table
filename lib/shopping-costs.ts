@@ -1,6 +1,6 @@
 import type { PriceQuote } from "./catalogue.ts";
 import { areaKey, itemKey, type ItemQuote, type PriceMemory } from "./price-memory.ts";
-import { canonicalizeProductText, type StockFlag } from "./product-match.ts";
+import { canonicalizeProductText, ingredientPreparationConflict, type StockFlag } from "./product-match.ts";
 import type { ShoppingLine } from "./shopping.ts";
 import { estimateIngredientCost, type IngredientPlanningEstimate } from "./ingredient-estimates.ts";
 
@@ -140,7 +140,7 @@ export function resolveIngredientPricing(line: ShoppingLine, row?: ShoppingCostL
   // recipe quantity. Larger rows belong to a previous quantity/serving choice.
   const matchingRow = row?.id === line.id && row.name === line.name && row.unit === line.unit && Number.isFinite(row.amount) && row.amount >= 0 && row.amount <= line.amount ? row : null;
   const planningEstimate = matchingRow?.amount === line.amount ? matchingRow.planningEstimate ?? estimateIngredientCost(line) : estimateIngredientCost(line);
-  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer));
+  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(line.name, offer.productName));
   const observedRecipeCents = chosen ? consumedOfferCost(line, chosen) : null;
   const observedPurchase = chosen && Number.isSafeInteger(matchingRow?.estimatedCents) && matchingRow!.estimatedCents! >= 0 && matchingRow!.estimatedCents! <= 1_000_000_000 ? matchingRow!.estimatedCents : null;
   const purchaseCents = observedPurchase ?? planningEstimate?.purchaseCents ?? null;
@@ -223,7 +223,7 @@ function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now:
   const retailerName = quote.retailerName || ({ coles: "Coles", woolworths: "Woolworths", aldi: "ALDI", iga: "IGA" }[retailerId || ""] ?? "Shop");
   const shop = quote.shop;
   const publishedGuide = quote.source === "aldi-online-catalogue" || quote.source === "iga-online-catalogue" || quote.source === "local-shop-website";
-  return quote.matches.slice(0, 6).map((match): ShoppingOffer => {
+  return quote.matches.slice(0, 6).filter(match => !ingredientPreparationConflict(line.name, match.name)).map((match): ShoppingOffer => {
     const current = freshness(quote.fetchedAt, now, 15 * 60_000);
     const preparedMismatch = match.preparedForm === "cooked-rice" && !foodWords(line.name).includes("cooked");
     const comparable = comparableState(line, match.name) && !preparedMismatch;
@@ -343,7 +343,7 @@ export function applyShoppingOfferSelection(row: ShoppingCostLine, offerId: stri
   if (row.amount === 0) return row;
   if (offerId === null) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "No offer selected. This line is excluded from the estimate." };
   const chosen = row.offers.find(offer => offer.id === offerId);
-  if (!chosen || !isShoppingOfferSelectable(chosen)) return row;
+  if (!chosen || !isShoppingOfferSelectable(chosen) || ingredientPreparationConflict(row.name, chosen.productName)) return row;
   return { ...row, chosenOfferId: chosen.id, estimatedCents: chosen.cost.lineCents, reason: chosen.match === "review" ? "You selected this product after reviewing the match. Verify the packet." : null };
 }
 
@@ -351,7 +351,7 @@ export function applyShoppingOfferSelections(rows: readonly ShoppingCostLine[], 
   return rows.map(row => {
     if (!Object.prototype.hasOwnProperty.call(selections, row.id)) return row;
     const selection = selections[row.id];
-    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferSelectable(offer))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
+    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(row.name, offer.productName))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
     return applyShoppingOfferSelection(row, selection);
   });
 }

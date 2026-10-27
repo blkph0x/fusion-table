@@ -290,6 +290,56 @@ function ingredientFoodFormConflict(wanted: string, seen: string): boolean {
   return requested.has("stock") && rawStockMeat.test(seen) && !rawStockMeat.test(wanted);
 }
 
+const FINISHED_FOOD_FORMS: readonly (readonly [string, RegExp])[] = [
+  ["biscuit", /\b(?:biscuit|cookie|biscotti)\b/],
+  ["cake", /\b(?:cake|muffin|pastry|doughnut|donut|waffle|pancake)\b/],
+  ["bread", /\b(?:bread|naan|flatbread|bagel|baguette|bun|crouton|breadstick|wrap|tortilla)\b/],
+  ["cracker", /\bcracker\b/], ["crisps", /\b(?:chip|crisp|crispy)\b/], ["snack", /\b(?:snack|popcorn)\b/],
+  ["chutney", /\bchutney\b/], ["relish", /\brelish\b/], ["pesto", /\bpesto\b/], ["ketchup", /\bketchup\b/],
+  ["jelly", /\bjelly\b/], ["curd", /\bcurd\b/], ["jam", /\b(?:jam|marmalade|conserve)\b/],
+  ["chocolate", /\b(?:chocolate|fudge|candy|confectionery)\b/], ["dressing", /\bdressing\b/],
+  ["dip", /\b(?:dip|hummus|houmous|guacamole)\b/], ["mayonnaise", /\b(?:mayonnaise|mayo|aioli)\b/],
+  ["salt", /\bsalt\b/], ["butter", /\bbutter\b/], ["risotto", /\brisotto\b/],
+  ["pasta", /\b(?:pasta|lasagne|lasagna|noodle)\b/], ["pizza", /\bpizza\b/], ["gozleme", /\bgozleme\b/],
+  ["bake", /\b(?:bake|gratin)\b/], ["cordial", /\bcordial\b/], ["syrup", /\bsyrup\b/], ["passata", /\bpassata\b/],
+];
+const RAW_PRODUCE_WORDS = new Set(["ginger", "garlic", "onion", "scallion", "shallot", "leek", "tomato", "potato", "carrot", "beetroot", "broccoli", "cauliflower", "cabbage", "capsicum", "courgette", "eggplant", "cucumber", "spinach", "lettuce", "lemon", "lime", "orange", "apple", "banana", "pear", "mushroom", "coriander", "parsley", "basil", "mint", "dill", "rosemary", "thyme", "sage", "chilli", "celery", "fennel", "asparagus"]);
+const PRODUCE_PREPARATIONS: readonly RegExp[] = [
+  /\b(?:jarred|bottled|canned|tinned|preserved)\b/, /\bpickled\b/, /\b(?:candied|crystallised|crystalized)\b/,
+  /\b(?:ground|dried|dehydrated)\b/, /\b(?:cooked|roasted|grilled|baked|fried|caramelised|caramelized)\b/,
+  /\bready cut\b/,
+];
+
+function otherIngredientPreparationConflict(wanted: string, seen: string): boolean {
+  // A flavour word inside a finished food is not the requested ingredient.
+  // Group biscuit/cookie and naan/bread wording, while preserving explicit foods.
+  const produceRequest = wanted.split(" ").some(word => RAW_PRODUCE_WORDS.has(word));
+  // Curd also names tofu, risotto also names uncooked rice, and bake can be a
+  // flour-brand word. These are finished-food evidence only for produce queries.
+  for (const [kind, form] of FINISHED_FOOD_FORMS) {
+    if (!produceRequest && ["salt", "butter", "curd", "risotto", "bake"].includes(kind)) continue;
+    if (form.test(seen) && !form.test(wanted)) return true;
+  }
+  const rawProduce = produceRequest
+    && ingredientFoodForms(wanted).size === 0
+    && !FINISHED_FOOD_FORMS.some(([, form]) => form.test(wanted))
+    && !/\b(?:seed|flake|stem ginger)\b/.test(wanted);
+  if (!rawProduce) return false;
+  for (const preparation of PRODUCE_PREPARATIONS) if (preparation.test(seen) && !preparation.test(wanted)) return true;
+  if (/\b(?:ginger|garlic)\b/.test(wanted)) {
+    for (const preparation of [/\bcrushed\b/, /\bchopped\b/]) {
+      if (preparation.test(seen) && !preparation.test(wanted) && !/\b(?:fresh|root|punnet|loose|bulb|clove)\b/.test(seen)) return true;
+    }
+  }
+  return false;
+}
+
+/** Shared by live matching and retained-offer checks; it never establishes stock. */
+export function ingredientPreparationConflict(requested: string, offered: string): boolean {
+  const wanted = canonicalizeProductText(requested), seen = canonicalizeProductText(offered);
+  return ingredientFoodFormConflict(wanted, seen) || otherIngredientPreparationConflict(wanted, seen);
+}
+
 function meatPreparations(canonical: string, product?: CatalogueProduct): Set<MeatPreparation> {
   const forms = new Set<MeatPreparation>();
   if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
@@ -337,6 +387,7 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     if (!product.name.trim() || product.name.length > 500 || isNonFoodCatalogueProduct(product)) continue;
     const seen = canonicalizeProductText(product.name);
     if (ingredientFoodFormConflict(wanted, seen)) continue;
+    if (otherIngredientPreparationConflict(wanted, seen)) continue;
     if (meatPreparationConflict(wanted, seen, product)) continue;
     if (/\bsausage roll\b/.test(seen) && !/\bsausage roll\b/.test(wanted)) continue;
     if (/\bsauce\b/.test(seen) && !/\bsauce\b/.test(wanted)) continue;

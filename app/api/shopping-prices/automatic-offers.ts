@@ -1,6 +1,7 @@
 import type { ShoppingCostLine, ShoppingOffer } from "../../../lib/shopping-costs.ts";
 import { costShoppingQuantity, summarizeShoppingCosts } from "../../../lib/shopping-costs.ts";
 import { estimateIngredientCost } from "../../../lib/ingredient-estimates.ts";
+import { ingredientPreparationConflict } from "../../../lib/product-match.ts";
 const clean = (value: string) => value.toLowerCase().replace(/[\u2019']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 const prepared = /\b(?:powder|paste|sauce|gravy|bouillon|soup|juice|stock|seasoning|seasoned|cracker|chip|chips|snack|pickled|canned|tinned|frozen|cooked|fried|roasted|flavoured|flavored|marinated|marinade|brined|cured|truffle|kit|meal|dip|dressing|chutney|relish|marmalade|jam)\b/;
 const nonFood = /\b(?:compost|soil|fertiliser|fertilizer|pesticide|fungicide|insecticide|inoculant|seedling|growing kit|grow kit|mushroom spawn|plant food)\b|\b(?:hair|body|face|facial|hand) (?:oil|cream|lotion|butter|treatment|shampoo|conditioner)\b/;
@@ -9,7 +10,7 @@ const hasPlainRule = (name: string) => /^(?:fresh )?mushrooms?$/.test(clean(name
 /** Narrow food-form rules resolve ordinary brand ties, never a dietary substitution. */
 export function plainProductFits(name: string, product: string): boolean {
   const wanted = clean(name), seen = clean(product);
-  if (nonFood.test(seen)) return false;
+  if (nonFood.test(seen) || ingredientPreparationConflict(name, product)) return false;
   if (/^(?:fresh )?mushrooms?$/.test(wanted)) return /\bmushrooms?\b/.test(seen) && !prepared.test(seen) && !/\b(?:portobello|shiitake|oyster|enoki|porcini|dried|mix|mixed)\b/.test(seen);
   if (wanted === "brown onion" || wanted === "brown onions") return /\bbrown\b/.test(seen) && /\bonions?\b/.test(seen) && !prepared.test(seen) && !/\b(?:red|white|shallot|peeled|dried|crisp)\b/.test(seen);
   if (wanted === "chicken breast" || wanted === "chicken breast fillets") return /\bchicken breast\b/.test(seen) && !prepared.test(seen) && !/\b(?:mince|diced|dice|strips|chunks|sliced|schnitzel|crumb|crumbed|breaded|battered|tempura|nuggets?|chipees?|munchies|munchie|kievs?|kyivs?|tender|tenders|kebab|kebabs|skin on|bone in|honey|teriyaki|garlic|herb|herbs|lemon|chilli|barbecue|bbq|stuffed|ready)\b/.test(seen);
@@ -37,6 +38,7 @@ function usableAvailability(offer: ShoppingOffer): boolean {
 export function suggestAutomaticPrices(rows: readonly ShoppingCostLine[]): ShoppingCostLine[] {
   return rows.map(original => {
     const offers = original.offers.map(offer => {
+      if (ingredientPreparationConflict(original.name, offer.productName)) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "This product is a different food or preparation, so it cannot price the requested ingredient." }, reviewReason: "A finished food or prepared condiment cannot substitute for this ingredient unless that form is requested." };
       if (nonFood.test(clean(offer.productName))) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "This is a non-food product, so it is excluded from the recipe estimate." }, reviewReason: "A garden, growing or personal-care product cannot substitute for this cooking ingredient." };
       if (uncertainRate(offer)) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "Loose-product price basis needs verification; the weight increment is not assumed to be the selling unit." }, reviewReason: "Check the retailer's actual per-kg or per-item price before costing this loose product." };
       // Australian metric spoons are exact volume units, not ingredient densities.
