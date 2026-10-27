@@ -90,6 +90,11 @@ export function readablePriceContent({text = "",html = ""}) {
     || /"@type"\s*:\s*"Product"/i.test(html) && /"price"\s*:/i.test(html);
 }
 
+export function colesEmptyBrowserGate({url,text = "",html = ""}) {
+  return retailerUrl(url).retailer === "coles" && text.trim().length < 100
+    && [...html.matchAll(/<meta\b[^>]*>/gi)].some(match => /\bname=["']robots["']/i.test(match[0]) && /\bcontent=["'][^"']*noindex/i.test(match[0]));
+}
+
 const STREET_TYPES = {st:"street",street:"street",rd:"road",road:"road",ave:"avenue",av:"avenue",avenue:"avenue",dr:"drive",drive:"drive",ln:"lane",lane:"lane",ct:"court",court:"court",pde:"parade",parade:"parade",hwy:"highway",highway:"highway",cres:"crescent",crescent:"crescent",tce:"terrace",terrace:"terrace",pl:"place",place:"place",blvd:"boulevard",boulevard:"boulevard",way:"way"};
 export function addressProof(value) {
   const text = String(value || "").normalize("NFKC").toLowerCase().replace(/[.,]/g," ").replace(/\s+/g," ").trim();
@@ -100,6 +105,81 @@ export function addressProof(value) {
 export function sameStoreAddress(expected,actual) {
   const a = addressProof(expected), b = addressProof(actual);
   return !!a && !!b && a.number === b.number && a.street === b.street && a.type === b.type && a.postcode === b.postcode;
+}
+
+export function verifiedStoreKey(store) {
+  // A visitor's shopping area is not the physical branch identity. Include it
+  // only when a complete independent address is unavailable for store proof.
+  return JSON.stringify([store.id,store.name,store.address || "",store.lat ?? null,store.lon ?? null,addressProof(store.address) ? null : store.area]);
+}
+
+/** Anonymous contexts enter this pool only after the factory proves a branch. */
+export function createVerifiedStoreSessions({maxSessions = 4,ttlMs = 5 * 60_000,now = Date.now} = {}) {
+  const entries = new Map();
+  let closed = false;
+  const dispose = entry => {
+    entry.invalid = true;
+    if (entries.get(entry.key) === entry) entries.delete(entry.key);
+    entry.controller.abort(new DOMException("Store session closed.","AbortError"));
+    return entry.value?.close().catch(() => undefined);
+  };
+  return {
+    get size() { return entries.size; },
+    async acquire(key,create,signal) {
+      signal?.throwIfAborted();
+      if (closed) throw new Error("Store browser sessions are stopping.");
+      let entry = entries.get(key);
+      const expired = [...entries.values()].filter(row => !row.leases && !row.waiters.size && row.ready && now()-row.at >= ttlMs);
+      const retired = expired.map(dispose);
+      if (entry?.invalid || entry?.signal.aborted) entry = undefined;
+      if (!entry) {
+        if (entries.size >= maxSessions) {
+          const idle = [...entries.values()].filter(row => row.ready && !row.leases && !row.waiters.size).sort((a,b) => a.at-b.at)[0];
+          if (!idle) throw new Error("Nearby-store browser sessions are busy. Try again shortly.");
+          retired.push(dispose(idle));
+        }
+        const controller = new AbortController();
+        entry = {key,controller,signal:controller.signal,waiters:new Set(),leases:0,ready:false,invalid:false,at:now(),value:null,task:null};
+        const created = entry;
+        entries.set(key,entry);
+        entry.task = (async () => {
+          await Promise.all(retired);
+          controller.signal.throwIfAborted();
+          const value = await create(controller.signal);
+          if (created.invalid || controller.signal.aborted || closed) { await value.close(); controller.signal.throwIfAborted(); throw new Error("Store session no longer needed."); }
+          created.value = value; created.ready = true; created.at = now();
+          return value;
+        })().catch(error => { void dispose(created); throw error; });
+      }
+      const waiting = entry, token = Symbol("store session reader");
+      waiting.waiters.add(token);
+      return new Promise((resolve,reject) => {
+        const detach = () => {
+          signal?.removeEventListener("abort",abort); waiting.waiters.delete(token);
+          if (!waiting.ready && !waiting.waiters.size && !waiting.leases) void dispose(waiting);
+        };
+        const abort = () => { detach(); reject(signal.reason); };
+        signal?.addEventListener("abort",abort,{once:true});
+        if (signal?.aborted) { abort(); return; }
+        waiting.task.then(value => {
+          if (signal?.aborted) return;
+          waiting.leases++; detach();
+          let released = false;
+          resolve({value,release() {
+            if (released) return; released = true;
+            waiting.leases--; waiting.at = now();
+            if (waiting.invalid && !waiting.leases) void dispose(waiting);
+          },invalidate() {
+            waiting.invalid = true;
+            if (entries.get(key) === waiting) entries.delete(key);
+            if (!waiting.leases) void dispose(waiting);
+          }});
+        },error => { detach(); reject(error); });
+      });
+    },
+    async clear() { await Promise.all([...entries.values()].map(dispose)); },
+    async close() { closed = true; await Promise.all([...entries.values()].map(dispose)); },
+  };
 }
 
 export function storeContext(value) {

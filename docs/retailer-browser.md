@@ -1,6 +1,6 @@
 # Retailer browser worker
 
-The price reader can use an ordinary anonymous Chromium browser with JavaScript and cookies. Each lookup has a fresh session. It does not import accounts, copy a user's browser cookies, change browser identity, solve CAPTCHAs or repeatedly refresh a security check.
+The price reader can use an ordinary anonymous Chromium browser with JavaScript and cookies. IGA may reuse an anonymous store session after its branch has been independently verified; other lookups have fresh sessions. It does not import accounts, copy a user's browser cookies, change browser identity, solve CAPTCHAs or repeatedly refresh a security check.
 
 The service accepts only local server requests on `127.0.0.1:8794`. Do not expose this port through the website's reverse proxy. `POST /render` (or `/`) requires `Content-Type: application/json` and a body such as:
 
@@ -9,6 +9,8 @@ The service accepts only local server requests on `127.0.0.1:8794`. Do not expos
 ```
 
 IGA may also receive `store:{id,name,area,address?,lat?,lon?}`. The application must derive this from its verified nearby-store results. The browser verifies the visible selected branch and refuses a different store. Generic IGA search URLs do not identify a branch. Cache entries include all store details.
+
+At most four verified IGA contexts are retained for five idle minutes. The initial ordinary store-selection flow is coalesced, and only its exact branch address/card/header proof establishes reusable canonical metadata. Every later query opens a new page and verifies that canonical header again. Different store identities/addresses never share a context. A cancelled query closes its own page; initial selection stops when all waiting readers cancel. No cookies are exposed in responses or logs.
 
 For a website verified by the application's nearby-store discovery, the server may send `source:"local-shop"` with its public HTTPS URL. This mode permits only same-host page navigation (including a `www` alias), while retaining the public-IP-pinned network boundary. Do not forward arbitrary user-supplied URLs to this endpoint.
 

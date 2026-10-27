@@ -5,7 +5,7 @@ import { lookupAldiQueries } from "@/lib/aldi-catalogue";
 import { lookupIgaQueries } from "@/lib/iga-catalogue";
 import { browserPriceRenderer, localShopPageRenderer } from "@/lib/browser-price-client";
 import { lookupLocalShopPrices } from "@/lib/local-shop-prices";
-import { searchShops } from "@/lib/location-providers";
+import { searchShopsWithFresh } from "@/lib/location-providers";
 import { enrichShopWebsites } from "@/lib/shop-website-discovery";
 import type { Shop } from "@/lib/locations";
 import { compareShopping } from "@/lib/shopping-compare";
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     if (!limiter.allow(input.device)) return Response.json({ error: "A lot of prices were just checked. Please try again in a minute." }, { status: 429, headers });
     const signal = AbortSignal.any([request.signal, AbortSignal.timeout(35_000)]);
     let nearbySearch: Promise<Shop[]> | undefined;
-    const nearbyShops = () => nearbySearch ??= input.location ? searchShops({ ...input.location, radiusKm: input.radiusKm ?? 5 }, { photonReverseUrl: process.env.PHOTON_REVERSE_API_URL, overpassUrl: process.env.OVERPASS_API_URL, shopProvider: process.env.SHOP_DATA_PROVIDER, appOrigin: new URL(request.url).origin }).then(result => enrichShopWebsites(result.shops, { appOrigin: new URL(request.url).origin }, signal).catch(() => result.shops)) : Promise.resolve([]);
+    const nearbyShops = () => nearbySearch ??= input.location ? searchShopsWithFresh({ ...input.location, radiusKm: input.radiusKm ?? 5 }, { photonReverseUrl: process.env.PHOTON_REVERSE_API_URL, overpassUrl: process.env.OVERPASS_API_URL, shopProvider: process.env.SHOP_DATA_PROVIDER, appOrigin: new URL(request.url).origin }).then(result => enrichShopWebsites(result.shops, { appOrigin: new URL(request.url).origin }, signal).catch(() => result.shops)) : Promise.resolve([]);
     const result = await compareShopping(input, {
       woolworths: (queries, abort) => lookupQueries(queries, fetch, abort),
       coles: (queries, abort) => lookupColesQueries(queries, fetch, abort, render),

@@ -57,7 +57,8 @@ Published data checks
 - https://schema.org/Offer documents the explicit offer fields used here.
 
 Validation
-23 local-pricing tests and six website-discovery tests cover positive products, quantity costs, unsupported/member/
+25 local-pricing tests, six website-discovery tests and three specialist-map
+tests cover positive products, quantity costs, unsupported/member/
 expired prices, stock uncertainty, product identity, geographical exclusions,
 discovery bounds, duplicates, partial success, browser-check states, independent
 caller cancellation, provider concurrency, DNS rebinding prevention, redirects,
@@ -86,3 +87,19 @@ Using the restored Feather & Bone site, a live three-page strict lookup complete
 in about 2.6 seconds and returned Sommerlad heritage chicken breast, 500g,
 AUD 27.90 with explicit online InStock. This is a published website guide and
 does not establish that price or stock at an individual shop counter.
+
+Photon ranked-list coverage fix
+At a nearby Newtown center (-33.897, 151.18), the general fifty-record limit was
+filled by supermarkets, bakeries and delis before reaching Feather & Bone, despite
+that butcher being only 1.74 km away inside the chosen 5 km radius. A separate
+specialist-only Photon query restored it. searchShopsWithFresh supplements only
+truncated general lists, uses the existing provider queue/cache, and merges exact
+OSM identities. Counts remain explicitly partial/lower bounds; overlapping raw
+provider counts are disclosed. A failed extra query retains the original list.
+Informational market websites without commerce signals consume one homepage read;
+they no longer receive a synthetic WooCommerce search request.
+Selected shops run concurrently through the existing two-job provider limit,
+starting one needed produce shop and one butcher first. A slow informational
+market cannot consume the entire shared twenty-second budget before the butcher
+starts. Results retain deterministic distance order and completed prices survive
+another shop timing out or the caller ending the shared request.

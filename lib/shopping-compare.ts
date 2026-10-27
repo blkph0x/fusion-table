@@ -42,13 +42,16 @@ export async function compareShopping(request: ShoppingPriceRequest, deps: Depen
   const queries = names.filter((name) => name.length <= 80);
   const online = request.online && australianPriceGuide(request.country) && queries.length > 0;
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Australia/Sydney", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+  // Start specialist discovery first. It shares the map search with IGA, and
+  // nearby produce/meat pages should not wait behind repeated chain searches.
+  const localTask = online && request.location && deps.local ? Promise.resolve().then(() => deps.local!(request, signal)) : Promise.resolve({ quotes: [] as PriceQuote[], warnings: [] as string[], checkedShops: [] as {id:string;name:string;website?:string|null}[] });
   const tasks = [
     online ? Promise.resolve().then(() => deps.woolworths(queries, signal)) : Promise.resolve([] as PriceQuote[]),
     online ? Promise.resolve().then(() => deps.coles(queries, signal)) : Promise.resolve([] as PriceQuote[]),
     request.localRecords !== false && australianPriceGuide(request.country) ? Promise.resolve().then(() => deps.recorded(request.area, names, today)) : Promise.resolve([] as ItemQuote[]),
     online && deps.aldi ? Promise.resolve().then(() => deps.aldi!(queries, signal)) : Promise.resolve([] as PriceQuote[]),
     online && deps.iga ? Promise.resolve().then(() => deps.iga!(queries, signal)) : Promise.resolve([] as PriceQuote[]),
-    online && request.location && deps.local ? Promise.resolve().then(() => deps.local!(request, signal)) : Promise.resolve({ quotes: [] as PriceQuote[], warnings: [] as string[], checkedShops: [] as {id:string;name:string;website?:string|null}[] }),
+    localTask,
   ];
   const sources = await Promise.allSettled(tasks.map(task => untilAbort<unknown>(task, signal)));
   const warnings: string[] = [];

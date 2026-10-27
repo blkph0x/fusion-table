@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
-import { retailerUrl, publicHttpsUrl, publicAddress, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress } from "../scripts/retailer-browser-policy.mjs";
+import { retailerUrl, publicHttpsUrl, publicAddress, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate } from "../scripts/retailer-browser-policy.mjs";
 import { publicShopAddress } from "../lib/public-shop-reader.ts";
 import { startEgressProxy, startRetailerBrowser } from "../scripts/retailer-browser.mjs";
 
@@ -66,12 +66,80 @@ test("an empty or instruction-only retailer page cannot be reported as ready pri
   assert.equal(readablePriceContent({html:'<script type="application/ld+json">{"@type":"Product","offers":{"price":"12.50"}}</script>'}),true);
 });
 
+test("only the observed nearly-empty Coles NOINDEX response is classified as requiring a browser visit",() => {
+  const html = '<html><meta name="ROBOTS" content="NOINDEX"><body></body></html>';
+  assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html,text:""}),true);
+  assert.equal(colesEmptyBrowserGate({url:"https://www.aldi.com.au/results?q=rice",html,text:""}),false);
+  assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html:"<body></body>",text:""}),false);
+  assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html,text:"Full product search content ".repeat(20)}),false);
+});
+
 test("IGA branch proof requires the same house, street name/type and postcode even if retailer names differ",() => {
   assert.equal(sameStoreAddress("259 King Street, Newtown, Sydney, 2042","259 King St Newtown NSW 2042"),true);
   for (const address of ["260 King St Newtown NSW 2042","259 King Road Newtown NSW 2042","259 Kings St Newtown NSW 2042","259 King St Newtown NSW 2048"]) assert.equal(sameStoreAddress("259 King Street, Newtown, 2042",address),false,address);
   assert.equal(sameStoreAddress("Newtown 2042","259 King St Newtown NSW 2042"),false);
   assert.equal(addressProof("1234 King Street, Newtown, 2042").postcode,"2042");
   assert.equal(sameStoreAddress("191-193 Enmore Road, Enmore, 2042","191 Enmore Rd Enmore NSW 2042"),false);
+});
+
+test("verified session keys isolate branch identities and addresses while retaining the same physical store across visitor areas",() => {
+  const first = {id:"node/1",name:"Lloyds IGA",area:"Newtown 2042",address:"259 King Street, Newtown 2042"};
+  assert.equal(verifiedStoreKey(first),verifiedStoreKey({...first,area:"Stanmore 2048"}));
+  assert.notEqual(verifiedStoreKey(first),verifiedStoreKey({...first,id:"node/2"}));
+  assert.notEqual(verifiedStoreKey(first),verifiedStoreKey({...first,address:"260 King Street, Newtown 2042"}));
+  assert.notEqual(verifiedStoreKey({...first,address:""}),verifiedStoreKey({...first,address:"",area:"Stanmore 2048"}));
+});
+
+test("verified IGA session selection is coalesced and reused until idle expiry, with isolated branch contexts",async t => {
+  let clock = 100, created = 0, closed = 0;
+  const pool = createVerifiedStoreSessions({ttlMs:50,now:() => clock}); t.after(() => pool.close());
+  let finish;
+  const create = async () => { created++; await new Promise(resolve => { finish = resolve; }); return {id:created,close:async () => { closed++; }}; };
+  const first = pool.acquire("store-one",create), second = pool.acquire("store-one",create);
+  await Promise.resolve(); await Promise.resolve(); assert.equal(created,1);
+  finish(); const [a,b] = await Promise.all([first,second]);
+  assert.equal(a.value,b.value); a.release(); b.release();
+  const warm = await pool.acquire("store-one",async () => { throw new Error("Selected twice"); });
+  assert.equal(warm.value,a.value); warm.release(); assert.equal(closed,0);
+  const other = await pool.acquire("store-two",async () => ({id:2,close:async () => { closed++; }}));
+  assert.notEqual(other.value,a.value); other.release();
+  clock += 51;
+  const renewed = await pool.acquire("store-one",async () => ({id:3,close:async () => { closed++; }}));
+  assert.notEqual(renewed.value,a.value); assert.equal(closed,2); renewed.release();
+});
+
+test("cancelling the first IGA selection reader retains another reader, and cancelling all closes unproven selection",async t => {
+  const pool = createVerifiedStoreSessions(); t.after(() => pool.close());
+  let finish, selectionSignal, created = 0;
+  const create = async signal => {
+    created++; selectionSignal = signal;
+    await new Promise((resolve,reject) => { finish = resolve; signal.addEventListener("abort",() => reject(signal.reason),{once:true}); });
+    return {close:async () => {}};
+  };
+  const firstController = new AbortController(), secondController = new AbortController();
+  const first = pool.acquire("shared",create,firstController.signal), second = pool.acquire("shared",create,secondController.signal);
+  await Promise.resolve(); await Promise.resolve();
+  firstController.abort(new Error("first closed")); await assert.rejects(first,/first closed/);
+  assert.equal(selectionSignal.aborted,false); finish();
+  const lease = await second; assert.equal(created,1); lease.release();
+  const thirdController = new AbortController(), fourthController = new AbortController();
+  const third = pool.acquire("cancel-all",create,thirdController.signal), fourth = pool.acquire("cancel-all",create,fourthController.signal);
+  await Promise.resolve(); await Promise.resolve();
+  thirdController.abort(new Error("third closed")); fourthController.abort(new Error("fourth closed"));
+  await Promise.all([assert.rejects(third,/third closed/),assert.rejects(fourth,/fourth closed/)]);
+  assert.equal(selectionSignal.aborted,true);
+});
+
+test("the context bound evicts idle stores, preserves active queries, and rejects new contexts when all slots are leased",async t => {
+  const pool = createVerifiedStoreSessions({maxSessions:2}); t.after(() => pool.close());
+  const closed = [];
+  const create = name => async () => ({name,close:async () => { closed.push(name); }});
+  const a = await pool.acquire("a",create("a")), b = await pool.acquire("b",create("b"));
+  await assert.rejects(pool.acquire("c",create("c")),/busy/);
+  b.release(); const c = await pool.acquire("c",create("c"));
+  assert.deepEqual(closed,["b"]); assert.equal(a.value.name,"a"); assert.equal(pool.size,2);
+  a.invalidate(); assert.deepEqual(closed,["b"]);
+  a.release(); await Promise.resolve(); assert.deepEqual(closed,["b","a"]); c.release();
 });
 
 test("scheduler enforces two active pages, bounded waiting, and removes cancelled queued work",async () => {
@@ -148,6 +216,33 @@ test("HTTP service accepts server JSON only, deduplicates/cache results, and bac
   assert.equal((await post({url,store})).status,422);
   assert.equal((await post({url:"https://butcher.retailer.net/products",source:"local-shop"})).status,200);
   assert.equal(calls,5);
+});
+
+test("queued ingredients recheck provider backoff after an earlier browser refusal",async t => {
+  const releases = new Map(); let colesCalls = 0;
+  const renderer = {configured:true,connected:true,close:async () => { for (const release of releases.values()) release(); },render:async url => {
+    if (url.includes("coles")) { colesCalls++; return {html:"",url,status:403,providerStatus:"needs-browser",message:"Open Coles"}; }
+    await new Promise(resolve => releases.set(url,resolve));
+    return {html:"<div>Rice $2</div>",url,status:200,providerStatus:"ready"};
+  }};
+  const worker = await startRetailerBrowser({port:0,renderer}); t.after(() => worker.close());
+  const base = `http://127.0.0.1:${worker.port}`;
+  const post = url => fetch(base+"/render",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url})}).then(response => response.json());
+  const waitHealth = async predicate => {
+    for (let index = 0; index < 100; index++) { const health = await (await fetch(base+"/health")).json(); if (predicate(health)) return; await new Promise(resolve => setTimeout(resolve,5)); }
+    assert.fail("Worker queue did not reach the expected state.");
+  };
+  const wooliesUrl = "https://www.woolworths.com.au/shop/search/products?searchTerm=rice";
+  const aldiUrl = "https://www.aldi.com.au/results?q=rice";
+  const first = post(wooliesUrl), second = post(aldiUrl);
+  await waitHealth(health => health.active === 2);
+  const third = post("https://www.coles.com.au/search?q=rice"), fourth = post("https://www.coles.com.au/search?q=chicken");
+  await waitHealth(health => health.queued === 2);
+  releases.get(wooliesUrl)();
+  const [blocked,cached] = await Promise.all([third,fourth]);
+  assert.equal(blocked.providerStatus,"needs-browser"); assert.equal(cached.providerStatus,"needs-browser");
+  assert.equal(cached.cached,true); assert.equal(colesCalls,1);
+  releases.get(aldiUrl)(); await Promise.all([first,second]);
 });
 
 test("HTTP response deadlines are bounded even if the browser has not finished shutting its page",async t => {

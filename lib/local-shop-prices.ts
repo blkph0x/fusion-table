@@ -155,13 +155,14 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
   for(const kind of ["produce","butcher"]){const first=candidates.find(shop=>(kind==="produce"?produceShop(shop):butcherShop(shop)));if(first)chosen.set(first.id,first);}
   for(const candidate of candidates){if(chosen.size>=3)break;chosen.set(candidate.id,candidate);}
   const shops=[...chosen.values()].sort((a,b)=>kilometres(context.location,a)-kilometres(context.location,b));
-  const quotes:LocalShopQuote[]=[],warnings:string[]=[],checkedShops:CheckedLocalShop[]=[];
   const batchSignal=AbortSignal.any([...(signal?[signal]:[]),AbortSignal.timeout(20_000)]);
-  for(const shop of shops){
-    if(batchSignal.aborted)break;
+  async function checkShop(shop:Shop){
+    const quotes:LocalShopQuote[]=[],warnings:string[]=[],checkedShops:CheckedLocalShop[]=[];
+    const result={quotes,warnings,checkedShops};
+    if(batchSignal.aborted)return result;
     const suitable=lines.filter(line=>category(line)===(butcherShop(shop)?"butcher":"produce")&&line.name.length<=80);
-    if(!suitable.length)continue;
-    let base:URL;try{base=publicShopUrl(shop.website!);if(/(?:^|\.)(?:facebook|instagram|youtube|google|goo\.gl|tiktok)\./i.test(base.hostname))continue;}catch{continue;}
+    if(!suitable.length)return result;
+    let base:URL;try{base=publicShopUrl(shop.website!);if(/(?:^|\.)(?:facebook|instagram|youtube|google|goo\.gl|tiktok)\./i.test(base.hostname))return result;}catch{return result;}
     const queries=[...new Set(suitable.map(line=>line.name))].slice(0,2);
     checkedShops.push({id:shop.id,name:shop.name,website:base.href});
     const shopInfo={id:shop.id,name:shop.name,website:base.href,area:context.area,lat:shop.lat,lon:shop.lon};
@@ -172,8 +173,10 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
         async function read(url:string){combined.throwIfAborted();const page=await reader(url,combined);combined.throwIfAborted();if(page.status!==undefined&&(page.status<200||page.status>=300))throw new Error([401,403,429].includes(page.status)?"This shop requires a browser check.":"This shop did not return a public price page.");publicShopUrl(page.url);if(new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The shop redirected to a different website.");searched.push(page.url);for(const product of parseLocalShopProducts(page.html,page.url,now)){const key=JSON.stringify([product.url,product.name,product.priceCents,product.packageSize]);if(!seen.has(key)){seen.add(key);found.push(product);}}return page;}
         try{
           const home:PublicShopPage=await read(base.href),shopify=/Shopify|cdn\.shopify\.com|shopify-section/i.test(home.html);
+          const commerce=shopify||/woocommerce|wc-block|wc\/store|post_type=product/i.test(home.html)||[...home.html.matchAll(/href\s*=\s*["']([^"']+)["']/gi)].slice(0,1000).some(match=>{const url=sameShopUrl(match[1],new URL(home.url));return !!url&&/\/(?:products?|shop)\/[^/]+/.test(new URL(url).pathname);});
           for(const query of queries){
             if(matchProducts(query,found).some(match=>match.selected))continue;
+            if(!commerce)continue;
             try{
               const direct=localProductLinks(home.html,home.url,query)[0];
               if(direct&&!searched.includes(direct)){await read(direct);if(matchProducts(query,found).some(match=>match.nameMatched&&match.priceCents!=null))continue;}
@@ -198,6 +201,14 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
       warnings.push(`${shop.name}: ${message}`);
       for(const line of suitable)quotes.push({query:line.name,source:"local-shop-website",scope:"shop-website",shop:shopInfo,status,collectionMethod:deps.render?"browser":"http",label:`Published website guide for ${shop.name}. Branch prices, delivery terms and shelf stock are unconfirmed.`,fetchedAt:null,cached:false,fulfilmentStoreId:null,searched:[base.href],matches:[],error:message});
     }
+    return result;
   }
-  return {quotes,warnings,checkedShops};
+  // Start one of each needed specialist first. shopSlot still limits all requests
+  // to two actual jobs, while a slow market cannot hold a butcher behind it.
+  const priority=new Map<string,Shop>();
+  for(const kind of ["produce","butcher"]){const first=shops.find(shop=>kind==="produce"?produceShop(shop):butcherShop(shop));if(first)priority.set(first.id,first);}
+  for(const shop of shops)priority.set(shop.id,shop);
+  const jobs=new Map([...priority.values()].map(shop=>[shop.id,checkShop(shop)]));
+  const results=await Promise.all(shops.map(shop=>jobs.get(shop.id)!));
+  return {quotes:results.flatMap(result=>result.quotes),warnings:results.flatMap(result=>result.warnings),checkedShops:results.flatMap(result=>result.checkedShops)};
 }

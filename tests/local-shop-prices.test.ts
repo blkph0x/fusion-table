@@ -144,9 +144,28 @@ test("caller cancellation stops shared work and releases the provider slot",asyn
 });
 
 test("a later ingredient failure retains an earlier verified published price",async()=>{
- const read=async(url:string)=>({url,html:new URL(url).searchParams.get("s")==="Beef mince"?"<title>Just a moment</title>":fixture(product())});
+ const read=async(url:string)=>({url,html:new URL(url).searchParams.get("s")==="Beef mince"?"<title>Just a moment</title>":"WooCommerce"+fixture(product())});
  const result=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"},{id:"beef",name:"Beef mince",amount:500,unit:"g",category:"butcher"}],[shop({id:"partial-shop"})],context,{read});
  assert.equal(result.quotes[0].status,"ready");assert.equal(result.quotes[0].matches[0].priceCents,1388);assert.equal(result.quotes[1].status,"needs-browser");assert.deepEqual(result.quotes[1].matches,[]);
+});
+
+test("an informational farmers-market website does not trigger a made-up WooCommerce query",async()=>{
+ const calls:string[]=[];const result=await lookupLocalShopPrices([{id:"tomato",name:"Tomatoes",amount:500,unit:"g",category:"produce"}],[shop({id:"info-market",name:"Local Farmers Market",kind:"market",shopType:undefined})],context,{read:async url=>{calls.push(url);return {url,html:'<h1>Market every Saturday</h1><p>Fresh local tomatoes and produce.</p>'};}});
+ assert.equal(calls.length,1);assert.equal(result.quotes[0].status,"unavailable");assert.deepEqual(result.quotes[0].matches,[]);
+});
+
+test("a slow market cannot starve a fast butcher and completed prices survive the shared deadline in shop order",async()=>{
+ const first=shop({id:"slow-market",kind:"produce",shopType:"greengrocer",name:"First fruit market",website:"https://market.example.com/"});
+ const second=shop({id:"other-market",kind:"produce",shopType:"greengrocer",name:"Second fruit market",website:"https://other-market.example.com/",lat:-33.9001});
+ const butcher=shop({id:"fast-butcher",lat:-33.901});const started:string[]=[];let finished=false;
+ const controller=new AbortController();
+ const work=lookupLocalShopPrices([{id:"tomato",name:"Tomatoes",amount:500,unit:"g",category:"produce"},{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[first,second,butcher],context,{read:async(url,signal)=>{
+  started.push(new URL(url).hostname);
+  if(new URL(url).hostname==="butcher.example.com"){finished=true;return {url,html:fixture(product())};}
+  return new Promise((_resolve,reject)=>signal?.addEventListener("abort",()=>reject(signal.reason),{once:true}));
+ }},controller.signal);
+ await new Promise(resolve=>setTimeout(resolve,20));assert.equal(finished,true);assert.deepEqual(started.slice(0,2),["market.example.com","butcher.example.com"]);controller.abort();
+ const result=await work;assert.deepEqual(result.checkedShops.map(shop=>shop.id),["slow-market","other-market","fast-butcher"]);assert.deepEqual(result.quotes.map(quote=>quote.shop.id),["slow-market","other-market","fast-butcher"]);assert.equal(result.quotes[2].status,"ready");assert.equal(result.quotes[2].matches[0].priceCents,1388);assert.equal(result.quotes[0].status,"unavailable");
 });
 
 test("provider concurrency stays bounded across independent nearby-price requests",async()=>{

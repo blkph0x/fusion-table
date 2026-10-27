@@ -6,7 +6,7 @@ import { existsSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import {
   PAGE_LIMIT, JOB_DEADLINE_MS, CACHE_TTL_MS, CHALLENGE_BACKOFF_MS,
-  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress,
+  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate,
 } from "./retailer-browser-policy.mjs";
 
 const loopback = address => address === "127.0.0.1" || address === "::ffff:127.0.0.1";
@@ -160,6 +160,7 @@ export async function startEgressProxy({ resolve = lookup, dial = connect } = {}
 
 export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium" } = {}) {
   let browser, launching, proxy, closed = false;
+  const storeSessions = createVerifiedStoreSessions();
   const getBrowser = async () => {
     if (closed) throw new Error("Browser reader is stopping.");
     if (browser?.isConnected()) return browser;
@@ -172,91 +173,126 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         timeout:12_000, proxy:{server:proxy.url,bypass:"<-loopback>"},
         args:["--disable-quic","--force-webrtc-ip-handling-policy=disable_non_proxied_udp"],
       });
-      browser.on("disconnected",() => { browser = undefined; });
+      browser.on("disconnected",() => { browser = undefined; void storeSessions.clear(); });
       return browser;
     })().finally(() => { launching = undefined; });
     return launching;
+  };
+  const newSession = async (instance,value,source) => {
+    const context = await instance.newContext({ javaScriptEnabled:true, serviceWorkers:"block", acceptDownloads:false,
+      viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
+    });
+    const counts = new WeakMap(); let expectedPages = 0;
+    context.on("page",page => {
+      if (expectedPages) { expectedPages--; return; }
+      void page.close().catch(() => undefined);
+    });
+    await context.route("**/*",async route => {
+      try {
+        const request = route.request();
+        publicHttpsUrl(request.url());
+        const frame = request.frame(), page = frame.page(), count = (counts.get(page) || 0)+1;
+        counts.set(page,count);
+        if (count > MAX_PAGE_REQUESTS) throw new Error("Request limit reached.");
+        if (request.isNavigationRequest() && frame === page.mainFrame()) navigationUrl(request.url(),value,source);
+        await route.continue();
+      } catch { await route.abort("blockedbyclient").catch(() => undefined); }
+    });
+    await context.routeWebSocket("**/*",socket => socket.close());
+    return {context,count:page => counts.get(page) || 0,close:() => context.close(),async newPage() {
+      expectedPages++;
+      const page = await context.newPage();
+      page.setDefaultTimeout(5000); page.setDefaultNavigationTimeout(12_000);
+      page.on("dialog",dialog => void dialog.dismiss());
+      return page;
+    }};
+  };
+  const settle = async (page,source,allowStoreChooser = false) => {
+    if (source === "local-shop") await page.waitForLoadState("networkidle",{timeout:2000}).catch(() => undefined);
+    await page.waitForFunction(({allowStoreChooser,local}) => {
+      const visible = document.body?.innerText || "";
+      const cards = [...document.querySelectorAll('[id^="product-tile-"],[data-product-card="true"],section[data-testid="product-tile"],[data-testid="product-card"]')];
+      if (cards.some(card => card.getBoundingClientRect().height > 0 && /\$\s*\d/.test(card.textContent || ""))) return true;
+      if (/captcha|verify.*human|access denied|checking your browser|refresh.*(?:cookies|javascript)|(?:cookies|javascript).*refresh|\b(?:no|0) (?:products|results)|couldn.t find any/i.test(visible)) return true;
+      if (allowStoreChooser && document.querySelector('[data-test-id="header-store-select-button"]')) return true;
+      return local && (!!document.querySelector('script[type="application/ld+json"]') || /\$\s*\d/.test(visible));
+    },{allowStoreChooser,local:source === "local-shop"},{timeout:4000}).catch(() => undefined);
+  };
+  const visible = async page => {
+    const snapshot = await page.evaluate(() => ({text:(document.body?.innerText || "").slice(0,60_000),title:document.title.slice(0,300)}));
+    for (const frame of page.frames().slice(1,5)) {
+      try {
+        const element = await frame.frameElement();
+        const shown = await element.isVisible(); await element.dispose();
+        if (!shown) continue;
+        const embedded = await frame.evaluate(() => ({text:(document.body?.innerText || "").slice(0,12_000),title:document.title.slice(0,300)}));
+        snapshot.text += `\n${embedded.title}\n${embedded.text}`;
+      } catch { /* A visible frame may disappear while the page settles. */ }
+    }
+    snapshot.text = snapshot.text.slice(0,80_000); return snapshot;
+  };
+  const proveStoreSession = async (instance,value,store,readerSignal) => {
+    const signal = AbortSignal.any([readerSignal,AbortSignal.timeout(JOB_DEADLINE_MS)]);
+    const session = await newSession(instance,value);
+    let page,proven = false;
+    const abort = () => { void session.close().catch(() => undefined); };
+    signal.addEventListener("abort",abort,{once:true});
+    try {
+      signal.throwIfAborted(); page = await session.newPage();
+      let response = await page.goto("https://www.igashop.com.au/",{waitUntil:"domcontentloaded"});
+      await settle(page,undefined,true);
+      let snapshot = await visible(page), action = pageAction({...snapshot,status:response?.status() || 200});
+      if (action === "refresh-once") {
+        response = await page.reload({waitUntil:"domcontentloaded"}); await settle(page,undefined,true);
+        snapshot = await visible(page); action = pageAction({...snapshot,status:response?.status() || 200});
+      }
+      if (action !== "ready") throw Object.assign(new Error("Open IGA and complete its browser check before choosing a store."),{providerStatus:"needs-browser",status:403});
+      let diagnostic;
+      if (!await selectIgaStore(page,store,value => { diagnostic = value; })) throw Object.assign(new Error("Open IGA and select the exact nearby store to confirm its prices."),{providerStatus:"needs-store",status:409,diagnostic:session.count(page) > MAX_PAGE_REQUESTS ? {...diagnostic,reason:"network-request-limit"} : diagnostic});
+      signal.throwIfAborted();
+      if (!diagnostic?.selectedStore || !await igaHeaderMatches(page,diagnostic.selectedStore.name)) throw new Error("IGA store proof was not completed.");
+      session.selectedStore = diagnostic.selectedStore; proven = true;
+      return session;
+    } finally {
+      signal.removeEventListener("abort",abort);
+      await page?.close().catch(() => undefined);
+      if (!proven) await session.close().catch(() => undefined);
+    }
   };
   return {
     get configured() { return existsSync(executablePath); },
     get connected() { return !!browser?.isConnected(); },
     async render(value,signal,store,source) {
       signal.throwIfAborted();
-      let context, page;
-      const abort = () => { void context?.close().catch(() => undefined); };
+      let context, page, session, lease;
+      const abort = () => { void (lease ? page?.close() : context?.close())?.catch(() => undefined); };
       signal.addEventListener("abort",abort,{once:true});
       try {
         const instance = await getBrowser();
         signal.throwIfAborted();
-        // A fresh session per request: no passwords, account cookies or selected-store leakage.
-        context = await instance.newContext({ javaScriptEnabled:true, serviceWorkers:"block", acceptDownloads:false,
-          viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
-        });
-        signal.throwIfAborted();
-        let requestCount = 0;
-        await context.route("**/*",async route => {
-          try {
-            const request = route.request();
-            publicHttpsUrl(request.url());
-            if (++requestCount > MAX_PAGE_REQUESTS) throw new Error("Request limit reached.");
-            if (request.isNavigationRequest() && request.frame() === page?.mainFrame()) navigationUrl(request.url(),value,source);
-            await route.continue();
-          } catch { await route.abort("blockedbyclient").catch(() => undefined); }
-        });
-        await context.routeWebSocket("**/*",socket => socket.close());
-        page = await context.newPage();
-        context.on("page",popup => { if (popup !== page) void popup.close(); });
-        page.setDefaultTimeout(5000); page.setDefaultNavigationTimeout(12_000);
-        page.on("dialog",dialog => void dialog.dismiss());
-        let response = await page.goto(store && !source && retailerUrl(value).retailer === "iga" ? "https://www.igashop.com.au/" : value,{waitUntil:"domcontentloaded"});
-        const settle = async (allowStoreChooser = false) => {
-          if (source === "local-shop") await page.waitForLoadState("networkidle",{timeout:2000}).catch(() => undefined);
-          await page.waitForFunction(({allowStoreChooser,local}) => {
-            const visible = document.body?.innerText || "";
-            const cards = [...document.querySelectorAll('[id^="product-tile-"],[data-product-card="true"],section[data-testid="product-tile"],[data-testid="product-card"]')];
-            if (cards.some(card => card.getBoundingClientRect().height > 0 && /\$\s*\d/.test(card.textContent || ""))) return true;
-            if (/captcha|verify.*human|access denied|checking your browser|refresh.*(?:cookies|javascript)|(?:cookies|javascript).*refresh|\b(?:no|0) (?:products|results)|couldn.t find any/i.test(visible)) return true;
-            if (allowStoreChooser && document.querySelector('[data-test-id="header-store-select-button"]')) return true;
-            return local && (!!document.querySelector('script[type="application/ld+json"]') || /\$\s*\d/.test(visible));
-          },{allowStoreChooser,local:source === "local-shop"},{timeout:4000}).catch(() => undefined);
-        };
-        await settle(!!store);
-        const visible = async () => {
-          const snapshot = await page.evaluate(() => ({text:(document.body?.innerText || "").slice(0,60_000),title:document.title.slice(0,300)}));
-          // Retailer gates sometimes put their normal instructions in a visible frame.
-          // Read only what a visitor can see; never interact with a challenge.
-          for (const frame of page.frames().slice(1,5)) {
-            try {
-              const element = await frame.frameElement();
-              const shown = await element.isVisible(); await element.dispose();
-              if (!shown) continue;
-              const embedded = await frame.evaluate(() => ({text:(document.body?.innerText || "").slice(0,12_000),title:document.title.slice(0,300)}));
-              snapshot.text += `\n${embedded.title}\n${embedded.text}`;
-            } catch { /* A frame may be removed while its public page settles. */ }
-          }
-          snapshot.text = snapshot.text.slice(0,80_000);
-          return snapshot;
-        };
-        let snapshot = await visible();
+        if (store && !source && retailerUrl(value).retailer === "iga") {
+          lease = await storeSessions.acquire(verifiedStoreKey(store),sharedSignal => proveStoreSession(instance,value,store,sharedSignal),signal);
+          session = lease.value;
+        } else session = await newSession(instance,value,source);
+        context = session.context;
+        signal.throwIfAborted(); page = await session.newPage();
+        let response = await page.goto(value,{waitUntil:"domcontentloaded"});
+        await settle(page,source);
+        let snapshot = await visible(page);
         let action = pageAction({...snapshot,status:response?.status() || 200});
         if (action === "refresh-once") {
           response = await page.reload({waitUntil:"domcontentloaded"});
-          await settle(); snapshot = await visible();
+          await settle(page,source); snapshot = await visible(page);
           action = pageAction({...snapshot,status:response?.status() || 200});
         }
         const final = navigationUrl(page.url(),value,source);
         if (action !== "ready") return controlled(final,"needs-browser","Open the retailer in your browser and complete its check, then choose your store. No automated challenge solving was attempted.",response?.status() || 403);
-        let selectedStore;
-        if (store && !source && retailerUrl(value).retailer === "iga") {
-          let diagnostic;
-          const selected = await selectIgaStore(page,store,value => { diagnostic = value; });
-          if (!selected) return controlled(final,"needs-store","Open IGA and select the exact nearby store to confirm its prices. The browser could not verify that branch.",409,{diagnostic:requestCount > MAX_PAGE_REQUESTS ? {...diagnostic,reason:"network-request-limit"} : diagnostic});
-          selectedStore = diagnostic.selectedStore;
-          response = await page.goto(value,{waitUntil:"domcontentloaded"});
-          await settle();
-          if (!await igaHeaderMatches(page,selectedStore?.name || store.name)) return controlled(final,"needs-store","The selected IGA branch could not be verified. Choose your store on IGA.",409);
-          snapshot = await visible();
-          if (pageAction(snapshot) !== "ready") return controlled(final,"needs-browser","Open IGA and complete its browser check before confirming the selected store.",403);
+        const selectedStore = session.selectedStore;
+        if (selectedStore) {
+          if (!await igaHeaderMatches(page,selectedStore.name)) {
+            lease.invalidate();
+            return controlled(final,"needs-store","The selected IGA branch could not be verified. Choose your store on IGA.",409);
+          }
         }
         if ((response?.status() || 200) >= 400) return controlled(final,"unavailable","The retailer page is temporarily unavailable. Open its website to check this item.",response.status());
         const html = await page.evaluate(limit => {
@@ -277,20 +313,26 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
           return new TextEncoder().encode(output).length <= limit ? output : null;
         },PAGE_LIMIT);
         if (!html) return controlled(final,"unavailable","The retailer page exceeded the safe reading limit. Open it directly to check prices.",413);
-        if (!readablePriceContent({text:snapshot.text,html})) return controlled(final,"unavailable","The retailer did not display readable product prices. Open its website to check this item.",503);
+        if (!readablePriceContent({text:snapshot.text,html})) {
+          if (!source && colesEmptyBrowserGate({url:value,text:snapshot.text,html})) return controlled(final,"needs-browser","Coles did not display prices in this browser session; open Coles to continue.",403);
+          return controlled(final,"unavailable","The retailer did not display readable product prices. Open its website to check this item.",503);
+        }
         return {html,url:navigationUrl(page.url(),value,source),status:response?.status() || 200,providerStatus:"ready",...(selectedStore ? {selectedStore} : {})};
       } catch (error) {
+        if (lease && context && !context.browser()?.isConnected()) lease.invalidate();
         if (signal.aborted) return controlled(value,"unavailable","The browser price check timed out. Try again shortly or open the retailer directly.",504);
-        return controlled(value,error?.providerStatus === "not-configured" ? "not-configured" : "unavailable",
-          error?.providerStatus === "not-configured" ? error.message : "The retailer could not be read in the browser. Open its website to check this item.",503);
+        const status = ["not-configured","needs-browser","needs-store"].includes(error?.providerStatus) ? error.providerStatus : "unavailable";
+        return controlled(value,status,status !== "unavailable" ? error.message : "The retailer could not be read in the browser. Open its website to check this item.",error?.status || 503,error?.diagnostic ? {diagnostic:error.diagnostic} : {});
       } finally {
         signal.removeEventListener("abort",abort);
-        await context?.close().catch(() => undefined);
+        if (lease) { await page?.close().catch(() => undefined); lease.release(); }
+        else await context?.close().catch(() => undefined);
       }
     },
     async close() {
       closed = true;
       await launching?.catch(() => undefined);
+      await storeSessions.close();
       await browser?.close().catch(() => undefined);
       await proxy?.close();
     },
@@ -320,14 +362,21 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
         expire = () => resolve(controlled(url,"unavailable","The browser price check timed out. Try again shortly or open the retailer directly.",504));
         signal.addEventListener("abort",expire,{once:true});
       });
-      const scheduled = scheduler.run(() => renderer.render(url,signal,store,source),signal);
+      const scheduled = scheduler.run(async () => {
+        // Another queued ingredient may already have encountered this retailer's gate.
+        const recent = backoff.get(retailer);
+        if (recent?.until > Date.now()) return {...recent.result,url,cached:true,retryAfterSeconds:Math.ceil((recent.until-Date.now())/1000)};
+        const result = await renderer.render(url,signal,store,source);
+        if (!signal.aborted && result.providerStatus === "needs-browser") {
+          backoff.delete(retailer); backoff.set(retailer,{result,until:Date.now()+CHALLENGE_BACKOFF_MS});
+          while (backoff.size > 128) backoff.delete(backoff.keys().next().value);
+        }
+        return result;
+      },signal);
       shared.task = Promise.race([scheduled,timeout]).then(result => {
         if (!signal.aborted && result.providerStatus === "ready" && Buffer.byteLength(result.html || "") <= PAGE_LIMIT) {
           cache.delete(key); cache.set(key,{result,at:Date.now()});
           while (cache.size > 32) cache.delete(cache.keys().next().value);
-        } else if (!signal.aborted && result.providerStatus === "needs-browser") {
-          backoff.delete(retailer); backoff.set(retailer,{result,until:Date.now()+CHALLENGE_BACKOFF_MS});
-          while (backoff.size > 128) backoff.delete(backoff.keys().next().value);
         }
         return result;
       }).finally(() => {
