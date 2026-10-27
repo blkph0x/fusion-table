@@ -40,6 +40,14 @@ test("stale, unavailable, dietary-substitute and non-reviewable candidates canno
  assert.equal(suggestAutomaticPrices([row("Gluten-free cooking cream",[offer("cream","Bulla Cooking Cream","300ml")],90,"ml")])[0].estimatedCents,null);
 });
 
+test("a previously chosen offer cannot retain automatic selection when stale or unavailable", () => {
+ for (const patch of [{ freshness: "stale" as const }, { stock: "OUT_OF_STOCK" as const }, { stock: "UNKNOWN" as const }]) {
+  const candidate = { ...offer("old", "Woolworths Mushrooms Button Punnet", "200g"), eligible: true, ...patch };
+  const original = { ...row("Mushrooms", [candidate]), chosenOfferId: candidate.id, estimatedCents: 450 };
+  assert.equal(suggestAutomaticPrices([original])[0].chosenOfferId, null);
+ }
+});
+
 test("full catalogue pipeline cannot retain automatic eligibility for a rejected plain food form", () => {
  const now = new Date("2026-10-27T00:00:00Z");
  for (const [name, product] of [["Cooking cream", "Nestle Carnation Lite Cooking Cream"], ["Olive oil", "Woolworths Olive Oil Spray"], ["Toasted sesame oil", "Brand Toasted Sesame Oil Blend"]]) {

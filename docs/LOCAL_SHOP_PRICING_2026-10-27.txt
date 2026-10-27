@@ -1,0 +1,88 @@
+Nearby specialist website pricing — 27 October 2026
+
+The local-shop adapter accepts only shops discovered on the server for the chosen
+Australian area. It recomputes the radius from coordinates rather than accepting
+an asserted distance. It checks up to three nearest fruit/produce specialists or
+butchers within the selected radius (maximum 25 km), using appropriate fresh-food
+ingredients. Generic supermarket results are handled by their separate adapters.
+
+Prices must be explicit AUD Product/Offer structured data on the shop's own HTTPS
+website. Public WooCommerce and Shopify search pages are supported, followed by a
+relevant same-site product link. Each shop gets at most two ingredient searches,
+one product page per ingredient, and a homepage read. A relevant homepage product
+link is followed before spending a search request. Old official HTTP website
+spellings are upgraded to the identical HTTPS host/path; HTTP is never requested
+and a failed HTTPS visit does not cause domain guessing. Other products discovered on
+these pages can match additional ingredients. This is bounded discovery, not a
+claim that every ingredient or nearby shop has a published online price.
+
+Each result includes its shop identity, area, source page, actual declared selling
+quantity, availability when explicitly published, and retrieval time. It is a shop
+website guide. It does not confirm the shelf price, stock or delivery service at
+a particular branch. Missing availability remains unknown. Member prices,
+minimum-price ranges, multiple unselected variants, expired offers, foreign
+currencies, crossed-out prices, unsupported pack ambiguities and nonfood products
+do not become automatic basket prices. Existing strict ingredient matching and
+pack-aware cost rules determine whether a published product is usable.
+
+Network safeguards
+- Only ordinary HTTPS without credentials, cookies or private/IP-literal hosts.
+- DNS results must all be public. The validated address is pinned into the TLS
+  connection while certificate verification uses the shop hostname.
+- Same-site redirects are bounded and revalidated. Mixed public/private DNS,
+  local/mapped/transition IPv6, retired 6bone and documentation ranges are blocked.
+- HTML bytes, headers, redirects, time, provider concurrency and queue are bounded.
+- Work is cached for ten minutes and shared safely between callers. Caller
+  cancellation detaches promptly; abandoned shared work is cancelled.
+- When the isolated browser worker is configured, the adapter can use its normal
+  browser rendering with the local-shop same-host policy and public pinned egress.
+  This dependency reports collectionMethod=browser; the HTTPS default reports http.
+- Browser checks and refused pages remain visible as needs-browser/unavailable;
+  challenges are not solved or evaded, and no price is invented.
+
+The existing visitor-requested manual shop-page reader now uses this same pinned
+HTTPS transport by default. Its explicit injected-fetch test interface remains
+compatible; production calls do not use that test transport.
+
+Published data checks
+- https://chopbutchery.com.au/products/chicken-breast-fillets
+  Normal pinned HTTPS returned Product/Offer data for Chicken Breast Fillets
+  (1kg), AUD 13.88, and explicit InStock. This is an online guide at the time of
+  reading, not a promise about a nearby branch.
+- https://panettamercato.com.au/product/tomato-bag-1kg/
+  Earlier public HTML exposed Product/Offer data for Tomatoes Round 1kg Bag,
+  AUD 5.99. The current production reader received a browser-check refusal and
+  stopped. A stripped synthetic fixture based on the product fields verifies
+  extraction; this does not claim the live reader can currently access the page.
+- https://schema.org/Offer documents the explicit offer fields used here.
+
+Validation
+23 local-pricing tests and six website-discovery tests cover positive products, quantity costs, unsupported/member/
+expired prices, stock uncertainty, product identity, geographical exclusions,
+discovery bounds, duplicates, partial success, browser-check states, independent
+caller cancellation, provider concurrency, DNS rebinding prevention, redirects,
+private IPv4/IPv6 and oversized responses. Existing community/manual-price tests,
+TypeScript checks and changed-file lint also pass.
+
+Restoring websites omitted by the map provider
+Photon can return a verified nearby shop's OSM identity/name/coordinates without
+its original website tags. The optional enrichShopWebsites helper reads only
+those exact OSM IDs from the fixed official api.openstreetmap.org read API, in
+at most three small requests for twelve relevant shops. Its six-hour shared cache,
+6.5-second total deadline, one active batch and bounded queue avoid repeatedly
+looking up the same directory data. IDs, names and shop types must agree; supplied
+fresh coordinates must stay close to the mapped object. It fills only missing
+website/address fields and never guesses a domain or changes the shop's name.
+Ways/relations retain their previously verified map coordinates because the small
+OSM read response has no center. Pricing still rechecks the chosen local radius.
+
+Live Newtown check: Photon omitted website metadata for Feather & Bone
+(node/12200892725); the official OSM response restored
+https://featherandbone.com.au/ and its Marrickville address. An additional exact-ID
+OSM check found Australian Meat Emporium (node/2390154110) declares
+https://meatemporium.com.au/. Nearby Azzi Fruit Market and Erskineville Fruit Market
+genuinely had no website tag; those remain unknown rather than guessed.
+Using the restored Feather & Bone site, a live three-page strict lookup completed
+in about 2.6 seconds and returned Sommerlad heritage chicken breast, 500g,
+AUD 27.90 with explicit online InStock. This is a published website guide and
+does not establish that price or stock at an individual shop counter.

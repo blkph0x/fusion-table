@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { lookupColesQuery, parseColesSearch } from "../lib/coles-catalogue.ts";
+import type { RetailerPageRenderer } from "../lib/aldi-catalogue.ts";
+import { costShoppingQuantity } from "../lib/shopping-costs.ts";
 
 test("a retailer refusal triggers a short backoff instead of repeated search attempts", async () => {
   let calls = 0;
@@ -169,4 +171,84 @@ test("queued Coles requests observe cancellation before a busy request releases 
     finishes.forEach(finish => finish());
     await Promise.all(active);
   }
+});
+
+// Observed current normal-browser structure, including a standard price next
+// to independent previous, comparison and conditional multi-buy prices.
+function renderedCard(id: number, title: string, price: string, options: { extra?: string; button?: string; href?: string; labelled?: string } = {}): string {
+  return `<section data-testid="product-tile"><header><a tabindex="-1" aria-label="${title}" href="${options.href || `/product/fixture-${id}`}"><span></span></a></header><a href="/product/fixture-${id}"><h2>${title}</h2></a><div data-testid="pricing"><section data-testid="product_price"><span data-testid="product-pricing" aria-label="${options.labelled || `Price $${price}`}">$${price}</span><div>$0.30/ 100g <span> | Was $9.50</span></div></section>${options.extra || ""}</div>${options.button === undefined ? '<button data-testid="add-to-cart-button">Add</button>' : options.button}</section>`;
+}
+
+test("current rendered Coles cards take precedence over stale hydration prices", () => {
+  const html = renderedCard(2263179, "Coles RSPCA Approved Chicken Breast Fillets Large Pack | approx. 1.4kg", "15.40", { extra: '<span data-testid="price-calculation-method-description">Final price is based on weight</span>' })
+    + renderedCard(2736805, "Coles RSPCA Approved Chicken Breast Diced | 500g", "9.00", { extra: '<div data-testid="multibuy-unit-pricing" aria-label="Buy 2 for $13.50. Unit price $13.50 dollars per 1kg"><span>Add 2 | $13.50</span></div>' })
+    + page([product({ id: 2736805, pricing: { now: 1 } })]);
+  const rows = parseColesSearch(html);
+  assert.deepEqual(rows.map(p => p.priceCents), [1540, 900]);
+  assert.deepEqual(rows.map(p => p.packageSize), ["approx. 1.4kg", "500g"]);
+  assert.equal(costShoppingQuantity(1, "kg", 1540, rows[0].packageSize).lineCents, null);
+  assert.equal(costShoppingQuantity(1.2, "kg", 900, rows[1].packageSize).lineCents, 2700);
+});
+
+test("rendered Coles availability requires an enabled buy button or explicit unavailable state", () => {
+  const rows = parseColesSearch(renderedCard(1001, "Firm Tofu | 450g", "4.50", { button: '<button data-testid="add-to-cart-button" aria-disabled="false">Add</button>' })
+    + renderedCard(1002, "Firm Tofu | 450g", "4.50", { button: "", extra: "Currently unavailable" })
+    + renderedCard(1003, "Firm Tofu | 450g", "4.50", { button: "" })
+    + renderedCard(1004, "Firm Tofu | 450g", "4.50", { button: '<button data-testid="add-to-cart-button" disabled="">Add</button>' }));
+  assert.deepEqual(rows.map(p => p.inStock), [true, false, null, null]);
+});
+
+test("Coles preserves apostrophes and entities while refusing foreign links or member-only prices", () => {
+  const rows = parseColesSearch(renderedCard(7690767, "Moira Mac's Smoked Chicken Breast | 300g", "8.00", { href: "https://www.coles.com.au/product/moira-mac's-smoked-chicken-breast-300g-7690767" })
+    + renderedCard(1050387, "Cheese &amp; Herb Crumb | 500g", "12.00")
+    + renderedCard(1001, "Jasmine Rice | 1kg", "3.00", { href: "https://evil.example/product/rice-1001" })
+    + renderedCard(1002, "Jasmine Rice | 1kg", "3.00", { labelled: "Member price $3.00" }));
+  assert.equal(rows.length, 2); assert.match(rows[0].url || "", /mac's/); assert.match(rows[1].name, /Cheese & Herb/);
+});
+
+test("Coles uses the configured normal renderer, identifies its default context, and isolates caches", async () => {
+  let firstCalls = 0, secondCalls = 0;
+  const fetchImpl: typeof fetch = async () => { throw new Error("HTTP must not be called"); };
+  const renderer: RetailerPageRenderer = async url => { firstCalls++; return { url, html: '<header>You’re seeing items for delivery to Melbourne 3000.</header>' + renderedCard(1001, "Firm Tofu | 450g", "4.50") }; };
+  const other: RetailerPageRenderer = async url => { secondCalls++; return { url, html: renderedCard(1001, "Firm Tofu | 450g", "5.50") }; };
+  const [a, b] = await Promise.all([lookupColesQuery("firm tofu", fetchImpl, undefined, renderer), lookupColesQuery("firm tofu", fetchImpl, undefined, renderer)]);
+  const c = await lookupColesQuery("firm tofu", fetchImpl, undefined, other);
+  assert.equal(firstCalls, 1); assert.equal(secondCalls, 1); assert.equal(a.collectionMethod, "browser");
+  assert.equal(a.matches[0].priceCents, b.matches[0].priceCents); assert.equal(c.matches[0].priceCents, 550);
+  assert.equal(a.storeLabel, "Melbourne 3000"); assert.equal(a.scope, "chain-online"); assert.equal(a.fulfilmentStoreId, null);
+});
+
+test("Coles browser refusals back off and do not fall back to challenge-evasion requests", async () => {
+  let calls = 0;
+  const renderer: RetailerPageRenderer = async url => { calls++; return { url, html: "<title>Pardon Our Interruption</title>", status: 403 }; };
+  const failed = await lookupColesQuery("first browser rice", fetch, undefined, renderer);
+  const second = await lookupColesQuery("second browser rice", fetch, undefined, renderer);
+  assert.equal(calls, 1); assert.equal(failed.status, "needs-browser"); assert.equal(second.matches.length, 0);
+  const escaping: RetailerPageRenderer = async () => ({ html: renderedCard(1001, "Firm Tofu | 450g", "4.50"), url: "https://evil.example/search" });
+  assert.equal((await lookupColesQuery("firm tofu", fetch, undefined, escaping)).matches.length, 0);
+});
+
+test("Coles preserves browser gateway provider states across its backoff", async () => {
+  const renderer: RetailerPageRenderer = async () => { throw Object.assign(new Error("Browser guide not configured"), { providerStatus: "not-configured" }); };
+  const first = await lookupColesQuery("first state rice", fetch, undefined, renderer);
+  const next = await lookupColesQuery("next state rice", fetch, undefined, renderer);
+  assert.equal(first.status, "not-configured"); assert.equal(next.status, "not-configured");
+});
+
+test("a local browser queue error cannot suppress unrelated Coles prices or retry alternate phrases", async () => {
+  let calls = 0;
+  const renderer: RetailerPageRenderer = async url => { if (++calls === 1) throw Object.assign(new Error("Browser queue busy; retry shortly"), { providerStatus: "unavailable" }); return { url, html: renderedCard(1001, "Firm Tofu | 450g", "4.50") }; };
+  assert.equal((await lookupColesQuery("beef eye fillet", fetch, undefined, renderer)).matches.length, 0);
+  assert.equal(calls, 1);
+  assert.equal((await lookupColesQuery("firm tofu", fetch, undefined, renderer)).matches[0].priceCents, 450);
+  assert.equal(calls, 2);
+});
+
+test("Coles waits for the browser worker's queue budget without extending direct HTTP", async t => {
+  const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
+  t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
+  const renderer: RetailerPageRenderer = async url => ({ url, html: renderedCard(1001, "Firm Tofu | 450g", "4.50") });
+  await lookupColesQuery("firm tofu", fetch, undefined, renderer);
+  await lookupColesQuery("firm tofu", async () => new Response(fixture("firm tofu")));
+  assert.deepEqual(budgets, [28_000, 12_000]);
 });

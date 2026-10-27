@@ -9,6 +9,8 @@ export interface ShoppingPriceRequest {
   shops: { id: string; name: string }[];
   online: boolean;
   localRecords?: boolean;
+  location?: { lat: number; lon: number };
+  radiusKm?: number;
 }
 
 const object = (value: unknown): Record<string, unknown> | null => value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
@@ -41,6 +43,9 @@ export function parseShoppingPriceRequest(value: unknown): ShoppingPriceRequest 
   if (body.country !== undefined && (typeof body.country !== "string" || body.country.length > 80)) throw new Error("Choose a valid country for your shopping area.");
   if (body.online !== undefined && typeof body.online !== "boolean") throw new Error("Choose whether to check online price guides.");
   if (body.localRecords !== undefined && typeof body.localRecords !== "boolean") throw new Error("Choose a valid local-price setting.");
+  const location = object(body.location);
+  if (body.location !== undefined && (!location || typeof location.lat !== "number" || typeof location.lon !== "number" || !Number.isFinite(location.lat) || !Number.isFinite(location.lon) || Math.abs(location.lat) > 90 || Math.abs(location.lon) > 180)) throw new Error("Choose a valid location before checking nearby shop prices.");
+  if (body.radiusKm !== undefined && (typeof body.radiusKm !== "number" || !Number.isFinite(body.radiusKm) || body.radiusKm < 1 || body.radiusKm > 25)) throw new Error("Choose a shopping radius between 1 and 25 km.");
   const device = clean(body.device, 128) || "shopping";
   if (!/^[a-zA-Z0-9_-]{1,128}$/.test(device)) throw new Error("Refresh the shopping page and try again.");
   if (body.shops !== undefined && (!Array.isArray(body.shops) || body.shops.length > 120)) throw new Error("The nearby shop list is too large. Search a smaller area.");
@@ -50,7 +55,7 @@ export function parseShoppingPriceRequest(value: unknown): ShoppingPriceRequest 
     const id = clean(shop.id, 120), name = clean(shop.name, 160);
     return id && name ? [{ id, name }] : [];
   });
-  return { lines, area, device, shops, country: clean(body.country, 80), online: body.online !== false, localRecords: body.localRecords !== false };
+  return { lines, area, device, shops, country: clean(body.country, 80), online: body.online !== false, localRecords: body.localRecords !== false, ...(location ? { location: { lat: location.lat as number, lon: location.lon as number }, radiusKm: body.radiusKm as number | undefined ?? 5 } : {}) };
 }
 
 export function australianPriceGuide(country: string): boolean {

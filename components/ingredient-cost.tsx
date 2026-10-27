@@ -10,13 +10,13 @@ import { australianPriceGuide } from "@/lib/shopping-request";
 import { formatAudCents } from "@/lib/product-match";
 import { observeRecipePrices, priceContextKey, type RecipePriceContext, type RecipePriceResult } from "./recipe-price-client";
 
-function requestFor(lines: ShoppingLine[], location: LocationResult | null, shops: Shop[] = []): RecipePriceContext {
-  return { lines, area: areaKey(`${location?.label || ""} ${location?.name || ""}`) || areaKey("Australia online"), country: location?.country === undefined ? "Australia" : typeof location.country === "string" ? location.country : "unknown", localRecords: !!location && location.id !== "current-location", shops: shops.map(shop => ({ id: shop.id, name: shop.name })) };
+function requestFor(lines: ShoppingLine[], location: LocationResult | null, shops: Shop[] = [], radiusKm = 5): RecipePriceContext {
+  return { lines, area: areaKey(`${location?.label || ""} ${location?.name || ""}`) || areaKey("Australia online"), country: location?.country === undefined ? "Australia" : typeof location.country === "string" ? location.country : "unknown", localRecords: !!location && location.id !== "current-location", shops: shops.map(shop => ({ id: shop.id, name: shop.name })), ...(location ? { location: { lat: location.lat, lon: location.lon }, radiusKm } : {}) };
 }
 
 /** Baselines render immediately; catalogue checks are shared, deferred and bounded. */
-export function useIngredientPrices(lines: ShoppingLine[], location: LocationResult | null, shops: Shop[] = [], enabled = true) {
-  const input = requestFor(lines, location, shops), key = priceContextKey(input);
+export function useIngredientPrices(lines: ShoppingLine[], location: LocationResult | null, shops: Shop[] = [], enabled = true, radiusKm = 5) {
+  const input = requestFor(lines, location, shops, radiusKm), key = priceContextKey(input);
   const request = useMemo(() => input, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   const [result, setResult] = useState<{ key: string; data: RecipePriceResult } | null>(null);
   const [retry, setRetry] = useState(0);
@@ -35,9 +35,9 @@ export function useIngredientPrices(lines: ShoppingLine[], location: LocationRes
 }
 
 const PriceRows = createContext<ShoppingCostLine[]>([]);
-export function IngredientPriceProvider({ recipe, location, shops, children }: { recipe: Recipe; location: LocationResult | null; shops?: Shop[]; children: ReactNode }) {
+export function IngredientPriceProvider({ recipe, location, shops, radiusKm = 5, children }: { recipe: Recipe; location: LocationResult | null; shops?: Shop[]; radiusKm?: number; children: ReactNode }) {
   const lines = useMemo(() => normalizeShoppingList(recipe.ingredients, recipe.ingredients), [recipe]);
-  const prices = useIngredientPrices(lines, location, shops);
+  const prices = useIngredientPrices(lines, location, shops, true, radiusKm);
   return <PriceRows.Provider value={prices?.rows || []}>{children}</PriceRows.Provider>;
 }
 
@@ -50,11 +50,11 @@ export function IngredientCost({ ingredient }: { ingredient: RecipeIngredient })
   </small>;
 }
 
-export function MealCostBadge({ recipe, location = null }: { recipe: Recipe; location?: LocationResult | null }) {
+export function MealCostBadge({ recipe, location = null, radiusKm = 5 }: { recipe: Recipe; location?: LocationResult | null; radiusKm?: number }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [visible, setVisible] = useState(false);
   const lines = useMemo(() => normalizeShoppingList(recipe.ingredients, recipe.ingredients), [recipe]);
-  const result = useIngredientPrices(lines, location, [], visible);
+  const result = useIngredientPrices(lines, location, [], visible, radiusKm);
   useEffect(() => {
     const element = ref.current;
     if (!element || typeof IntersectionObserver === "undefined") return;

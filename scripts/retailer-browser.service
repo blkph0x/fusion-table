@@ -1,0 +1,30 @@
+[Unit]
+Description=Fusion Table anonymous retailer browser
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=fusion-retailer
+Group=fusion-retailer
+WorkingDirectory=/opt/fusion-table
+ExecStart=/usr/bin/node /opt/fusion-table/scripts/retailer-browser.mjs
+Environment=NODE_ENV=production
+Environment=RETAILER_BROWSER_PORT=8794
+Environment=RETAILER_CHROMIUM_PATH=/usr/bin/chromium
+Environment=HOME=/var/lib/fusion-retailer-browser
+StateDirectory=fusion-retailer-browser
+RuntimeDirectory=fusion-retailer-browser
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+NoNewPrivileges=true
+UMask=0077
+TasksMax=256
+MemoryMax=1536M
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=25
+
+[Install]
+WantedBy=multi-user.target

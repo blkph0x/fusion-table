@@ -296,8 +296,14 @@ export function productSearchLink(shop: Shop, ingredient: ShoppingLine | string,
   const note = `Search for ${term}${place ? ` near ${place}` : ""}. Select the retailer's store or delivery area and check the exact product; this link does not confirm local stock or price.`;
   if (brand("woolworths", "woolworths.com.au")) return { url: `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(term)}`, label: `Search Woolworths for ${term}`, kind: "retailer-search", note };
   if (brand("coles", "coles.com.au")) return { url: `https://www.coles.com.au/search?q=${encodeURIComponent(term)}`, label: `Search Coles for ${term}`, kind: "retailer-search", note };
-  if (brand("aldi", "aldi.com.au")) return { url: "https://www.aldi.com.au/Products", label: `Find ${term} in ALDI's product finder`, kind: "retailer-website", note };
-  if (brand("iga", "iga.com.au") || hostname === "igashop.com.au" || hostname.endsWith(".igashop.com.au")) return { url: "https://www.igashop.com.au/", label: `Find ${term} at IGA`, kind: "retailer-website", note };
+  if (brand("aldi", "aldi.com.au")) return { url: `https://www.aldi.com.au/results?q=${encodeURIComponent(term)}`, label: `Search ALDI for ${term}`, kind: "retailer-search", note };
+  if (brand("iga", "iga.com.au") || hostname === "igashop.com.au" || hostname.endsWith(".igashop.com.au")) {
+    // Independent IGA shops can have their own published catalogue. Do not
+    // discard that exact shop website in favour of an unrelated national page.
+    if (website && !["igashop.com.au", "www.igashop.com.au", "iga.com.au", "www.iga.com.au"].includes(hostname)) return { url: website, label: `Open ${shop.name}'s website`, kind: "retailer-website", note, fallbackUrl: `https://www.google.com/search?q=${encodeURIComponent([shop.name, place, term].filter(Boolean).join(" "))}` };
+    if (website && ["iga.com.au", "www.iga.com.au"].includes(hostname) && new URL(website).pathname !== "/") return { url: website, label: `Open ${shop.name}'s store page`, kind: "retailer-website", note };
+    return { url: `https://www.igashop.com.au/search?q=${encodeURIComponent(term)}`, label: `Search IGA for ${term}`, kind: "retailer-search", note };
+  }
   const query = [shop.name, place, term].filter(Boolean).join(" ");
   const webSearch = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
   return website

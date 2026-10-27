@@ -26,6 +26,23 @@ function quoted(records: PriceMemory[], specials: PriceMemory[] = []): ItemQuote
   return [{ itemKey: itemKey(line.name), itemName: line.name, averageCents: 1, averageCount: 99, averageLabel: "Not a usable pack price", records, specials }];
 }
 
+test("shared product URLs keep branch offer identities and prices separate", () => {
+  const branch = (id: string, priceCents: number): PriceQuote => catalogue({ source: "local-shop-website", scope: "shop-website", shop: { id, name: `Branch ${id}`, website: "https://grocer.example.org", area: "2000" }, matches: [{ ...catalogue().matches[0], priceCents }] });
+  const row = buildShoppingOffers([line], [branch("expensive", 600), branch("cheaper", 300)], [], options)[0];
+  assert.notEqual(row.offers[0].id, row.offers[1].id);
+  assert.equal(row.offers.find(offer => offer.id === row.chosenOfferId)?.shopId, "cheaper");
+  assert.equal(row.offers.find(offer => offer.id === row.chosenOfferId)?.priceCents, 300);
+  assert.equal(row.estimatedCents, 600);
+});
+
+test("shop price guides require branch evidence, area agreement, and a usable provider state", () => {
+  const valid = catalogue({ source: "iga-online-catalogue", scope: "selected-store", fulfilmentStoreId: "iga-1", shop: { id: "iga-1", name: "IGA Branch", website: "https://www.igashop.com.au", area: "2000" } });
+  assert.equal(buildShoppingOffers([line], [valid], [], options)[0].offers.length, 1);
+  for (const invalid of [{ ...valid, shop: undefined }, { ...valid, fulfilmentStoreId: "other-branch" }, { ...valid, status: "needs-store" as const }, { ...valid, shop: { ...valid.shop!, area: "3000" } }, catalogue({ source: "local-shop-website" })]) {
+    assert.equal(buildShoppingOffers([line], [invalid], [], options)[0].offers.length, 0);
+  }
+});
+
 test("metric packs round up whole purchases and preserve purchased quantity", () => {
   assert.deepEqual(costShoppingQuantity(750, "g", 300, "500 g"), { lineCents: 600, packs: 2, purchasedAmount: 1000, purchasedUnit: "g", reason: null });
   assert.equal(costShoppingQuantity(1.2, "kg", 400, "500g").lineCents, 1200);

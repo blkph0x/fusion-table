@@ -19,7 +19,7 @@ export interface ShoppingOffer {
   shopId: string | null;
   shopName: string;
   source: PriceQuote["source"] | "recorded" | "public-page";
-  scope: "chain-online" | "shop-recorded" | "area-recorded";
+  scope: "chain-online" | "shop-online" | "shop-recorded" | "area-recorded";
   evidenceLabel: string;
   priceCents: number | null;
   packageSize: string | null;
@@ -129,17 +129,20 @@ export function consumedOfferCost(line: Pick<ShoppingLine, "amount" | "unit">, o
 
 /** Use current reviewed/automatic offers when available, otherwise a labelled budget allowance. */
 export function resolveIngredientPricing(line: ShoppingLine, row?: ShoppingCostLine | null) {
-  const matchingRow = row?.id === line.id && row.name === line.name && row.unit === line.unit ? row : null;
+  // A shopping row may be a pantry shortfall, but it cannot exceed the full
+  // recipe quantity. Larger rows belong to a previous quantity/serving choice.
+  const matchingRow = row?.id === line.id && row.name === line.name && row.unit === line.unit && Number.isFinite(row.amount) && row.amount >= 0 && row.amount <= line.amount ? row : null;
   const planningEstimate = matchingRow?.amount === line.amount ? matchingRow.planningEstimate ?? estimateIngredientCost(line) : estimateIngredientCost(line);
   const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer));
   const observedRecipeCents = chosen ? consumedOfferCost(line, chosen) : null;
-  const purchaseCents = matchingRow?.estimatedCents != null && matchingRow.estimatedCents >= 0 && chosen ? matchingRow.estimatedCents : planningEstimate?.purchaseCents ?? null;
+  const observedPurchase = chosen && Number.isSafeInteger(matchingRow?.estimatedCents) && matchingRow!.estimatedCents! >= 0 && matchingRow!.estimatedCents! <= 1_000_000_000 ? matchingRow!.estimatedCents : null;
+  const purchaseCents = observedPurchase ?? planningEstimate?.purchaseCents ?? null;
   return {
     currency: "AUD" as const,
     recipeCents: observedRecipeCents ?? planningEstimate?.recipeCents ?? null,
     purchaseCents,
     source: observedRecipeCents !== null ? "observed" as const : "planning-guide" as const,
-    purchaseSource: chosen && matchingRow?.estimatedCents != null ? "observed" as const : "planning-guide" as const,
+    purchaseSource: observedPurchase !== null ? "observed" as const : "planning-guide" as const,
     label: observedRecipeCents !== null ? chosen!.evidenceLabel : planningEstimate?.label ?? "No quantity estimate is available.",
     planningEstimate,
     offer: chosen ?? null,
@@ -203,36 +206,44 @@ function simpleGrocerySuggestion(line: ShoppingLine, productName: string): boole
   return scoped && wanted.every(word => SIMPLE_GROCERY_WORDS.has(word)) && equivalentFoodForm(line, productName);
 }
 
-function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now: Date): ShoppingOffer[] {
-  return quotes.filter(row => itemKey(row.query) === itemKey(line.name)).flatMap(quote => {
-  const coles = quote.source === "coles-online-catalogue";
+function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now: Date, area: string): ShoppingOffer[] {
+  return quotes.filter(row => itemKey(row.query) === itemKey(line.name)
+    && (!row.shop || areaKey(row.shop.area) === areaKey(area))
+    && (!row.status || row.status === "ready" || row.status === "partial")
+    && (row.source !== "local-shop-website" || Boolean(row.shop?.id && row.shop.name && row.shop.area))
+    && (row.source !== "iga-online-catalogue" || Boolean(row.scope === "selected-store" && row.shop?.id && row.fulfilmentStoreId === row.shop.id))).flatMap(quote => {
+  const retailerId = quote.source === "local-shop-website" ? null : quote.source.replace("-online-catalogue", "");
+  const retailerName = quote.retailerName || ({ coles: "Coles", woolworths: "Woolworths", aldi: "ALDI", iga: "IGA" }[retailerId || ""] ?? "Shop");
+  const shop = quote.shop;
+  const publishedGuide = quote.source === "aldi-online-catalogue" || quote.source === "iga-online-catalogue" || quote.source === "local-shop-website";
   return quote.matches.slice(0, 6).map((match): ShoppingOffer => {
     const current = freshness(quote.fetchedAt, now, 15 * 60_000);
     const preparedMismatch = match.preparedForm === "cooked-rice" && !foodWords(line.name).includes("cooked");
     const comparable = comparableState(line, match.name) && !preparedMismatch;
     const sameForm = equivalentFoodForm(line, match.name) && !preparedMismatch;
-    const suggestion = Boolean(match.reviewable) && simpleGrocerySuggestion(line, match.name);
+    const suggestion = Boolean(match.reviewable || publishedGuide && match.nameReviewable) && simpleGrocerySuggestion(line, match.name);
     const preparedReason = "Retailer metadata identifies cooked rice. No dry-to-cooked weight conversion was guessed; choose a dry-rice pack for this quantity.";
     const reviewReason = preparedMismatch ? preparedReason : suggestion && !match.selected ? "Suggested for this quantity: the requested ingredient and food form match. Review the brand and packet before buying." : !sameForm ? "This product uses a different food form or wording. Review it before choosing; it is excluded from the suggested estimate." : match.reason;
     const cost = comparable ? costShoppingQuantity(line.amount, line.unit, match.priceCents, match.packageSize) : unknownCost(preparedMismatch ? preparedReason : "Cooked or drained quantity is not established by this pack.");
     return {
-      id: [quote.source, line.id, match.url ?? "", match.name, match.packageSize ?? ""].map(encodeURIComponent).join(":"),
+      id: [quote.source, shop?.id ?? "", shop ? areaKey(shop.area) : "", line.id, match.url ?? "", match.name, match.packageSize ?? ""].map(encodeURIComponent).join(":"),
       productName: match.name,
-      retailerId: coles ? "coles" : "woolworths",
-      shopId: null,
-      shopName: coles ? "Coles online" : "Woolworths online",
+      retailerId,
+      shopId: shop?.id ?? null,
+      shopName: shop?.name ?? `${retailerName} online`,
       source: quote.source,
-      scope: "chain-online",
-      evidenceLabel: `${coles ? "Coles" : "Woolworths"} online price guide; confirm your chosen store.`,
+      scope: shop ? "shop-online" : "chain-online",
+      evidenceLabel: quote.label || `${retailerName} online price guide; confirm your chosen store.`,
       priceCents: match.priceCents,
       packageSize: match.packageSize,
       stock: match.stock,
       fetchedAt: quote.fetchedAt,
       freshness: current,
       match: match.selected && !preparedMismatch ? "matched" : "review",
-      reviewable: Boolean(match.reviewable ?? match.selected) && comparable && match.stock === "IN_STOCK" && match.priceCents != null && match.priceCents > 0,
+      reviewable: Boolean(match.reviewable ?? match.selected) && comparable && match.stock === "IN_STOCK" && match.priceCents != null && match.priceCents > 0
+        || publishedGuide && Boolean(match.nameReviewable) && comparable && sameForm && match.stock !== "OUT_OF_STOCK" && match.priceCents != null && match.priceCents > 0,
       reviewReason,
-      eligible: (match.selected || suggestion) && sameForm && match.stock === "IN_STOCK" && current === "current" && cost.lineCents != null,
+      eligible: Boolean(match.selected || suggestion || publishedGuide && match.nameMatched) && sameForm && (match.stock === "IN_STOCK" || publishedGuide && match.stock === "UNKNOWN") && current === "current" && cost.lineCents != null,
       cost,
       url: match.url,
     };
@@ -293,7 +304,7 @@ export interface ShoppingCostOptions {
 export function buildShoppingOffers(lines: readonly ShoppingLine[], catalogue: readonly PriceQuote[], recorded: readonly ItemQuote[], options: ShoppingCostOptions): ShoppingCostLine[] {
   const now = options.now ?? new Date();
   return lines.map(line => {
-    const offers = [...catalogueOffers(line, catalogue, now), ...recordedOffers(line, recorded, options, now)];
+    const offers = [...catalogueOffers(line, catalogue, now, options.area), ...recordedOffers(line, recorded, options, now)];
     const chosen = offers.filter(offer => offer.eligible).sort((a, b) => (a.cost.lineCents as number) - (b.cost.lineCents as number) || a.id.localeCompare(b.id))[0];
     const noNeed = line.amount === 0;
     return {
@@ -307,9 +318,10 @@ export function buildShoppingOffers(lines: readonly ShoppingLine[], catalogue: r
 }
 
 export function isShoppingOfferSelectable(offer: ShoppingOffer): boolean {
-  const online = offer.scope === "chain-online";
+  const online = offer.scope === "chain-online" || offer.scope === "shop-online";
+  const publishedGuide = offer.source === "aldi-online-catalogue" || offer.source === "iga-online-catalogue" || offer.source === "local-shop-website";
   return (offer.eligible || offer.reviewable) && offer.freshness === "current"
-    && (!online || offer.stock === "IN_STOCK")
+    && (!online || offer.stock === "IN_STOCK" || publishedGuide && offer.stock === "UNKNOWN")
     && offer.priceCents != null && Number.isSafeInteger(offer.priceCents) && offer.priceCents > 0
     && offer.cost.lineCents != null && Number.isSafeInteger(offer.cost.lineCents) && offer.cost.lineCents >= 0;
 }

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { shoppingOfferPreview, shoppingVendorCards } from "../components/shopping-offers.ts";
+import { mergeProviderStatuses, readProviderStatuses, shoppingOfferPreview, shoppingScopeLabel, shoppingVendorCards } from "../components/shopping-offers.ts";
 import type { ShoppingCostLine, ShoppingOffer } from "../lib/shopping-costs.ts";
 
 function offer(id: string, retailerId = "woolworths", changes: Partial<ShoppingOffer> = {}): ShoppingOffer {
@@ -46,19 +46,56 @@ test("separate local shops and online catalogue scope remain distinct", () => {
 
 test("a failed retailer remains visible with unknown cost beside available prices", () => {
   const cards = shoppingVendorCards([row([offer("available")])], ["Coles: Jasmine rice — public lookup unavailable"]);
-  assert.deepEqual(cards.map((card) => [card.name, card.cents, card.pricedLines, card.status]), [["Woolworths online", 400, 1, ""], ["Coles online", null, 0, "Lookup unavailable"]]);
+  assert.deepEqual(cards.map((card) => [card.name, card.cents, card.pricedLines, card.status]), [["Woolworths online", 400, 1, ""], ["Coles online", null, 0, "Lookup unavailable"], ["IGA", null, 0, "No matched prices"], ["ALDI", null, 0, "No matched prices"]]);
   assert.equal(cards[1].url, "https://www.coles.com.au/");
   assert.equal(cards[0].linkLabel, "Check Woolworths");
 });
 
 test("review-only and unmatched retailer results stay unknown, never zero", () => {
   const cards = shoppingVendorCards([row([offer("needs-review", "coles", { eligible: false, match: "review" })])], []);
-  assert.deepEqual(cards.map((card) => [card.cents, card.pricedLines, card.status]), [[null, 0, "No matched prices"], [null, 0, "Review products below"]]);
+  assert.deepEqual(cards.map((card) => [card.cents, card.pricedLines, card.status]), [[null, 0, "No matched prices"], [null, 0, "Review products below"], [null, 0, "No matched prices"], [null, 0, "No matched prices"]]);
   assert.deepEqual(shoppingVendorCards([], []), []);
 });
 
 test("local recorded evidence stays separate from a failed chain guide", () => {
   const local = offer("local", "woolworths", { scope: "shop-recorded", shopId: "osm/1", shopName: "Woolworths Town Hall", source: "recorded", cost: priced(350) });
   const cards = shoppingVendorCards([row([local])], ["Woolworths prices could not be checked for this batch."]);
-  assert.deepEqual(cards.map((card) => [card.name, card.cents, card.pricedLines, card.status]), [["Woolworths online", null, 0, "Lookup unavailable"], ["Coles online", null, 0, "No matched prices"], ["Woolworths Town Hall", 350, 1, ""]]);
+  assert.deepEqual(cards.map((card) => [card.name, card.cents, card.pricedLines, card.status]), [["Woolworths online", null, 0, "Lookup unavailable"], ["Coles online", null, 0, "No matched prices"], ["IGA", null, 0, "No matched prices"], ["ALDI", null, 0, "No matched prices"], ["Woolworths Town Hall", 350, 1, ""]]);
+});
+
+test("all four chains remain visible while checking and browser or store selection is actionable without a fake zero basket", () => {
+  const statuses = readProviderStatuses([
+    { id: "coles", name: "Coles", status: "needs-browser", message: "A browser check needs your visit.", url: "https://www.coles.com.au/search?q=rice" },
+    { id: "iga", name: "IGA", status: "needs-store", message: "Choose the IGA you shop at.", url: "https://www.igashop.com.au/" },
+  ]);
+  const cards = shoppingVendorCards([], [], statuses, { includeEmpty: true, checking: true });
+  assert.equal(cards.length, 4); assert.ok(cards.every(card => card.cents === null && card.pricedLines === 0));
+  assert.equal(cards[0].status, "Checking prices");
+  assert.equal(cards[1].status, "Open retailer to complete its check"); assert.equal(cards[1].url, statuses[0].url); assert.equal(cards[1].needsAction, true);
+  assert.equal(cards[2].status, "Choose a store on the retailer"); assert.equal(cards[2].needsAction, true);
+});
+
+test("status parsing rejects script and credential links, bounds metadata, and merges a partially blocked source conservatively", () => {
+  const statuses = readProviderStatuses([
+    { id: "coles", name: "Coles", status: "ready", message: "One result." },
+    { id: "bad<script>", name: "Bad", status: "ready", message: "bad" },
+    { id: "iga", name: "IGA", status: "needs-store", message: "x".repeat(1000), url: "javascript:alert(1)" },
+    { id: "aldi", name: "ALDI", status: "unavailable", message: "No prices", url: "https://user:secret@example.com/" },
+    { id: "bad-state", name: "Bad", status: "complete", message: "Ignored" },
+  ]);
+  assert.equal(statuses.length, 3); assert.equal(statuses[1].message.length, 500); assert.equal(statuses[1].url, undefined); assert.equal(statuses[2].url, undefined);
+  const blocked = readProviderStatuses([{ id: "coles", name: "Coles", status: "needs-browser", message: "Other items need a browser." }]);
+  assert.equal(mergeProviderStatuses(blocked, statuses)[0].status, "needs-browser");
+  const card = shoppingVendorCards([row([offer("coles-rice", "coles")])], [], mergeProviderStatuses(statuses, blocked))[1];
+  assert.equal(card.cents, 400); assert.equal(card.needsAction, true); assert.equal(card.status, "Open retailer to complete its check");
+});
+
+test("a nearby published fresh-food seller is represented beside chain prices and remains distinct from recorded evidence", () => {
+  const local = offer("butcher", "local", { source: "local-shop-website" as ShoppingOffer["source"], scope: "shop-online" as ShoppingOffer["scope"], shopId: "node/4", shopName: "Nearby butcher", url: "https://butcher.example/product" });
+  const products = [offer("woolies"), offer("coles", "coles"), offer("iga", "iga"), offer("aldi", "aldi"), local];
+  assert.ok(shoppingOfferPreview(products, null).some(product => product.id === "butcher"));
+  assert.equal(shoppingScopeLabel(local.scope, local.source), "Published shop price");
+  const cards = shoppingVendorCards([row([local])], [], readProviderStatuses([{ id: "local-node/4", name: "Nearby butcher", shopId: "node/4", status: "ready", message: "Published on this shop's site." }]));
+  assert.equal(cards.filter(card => card.name === "Nearby butcher").length, 1);
+  assert.equal(cards.find(card => card.name === "Nearby butcher")?.cents, 400);
 });

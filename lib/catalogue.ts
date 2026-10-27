@@ -9,7 +9,13 @@ const CACHE_LIMIT = 512;
 
 export interface PriceQuote {
   query: string;
-  source: "woolworths-online-catalogue" | "coles-online-catalogue";
+  source: "woolworths-online-catalogue" | "coles-online-catalogue" | "aldi-online-catalogue" | "iga-online-catalogue" | "local-shop-website";
+  retailerName?: string;
+  scope?: "chain-online" | "shop-website" | "selected-store";
+  shop?: { id: string; name: string; website: string; area: string; lat?: number; lon?: number };
+  storeLabel?: string;
+  collectionMethod?: "http" | "browser";
+  status?: "ready" | "partial" | "needs-browser" | "needs-store" | "unavailable" | "not-configured";
   label: string;
   fetchedAt: string | null;
   cached: boolean;

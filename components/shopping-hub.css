@@ -58,6 +58,11 @@
 .sh-vendor-comparison small { font-size: 11px; color: var(--sh-muted); }
 .sh-vendor-comparison a { display: flex; align-items: center; gap: 5px; min-height: 32px; margin-top: 4px; color: var(--sh-green); font-size: 11px; font-weight: 600; }
 .sh-vendor-comparison > p { flex-basis: 100%; font-size: 11px; }
+.sh-vendor-comparison .sh-provider-action { border-color: #d7c38c; background: #fffaf0; }
+.sh-vendor-comparison .sh-provider-message { font-size: 11px; margin: 7px 0; overflow-wrap: anywhere; }
+.sh-fresh-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0 8px; }
+.sh-fresh-filters button { border: 1px solid #c5d2b9; border-radius: 18px; padding: 8px 12px; min-height: 40px; background: #fffefa; color: var(--sh-green); font-size: 12px; }
+.sh-fresh-filters button[aria-pressed="true"] { background: var(--sh-green); color: white; border-color: var(--sh-green); }
 .sh-source-notes { padding: 12px 14px; margin-bottom: 16px; border: 1px solid var(--sh-line); border-radius: 8px; background: #f6f7f0; font-size: 12px; }
 .sh-source-notes summary { cursor: pointer; font-weight: 600; }
 .sh-source-notes ul { padding: 10px 0 0 17px; list-style: disc; }

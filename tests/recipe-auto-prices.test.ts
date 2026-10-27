@@ -79,6 +79,32 @@ test("malformed stored country values have an isolated unknown key instead of th
  assert.notEqual(priceContextKey(invalid), priceContextKey(input));
  assert.equal(JSON.parse(priceContextKey(invalid))[1], "unknown");
 });
+test("precise shopping area, radius and arriving shop identities isolate shared price contexts", () => {
+ const input = { ...context(1), location: { lat: -33.898, lon: 151.179 }, radiusKm: 5 };
+ assert.notEqual(priceContextKey(input), priceContextKey({ ...input, location: { ...input.location, lat: -33.9 } }));
+ assert.notEqual(priceContextKey(input), priceContextKey({ ...input, radiusKm: 10 }));
+ assert.notEqual(priceContextKey(input), priceContextKey({ ...input, shops: [{ id: "a-real-nearby-shop", name: "A fruit shop" }] }));
+});
+test("incremental source metadata retains a browser check when other batches succeed", async () => {
+ const input = { ...context(7), location: { lat: -33.898, lon: 151.179 }, radiusKm: 6 };
+ const result = await fetchRecipePrices(input, () => {}, async (_url, init) => {
+  const body = JSON.parse(init!.body as string); assert.deepEqual(body.location, input.location); assert.equal(body.radiusKm, 6);
+  return new Response(JSON.stringify({ lines: JSON.parse(await response(body.lines).text()).lines, providerStatuses: [{ id: "coles", name: "Coles", status: body.lines[0].id === "item-0" ? "needs-browser" : "ready", message: "Check retailer" }], checkedAt: "2026-10-27T01:00:00.000Z" }));
+ });
+ assert.equal(result.providerStatuses?.find(provider => provider.id === "coles")?.status, "needs-browser");
+ assert.equal(result.rows.length, 7);
+});
+test("a late automatic update cannot visually replace a reviewed selection already shown in the same visit", async t => {
+ const input = context(1); input.area = "manual-listener-race";
+ let release!: () => void; const pendingResponse = new Promise<void>(resolve => { release = resolve; });
+ t.mock.method(globalThis, "fetch", async () => { await pendingResponse; return response(input.lines); });
+ const received: (string | null)[] = [];
+ let finish!: () => void; const delivered = new Promise<void>(resolve => { finish = resolve; });
+ const detach = observeRecipePrices(input, result => { received.push(result.rows[0]?.chosenOfferId ?? null); finish(); });
+ rememberRecipePrices(input, { rows: [{ ...input.lines[0], offers: [], chosenOfferId: "my-reviewed-shop", estimatedCents: 700, reason: null }], checked: 1, total: 1, checkedAt: null, warnings: [], error: "" });
+ release(); await delivered; detach();
+ assert.deepEqual(received, ["my-reviewed-shop"]);
+});
 test("homepage counts match the complete dynamic authored plan without claiming seeds as unique meals",()=>{
  const counts=catalogueCounts(),plan=buildCompleteCataloguePlan();
  assert.equal(counts.authoredCombinations,plan.total);assert.equal(counts.authoredCombinations,20414810);

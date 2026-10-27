@@ -105,13 +105,24 @@ describe("public retailer ingredient links", () => {
     assert.match(woolies.note, /Newtown 2042.*does not confirm local stock or price/);
   });
 
-  it("uses official ALDI/IGA destinations without inventing stock or unsupported search parameters", () => {
+  it("uses the current official ALDI/IGA search destinations without claiming a selected branch", () => {
     const aldi = productSearchLink(shop("1", "supermarket", "supermarket", 1, "ALDI"), lines[0]);
     const iga = productSearchLink(shop("2", "supermarket", "supermarket", 1, "IGA Newtown"), lines[0]);
-    assert.equal(aldi.url, "https://www.aldi.com.au/Products");
-    assert.equal(iga.url, "https://www.igashop.com.au/");
-    assert.equal(aldi.kind, "retailer-website");
-    assert.equal(iga.kind, "retailer-website");
+    assert.equal(new URL(aldi.url).pathname, "/results");
+    assert.equal(new URL(aldi.url).searchParams.get("q"), lines[0].name);
+    assert.equal(new URL(iga.url).pathname, "/search");
+    assert.equal(new URL(iga.url).searchParams.get("q"), lines[0].name);
+    assert.equal(aldi.kind, "retailer-search");
+    assert.equal(iga.kind, "retailer-search");
+  });
+
+  it("keeps a named independent IGA shop website and a specific official store page", () => {
+    const branch = { ...shop("iga", "supermarket", "supermarket", 1, "Local IGA"), website: "https://ourlocaliga.example/shop" };
+    const link = productSearchLink(branch, "Chicken thighs", "Newtown 2042");
+    assert.equal(link.url, branch.website);
+    assert.match(new URL(link.fallbackUrl!).searchParams.get("q")!, /Local IGA Newtown 2042 Chicken thighs/);
+    const official = { ...branch, website: "https://www.iga.com.au/stores/local-iga/" };
+    assert.equal(productSearchLink(official, "Chicken thighs").url, official.website);
   });
 
   it("offers a public shop website and area-specific web fallback, rejecting unsafe destinations", () => {

@@ -1,0 +1,104 @@
+IGA and ALDI public-price verification — 27 October 2026
+
+Scope
+These adapters read selling prices actually published by the Australian retailer.
+They do not infer stock, national consistency, the visitor's local store, or a price
+from a missing result. A renderer, when configured, is used for every page check.
+It must use ordinary browser behavior. Refusals cause bounded failure/backoff,
+not CAPTCHA solving, stealth, proxy rotation, or repeated challenge retries.
+
+ALDI
+Observed normal-browser search route:
+https://www.aldi.com.au/results?q=jasmine+rice
+Observed category:
+https://www.aldi.com.au/products/meat-seafood/poultry/k/1111111146
+Example product:
+https://www.aldi.com.au/product/imperial-grain-jasmine-rice-1kg-000000000000262101
+
+The public page renders product-tile-{id} cards. Name, brand, selling size and
+comparison unit price have separate product-tile__* data-test attributes.
+The observed base-price__regular span contains the selling price. Comparison
+unit prices are never substituted for selling prices. Unrecognized discount
+layouts, membership/coupon prices and announced 'On Sale' cards are omitted.
+This deliberately errs toward missing an offer instead of quoting a future one.
+
+Observed examples, for validation rather than constants in application code:
+- Jasmine Rice 1kg: $2.99, comparison $0.30 per 100g.
+- Chicken Breast Fillets Bulk: approximately 1.38kg at $15.17; $10.99/kg comparison.
+- Chicken Breast Fillets: approximately 0.6kg at $7.19; $11.99/kg comparison.
+
+The ordinary browser automatically showed '2745, Glenmore Park'. This was not a
+visitor-selected store and is not used as the visitor's location. Results are
+labelled an online guide, with unknown stock, never a local shelf or stock check.
+Approximate weighted packages remain approximate; exact shopping calculations
+must refuse them. Fixed packs and count packs retain their payable pack sizes.
+
+IGA
+Observed normal-browser search route:
+https://www.igashop.com.au/search?q=jasmine+rice
+Example product:
+https://www.igashop.com.au/product/chicken-breast-fillets-80080001
+
+Selecting a store through IGA's visible postcode/store chooser changes browser
+session context without changing the product/search URL. A public sample area
+Newtown NSW 2042 was used for verification; no precise user location was shared.
+The same chicken page initially displayed Ashcroft's IGA Erskine Park at $6.50
+average 500g / $13/kg. After explicitly selecting Lloyds IGA Newtown it displayed
+$7.50 average 500g / $15/kg. Thus a generic IGA result cannot be called national
+or assigned to the nearest IGA. The page also initially said no store selected.
+
+The adapter requires an explicit server-verified IgaStoreContext, then checks the
+rendered header-store-select strong text exactly against its branch name. Missing
+or different store selection returns needs-store and no prices. The renderer
+must already hold the genuinely selected branch context. Without verified branch
+selection the browser gateway must leave IGA in needs-store.
+
+Normal visible store selection flow: header-store-select-button, then optional
+'Search for another store', 'Shop in-store' tab, #search-location postcode, exact
+suburb role=option, then the matching branch card's Select Store button.
+Branch cards expose data-test-id=store-selection-list-item and a public
+data-store-id attribute (Lloyds Newtown 8863, Enmore 6033, Stanmore 6743).
+Each includes h3 branch name, street/suburb/postcode, and its own Select Store
+button. Both branch name and address should agree with server-verified nearby
+shop details; never choose the first branch or infer a branch from the postcode.
+After selection wait for the rendered header and cards to update before reading.
+
+Rendered IGA cards use data-product-card=true. Their labelled product anchor has
+separate name and pack spans; the bold leading-none span is the selling price.
+Comparison prices and 'was' badges are not payable prices. __NEXT_DATA__ is not
+used: client-side branch selection can leave stale default-store data there.
+All returned stock flags remain unknown unless the card explicitly says out of
+stock/unavailable. 'Add To List' does not establish availability.
+
+Example selected-store rendered observations:
+- SunRice Premium Thai Jasmine Rice 1kg: $8.10.
+- SunRice Jasmine Fragrant Rice 5kg: current $16.95, was $27.00, comparison $3.39/kg.
+- Chicken Breast Fillets 500g: $7.50 average, final cost based on weight.
+
+Operational bounds
+Each adapter caps HTML at 3MB, limits result cards and products, uses bounded
+concurrency/queues, deduplicates simultaneous reads, caches for ten minutes, and
+backs off unreadable/refused pages for one minute. Renderer caches are isolated
+by renderer identity; IGA cache keys additionally include branch ID/name/area.
+Redirects and product links remain on the official secure retailer origin.
+No real cookies or account credentials are stored in this repository.
+
+Coles browser compatibility was also extended using the currently rendered
+section[data-testid=product-tile] cards, product-pricing span and separately
+labelled pack size. The current card price wins over stale __NEXT_DATA__ prices.
+Observed normal-browser six-card sample retained $15.40 / approx.1.4kg chicken
+breast, $9.00 / 500g diced chicken (ignoring its separate 2-for-$13.50 offer), and
+$8.00 / 300g smoked chicken (ignoring old/comparison prices). Default retailer
+delivery context 'Melbourne 3000' is labelled as retailer context, not the visitor.
+All adapters preserve gateway challenge/configuration status across backoff.
+
+The shared matcher now rejects raw meat/seafood requests against cooked, smoked,
+breaded, marinated, cured or deli products unless that preparation is explicitly
+requested. Matching-name proof for unknown-stock guides has the same gate.
+Frenched cuts, raw diced meat, roasting cuts and skin/bone preparation stay valid.
+
+Focused checks
+tests/aldi-catalogue.test.ts and tests/iga-catalogue.test.ts cover selling versus
+comparison/previous prices, future/member offers, fixed/count/approximate packs,
+stock uncertainty, branch leakage, renderer preference, cache context isolation,
+response limits, foreign redirects, product matching and provider backoff.

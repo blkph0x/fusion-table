@@ -9,8 +9,8 @@ import { publicPath } from "@/lib/public-path";
 import { productSearchLink, rankShopsForList, type ShoppingLine } from "@/lib/shopping";
 import { australianPriceGuide } from "@/lib/shopping-request";
 import { applyShoppingOfferSelection, applyShoppingOfferSelections, isShoppingOfferSelectable, resolveIngredientPricing, summarizeShoppingCosts, type ShoppingCostLine, type ShoppingOffer } from "@/lib/shopping-costs";
-import { shoppingOfferPreview, shoppingVendorCards } from "./shopping-offers";
-import { cachedRecipePrices, rememberRecipePrices } from "./recipe-price-client";
+import { mergeProviderStatuses, readProviderStatuses, shoppingOfferPreview, shoppingScopeLabel, shoppingVendorCards, type ShoppingProviderStatus } from "./shopping-offers";
+import { cachedRecipePrices, priceContextKey, rememberRecipePrices } from "./recipe-price-client";
 import "./shopping-hub.css";
 
 export interface ShoppingHubProps {
@@ -32,7 +32,7 @@ export interface ShoppingHubProps {
   onOpenRecipe?: () => void;
 }
 
-type Comparison = { key: string; rows: ShoppingCostLine[]; checked: number; total: number; busy: boolean; error: string; warnings: string[]; checkedAt: string | null };
+type Comparison = { key: string; rows: ShoppingCostLine[]; checked: number; total: number; busy: boolean; error: string; warnings: string[]; checkedAt: string | null; providerStatuses?: ShoppingProviderStatus[] };
 const EMPTY: Comparison = { key: "", rows: [], checked: 0, total: 0, busy: false, error: "", warnings: [], checkedAt: null };
 const KINDS: (ShopKind | "all")[] = ["all", "supermarket", "produce", "butcher", "fishmonger", "grocery", "market", "specialty"];
 const UNITS = ["each", "g", "kg", "ml", "l", "tsp", "tbsp", "cloves", "bunch", "pack"];
@@ -61,12 +61,13 @@ function OfferCard({ offer, selected, onSelect }: { offer: ShoppingOffer; select
   const url = safeUrl(offer.url);
   const usable = isShoppingOfferSelectable(offer);
   return <div className={`sh-offer${selected ? " sh-offer-selected" : ""}`}>
-    <div className="sh-offer-top"><span className="sh-source-badge">{offer.scope === "chain-online" ? "Online catalogue" : offer.source === "public-page" ? "Shop page" : "Recorded price"}</span>{selected && <span className="sh-selected-offer"><Check size={13} /> {offer.match === "review" && offer.eligible ? "Suggested estimate" : "In estimate"}</span>}</div>
+    <div className="sh-offer-top"><span className="sh-source-badge">{shoppingScopeLabel(offer.scope, offer.source)}</span>{selected && <span className="sh-selected-offer"><Check size={13} /> {offer.match === "review" && offer.eligible ? "Suggested estimate" : "In estimate"}</span>}</div>
     <strong className="sh-offer-shop">{offer.shopName}</strong><p className="sh-product-name">{offer.productName}</p>
     <div className="sh-offer-price"><strong>{money(offer.priceCents)}</strong><span>{offer.packageSize || "Pack size unknown"}</span></div>
     {offer.cost.lineCents != null ? <p className="sh-line-cost">{offer.cost.packs != null ? `${offer.cost.packs} ${offer.cost.packs === 1 ? "pack" : "packs"} · ` : ""}<strong>{money(offer.cost.lineCents)}</strong> for this quantity</p> : <p className="sh-muted">{offer.cost.reason || "Quantity cost cannot be calculated from this price."}</p>}
     {offer.match === "review" && <p className="sh-offer-warning">{offer.reviewReason || "Check the product match before using this price."}</p>}
     {offer.freshness === "stale" && <p className="sh-offer-warning">Older price — check again before shopping.</p>}
+    {offer.stock === "UNKNOWN" && <p className="sh-offer-warning">Stock at this shop is not confirmed.</p>}
     <p className="sh-evidence">{offer.evidenceLabel}</p><p className="sh-price-time">{dateLabel(offer.fetchedAt)}</p>
     <div className="sh-offer-actions">{usable && !selected && <button type="button" className="sh-small-action" onClick={onSelect}>{offer.match === "review" ? "Use reviewed product" : "Use in estimate"}</button>}{url && <a href={url} target="_blank" rel="noreferrer">View product <ExternalLink size={12} /></a>}</div>
   </div>;
@@ -147,14 +148,15 @@ export function ShoppingHub(props: ShoppingHubProps) {
   const localRecords = !!location && location.id !== "current-location";
   const unsupportedPriceMessage = "Price comparison currently supports Australia; nearby shops and retailer links still work.";
   const recordDisabledReason = !supportsPrices ? unsupportedPriceMessage : !location || !localRecords ? "Choose a suburb or postcode before recording a local price, so it is saved in the right shopping area." : "";
-  const contextKey = JSON.stringify([sourceId, area, location?.id, location?.country, location?.lat, location?.lon, radius, lines.map((line) => [line.id, line.name, line.amount, line.unit, line.category, line.allergens, line.aliases])]);
+  const shops = shopData?.shops || [];
+  const priceContext = { lines, area, country: location?.country || "Australia", localRecords, shops: shops.map(shop => ({ id: shop.id, name: shop.name })), ...(location ? { location: { lat: location.lat, lon: location.lon }, radiusKm: radius } : {}) };
+  const contextKey = JSON.stringify([sourceId, priceContextKey(priceContext)]);
   const current = comparison.key === contextKey ? comparison : EMPTY;
   const rows = useMemo(() => new Map(current.rows.map((row) => [row.id, row])), [current.rows]);
   const summary = useMemo(() => summarizeShoppingCosts(current.rows, lines.length), [current.rows, lines.length]);
   const budget = lines.map(line => resolveIngredientPricing(line, current.rows.find(row => row.id === line.id)));
   const budgetCents = budget.reduce((sum, row) => sum + (row.purchaseCents ?? 0), 0);
   const budgetComplete = budget.every(row => row.purchaseCents !== null);
-  const shops = shopData?.shops || [];
   const matches = useMemo(() => rankShopsForList(lines, shopData?.shops || [], { radiusKm: radius }), [lines, shopData, radius]);
   const matchById = useMemo(() => new Map(matches.map((match) => [match.shop.id, match])), [matches]);
   const selectedShop = shops.find((shop) => shop.id === selectedShopId) || null;
@@ -163,7 +165,7 @@ export function ShoppingHub(props: ShoppingHubProps) {
   const visibleLines = lines.filter((line) => `${line.name} ${(line.aliases || []).join(" ")}`.toLowerCase().includes(ingredientQuery.trim().toLowerCase()) && (!onlyUnpriced || rows.get(line.id)?.estimatedCents == null));
   const nearbyTabLabel = !location ? "Nearby shops · choose area" : props.shopsLoading ? "Finding shops…" : shopData ? `Nearby shops (${visibleShops.length})` : "Nearby shops";
   const boughtCount = lines.filter((line) => bought[boughtKey(sourceId, line)]).length;
-  const vendorSummaries = useMemo(() => shoppingVendorCards(current.rows, current.warnings), [current.rows, current.warnings]);
+  const vendorSummaries = useMemo(() => shoppingVendorCards(current.rows, current.warnings, current.providerStatuses, { includeEmpty: lines.length > 0, checking: current.busy }), [current.rows, current.warnings, current.providerStatuses, current.busy, lines.length]);
 
   useEffect(() => {
     try { const stored = JSON.parse(localStorage.getItem("fusion-shopping-bought-v1") || "{}"); if (stored && typeof stored === "object" && !Array.isArray(stored)) setBought(Object.fromEntries(Object.entries(stored).filter(([key, value]) => key.length < 500 && value === true).slice(-2000)) as Record<string, boolean>); } catch { /* A checklist remains available without storage. */ }
@@ -207,21 +209,23 @@ export function ShoppingHub(props: ShoppingHubProps) {
     if (currentSelections.current.key !== requestKey) currentSelections.current = { key: requestKey, offers: {} };
     const merged = new Map<string, ShoppingCostLine>();
     const warnings: string[] = [];
+    let providerStatuses: ShoppingProviderStatus[] = [];
     setComparison({ ...EMPTY, key: requestKey, busy: true, total: lines.length });
     try {
       for (let index = 0; index < lines.length; index += 6) {
         if (revision !== comparisonRevision.current || controller.signal.aborted) return;
         const batch = lines.slice(index, index + 6);
-        const response = await fetch(publicPath("/api/shopping-prices"), { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ lines: batch, area, country: location.country, localRecords, device: deviceId(), shops: shops.map((shop) => ({ id: shop.id, name: shop.name })) }), cache: "no-store", signal: controller.signal });
-        let data: { lines?: ShoppingCostLine[]; warnings?: string[]; error?: string; checkedAt?: string };
+        const response = await fetch(publicPath("/api/shopping-prices"), { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ ...priceContext, lines: batch, device: deviceId() }), cache: "no-store", signal: controller.signal });
+        let data: { lines?: ShoppingCostLine[]; warnings?: string[]; error?: string; checkedAt?: string; providerStatuses?: unknown };
         try { data = await response.json(); } catch { throw new Error("The price service could not respond. Your list is still available."); }
         if (revision !== comparisonRevision.current || controller.signal.aborted) return;
         if (!response.ok || !Array.isArray(data.lines)) throw new Error(data.error || "Prices could not be checked. Your list is still available.");
         for (const row of data.lines) if (batch.some((line) => line.id === row.id) && Array.isArray(row.offers)) merged.set(row.id, row);
         for (const line of batch) if (!merged.has(line.id)) merged.set(line.id, { id: line.id, name: line.name, amount: line.amount, unit: line.unit, offers: [], chosenOfferId: null, estimatedCents: null, reason: "This item could not be priced in the response. Retry the comparison or record a price you saw." });
         for (const warning of data.warnings || []) if (typeof warning === "string" && !warnings.includes(warning)) warnings.push(warning);
+        providerStatuses = mergeProviderStatuses(providerStatuses, readProviderStatuses(data.providerStatuses));
         const selectedRows = applyShoppingOfferSelections(lines.flatMap((line) => { const row = merged.get(line.id); return row ? [row] : []; }), currentSelections.current.key === requestKey ? currentSelections.current.offers : {});
-        setComparison({ key: requestKey, rows: selectedRows, checked: Math.min(index + batch.length, lines.length), total: lines.length, busy: true, error: "", warnings: [...warnings], checkedAt: data.checkedAt || new Date().toISOString() });
+        setComparison({ key: requestKey, rows: selectedRows, checked: Math.min(index + batch.length, lines.length), total: lines.length, busy: true, error: "", warnings: [...warnings], checkedAt: data.checkedAt || new Date().toISOString(), providerStatuses });
       }
     } catch (error) {
       if (revision === comparisonRevision.current && !controller.signal.aborted) setComparison((previous) => previous.key === requestKey ? { ...previous, error: error instanceof Error ? error.message : "Prices could not be checked. Try again when you're ready." } : previous);
@@ -230,7 +234,7 @@ export function ShoppingHub(props: ShoppingHubProps) {
     }
   }
   const automaticComparison = useEffectEvent(() => {
-    const input = { lines, area, country: location?.country || "Australia", localRecords, shops: shops.map(shop => ({ id: shop.id, name: shop.name })) };
+    const input = priceContext;
     const saved = cachedRecipePrices(input);
     if (saved && saved.checked === lines.length && !saved.error) {
       currentSelections.current = { key: contextKey, offers: Object.fromEntries(saved.rows.map(row => [row.id, row.chosenOfferId])) };
@@ -245,7 +249,7 @@ export function ShoppingHub(props: ShoppingHubProps) {
   }, [contextKey, canAutomaticallyCompare]);
   useEffect(() => {
     if (current.key !== contextKey || current.checked < lines.length || !lines.length) return;
-    rememberRecipePrices({ lines, area, country: location?.country || "Australia", localRecords, shops: shops.map(shop => ({ id: shop.id, name: shop.name })) }, current);
+    rememberRecipePrices(priceContext, current);
     // Context binds every request input; current changes when product choices change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, contextKey]);
@@ -269,7 +273,7 @@ export function ShoppingHub(props: ShoppingHubProps) {
     <div className="sh-main-layout" data-mobile-view={mobilePane}><section className="sh-ingredients" aria-labelledby="sh-results-heading"><div className="sh-section-heading"><div><span className="sh-eyebrow">PRICE COMPARISON</span><h2 id="sh-results-heading">Your list, item by item</h2></div></div>
       {lines.length > 0 && <div className="sh-cost-summary"><div><span>Whole-list budget - packs to buy</span><strong>~{money(budgetCents)}{!budgetComplete ? "+" : ""}</strong><p>{budget.filter(row => row.purchaseSource === "observed").length} store guides; remaining supported items use AUD planning estimates.</p></div><p className="sh-muted">Includes assumed packs and leftovers. Planning values are budget allowances, not observed prices. Store guides may come from different shops; local stock and shelf prices need checking.</p></div>}
       {current.rows.length > 0 && <div className="sh-cost-summary"><div><span>Selected offers · {summary.pricedLines} of {lines.length} items priced</span><strong>{summary.knownSubtotalCents == null ? "No quantity costs yet" : money(summary.knownSubtotalCents)}</strong><p>{summary.complete ? "Estimated pack basket for the selected offers." : `${summary.unpricedLines} ${summary.unpricedLines === 1 ? "item remains" : "items remain"} unpriced. This is a partial subtotal.`}</p></div><p className="sh-muted">Online catalogue prices apply to that chain&apos;s online service. Local branch stock and shelf prices are unverified.{current.checkedAt ? ` Last check: ${dateLabel(current.checkedAt)}.` : ""}</p></div>}
-      {vendorSummaries.length > 0 && <div className="sh-vendor-comparison" aria-label="Compare shop coverage">{vendorSummaries.map((vendor) => <div key={vendor.id}><span>{vendor.scope === "chain-online" ? "Online catalogue" : "Recorded local prices"}</span><strong>{vendor.name}</strong><p>{vendor.pricedLines} / {lines.length} items priced</p><b>{vendor.cents == null ? "Unknown cost" : money(vendor.cents)}</b><small>{vendor.status || (vendor.pricedLines === lines.length ? "Estimated pack basket" : "Partial subtotal")}</small>{vendor.url && <a href={vendor.url} target="_blank" rel="noreferrer">{vendor.linkLabel} <ExternalLink size={11} /></a>}</div>)}<p>Compare coverage as well as price. A smaller partial subtotal does not mean a cheaper full shop.</p></div>}
+      {vendorSummaries.length > 0 && <div className="sh-vendor-comparison" aria-label="Compare shop coverage">{vendorSummaries.map((vendor) => <div key={vendor.id} className={vendor.needsAction ? "sh-provider-action" : ""}><span>{vendor.scope === "chain-online" ? "Online price guide" : "Nearby shop"}</span><strong>{vendor.name}</strong><p>{vendor.pricedLines} / {lines.length} items priced</p><b>{vendor.cents == null ? "Not priced" : money(vendor.cents)}</b><small>{vendor.status || (vendor.pricedLines === lines.length ? "Estimated pack basket" : "Partial subtotal")}</small>{vendor.message && <p className="sh-provider-message">{vendor.message}</p>}{vendor.url && <a href={vendor.url} target="_blank" rel="noreferrer">{vendor.linkLabel} <ExternalLink size={11} /></a>}</div>)}<p>Choose your store on the retailer and confirm the product. Browser checks must be completed on that retailer. A smaller partial subtotal does not mean a cheaper full shop.</p></div>}
       {current.warnings.length > 0 && <details className="sh-source-notes"><summary>Price sources and availability notes</summary><ul>{current.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul></details>}
       <div className="sh-list-filters"><label><Search size={16} /><span className="sr-only">Search your ingredients</span><input value={ingredientQuery} maxLength={80} onChange={(event) => setIngredientQuery(event.target.value)} placeholder="Find an ingredient" /></label><label className="sh-check-filter"><input type="checkbox" checked={onlyUnpriced} onChange={(event) => setOnlyUnpriced(event.target.checked)} /> Unpriced only</label></div>
       {!lines.length ? <div className="sh-empty"><ShoppingBasket size={32} /><h3>Your shopping list starts here.</h3><p>Choose a meal or week above, or add the ingredients you need.</p></div> : !visibleLines.length ? <div className="sh-empty"><p>No ingredients match this filter.</p><button type="button" className="sh-text-button" onClick={() => { setIngredientQuery(""); setOnlyUnpriced(false); }}>Show the whole list</button></div> : <div className="sh-item-list">{visibleLines.map((line) => {
@@ -282,7 +286,7 @@ export function ShoppingHub(props: ShoppingHubProps) {
           {row && row.offers.length > 0 && (row.chosenOfferId ? <button type="button" className="sh-text-button" onClick={() => selectOffer(line.id, null)}>Exclude this product from store subtotal</button> : row.reason && <p className="sh-muted">{row.reason}</p>)}
           <div className="sh-item-shops">{matches.filter((match) => match.matchedIngredientIds.includes(line.id)).slice(0, 3).map((match) => { const search = productSearchLink(match.shop, line, location?.name); return <a key={match.shop.id} href={search.url} target="_blank" rel="noreferrer">{match.shop.name} <ExternalLink size={11} /></a>; })}</div><RecordPrice key={`${area}|${line.id}`} line={line} area={area} shops={shops} selectedShopId={selectedShopId} onSaved={() => void compare()} disabledReason={recordDisabledReason} onChangeArea={props.onChangeArea} /></article>;
       })}</div>}
-    </section><aside className="sh-nearby" aria-labelledby="sh-nearby-heading"><div className="sh-section-heading"><div><span className="sh-eyebrow"><MapPin size={14} /> AROUND YOU</span><h2 id="sh-nearby-heading">Nearby food shops</h2></div></div><p className="sh-muted">Ranked by likely ingredient coverage and distance. Shop categories suggest where to ask; stock is not confirmed.</p><div className="sh-shop-filters"><label><span className="sr-only">Find a nearby shop</span><input value={shopQuery} maxLength={80} onChange={(event) => setShopQuery(event.target.value)} placeholder="Search shop name" /></label><label><span className="sr-only">Shop type</span><select value={shopKind} onChange={(event) => setShopKind(event.target.value as ShopKind | "all")}>{KINDS.map((kind) => <option key={kind} value={kind}>{kind === "all" ? "All food shops" : SHOP_LABELS[kind]}</option>)}</select></label><label><span className="sr-only">Order nearby shops</span><select value={shopSort} onChange={(event) => setShopSort(event.target.value as "coverage" | "distance")}><option value="coverage">Ingredient coverage first</option><option value="distance">Nearest first</option></select></label></div>
+    </section><aside className="sh-nearby" aria-labelledby="sh-nearby-heading"><div className="sh-section-heading"><div><span className="sh-eyebrow"><MapPin size={14} /> AROUND YOU</span><h2 id="sh-nearby-heading">Nearby food shops</h2></div></div><p className="sh-muted">Ranked by likely ingredient coverage and distance. Published website prices are checked for nearby fruit shops and butchers when available. Shop categories suggest where to ask; stock is not confirmed.</p><div className="sh-fresh-filters" role="group" aria-label="Fresh food shops"><button type="button" aria-pressed={shopKind === "produce"} onClick={() => { setShopKind(shopKind === "produce" ? "all" : "produce"); setShopQuery(""); }}>Fruit &amp; vegetables</button><button type="button" aria-pressed={shopKind === "butcher"} onClick={() => { setShopKind(shopKind === "butcher" ? "all" : "butcher"); setShopQuery(""); }}>Butchers</button></div><div className="sh-shop-filters"><label><span className="sr-only">Find a nearby shop</span><input value={shopQuery} maxLength={80} onChange={(event) => setShopQuery(event.target.value)} placeholder="Search shop name" /></label><label><span className="sr-only">Shop type</span><select value={shopKind} onChange={(event) => setShopKind(event.target.value as ShopKind | "all")}>{KINDS.map((kind) => <option key={kind} value={kind}>{kind === "all" ? "All food shops" : SHOP_LABELS[kind]}</option>)}</select></label><label><span className="sr-only">Order nearby shops</span><select value={shopSort} onChange={(event) => setShopSort(event.target.value as "coverage" | "distance")}><option value="coverage">Ingredient coverage first</option><option value="distance">Nearest first</option></select></label></div>
       {!location ? <div className="sh-empty"><MapPin size={28} /><p>Choose your area to find shops near you.</p><button className="sh-small-action" type="button" onClick={props.onChangeArea}>Choose area</button></div> : props.shopsLoading ? <div className="sh-shop-loading" role="status"><LoaderCircle className="sh-spin" size={24} /><p>Finding food shops within {radius} km…</p></div> : props.shopError ? <div className="sh-error" role="alert"><p>{props.shopError}</p><button type="button" className="sh-small-action" onClick={props.onSearchShops}>Retry nearby shops</button></div> : !shopData ? <div className="sh-empty"><p>Find supermarkets, produce shops, butchers and markets around {location.name}.</p><button type="button" className="sh-small-action" onClick={props.onSearchShops}>Find food shops</button></div> : <><p className="sh-result-count">{visibleShops.length} {visibleShops.length === 1 ? "shop" : "shops"} shown · within {radius} km</p>{!visibleShops.length && <div className="sh-empty"><p>No shops match this view. Try another type, a wider radius or a shorter name.</p></div>}<div className="sh-shop-list">{visibleShops.map((shop) => { const match = matchById.get(shop.id); return <div key={shop.id} className="sh-shop-entry"><button type="button" className={`sh-shop-card${selectedShopId === shop.id ? " sh-shop-selected" : ""}`} onClick={() => setSelectedShopId((previous) => previous === shop.id ? "" : shop.id)} aria-expanded={selectedShopId === shop.id} aria-controls={selectedShopId === shop.id ? `sh-shop-detail-${shop.id}` : undefined}><div><span className="sh-shop-kind">{SHOP_LABELS[shop.kind]}</span><strong>{shop.name}</strong><small>{shop.address || "Address not listed"}</small></div><span className="sh-shop-distance">{distance(shop.distanceKm)}</span><span className="sh-shop-coverage">{match?.matchedCount ? `Suggested for ${match.matchedCount} / ${lines.length} ingredients` : "Browse this shop"}</span></button>{selectedShopId === shop.id && selectedShopDetail}</div>; })}</div></>}
       {shopData && <p className="sh-attribution">Listings: <a href={safeUrl(shopData.attributionUrl) || "https://www.openstreetmap.org/copyright"} target="_blank" rel="noreferrer">{shopData.attribution}</a>. {dateLabel(shopData.fetchedAt)}. {shopData.notice}{shopData.truncated ? " Results are limited; try a smaller area." : ""}</p>}
     </aside></div>

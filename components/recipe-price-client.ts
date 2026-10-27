@@ -1,9 +1,10 @@
 import { publicPath } from "../lib/public-path.ts";
 import type { ShoppingLine } from "../lib/shopping.ts";
 import type { ShoppingCostLine } from "../lib/shopping-costs.ts";
-export interface RecipePriceContext { lines: ShoppingLine[]; area: string; country: string; localRecords: boolean; shops: { id: string; name: string }[] }
-export interface RecipePriceResult { rows: ShoppingCostLine[]; checked: number; total: number; checkedAt: string | null; warnings: string[]; error: string }
-export const priceContextKey = (input: RecipePriceContext) => JSON.stringify([input.area, (typeof input.country === "string" ? input.country.trim().toLowerCase() || "australia" : "unknown"), input.localRecords, input.shops.map(shop => [shop.id, shop.name]).sort(), input.lines.map(line => [line.id, line.name, line.amount, line.unit, line.category, line.allergens])]);
+import { mergeProviderStatuses, readProviderStatuses, type ShoppingProviderStatus } from "./shopping-offers.ts";
+export interface RecipePriceContext { lines: ShoppingLine[]; area: string; country: string; localRecords: boolean; shops: { id: string; name: string }[]; location?: { lat: number; lon: number }; radiusKm?: number }
+export interface RecipePriceResult { rows: ShoppingCostLine[]; checked: number; total: number; checkedAt: string | null; warnings: string[]; error: string; providerStatuses?: ShoppingProviderStatus[] }
+export const priceContextKey = (input: RecipePriceContext) => JSON.stringify([input.area, (typeof input.country === "string" ? input.country.trim().toLowerCase() || "australia" : "unknown"), input.localRecords, input.shops.map(shop => [shop.id, shop.name]).sort(), input.lines.map(line => [line.id, line.name, line.amount, line.unit, line.category, line.allergens]), input.location ? [input.location.lat, input.location.lon] : null, input.radiusKm ?? null]);
 const cache = new Map<string, { at: number; result: RecipePriceResult }>();
 const pending = new Map<string, { listeners: Set<(result: RecipePriceResult) => void>; promise: Promise<RecipePriceResult> }>();
 // Retain revisions only for cached or in-flight contexts (at most32+4).
@@ -14,8 +15,8 @@ const device = () => { try { let value = localStorage.getItem("fusion-device") |
 /** At most two small batches run together; identical requests share work for this visit. */
 export async function fetchRecipePrices(input: RecipePriceContext, onProgress: (result: RecipePriceResult) => void, fetcher: typeof fetch = fetch): Promise<RecipePriceResult> {
   const rows = new Map<string, ShoppingCostLine>(), warnings = new Set<string>();
-  let checked = 0, next = 0, checkedAt: string | null = null, error = "";
-  const snapshot = (): RecipePriceResult => ({ rows: input.lines.flatMap(line => rows.has(line.id) ? [rows.get(line.id)!] : []), checked, total: input.lines.length, checkedAt, warnings: [...warnings], error });
+  let checked = 0, next = 0, checkedAt: string | null = null, error = "", providerStatuses: ShoppingProviderStatus[] = [];
+  const snapshot = (): RecipePriceResult => ({ rows: input.lines.flatMap(line => rows.has(line.id) ? [rows.get(line.id)!] : []), checked, total: input.lines.length, checkedAt, warnings: [...warnings], error, providerStatuses });
   const batches = Array.from({ length: Math.ceil(input.lines.length / 6) }, (_, i) => input.lines.slice(i * 6, i * 6 + 6));
   async function work() {
     while (next < batches.length) {
@@ -23,7 +24,7 @@ export async function fetchRecipePrices(input: RecipePriceContext, onProgress: (
       try {
         const response = await fetcher(publicPath("/api/shopping-prices"), { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify({ ...input, lines: batch, device: device() }), signal: AbortSignal.timeout(38_000), cache: "no-store" });
         const payload = await response.json();
-        const data = (payload && typeof payload === "object" ? payload : {}) as { lines?: ShoppingCostLine[]; error?: string; warnings?: unknown; checkedAt?: unknown };
+        const data = (payload && typeof payload === "object" ? payload : {}) as { lines?: ShoppingCostLine[]; error?: string; warnings?: unknown; checkedAt?: unknown; providerStatuses?: unknown };
         if (!response.ok || !Array.isArray(data.lines)) throw new Error(data.error || "Some prices could not be checked. Open the shopping list to retry.");
         for (const line of batch) {
           const row = data.lines.find((row: ShoppingCostLine) => row.id === line.id && row.name === line.name && row.amount === line.amount && row.unit === line.unit && Array.isArray(row.offers));
@@ -31,6 +32,7 @@ export async function fetchRecipePrices(input: RecipePriceContext, onProgress: (
         }
         if (Array.isArray(data.warnings)) data.warnings.filter((value: unknown): value is string => typeof value === "string").forEach((value: string) => warnings.add(value));
         if (typeof data.checkedAt === "string" && Number.isFinite(Date.parse(data.checkedAt))) checkedAt = data.checkedAt;
+        providerStatuses = mergeProviderStatuses(providerStatuses, readProviderStatuses(data.providerStatuses));
       } catch (failure) {
         error = failure instanceof Error ? failure.message : "Some prices are unavailable.";
         for (const line of batch) rows.set(line.id, { ...line, offers: [], chosenOfferId: null, estimatedCents: null, reason: "Price could not be checked. Retry from the shopping list." });
@@ -60,7 +62,10 @@ export function observeRecipePrices(input: RecipePriceContext, listener: (result
   if (pending.size >= 4) { listener({ ...blank(input.lines.length), error: "Other recipe price checks are finishing. Try again shortly." }); return () => {}; }
   const listeners = new Set([listener]);
   const revision = revisions.get(key) ?? 0;
-  const promise = fetchRecipePrices(input, result => listeners.forEach(fn => fn(result))).then(result => {
+  const promise = fetchRecipePrices(input, result => {
+    const reviewed = (revisions.get(key) ?? 0) !== revision ? cache.get(key)?.result : null;
+    listeners.forEach(fn => fn(reviewed || result));
+  }).then(result => {
     if ((revisions.get(key) ?? 0) === revision) rememberRecipePrices(input, result);
     return result;
   }).finally(() => { pending.delete(key); if (!cache.has(key)) revisions.delete(key); });

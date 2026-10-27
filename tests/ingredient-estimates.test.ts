@@ -87,6 +87,12 @@ test("observed compatible unit costs replace assumptions without making the pack
   const shortfallGuide = estimateIngredientCost({ ...rice, amount: 50 });
   assert.equal(resolveIngredientPricing(rice, { ...row, amount: 50, offers: [], chosenOfferId: null, estimatedCents: null, planningEstimate: shortfallGuide }).recipeCents, 100, "a pantry shortfall estimate cannot replace the cost of the full recipe amount");
   assert.equal(resolveIngredientPricing(rice, { ...row, name: "Unrelated ingredient" }).source, "planning-guide");
+  assert.equal(resolveIngredientPricing(rice, { ...row, amount: 400 }).source, "planning-guide", "a larger previous serving quantity cannot be treated as this recipe's shopping shortfall");
+  assert.equal(resolveIngredientPricing(rice, { ...row, amount: 50 }).recipeCents, 80, "a genuine pantry shortfall still provides observed food-unit pricing for the full recipe");
+  for (const invalid of [-1, Infinity, NaN, 1_000_000_001]) {
+    const invalidCost = resolveIngredientPricing(rice, { ...row, estimatedCents: invalid });
+    assert.equal(invalidCost.purchaseSource, "planning-guide"); assert.equal(invalidCost.purchaseCents, 250);
+  }
 });
 
 test("API exposes fallback allowances separately and never counts invented live prices", () => {

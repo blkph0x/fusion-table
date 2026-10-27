@@ -12,7 +12,7 @@ export function plainProductFits(name: string, product: string): boolean {
   if (nonFood.test(seen)) return false;
   if (/^(?:fresh )?mushrooms?$/.test(wanted)) return /\bmushrooms?\b/.test(seen) && !prepared.test(seen) && !/\b(?:portobello|shiitake|oyster|enoki|porcini|dried|mix|mixed)\b/.test(seen);
   if (wanted === "brown onion" || wanted === "brown onions") return /\bbrown\b/.test(seen) && /\bonions?\b/.test(seen) && !prepared.test(seen) && !/\b(?:red|white|shallot|peeled|dried|crisp)\b/.test(seen);
-  if (wanted === "chicken breast" || wanted === "chicken breast fillets") return /\bchicken breast\b/.test(seen) && !prepared.test(seen) && !/\b(?:mince|schnitzel|crumb|crumbed|breaded|nugget|nuggets|tender|tenders|kebab|kebabs|skin on|bone in|honey|teriyaki|garlic|herb|herbs|lemon|chilli|barbecue|bbq|stuffed|ready)\b/.test(seen);
+  if (wanted === "chicken breast" || wanted === "chicken breast fillets") return /\bchicken breast\b/.test(seen) && !prepared.test(seen) && !/\b(?:mince|diced|dice|strips|chunks|sliced|schnitzel|crumb|crumbed|breaded|nugget|nuggets|tender|tenders|kebab|kebabs|skin on|bone in|honey|teriyaki|garlic|herb|herbs|lemon|chilli|barbecue|bbq|stuffed|ready)\b/.test(seen);
   if (wanted === "carrot" || wanted === "carrots") return /\bcarrots?\b/.test(seen) && !prepared.test(seen) && !/\b(?:shred|shredded|sticks|baby|rainbow|mix|mixed|sliced|dried)\b/.test(seen);
   if (wanted === "plain flour") return /\bplain flour\b/.test(seen) && !/\b(?:self|raising|bread|pizza|wholemeal|gluten|free|rice|coconut|almond|chickpea|corn|oat|spelt|rye)\b/.test(seen);
   if (wanted === "soy sauce") return /\bsoy sauce\b/.test(seen) && !/\b(?:light|dark|reduced|less|salt|sodium|sweet|kecap|ketjap|tamari|gluten|free|garlic|ginger|chilli|teriyaki|dressing|marinade)\b/.test(seen);
@@ -31,6 +31,9 @@ function uncertainRate(offer: ShoppingOffer): boolean {
   // per kg. Without retained price-basis metadata these are unverified rates.
   return offer.scope === "chain-online" && /^(?:per\s+|\/)\d/.test(selling) && !/^(?:per\s+|\/)(?:1\s*(?:kg|l)|1000\s*(?:g|ml))$/.test(selling);
 }
+function usableAvailability(offer: ShoppingOffer): boolean {
+  return offer.stock === "IN_STOCK" || offer.stock === "UNKNOWN" && ["aldi-online-catalogue", "iga-online-catalogue", "local-shop-website"].includes(offer.source);
+}
 export function suggestAutomaticPrices(rows: readonly ShoppingCostLine[]): ShoppingCostLine[] {
   return rows.map(original => {
     const offers = original.offers.map(offer => {
@@ -42,11 +45,11 @@ export function suggestAutomaticPrices(rows: readonly ShoppingCostLine[]): Shopp
       // The catalogue matcher can already mark a lone wording as eligible.
       // Apply the stricter form rule to those rows as well as brand ties.
       if (hasPlainRule(original.name) && !plainProductFits(original.name, offer.productName)) return { ...offer, cost, eligible: false, reviewReason: "This product differs from the requested plain ingredient or food form. Review it before choosing; it is excluded from the automatic estimate." };
-      const suitable = plainProductFits(original.name, offer.productName) && offer.reviewable && offer.freshness === "current" && offer.stock === "IN_STOCK" && cost.lineCents !== null && Number.isSafeInteger(cost.lineCents) && cost.lineCents > 0;
+      const suitable = plainProductFits(original.name, offer.productName) && offer.reviewable && offer.freshness === "current" && usableAvailability(offer) && cost.lineCents !== null && Number.isSafeInteger(cost.lineCents) && cost.lineCents > 0;
       return suitable ? { ...offer, cost, eligible: true, reviewReason: "Suggested plain product for this ingredient and food form. Review the brand, packet and dietary labels before buying." } : { ...offer, cost };
     });
-    const previous = offers.find(offer => offer.id === original.chosenOfferId && offer.eligible && offer.cost.lineCents !== null);
-    const suggested = previous || offers.filter(offer => offer.eligible && offer.freshness === "current" && offer.stock === "IN_STOCK" && offer.cost.lineCents !== null).sort((a,b) => a.cost.lineCents! - b.cost.lineCents! || a.id.localeCompare(b.id))[0];
+    const previous = offers.find(offer => offer.id === original.chosenOfferId && offer.eligible && offer.freshness === "current" && usableAvailability(offer) && Number.isSafeInteger(offer.cost.lineCents) && offer.cost.lineCents! > 0);
+    const suggested = previous || offers.filter(offer => offer.eligible && offer.freshness === "current" && usableAvailability(offer) && offer.cost.lineCents !== null).sort((a,b) => a.cost.lineCents! - b.cost.lineCents! || a.id.localeCompare(b.id))[0];
     return { ...original, offers, chosenOfferId: suggested?.id || null, estimatedCents: suggested?.cost.lineCents ?? null, reason: suggested?.match === "review" ? "Suggested product for costing; review the packet before buying." : suggested ? original.reason : "No verified quantity price yet. Review a product or record a local price." };
   });
 }

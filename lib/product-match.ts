@@ -36,6 +36,9 @@ export interface ProductMatch {
   selected: boolean;
   /** May be chosen after review; requested explicit dietary claims must still be established. */
   reviewable?: boolean;
+  /** Food wording proof only. Does not establish availability. */
+  nameMatched?: boolean;
+  nameReviewable?: boolean;
   preparedForm?: "cooked-rice";
   reason: string;
 }
@@ -262,6 +265,59 @@ function cutsConflict(left: Set<string>, right: Set<string>): boolean {
   return false;
 }
 
+type MeatPreparation = "cooked" | "smoked" | "breaded" | "marinated" | "deli" | "cured";
+const MEAT_WORDS = /\b(?:chicken|turkey|beef|lamb|pork|duck|goat|venison|kangaroo|veal|fish|salmon|tuna|trout|cod|barramundi|hake|basa|prawn|shrimp|crab|lobster|squid|calamari|octopus|scallop|mussel|oyster|ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni)\b/;
+type IngredientFoodForm = "stock" | "gravy" | "paste" | "sauce" | "juice" | "powder";
+
+function ingredientFoodForms(canonical: string): Set<IngredientFoodForm> {
+  const forms = new Set<IngredientFoodForm>();
+  if (/\b(?:stock|broth|bouillon)\b/.test(canonical)) forms.add("stock");
+  // Gravy beef is an Australian raw cut, unlike a beef gravy cooking product.
+  if (/\bgravy\b/.test(canonical) && !/\bgravy beef\b/.test(canonical)) forms.add("gravy");
+  for (const form of ["paste", "sauce", "juice", "powder"] as const) if (new RegExp(`\\b${form}(?:ed)?\\b`).test(canonical)) forms.add(form);
+  return forms;
+}
+
+function ingredientFoodFormConflict(wanted: string, seen: string): boolean {
+  const requested = ingredientFoodForms(wanted), offered = ingredientFoodForms(seen);
+  if ([...requested].some(form => !offered.has(form)) || [...offered].some(form => !requested.has(form))) return true;
+  // Bones sold for making stock are raw ingredients, not a ready stock/broth.
+  const rawStockMeat = /\b(?:stock bone|soup bone|raw bone|(?:beef|chicken|pork) bone(?! broth\b)|chicken frame|chicken carcass|for (?:stock|broth|bouillon))\b/;
+  return requested.has("stock") && rawStockMeat.test(seen) && !rawStockMeat.test(wanted);
+}
+
+function meatPreparations(canonical: string, product?: CatalogueProduct): Set<MeatPreparation> {
+  const forms = new Set<MeatPreparation>();
+  if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
+  if (/\bsmoked\b/.test(canonical)) forms.add("smoked");
+  if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|kiev|cordon bleu)\b/.test(canonical)) forms.add("breaded");
+  if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
+  if (/\b(?:deli|sandwich|luncheon|cold cut)\b/.test(canonical)) forms.add("deli");
+  if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned)\b/.test(canonical)) forms.add("cured");
+  // Thinly sliced poultry sold as a product is ambiguous with ready-to-eat deli
+  // chicken. It is not proof of a raw breast ingredient. A query asking only for
+  // slicing does not request a deli product; explicit deli wording is required.
+  if (product && /\b(?:chicken|turkey)\b/.test(canonical) && /\b(?:thinly sliced|shaved)\b/.test(canonical)) forms.add("deli");
+  if (product?.categories?.some(category => /^(?:deli meat|delicatessen meat|cold cut|smallgoods|sliced meat|shaved meat)s?$/.test(canonicalizeProductText(category)))) forms.add("deli");
+  return forms;
+}
+
+function meatPreparationConflict(wanted: string, seen: string, product: CatalogueProduct): boolean {
+  if (!MEAT_WORDS.test(wanted) && !MEAT_WORDS.test(seen)) return false;
+  // A protein word in a matched stock/sauce/paste describes its flavour or base,
+  // not a request for raw meat. Roasted chicken stock is still chicken stock.
+  const cookingForms = ingredientFoodForms(wanted);
+  if (cookingForms.size && [...cookingForms].every(form => ingredientFoodForms(seen).has(form))) return false;
+  const requested = meatPreparations(wanted), offered = meatPreparations(seen, product);
+  // Smoking/curing and deli requests already carry the preparation implied by
+  // those names. Extra breading/marinade still requires an explicit request.
+  if (["smoked", "cured", "deli"].some(form => requested.has(form as MeatPreparation) && offered.has(form as MeatPreparation))) {
+    requested.delete("cooked"); offered.delete("cooked");
+    if (!requested.has("deli")) offered.delete("deli");
+  }
+  return [...requested].some(form => !offered.has(form)) || [...offered].some(form => !requested.has(form));
+}
+
 export function matchProducts(query: string, products: readonly CatalogueProduct[], limit = 6): ProductMatch[] {
   const wanted = canonicalizeProductText(query);
   if (wanted.length < 2) return [];
@@ -276,6 +332,8 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
   for (const product of products) {
     if (!product.name.trim() || product.name.length > 500 || isNonFoodCatalogueProduct(product)) continue;
     const seen = canonicalizeProductText(product.name);
+    if (ingredientFoodFormConflict(wanted, seen)) continue;
+    if (meatPreparationConflict(wanted, seen, product)) continue;
     if (/\bsausage roll\b/.test(seen) && !/\bsausage roll\b/.test(wanted)) continue;
     if (/\bsauce\b/.test(seen) && !/\bsauce\b/.test(wanted)) continue;
     const seenTokens = tokensOf(seen);
@@ -309,12 +367,14 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     const priced = product.priceCents != null && product.priceCents > 0;
     const claims = dietaryClaimsOf([product.name, ...(product.dietaryClaims || [])]);
     const missingClaims = [...requiredClaims].filter((claim) => !claims.has(claim) && !(claim === "vegetarian" && claims.has("vegan")));
-    let selected = !premium && !boneMismatch && stock === "IN_STOCK" && priced && overlap > 0;
+    let selected = !premium && !boneMismatch && priced && overlap > 0;
     if (missingClaims.length) selected = false;
     if (wantedCuts.size > 0 && !sharedCut) selected = false;
     if (wantedProteins.size > 0 && seenProteins.size > 0 && ![...wantedProteins].every((protein) => seenProteins.has(protein))) selected = false;
     if (!(overlap === wantedTokens.length || sharedCut || score >= 40)) selected = false;
 
+    const nameMatched = selected;
+    selected &&= stock === "IN_STOCK";
     const reason = premium
       ? `${seenBreed === "wagyu" ? "Wagyu" : "Angus"} is another option. It was not selected for an ordinary cut.`
       : boneMismatch
@@ -339,12 +399,19 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
       url: product.url ?? null,
       score,
       selected,
+      nameMatched,
+      nameReviewable: priced && missingClaims.length === 0 && !boneMismatch && !premium && overlap > 0,
       reviewable: stock === "IN_STOCK" && priced && missingClaims.length === 0 && !boneMismatch && overlap > 0,
       ...(product.preparedForm ? { preparedForm: product.preparedForm } : {}),
       reason,
     });
   }
 
+  const wordings = ranked.filter(match => match.nameMatched && match.stock !== "OUT_OF_STOCK").sort((a,b) => b.score - a.score);
+  const wordingTop = wordings[0];
+  const wordingTie = wordingTop && wordings.some(match => match !== wordingTop && match.score === wordingTop.score);
+  const wordingCuts = new Set(wordings.map(match => [...familiesOf(canonicalizeProductText(match.name))][0] ?? ""));
+  for (const match of ranked) match.nameMatched = Boolean(match === wordingTop && !wordingTie && !(wantedCuts.size === 0 && wordingCuts.size > 1));
   ranked.sort((a, b) => Number(b.selected) - Number(a.selected) || b.score - a.score || a.name.localeCompare(b.name));
   const selectable = ranked.filter((match) => match.selected);
   const top = selectable[0];
