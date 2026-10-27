@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "mode": "full",
+  "status": "failed",
+  "startedAt": "2026-10-27T04:22:09.438Z",
+  "finishedAt": "2026-10-27T04:22:17.691Z",
+  "node": "v22.13.0",
+  "catalogue": {
+    "regions": 76,
+    "sides": 90,
+    "defaultMainMethods": 266,
+    "supportedCutMethods": 648,
+    "diets": 5,
+    "classics": 34,
+    "classicRegions": 25
+  },
+  "source": {
+    "sha256": "594c87090d6920bb7e8d2c11bf1237852cd1456883c09ba279b8753c09437cd9",
+    "files": 64
+  },
+  "planned": {
+    "classics": 8500
+  },
+  "plannedTotal": 8500,
+  "checked": 8500,
+  "failedCases": 50,
+  "violations": 50,
+  "elapsedSeconds": 8.3,
+  "phases": [
+    {
+      "id": "classics",
+      "planned": 8500,
+      "scheduled": 8500,
+      "checked": 8500,
+      "failedCases": 50,
+      "coverage": "Every classic × classic regional profile × all five diets, authored and seed7; heat and servings rotate."
+    }
+  ],
+  "checks": [
+    "selected identity/settings",
+    "positive finite quantities and total time",
+    "unique ingredient IDs",
+    "ingredient name, ID or authored whole-phrase alias occurs in method",
+    "exact allergen-tag union and diet exclusions",
+    "one explicit regional finish; complete-meal finish after main",
+    "seeded preparation before delicate finish",
+    "animal endpoint/source/thermometer",
+    "usable method notes/equipment",
+    "chosen cut retained"
+  ],
+  "issueCounts": {
+    "UNUSED_INGREDIENT": 50
+  },
+  "examples": [
+    {
+      "phase": "classics",
+      "ordinal": 6253,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "king-oyster: King oyster mushrooms",
+      "input": {
+        "classicId": "charred-octopus",
+        "regionId": "japanese",
+        "diet": "vegetarian",
+        "servings": 6,
+        "spiceHeat": "mild",
+        "seed": 7
+      }
+    },
+    {
+      "phase": "classics",
+      "ordinal": 6255,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "king-oyster: King oyster mushrooms",
+      "input": {
+        "classicId": "charred-octopus",
+        "regionId": "japanese",
+        "diet": "vegan",
+        "servings": 1,
+        "spiceHeat": "medium",
+        "seed": 7
+      }
+    },
+    {
+      "phase": "classics",
+      "ordinal": 6263,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "king-oyster: King oyster mushrooms",
+      "input": {
+        "classicId": "charred-octopus",
+        "regionId": "korean",
+        "diet": "vegetarian",
+        "servings": 6,
+        "spiceHeat": "medium",
+        "seed": 7
+      }
+    },
+    {
+      "phase": "classics",
+      "ordinal": 6265,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "king-oyster: King oyster mushrooms",
+      "input": {
+        "classicId": "charred-octopus",
+        "regionId": "korean",
+        "diet": "vegan",
+        "servings": 1,
+        "spiceHeat": "hot",
+        "seed": 7
+      }
+    }
+  ],
+  "limits": [
+    "This checks authored content and recorded ingredient tags, not actual cooking, taste, packet contents or cross-contact.",
+    "All authored balanced combinations are exhaustive only after a completed full authored phase.",
+    "Seed/heat/serving/clean and cut/diet variants use the stated rotating cases, not every possible input Cartesian product.",
+    "Source hash covers local lib/*.ts at start and end; changing source invalidates the run."
+  ]
+}

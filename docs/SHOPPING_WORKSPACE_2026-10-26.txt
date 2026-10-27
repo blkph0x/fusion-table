@@ -1,0 +1,81 @@
+FUSION TABLE — LOCAL SHOPPING WORKSPACE
+26 October 2026
+
+The Local shops view is now one shopping workspace. It uses the selected suburb
+and radius, a recipe/week/saved/custom ingredient list, nearby food-shop listings,
+published catalogue offers and shop-specific recorded prices.
+
+How to use it
+
+1. Open Local shops, or Make shopping list on a recipe/week.
+2. Check the area at the top. Nearby shops load automatically; changing the radius
+   starts a new search after a short pause.
+3. Choose the recipe, week or saved list, or add your own ingredients and amounts.
+4. Choose Compare prices. Results appear in batches for the complete list.
+5. Review suggested products, choose another brand/pack, or exclude a line. The
+   estimate counts the packs needed to buy the requested amount, rather than
+   pretending one pack always covers a recipe.
+6. Select a nearby shop to see its details directly below that card. Use the
+   retailer product links, directions, phone or website. Record an observed price
+   with its pack size to add a local comparison.
+
+Phones have Prices / Nearby shops controls so a long weekly list does not bury
+store search. The page fits a 320-pixel viewport. Record forms load their shop
+options only when opened, avoiding thousands of hidden controls on weekly lists.
+
+Price coverage and evidence
+
+- Woolworths public search JSON and Coles public search-page product data are
+  read without accounts, cookies, CAPTCHA workarounds or paid API calls.
+- Their online guide prices are not assigned to a nearby branch as confirmed
+  stock or shelf prices. Woolworths' default fulfilment-store identifier is not
+  treated as the user's local store.
+- A Coles search returned real product/pack prices during testing; a later search
+  returned an interruption page. That case is handled as unavailable, retains
+  other results, provides a direct retailer link and triggers a short backoff.
+  Retailer failure never becomes a free item or a fabricated quote.
+- Both chain cards remain visible after comparison, including unknown cost and
+  coverage when a source cannot be read. Local recorded prices are separate.
+- Local records are tied to the selected area and an exact shop identifier when
+  one is available. Same-name branches are not silently merged. Generic GPS
+  locations require a suburb/postcode before local records can be used or saved.
+- Catalogue prices cover Australia. Known overseas locations keep store browsing
+  and links, while Australian prices/records are not borrowed for their postcode.
+
+Calculation safeguards
+
+- Exact metric conversions, count packs, multipacks and stated per-unit rates
+  are supported. Approximate/drained/cooked conversions and weight-versus-volume
+  assumptions remain unknown. Old recorded prices without pack sizes stay visible
+  without being treated as a complete recipe quantity.
+- Safe plain-rice and firm-tofu brand ties can produce suggested pack estimates;
+  requested words and food form must match. Prepared rice/flavoured tofu and
+  unknown dietary claims cannot become automatic substitutes. Meat/fish cut ties
+  remain explicit review choices.
+- Freshness, expiry, unknown stock, quantities and partial basket coverage are
+  shown. A smaller subtotal for fewer ingredients is not called a cheaper full
+  basket. User choices and exclusions survive a price refresh in the same context.
+- Custom lists and bought ticks persist on this device. Shopping ticks do not
+  consume pantry stock or rewrite the underlying recipe.
+
+Validation
+
+318 final regression tests passed with no failures. TypeScript passed; lint returned
+zero errors and the eight existing image/unused-variable advisories. Browser
+checks, production-build results and deployment identity are recorded under
+docs/audit-evidence-2026-10-26 and in the final shopping deployment record.
+
+Real price examples are dated observations, not fixed application prices. One
+750 g firm-tofu + 450 g jasmine-rice check suggested a full-pack subtotal of
+A$8.15; the source prices can change. Synthetic local price-entry checks used an
+isolated local development ledger and are excluded from deployment data.
+
+Official pricing context:
+https://www.woolworths.com.au/shop/services/terms-and-conditions
+Official product searches:
+https://www.woolworths.com.au/shop/search/products
+https://www.coles.com.au/search
+
+ALDI/IGA and independent food shops retain official product/store links and
+observed-price entry. This release does not claim a universal local inventory or
+price feed for shops that do not provide one.

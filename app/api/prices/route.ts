@@ -1,4 +1,5 @@
 import { CATALOGUE_LABEL, cleanSearchQuery, lookupQueries, lookupQuery } from "@/lib/catalogue";
+import { ReportBodyError, readReportJson } from "@/lib/ledger";
 
 export const dynamic = "force-dynamic";
 
@@ -21,8 +22,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
+    body = await readReportJson(request);
+  } catch (error) {
+    if (error instanceof ReportBodyError) return bad(error.message, error.status);
     return bad("Send the item names as JSON.");
   }
   const queries = body && typeof body === "object" && !Array.isArray(body) ? (body as { queries?: unknown }).queries : undefined;

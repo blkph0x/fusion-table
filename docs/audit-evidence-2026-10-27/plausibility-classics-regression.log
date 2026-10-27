@@ -1,0 +1,273 @@
+(node:32948) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:55400) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: deterministic barbecue and smoking expansion
+    # Subtest: retains every original selection and adds the promised distinct classics and profiles
+    ok 1 - retains every original selection and adds the promised distinct classics and profiles
+      ---
+      duration_ms: 2.809
+      ...
+    # Subtest: generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+    ok 2 - generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+      ---
+      duration_ms: 2751.3878
+      ...
+    # Subtest: composes recipes without network access or randomness
+    ok 3 - composes recipes without network access or randomness
+      ---
+      duration_ms: 14.304
+      ...
+    # Subtest: selects appropriate animal cuts and already-cooked products for each technique
+    ok 4 - selects appropriate animal cuts and already-cooked products for each technique
+      ---
+      duration_ms: 5.4163
+      ...
+    # Subtest: uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+    ok 5 - uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+      ---
+      duration_ms: 11.6643
+      ...
+    # Subtest: keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+    ok 6 - keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+      ---
+      duration_ms: 1.3084
+      ...
+    # Subtest: keeps gluten-free and plant alternatives distinct in pantry matching
+    ok 7 - keeps gluten-free and plant alternatives distinct in pantry matching
+      ---
+      duration_ms: 1.7291
+      ...
+    # Subtest: gives vegetarian and vegan adaptations their own preparation and cooking instructions
+    ok 8 - gives vegetarian and vegan adaptations their own preparation and cooking instructions
+      ---
+      duration_ms: 322.6075
+      ...
+    # Subtest: scales BBQ food quantities once without weakening the safety guidance
+    ok 9 - scales BBQ food quantities once without weakening the safety guidance
+      ---
+      duration_ms: 42.3062
+      ...
+    # Subtest: uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+    ok 10 - uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+      ---
+      duration_ms: 16.146
+      ...
+    # Subtest: explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+    ok 11 - explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+      ---
+      duration_ms: 2.6538
+      ...
+    # Subtest: routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+    ok 12 - routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+      ---
+      duration_ms: 3.4713
+      ...
+    # Subtest: leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+    ok 13 - leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+      ---
+      duration_ms: 3.067
+      ...
+    1..13
+ok 1 - deterministic barbecue and smoking expansion
+  ---
+  duration_ms: 3180.8806
+  type: 'suite'
+  ...
+# (node:62720) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classics that require an animal-main thermometer endpoint include the thermometer
+ok 2 - classics that require an animal-main thermometer endpoint include the thermometer
+  ---
+  duration_ms: 380.8638
+  ...
+# Subtest: every classic, regional profile and diet routes its listed regional ingredients into the method
+ok 3 - every classic, regional profile and diet routes its listed regional ingredients into the method
+  ---
+  duration_ms: 1273.5293
+  ...
+# Subtest: Japanese miso is a deliberate off-heat finish, with ginger cooked first
+ok 4 - Japanese miso is a deliberate off-heat finish, with ginger cooked first
+  ---
+  duration_ms: 3.6259
+  ...
+# Subtest: risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+ok 5 - risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+  ---
+  duration_ms: 0.7194
+  ...
+# Subtest: delicate spice and woody herbs have explicit finishing or removal instructions
+ok 6 - delicate spice and woody herbs have explicit finishing or removal instructions
+  ---
+  duration_ms: 4.9513
+  ...
+# Subtest: crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+ok 7 - crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+  ---
+  duration_ms: 0.8528
+  ...
+# Subtest: classic plates retain one authored starch rather than gaining a second full grain or bread
+ok 8 - classic plates retain one authored starch rather than gaining a second full grain or bread
+  ---
+  duration_ms: 370.4564
+  ...
+# Subtest: regional sauce amounts scale once and split base oil and stock without double allocation
+ok 9 - regional sauce amounts scale once and split base oil and stock without double allocation
+  ---
+  duration_ms: 1.379
+  ...
+# Subtest: every classic marks one authored finishing boundary before seeded extras are assembled
+ok 10 - every classic marks one authored finishing boundary before seeded extras are assembled
+  ---
+  duration_ms: 207.071
+  ...
+# Subtest: pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+ok 11 - pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+  ---
+  duration_ms: 7.3481
+  ...
+# Subtest: seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+ok 12 - seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+  ---
+  duration_ms: 82.8889
+  ...
+# Subtest: cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+ok 13 - cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+  ---
+  duration_ms: 1.6874
+  ...
+# (node:36924) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classic preparation and final assembly
+    # Subtest: serves hot stuffed shells with slaw and one starch
+    ok 1 - serves hot stuffed shells with slaw and one starch
+      ---
+      duration_ms: 54.3492
+      ...
+    # Subtest: does not add a second cooking step when an existing rice is only renamed
+    ok 2 - does not add a second cooking step when an existing rice is only renamed
+      ---
+      duration_ms: 2.5971
+      ...
+    # Subtest: keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+    ok 3 - keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+      ---
+      duration_ms: 17.9832
+      ...
+    1..3
+ok 14 - classic preparation and final assembly
+  ---
+  duration_ms: 77.0622
+  type: 'suite'
+  ...
+# (node:27436) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+ok 15 - stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+  ---
+  duration_ms: 792.5158
+  ...
+# Subtest: cottage-pie estimate covers its serial filling, oven and resting stages
+ok 16 - cottage-pie estimate covers its serial filling, oven and resting stages
+  ---
+  duration_ms: 35.8336
+  ...
+# Subtest: BBQ cooking estimates include required rest after the timed heat stages
+ok 17 - BBQ cooking estimates include required rest after the timed heat stages
+  ---
+  duration_ms: 1.9451
+  ...
+# Subtest: burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+ok 18 - burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+  ---
+  duration_ms: 404.6466
+  ...
+# Subtest: seeded fast mains prepare additions before cooking and retain final fresh service
+ok 19 - seeded fast mains prepare additions before cooking and retain final fresh service
+  ---
+  duration_ms: 93.8482
+  ...
+# Subtest: slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+ok 20 - slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+  ---
+  duration_ms: 11.4971
+  ...
+# (node:47892) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 72.5805
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 83.0246
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 2749.8172
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 142.7133
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 27.2883
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 87.6591
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 1.9893
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 0.8893
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 52.7486
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 4.8725
+      ...
+    # Subtest: uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+    ok 11 - uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+      ---
+      duration_ms: 15.797
+      ...
+    # Subtest: keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+    ok 12 - keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+      ---
+      duration_ms: 39.6777
+      ...
+    1..12
+ok 21 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 3281.158
+  type: 'suite'
+  ...
+1..21
+# tests 46
+# suites 3
+# pass 46
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3773.2361

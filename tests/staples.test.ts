@@ -17,14 +17,14 @@ describe("regional staples", () => {
     }
   });
 
-  it("specialises rice instead of adding a second rice, and keeps one tortilla line on tacos", () => {
+  it("specialises existing rice while keeping complete classic plates to their chosen starch", () => {
     const grainRice = (id: string) => /rice/i.test(id) && !/vinegar|miso|flour|noodle|vermicelli|paper/i.test(id);
     const pasta = generateRecipe({ classicId: "pasta", regionId: "japanese", servings: 4 });
-    assert.ok(pasta.ingredients.some((item) => item.name.toLowerCase().includes("short-grain")));
-    assert.equal(pasta.ingredients.filter((item) => grainRice(item.id)).length, 1);
+    assert.ok(pasta.ingredients.some((item) => item.id === "pasta"));
+    assert.equal(pasta.ingredients.filter((item) => grainRice(item.id)).length, 0);
     const tacos = generateRecipe({ classicId: "tacos", regionId: "mexican", servings: 4 });
     assert.equal(tacos.ingredients.filter((item) => item.id === "corn-tortillas").length, 1);
-    assert.ok(tacos.ingredients.some((item) => item.id === "pinto-beans"));
+    assert.ok(!tacos.ingredients.some((item) => item.id === "pinto-beans" || item.id === "mexican-rice"));
     const meal = generateMeal({ mainId: "salmon", methodId: "grilled", regionId: "japanese", sideId: "rice-greens", servings: 4 });
     const rice = meal.ingredients.filter((item) => grainRice(item.id));
     assert.equal(rice.length, 1);
@@ -40,7 +40,7 @@ describe("regional staples", () => {
   });
 
   it("names 100% teff injera without a wheat tag, and keeps gluten-free Indian plates wheat-free", () => {
-    const injeraMeal = generateMeal({ mainId: "lentils", methodId: "braised", regionId: "ethiopian", sideId: "lentil-salad", servings: 4, diet: "vegan" });
+    const injeraMeal = generateMeal({ mainId: "lentils", methodId: "braised", regionId: "ethiopian", sideId: "injera-salad", servings: 4, diet: "vegan" });
     const injera = injeraMeal.ingredients.find((item) => item.id === "injera");
     assert.ok(injera);
     assert.match(injera.name, /100% teff/);
@@ -49,7 +49,7 @@ describe("regional staples", () => {
     const indian = generateMeal({ mainId: "chicken", methodId: "curry", regionId: "indian", sideId: "rice-greens", servings: 4, diet: "gluten-free" });
     assert.ok(!indian.allergens.includes("wheat"));
     assert.ok(indian.ingredients.some((item) => /basmati/i.test(item.name)));
-    assert.ok(indian.ingredients.some((item) => /gluten-free plain flatbread/i.test(item.name)));
+    assert.ok(!indian.ingredients.some((item) => /flatbread|chapati/i.test(item.name)));
   });
 
   it("maps plancha almonds to tree-nut and keeps every curated plate compatible", () => {

@@ -3,7 +3,7 @@
  *
  * Unseeded plates stay on the authored RegionTaste lists (byte-stable).
  * With a seed, aromatics, simmer spices, herbs, acids and finishes are sampled
- * from the staple-family pool plus a small authored extra list. Signature heat
+ * from the selected region's authored profile plus an explicit extra list. Signature heat
  * (and side/hot heat) stay fixed so the plate remains region-true.
  *
  * Soften ids (already heavy in the week) get a lower pick weight; they are not
@@ -40,7 +40,7 @@ type SlotPools = {
   acids: string[];
 };
 
-/** Culinary-true extras beyond sibling plates, keyed by staple family. */
+/** Explicit exploration extras, keyed by staple family; shared staples do not imply shared flavours. */
 const FAMILY_EXTRA: Readonly<Record<string, Partial<SlotPools>>> = {
   japanese: {
     aromatics: ["ginger", "shallot"],
@@ -240,27 +240,14 @@ function allowForRegion(regionId: string, id: string): boolean {
 }
 
 function familyPools(region: RegionTaste): SlotPools {
-  const siblings = REGION_TASTES.filter((entry) => entry.staple === region.staple);
-  const aromatics: string[] = [];
-  const simmer: string[] = [];
-  const herbs: string[] = [];
-  const finish: string[] = [];
-  const acids: string[] = [];
-  for (const sibling of siblings) {
-    aromatics.push(...sibling.aromatics);
-    simmer.push(...(sibling.simmer ?? []));
-    herbs.push(...(sibling.herbs ?? []));
-    finish.push(...(sibling.finish ?? []));
-    acids.push(sibling.acid);
-  }
   const extra = FAMILY_EXTRA[region.staple] ?? {};
   const keep = (ids: readonly string[]) => unique(ids).filter((id) => allowForRegion(region.id, id));
   return {
-    aromatics: keep([...aromatics, ...(extra.aromatics ?? [])]),
-    simmer: keep([...simmer, ...(extra.simmer ?? [])]),
-    herbs: keep([...herbs, ...(extra.herbs ?? [])]),
-    finish: keep([...finish, ...(extra.finish ?? [])]),
-    acids: keep([...acids, ...(extra.acids ?? [])]),
+    aromatics: keep([...region.aromatics, ...(extra.aromatics ?? [])]),
+    simmer: keep([...(region.simmer ?? []), ...(extra.simmer ?? [])]),
+    herbs: keep([...(region.herbs ?? []), ...(extra.herbs ?? [])]),
+    finish: keep([...(region.finish ?? []), ...(extra.finish ?? [])]),
+    acids: keep([region.acid, ...(extra.acids ?? [])]),
   };
 }
 
@@ -431,7 +418,7 @@ export function exploreRegionProfile(
   }
 }
 
-/** Staple-family pantry size available for exploration (tests / reports). */
+/** Selected profile and explicit extras available for exploration (tests / reports). */
 export function explorePoolSize(regionId: string): number {
   const region = REGION_BY_ID.get(regionId);
   if (!region) return 0;

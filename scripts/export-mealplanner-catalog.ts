@@ -49,7 +49,7 @@ function pushTemplate(recipe: Recipe, variantId: string, kind: "classic" | "meal
     cookMinutes: recipe.cookMinutes,
     steps: recipe.steps.map((step, index) => `${index + 1}. ${step.title}. ${step.detail}`),
     safetyNote: recipe.safetyNote ?? "",
-    notes: recipe.dietaryNotes,
+    notes: [...new Set([...recipe.dietaryNotes, ...(recipe.methodNotes ?? []), `Equipment: ${recipe.equipment.join("; ")}.`])],
     ingredients: recipe.ingredients.map((item) => ({
       id: item.id,
       name: item.name,
@@ -97,6 +97,7 @@ for (const variant of variants) {
 
 const catalog = {
   source: "fusion-table",
+  contentVersion: "20261027-plausibility-quality",
   heat: "medium",
   yieldServings: 4,
   notice: "Template-generated, not kitchen-tested. Not a live model. No shelf prices. Regional staples are included. Check the packet.",

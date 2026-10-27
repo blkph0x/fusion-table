@@ -1,0 +1,144 @@
+{
+  "totals": {
+    "tests": 135,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "au.mealplanner.domain.AcceptanceExtrasTest",
+      "tests": "21",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.BudgetAndUnitsTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.CatalogueMatchTest",
+      "tests": "12",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.CookingDisplayTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.ExclusionEngineTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.FusionSatTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.FusionTablePlanTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.IllawarraAndFusionTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.LockedFusionSnapshotTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.MealVarietyTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.NativeBaseCookingTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.NativeGeneratorCookingTest",
+      "tests": "13",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.NativePlausibilityTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.NativeSideCookingTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.PackCalculatorTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.PantryAndScheduleTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.PlateStudioTest",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.SideMealsTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "au.mealplanner.domain.StreamingCatalogueTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "sourceSha256": "87713507f7f7a8cc75bb03800e0d1dfc4aac3e1af303e3a0f146478ae63738f0"
+}

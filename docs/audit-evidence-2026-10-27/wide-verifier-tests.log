@@ -1,0 +1,44 @@
+(node:62480) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:65292) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opt-in audit plans the complete authored matrix without generating it during normal tests
+ok 1 - opt-in audit plans the complete authored matrix without generating it during normal tests
+  ---
+  duration_ms: 5.5887
+  ...
+# Subtest: every region/main-method receives all five seeded heat/serving presets, rotating every side
+ok 2 - every region/main-method receives all five seeded heat/serving presets, rotating every side
+  ---
+  duration_ms: 125.0391
+  ...
+# Subtest: audit detects substantive content and quantity failures with small real fixtures
+ok 3 - audit detects substantive content and quantity failures with small real fixtures
+  ---
+  duration_ms: 11.3302
+  ...
+# Subtest: smoke indices are bounded, unique and include the edges of each phase
+ok 4 - smoke indices are bounded, unique and include the edges of each phase
+  ---
+  duration_ms: 0.2437
+  ...
+# Subtest: audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+ok 5 - audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+  ---
+  duration_ms: 25.461
+  ...
+# Subtest: classic ingredient references require the verified authored cooking phase
+ok 6 - classic ingredient references require the verified authored cooking phase
+  ---
+  duration_ms: 39.613
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1033.6468

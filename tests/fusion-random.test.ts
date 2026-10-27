@@ -65,20 +65,17 @@ describe("seeded fusion plates", () => {
       const extra = added(meal).map((item) => item.id).join(",");
       const text = meal.steps.map((step) => step.detail).join(" ");
       for (const item of added(meal)) assert.ok(text.includes(item.name), item.name);
-      if (/cold|chopped salad/.test(meal.title)) {
-        assert.match(text, /not a raw dish/);
-        assert.match(text, /Do not serve raw poultry/);
-        assert.match(text, /until cold/);
-      }
-      if (meal.title.includes("cold stir-fry")) assert.match(text, /shape of a stir-fry/);
-      if (meal.title.includes("hot stir-fry")) assert.match(text, /wide pan/);
-      if (added(meal).some((item) => item.id === "sat-fish")) assert.match(text, /63°C/);
-      if (added(meal).some((item) => item.allergens.includes("crustacean"))) assert.match(text, /pink and opaque/);
+      assert.equal(meal.mainId, chickenThai.mainId);
+      assert.equal(meal.methodId, chickenThai.methodId);
+      assert.equal(meal.sideId, chickenThai.sideId);
+      assert.ok(added(meal).length <= 2);
+      assert.ok(added(meal).every((item) => !["sat-fish", "sat-prawns", "sat-tofu"].includes(item.id)));
+      assert.doesNotMatch(meal.title, /cold stir-fry|hot stir-fry|chopped salad|lettuce wraps|as plated with/i);
       return `${meal.title}|${extra}`;
     });
     assert.ok(new Set(signatures).size >= 10, signatures.join("\n"));
     const forms = meals.map((meal) => meal.tags.at(-1));
-    assert.ok(new Set(forms).size >= 4, forms.join("\n"));
+    assert.ok(forms.every((form) => form === "regional finish" || form === "warm vegetable finish"), forms.join("\n"));
   });
 
   it("keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates", () => {
@@ -126,7 +123,7 @@ describe("seeded fusion plates", () => {
       const hot = generateMeal({ ...chickenThai, seed, spiceHeat: "hot" });
       // The Thai plate already lists bird's eye. A hot search may add sriracha, or choose bird's eye again and keep the one line.
       const birdLines = hot.ingredients.filter((item) => /bird/i.test(item.name));
-      assert.match(hot.title, /sriracha|bird/i);
+      assert.ok(hot.ingredients.some((item) => /sriracha|bird/i.test(item.name)));
       assert.equal(birdLines.length, 1, `seed ${seed}`);
       assert.ok(added(hot).some((item) => /sriracha/i.test(item.name)) || birdLines[0].id === "birds-eye-chilli", `seed ${seed}`);
       const vegan = generateMeal({ ...chickenThai, mainId: "tofu", methodId: "stir-fried", seed, diet: "vegan" });
@@ -171,7 +168,7 @@ describe("seeded fusion plates", () => {
     assert.ok(new Set(openingRegions).size >= 3, openingRegions.join(","));
     assert.ok(weeks[0].days.some((day) => day.recipe?.id.includes("-sat-")));
     assert.deepEqual(weeks[0].days.map((day) => day.recipe?.id), planWeek({ days: 7, servings: 4, seed: 1 }).days.map((day) => day.recipe?.id));
-    assert.ok(weeks[0].notes.some((note) => note.includes("not an alphabetical list")));
+    assert.ok(weeks[0].notes.some((note) => note.includes("bounded set of SAT-verified models") && note.includes("not proven taste or an exhaustive search")));
     assert.ok(weeks[0].notes.some((note) => note.includes("not a live model")));
     const sesame = planWeek({ days: 7, servings: 4, avoidAllergens: ["sesame"], seed: 11 });
     assert.ok(sesame.days.every((day) => !day.recipe?.allergens.includes("sesame")));

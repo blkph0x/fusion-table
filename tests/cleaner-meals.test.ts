@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { generateMeal } from "../lib/meals.ts";
+import { generateMeal, MEAL_SIDES } from "../lib/meals.ts";
 import { planWeek } from "../lib/planner.ts";
 import { fusionSearch } from "../lib/fusion-sat.ts";
 import {
@@ -8,10 +8,20 @@ import {
   countBottles,
   mealCleanStats,
   normalizeCleanPrefs,
+  orderSidesForClean,
 } from "../lib/clean-prefs.ts";
 import { markerLeak } from "../lib/region-affinity.ts";
 
 describe("cleaner meals", () => {
+  it("recognises current vegetable-side ids when ranking accompaniments", () => {
+    const vegetables = ["ratatouille-side", "sukuma-wiki-side", "gomen-style-greens"];
+    assert.ok(vegetables.every((id) => MEAL_SIDES.some((side) => side.id === id)));
+    const candidates = ["rice-greens", ...vegetables];
+    assert.deepEqual(orderSidesForClean(candidates), candidates);
+    const preferred = orderSidesForClean(candidates, { moreVegetables: true });
+    assert.equal(preferred[preferred.length - 1], "rice-greens");
+    assert.deepEqual(new Set(preferred.slice(0, 3)), new Set(vegetables));
+  });
   it("normalizes clean knobs and scores bottles and steps", () => {
     const prefs = normalizeCleanPrefs({ cleanMode: true, fewerBottles: "yes", junk: 1 });
     assert.deepEqual(prefs, { cleanMode: true });

@@ -1,0 +1,276 @@
+(node:58160) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:63672) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classic preparation and final assembly
+    # Subtest: keeps the hot shotgun-shells dish's existing accompaniments without adding a second grain
+    ok 1 - keeps the hot shotgun-shells dish's existing accompaniments without adding a second grain
+      ---
+      duration_ms: 58.7534
+      ...
+    # Subtest: does not add a second cooking step when an existing rice is only renamed
+    ok 2 - does not add a second cooking step when an existing rice is only renamed
+      ---
+      duration_ms: 2.1507
+      ...
+    # Subtest: keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+    ok 3 - keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+      ---
+      duration_ms: 18.9536
+      ...
+    1..3
+ok 1 - classic preparation and final assembly
+  ---
+  duration_ms: 81.4365
+  type: 'suite'
+  ...
+# (node:17468) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 101.6814
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 109.4981
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 2828.8014
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 142.7079
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 27.22
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 88.9415
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 2.029
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 0.9814
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 54.4248
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 4.586
+      ...
+    1..10
+ok 2 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 3362.8345
+  type: 'suite'
+  ...
+# (node:19632) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: blocks a plural chilli dislike and does not put fish on a vegan plate
+ok 3 - blocks a plural chilli dislike and does not put fish on a vegan plate
+  ---
+  duration_ms: 11.197
+  ...
+# Subtest: seeded fusion plates
+    # Subtest: keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+    ok 1 - keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+      ---
+      duration_ms: 201.6627
+      ...
+    # Subtest: keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+    ok 2 - keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+      ---
+      duration_ms: 3.4013
+      ...
+    # Subtest: obeys heat, diet and allergen clauses
+    ok 3 - obeys heat, diet and allergen clauses
+      ---
+      duration_ms: 191.5192
+      ...
+    # Subtest: does not make a seeded week alphabetical or identical, and does not relax a filter
+    ok 4 - does not make a seeded week alphabetical or identical, and does not relax a filter
+      ---
+      duration_ms: 5754.093
+      ...
+    # Subtest: varies a classic remix without changing the unseeded template
+    ok 5 - varies a classic remix without changing the unseeded template
+      ---
+      duration_ms: 9.5318
+      ...
+    1..5
+ok 4 - seeded fusion plates
+  ---
+  duration_ms: 6161.0213
+  type: 'suite'
+  ...
+# (node:33432) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 5 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 9.9837
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 6 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 3.6506
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 7 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 24.9784
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 8 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 413.1732
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 9 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 1.7264
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 10 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 5.4144
+  ...
+# (node:36924) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete recipe sharing identity
+    # Subtest: keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+    ok 1 - keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+      ---
+      duration_ms: 59.1455
+      ...
+    # Subtest: keeps the butcher cut, constraints, seeded regional variety and cook session
+    ok 2 - keeps the butcher cut, constraints, seeded regional variety and cook session
+      ---
+      duration_ms: 28.6827
+      ...
+    # Subtest: keeps classic clean flags and hard filters along with seed and session
+    ok 3 - keeps classic clean flags and hard filters along with seed and session
+      ---
+      duration_ms: 25.037
+      ...
+    # Subtest: shares pantry-first cooking choices without sharing what is in the household pantry
+    ok 4 - shares pantry-first cooking choices without sharing what is in the household pantry
+      ---
+      duration_ms: 16.9982
+      ...
+    # Subtest: retains input snapshots when a caller later edits their preference objects
+    ok 5 - retains input snapshots when a caller later edits their preference objects
+      ---
+      duration_ms: 12.6573
+      ...
+    # Subtest: still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+    ok 6 - still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+      ---
+      duration_ms: 7.8392
+      ...
+    # Subtest: does not pretend it can reproduce missing cleaner settings in an old saved recipe
+    ok 7 - does not pretend it can reproduce missing cleaner settings in an old saved recipe
+      ---
+      duration_ms: 15.3729
+      ...
+    # Subtest: bounds and validates additional token options rather than silently discarding them
+    ok 8 - bounds and validates additional token options rather than silently discarding them
+      ---
+      duration_ms: 1.1012
+      ...
+    # Subtest: verifies a current recipe while ignoring a renamed display title and pantry ticks
+    ok 9 - verifies a current recipe while ignoring a renamed display title and pantry ticks
+      ---
+      duration_ms: 14.152
+      ...
+    # Subtest: refuses links that would recreate changed quantities, methods or another recipe
+    ok 10 - refuses links that would recreate changed quantities, methods or another recipe
+      ---
+      duration_ms: 23.1389
+      ...
+    # Subtest: returns false for malformed or unsupported old-token specifications without throwing
+    ok 11 - returns false for malformed or unsupported old-token specifications without throwing
+      ---
+      duration_ms: 2.1305
+      ...
+    1..11
+ok 11 - complete recipe sharing identity
+  ---
+  duration_ms: 208.6327
+  type: 'suite'
+  ...
+# Subtest: complete classic recipe exclusions
+    # Subtest: rejects a recorded allergen in the base recipe even without a random seed
+    ok 1 - rejects a recorded allergen in the base recipe even without a random seed
+      ---
+      duration_ms: 4.0971
+      ...
+    # Subtest: checks hard dislikes against the full base and aliases, with and without a seed
+    ok 2 - checks hard dislikes against the full base and aliases, with and without a seed
+      ---
+      duration_ms: 4.2671
+      ...
+    1..2
+ok 12 - complete classic recipe exclusions
+  ---
+  duration_ms: 8.579
+  type: 'suite'
+  ...
+# (node:19812) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 68.4561
+      ...
+    # Subtest: serves exact inspiration images and an honest labelled placeholder for recipes without an image
+    ok 2 - serves exact inspiration images and an honest labelled placeholder for recipes without an image
+      ---
+      duration_ms: 64.4023
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 47.3631
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 11.0513
+      ...
+    1..4
+ok 13 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 193.2467
+  type: 'suite'
+  ...
+1..13
+# tests 42
+# suites 6
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6825.8013

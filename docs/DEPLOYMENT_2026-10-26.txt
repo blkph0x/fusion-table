@@ -1,0 +1,70 @@
+FUSION TABLE — SERVER DEPLOYMENT
+26 October 2026
+
+Status: DEPLOYED and verified on the public HTTPS site.
+
+Target: https://gearsqueens.online/fusion/
+Host: 10.1.1.111
+Release: 20261026-075845
+Source: D:\fusion-table, including the local quality pass and homepage/image fixes.
+Git baseline: 2d0cee19080190039d98b56a45f586e117d5820e plus the working-tree changes.
+This deployment uses a verified source snapshot; no GitHub push was made.
+
+Source archive SHA-256:
+c6efe6400e7a4103041074105a180ff24618651e7912e7e7a4535501db4427f4
+Source manifest SHA-256:
+698beddccfad6ce30ae49c636fd5778c1c6a62169e6f12584fc0856070f95ca9
+All 275 source files were verified after transfer. Credentials, local data,
+dependencies and local audit evidence were excluded from the archive.
+
+Release folder: /home/blkph0x/fusion-releases/20261026-075845
+Runtime: /home/blkph0x/opt/node/bin/node (22.23.4), conventional Node profile.
+Persistent data: /home/blkph0x/fusion-data
+Service: fusion-table.service; bound to 127.0.0.1:8792 behind existing Apache.
+Dependencies are copied into the release so subsequent development installs do
+not replace the running release's dependency tree. The old source checkout at
+/home/blkph0x/src/fusion-table is preserved with its original host-only patches.
+
+Changes checked for this deployment
+
+- Classic remix cards open their displayed recipe, diet, servings and heat.
+- Fresh suggestions and the meal of the week also open their displayed snapshot.
+  Household adaptations require explicit recipe creation.
+- Cartoon fallback drawings are replaced by a labelled image-unavailable state.
+  Existing matching inspiration images and the local image model remain.
+- Image URL versions bypass cached older drawings.
+- The host uses 384-pixel images, two model steps, one concurrent render, and a
+  60-second deadline. A direct realistic image probe took 21.72 seconds at this
+  size, compared with 55.44 seconds for 512 pixels and four steps. These timings
+  are individual samples, not a throughput guarantee. Generated pictures remain
+  illustrations and do not establish that a meal was cooked.
+  The complete website image route returned a realistic PNG in 29.77 seconds
+  during the final staged check.
+
+Validation before cutover
+
+- 246 automated regression tests passed; no failures.
+- TypeScript passed. Lint returned zero errors and eight existing advisories.
+- All five homepage click checks opened the expected title.
+- A separate staged Node process checked pages, images, PDFs and shared recipes.
+- All 13 final staged server checks passed, including the real local-model route.
+- Five public HTTPS checks passed and confirmed the exact source-manifest hash.
+- All five homepage click checks also passed on the deployed public site.
+- Synthetic price/report writes were isolated from production data. Both were
+  readable after a complete restart of the first staged server.
+- Final service state: active/running, enabled for boot, zero restarts observed.
+  Temporary staged servers were stopped; the public Node service owns port 8792.
+
+Recovery
+
+Original service backup:
+/home/blkph0x/fusion-deploy-backups/20261026-075845/fusion-table.service
+
+To restore the prior runtime as an administrator:
+  sudo cp -a /home/blkph0x/fusion-deploy-backups/20261026-075845/fusion-table.service /etc/systemd/system/fusion-table.service
+  sudo systemctl daemon-reload
+  sudo systemctl restart fusion-table.service
+
+The prior source/build was preserved. Rollback does not delete the new persistent
+data folder; the old Worker runtime does not consume that Node data automatically.
+Apache/TLS configuration and the separately hosted Android APK are unchanged.

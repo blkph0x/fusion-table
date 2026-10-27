@@ -1,4 +1,4 @@
-import { allowPost, ledgerFile, newId, withLedger } from "@/lib/ledger";
+import { ReportBodyError, allowPost, ledgerFile, newId, readReportJson, validPostDevice, withLedger } from "@/lib/ledger";
 import { quoteItems, rememberPrice, rememberShopPage, shopPagesFor } from "@/lib/price-memory";
 import { assertPublicShopUrl, readShopPage } from "@/lib/price-page";
 
@@ -17,13 +17,15 @@ function today(): string {
 export async function POST(request: Request) {
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
+    body = await readReportJson(request);
+  } catch (error) {
+    if (error instanceof ReportBodyError) return bad(error.message, error.status);
     return bad("Send the price note as JSON.");
   }
   if (!body || typeof body !== "object" || Array.isArray(body)) return bad("Send the price note as JSON.");
   const row = body as { action?: unknown; device?: unknown; area?: unknown; items?: unknown; url?: unknown; shopName?: unknown };
   const device = typeof row.device === "string" ? row.device : "prices";
+  if (!validPostDevice(device)) return bad("That browser id is not valid. The price note was not saved.");
   if (!allowPost(device)) return bad("Slow down a moment. Nothing was discarded.", 429);
   const items = Array.isArray(row.items) ? row.items.filter((item): item is string => typeof item === "string").slice(0, 16) : [];
   const now = new Date().toISOString();

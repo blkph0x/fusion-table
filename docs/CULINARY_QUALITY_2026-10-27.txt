@@ -1,0 +1,173 @@
+FUSION TABLE — CULINARY QUALITY IMPROVEMENTS
+27 October 2026 | Website recipe engine
+
+Purpose
+
+The user's Aussie–Thai parma and velveted steak with Mornay wrap examples set a
+quality benchmark: each ingredient needs a clear job, the cooking order should
+develop flavour, crisp surfaces should stay crisp, and the final assembly should
+make sense. The changes improve shared cooking instructions across existing meal
+and classic formats. They do not establish that these example dishes, or every
+generated combination, have been cooked and tasted.
+
+Regional ingredients now have cooking phases
+
+The shared helper in lib/regional-cooking.ts allocates supplied ingredients to
+specific preparation, heating, tempering, softening, blooming, liquid, simmering,
+removal and finishing stages. The original profile slot is not enough to decide
+how an ingredient should be cooked. Whole seeds, ground spices, fresh aromatics,
+wet condiments and delicate pastes receive different handling.
+
+Whole seeds can be briefly tempered in allocated oil. Aromatics soften before
+ground spices are gently bloomed. Suitable curry and chilli pastes are fried
+before the bulk sauce liquid is added. Sweet and salty wet condiments dissolve
+after liquid is present. Heat and fragrance cues accompany the timing estimates
+so the cook can avoid scorching. If no frying oil was allocated, the helper uses
+an explicit wet method rather than silently inventing more oil.
+
+Special cases are handled deliberately. Whole dried ancho chillies are softened
+before blending and cooking; their soaking water is separate from sauce liquid.
+Annatto seeds infuse the existing oil or liquid and are strained out. Saffron
+borrows a portion of the listed liquid. Woody leaves, pods or whole aromatic
+pieces have removal instructions where appropriate. Measured portions are
+accounted for once; a later reference or removal is not another ingredient use.
+
+Delicate flavours finish close to service
+
+Miso and other delicate pastes are loosened with cooked sauce and added gently
+toward the finish. Fresh herbs, citrus, finishing spices and toasted sesame oil
+have late actions instead of being put through the entire simmer. This is a
+practical default for these sauce templates, not a claim that miso can never be
+grilled or that every cuisine uses a spice at the same stage.
+
+Meal instructions now distinguish cooking the sauce base from its final
+seasoning. The delicate finish happens when the main has reached its stated
+endpoint and the side is ready. Crisp schnitzel and patties keep their sauce
+alongside until eating. Stir-fried batches are cooked first, then folded into
+the finished sauce without a further prolonged cook. Long smokes schedule the
+sauce near service rather than holding a freshly finished sauce for hours.
+
+Classic templates use the same ingredient-aware approach. Wet regional sauces
+are kept out of patties and away from direct grill or roasting heat. Pasta is
+started for its packet-timed final window and tossed immediately. Cold platters
+cool the cooked sauce promptly, refrigerate it, and add their fresh finish
+without reheating the chilled ready-to-eat main.
+
+Assembly and regional identity remain coherent
+
+Seeded assembly preserves the selected main, cooking method and accompaniment.
+Finishing vegetables are prepared before delicate sauce seasoning, and garnishes
+are reserved for final assembly. Crisp dishes are not casually converted into
+wet bowls. A broth assembly uses suitable retained cooking liquid, not raw meat
+juices or poaching liquid that the method instructed the cook to discard.
+
+The original classic formats retain their authored starch. Regionalising pasta,
+burgers, tacos or a potato-topped pie does not add a second full rice, grain or
+bread portion. Authored dishes that intentionally combine rice and beans retain
+those components. Regional exploration uses the selected profile and explicit
+extras; merely sharing a rice or other staple does not import another region's
+entire flavour pantry. For example, ordinary Japanese exploration no longer
+inherits the Japanese-curry profile's turmeric and curry powder.
+
+Measured, refrigerated stir-fry coating
+
+The helper in lib/main-techniques.ts adds a light maize-starch coating only to
+the specified Chinese-family thin, boneless beef, chicken, pork and turkey
+stir-fries. Whole, bone-in, minced, offal and sausage forms are excluded; uncertain
+slow-cut forms are skipped unless explicitly boneless. Seafood, duck, other
+regions and other cooking methods do not receive this coating automatically.
+
+The coating uses approximately 1.5% of the raw meat weight as pure maize starch
+and 60 ml cold water per kilogram of meat. One quarter of the main's existing
+oil is reserved for the coating; the remaining three quarters stay with the pan.
+No extra oil is silently added. For a four-serving 600 g main with 2 Australian
+tablespoons of main oil, that is 9 g starch, 36 ml water, 10 ml coating oil and
+30 ml pan oil. An Australian tablespoon is 20 ml; the coating instruction gives
+its oil portions in millilitres.
+
+The covered meat rests in the refrigerator at 5°C or colder for 15 minutes and
+stays chilled until cooking. The instructions include thin cross-grain slicing,
+uncrowded batches, disposal of leftover raw coating mixture and cleaning hands,
+the bowl and utensils. The recipe's thermometer endpoint still applies. The
+coating introduces no bicarbonate, egg or soy-based marinade and does not copy
+raw-meat rinsing or a room-temperature rest from the benchmark. Corn or maize
+exclusions skip the coating. Product labels still need checking.
+
+Scaling, sequencing and time estimates
+
+Meal draft quantities use a four-serving basis and are scaled once. The coating
+ingredient and divided oil allocations retain that basis; its instruction is
+scaled to the requested servings. The regional helper also supports quantities
+already scaled by the classic engine, avoiding a second scaling pass. Separate
+base, sauce and finishing portions are drawn from the same listed totals.
+
+Preparation and cooking estimates now account for the refrigerated coating
+rest, regional preparation such as dried-chilli soaking, sauce stages, relevant
+braise browning, smoke resting and final assembly. Sides begin near the end of
+long cooking where appropriate and follow their own serving instructions;
+cold sides are not told to be held hot. These remain estimates: thickness,
+equipment, batch count and the main's thermometer endpoint take precedence.
+
+Automated evidence and its limits
+
+The full generation and dietary matrix subtest in tests/meals.test.ts passed
+668,430 cases. It exercises five dietary settings, all 90 sides and all supported
+main/method pairs for each diet across seven sampled regions: Japanese,
+Indonesian, Indian vindaloo, Xinjiang, West African, home kitchen and Afghan.
+It is not an exhaustive test of all 76 regions, all random seeds or every cut.
+The complete captured run is in:
+docs/audit-evidence-2026-10-27/culinary-full-meal-matrix.log
+
+Focused regressions cover ingredient-stage allocation and ordering, delicate
+finishing, scaling and oil portions, refrigerated coating, exclusion handling,
+classic starch preservation, pasta timing, cold-sauce handling, smoke scheduling
+and reproducible recipe sharing. The new coating helper's eight focused tests
+passed. The final broader run passed all 380 tests in 42 suites, excluding the
+separately completed expensive meals.test.ts matrix suite. That suite passed
+all 12 of its tests in a follow-up run. A further 6,840 regional ingredient plans
+and 4,250 classic/region/diet cases are exercised inside focused checks.
+TypeScript, touched recipe-file lint and the local Node production build passed.
+Five existing image-element lint warnings remain in app/page.tsx; no lint errors.
+Browser checks verified Thai schnitzel, Chinese beef stir-fry, Japanese pasta and
+a chilled Japanese smoked-salmon platter. Evidence lives alongside the matrix log.
+
+This release updates the website. The separately built Android APK is unchanged.
+
+Automated checks establish structural and safety-instruction properties. They
+do not measure taste, tenderness, crispness, seasoning balance or real kitchen
+timing. Recipes remain template-generated and not kitchen-tested. The benchmark
+images are inspiration, not evidence that a generated meal was cooked or that
+its dietary suitability is guaranteed.
+
+References checked during this work
+
+Oregon State University Extension — Spices of India, page 9: whole-spice
+toasting and ground-spice blooming before liquid.
+https://extension.oregonstate.edu/sites/extd8/files/documents/8836/fch1404leaderguidespicesofindia.pdf
+
+Pailin Chongchitnant, Hot Thai Kitchen — Quick Thai red curry: fry paste before
+bulk liquid and add Thai basil after switching off the heat.
+https://hot-thai-kitchen.com/quick-red-curry-chicken/
+
+Marukome — Classic miso soup: dissolve miso off heat and avoid subsequent boiling.
+https://www.marukomeusa.com/pages/classic
+
+The Woks of Life — Beef and chicken preparation: thin cross-grain slicing and
+starch/oil coatings. The app's light coating is an adaptation, not a claim to
+reproduce every traditional velveting method or an alkaline tenderising step.
+https://thewoksoflife.com/prepare-beef-for-stir-fry/
+https://thewoksoflife.com/how-to-velvet-chicken-stir-fry/
+
+NSW Food Authority and USDA FSIS — Marinate in the refrigerator; bring marinade
+containing raw meat juices to the boil before serving, or reserve a clean portion
+before adding raw meat.
+https://www.foodauthority.nsw.gov.au/consumer/food-safety-home/key-tips
+https://ask.fsis.usda.gov/article/Can-you-reuse-meat-marinade
+
+Food Standards Australia New Zealand — Clean separation, refrigeration and
+thermometer checks, including 75°C centrally for poultry, minced or rolled
+meat and offal.
+https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics
+
+USDA FSIS — Washing raw meat and poultry increases cross-contamination risk.
+https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/washing-food-does-it-promote-food

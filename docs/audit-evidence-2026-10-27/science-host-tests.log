@@ -1,0 +1,3498 @@
+TAP version 13
+# Subtest: plain brand ties become transparent suggestions while changed food forms stay excluded
+ok 1 - plain brand ties become transparent suggestions while changed food forms stay excluded
+  ---
+  duration_ms: 8.815288
+  type: 'test'
+  ...
+# Subtest: a weight increment cannot masquerade as the selling price basis for loose produce
+ok 2 - a weight increment cannot masquerade as the selling price basis for loose produce
+  ---
+  duration_ms: 2.729428
+  type: 'test'
+  ...
+# Subtest: volume spoons convert only to volume, never to a guessed food density
+ok 3 - volume spoons convert only to volume, never to a guessed food density
+  ---
+  duration_ms: 1.052111
+  type: 'test'
+  ...
+# Subtest: stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+ok 4 - stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+  ---
+  duration_ms: 1.013811
+  type: 'test'
+  ...
+# Subtest: full catalogue pipeline cannot retain automatic eligibility for a rejected plain food form
+ok 5 - full catalogue pipeline cannot retain automatic eligibility for a rejected plain food form
+  ---
+  duration_ms: 12.201923
+  type: 'test'
+  ...
+# Subtest: obvious non-food matches cannot be priced or manually substituted as ingredients
+ok 6 - obvious non-food matches cannot be priced or manually substituted as ingredients
+  ---
+  duration_ms: 1.130312
+  type: 'test'
+  ...
+# Subtest: scoped plain rules retain other ingredient matches and exact Australian spoon volumes
+ok 7 - scoped plain rules retain other ingredient matches and exact Australian spoon volumes
+  ---
+  duration_ms: 0.623707
+  type: 'test'
+  ...
+# Subtest: deterministic barbecue and smoking expansion
+    # Subtest: retains every original selection and adds the promised distinct classics and profiles
+    ok 1 - retains every original selection and adds the promised distinct classics and profiles
+      ---
+      duration_ms: 7.461273
+      type: 'test'
+      ...
+    # Subtest: generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+    ok 2 - generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+      ---
+      duration_ms: 4889.318059
+      type: 'test'
+      ...
+    # Subtest: composes recipes without network access or randomness
+    ok 3 - composes recipes without network access or randomness
+      ---
+      duration_ms: 34.574249
+      type: 'test'
+      ...
+    # Subtest: selects appropriate animal cuts and already-cooked products for each technique
+    ok 4 - selects appropriate animal cuts and already-cooked products for each technique
+      ---
+      duration_ms: 9.369595
+      type: 'test'
+      ...
+    # Subtest: uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+    ok 5 - uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+      ---
+      duration_ms: 15.667358
+      type: 'test'
+      ...
+    # Subtest: keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+    ok 6 - keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+      ---
+      duration_ms: 3.082032
+      type: 'test'
+      ...
+    # Subtest: keeps gluten-free and plant alternatives distinct in pantry matching
+    ok 7 - keeps gluten-free and plant alternatives distinct in pantry matching
+      ---
+      duration_ms: 4.626347
+      type: 'test'
+      ...
+    # Subtest: gives vegetarian and vegan adaptations their own preparation and cooking instructions
+    ok 8 - gives vegetarian and vegan adaptations their own preparation and cooking instructions
+      ---
+      duration_ms: 640.32968
+      type: 'test'
+      ...
+    # Subtest: scales BBQ food quantities once without weakening the safety guidance
+    ok 9 - scales BBQ food quantities once without weakening the safety guidance
+      ---
+      duration_ms: 81.293722
+      type: 'test'
+      ...
+    # Subtest: uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+    ok 10 - uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+      ---
+      duration_ms: 20.72261
+      type: 'test'
+      ...
+    # Subtest: explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+    ok 11 - explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+      ---
+      duration_ms: 5.757258
+      type: 'test'
+      ...
+    # Subtest: routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+    ok 12 - routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+      ---
+      duration_ms: 4.747249
+      type: 'test'
+      ...
+    # Subtest: leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+    ok 13 - leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+      ---
+      duration_ms: 4.118441
+      type: 'test'
+      ...
+    1..13
+ok 8 - deterministic barbecue and smoking expansion
+  ---
+  duration_ms: 5725.084114
+  type: 'suite'
+  ...
+# Subtest: cuts stay optional
+    # Subtest: keeps the method cut when none is chosen
+    ok 1 - keeps the method cut when none is chosen
+      ---
+      duration_ms: 34.802451
+      type: 'test'
+      ...
+    # Subtest: shops the chosen cut and leaves the dish title on the main
+    ok 2 - shops the chosen cut and leaves the dish title on the main
+      ---
+      duration_ms: 7.742479
+      type: 'test'
+      ...
+    # Subtest: rejects an unknown cut and a cut for the wrong main
+    ok 3 - rejects an unknown cut and a cut for the wrong main
+      ---
+      duration_ms: 1.109911
+      type: 'test'
+      ...
+    # Subtest: covers everyday cuts, Angus, wagyu and the less common ones
+    ok 4 - covers everyday cuts, Angus, wagyu and the less common ones
+      ---
+      duration_ms: 4.543046
+      type: 'test'
+      ...
+    1..4
+ok 9 - cuts stay optional
+  ---
+  duration_ms: 50.910115
+  type: 'suite'
+  ...
+# Subtest: smart catalogue matching
+    # Subtest: excludes actual lime-juice accessories and strong pet/tool listings from edible suggestions
+    ok 1 - excludes actual lime-juice accessories and strong pet/tool listings from edible suggestions
+      ---
+      duration_ms: 10.262404
+      type: 'test'
+      ...
+    # Subtest: keeps food names that resemble pet or kitchen words and preserves ambiguous choices
+    ok 2 - keeps food names that resemble pet or kitchen words and preserves ambiguous choices
+      ---
+      duration_ms: 21.048813
+      type: 'test'
+      ...
+    # Subtest: uses explicit retailer non-food categories without assuming food names certify a diet
+    ok 3 - uses explicit retailer non-food categories without assuming food names certify a diet
+      ---
+      duration_ms: 13.162333
+      type: 'test'
+      ...
+    # Subtest: does not automatically select an unlabelled product for an explicit dietary request
+    ok 4 - does not automatically select an unlabelled product for an explicit dietary request
+      ---
+      duration_ms: 3.035231
+      type: 'test'
+      ...
+    # Subtest: accepts explicit product claim metadata but never infers it from a category
+    ok 5 - accepts explicit product claim metadata but never infers it from a category
+      ---
+      duration_ms: 3.541735
+      type: 'test'
+      ...
+    # Subtest: picks thigh fillet and does not pick breast
+    ok 6 - picks thigh fillet and does not pick breast
+      ---
+      duration_ms: 1.155612
+      type: 'test'
+      ...
+    # Subtest: keeps wagyu and Angus out of an ordinary pick, and does not swap in ordinary meat
+    ok 7 - keeps wagyu and Angus out of an ordinary pick, and does not swap in ordinary meat
+      ---
+      duration_ms: 1.995921
+      type: 'test'
+      ...
+    # Subtest: does not select out of stock, unknown stock, or a missing price
+    ok 8 - does not select out of stock, unknown stock, or a missing price
+      ---
+      duration_ms: 0.776508
+      type: 'test'
+      ...
+    # Subtest: recognises a different name for the same food
+    ok 9 - recognises a different name for the same food
+      ---
+      duration_ms: 4.851249
+      type: 'test'
+      ...
+    # Subtest: rounds a positive catalogue price half up and never turns zero into money
+    ok 10 - rounds a positive catalogue price half up and never turns zero into money
+      ---
+      duration_ms: 0.384003
+      type: 'test'
+      ...
+    1..10
+ok 10 - smart catalogue matching
+  ---
+  duration_ms: 62.32793
+  type: 'suite'
+  ...
+# Subtest: woolworths catalogue payload
+    # Subtest: reads the public search shape and drops a zero price
+    ok 1 - reads the public search shape and drops a zero price
+      ---
+      duration_ms: 0.95841
+      type: 'test'
+      ...
+    # Subtest: preserves explicit cooked-rice metadata even when the title omits its preparation
+    ok 2 - preserves explicit cooked-rice metadata even when the title omits its preparation
+      ---
+      duration_ms: 1.258412
+      type: 'test'
+      ...
+    # Subtest: filters non-food rows before the food result cap and reads bounded category labels
+    ok 3 - filters non-food rows before the food result cap and reads bounded category labels
+      ---
+      duration_ms: 1.400314
+      type: 'test'
+      ...
+    # Subtest: does not hang a catalogue price on a butcher, and an empty selection is not $0
+    ok 4 - does not hang a catalogue price on a butcher, and an empty selection is not $0
+      ---
+      duration_ms: 0.743308
+      type: 'test'
+      ...
+    # Subtest: reads a fixture response and refuses a redirect off Woolworths
+    ok 5 - reads a fixture response and refuses a redirect off Woolworths
+      ---
+      duration_ms: 81.969228
+      type: 'test'
+      ...
+    # Subtest: looks up the other shop name when the list wording is not what the catalogue uses
+    ok 6 - looks up the other shop name when the list wording is not what the catalogue uses
+      ---
+      duration_ms: 3.888939
+      type: 'test'
+      ...
+    # Subtest: does not follow a Woolworths redirect onto another port or with credentials
+    ok 7 - does not follow a Woolworths redirect onto another port or with credentials
+      ---
+      duration_ms: 3.366534
+      type: 'test'
+      ...
+    # Subtest: matches chillies to chilli and does not treat eggplant as eggs
+    ok 8 - matches chillies to chilli and does not treat eggplant as eggs
+      ---
+      duration_ms: 4.320743
+      type: 'test'
+      ...
+    # Subtest: cancels a queued lookup before busy slots finish and removes it without consuming a slot
+    ok 9 - cancels a queued lookup before busy slots finish and removes it without consuming a slot
+      ---
+      duration_ms: 60.081609
+      type: 'test'
+      ...
+    1..9
+ok 11 - woolworths catalogue payload
+  ---
+  duration_ms: 159.143409
+  type: 'suite'
+  ...
+# Subtest: classics that require an animal-main thermometer endpoint include the thermometer
+ok 12 - classics that require an animal-main thermometer endpoint include the thermometer
+  ---
+  duration_ms: 578.37375
+  type: 'test'
+  ...
+# Subtest: every classic, regional profile and diet routes its listed regional ingredients into the method
+ok 13 - every classic, regional profile and diet routes its listed regional ingredients into the method
+  ---
+  duration_ms: 2370.375178
+  type: 'test'
+  ...
+# Subtest: Japanese miso is a deliberate off-heat finish, with ginger cooked first
+ok 14 - Japanese miso is a deliberate off-heat finish, with ginger cooked first
+  ---
+  duration_ms: 9.508097
+  type: 'test'
+  ...
+# Subtest: risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+ok 15 - risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+  ---
+  duration_ms: 1.98852
+  type: 'test'
+  ...
+# Subtest: delicate spice and woody herbs have explicit finishing or removal instructions
+ok 16 - delicate spice and woody herbs have explicit finishing or removal instructions
+  ---
+  duration_ms: 7.129171
+  type: 'test'
+  ...
+# Subtest: crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+ok 17 - crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+  ---
+  duration_ms: 2.007421
+  type: 'test'
+  ...
+# Subtest: classic plates retain one authored starch rather than gaining a second full grain or bread
+ok 18 - classic plates retain one authored starch rather than gaining a second full grain or bread
+  ---
+  duration_ms: 1201.467356
+  type: 'test'
+  ...
+# Subtest: regional sauce amounts scale once and split base oil and stock without double allocation
+ok 19 - regional sauce amounts scale once and split base oil and stock without double allocation
+  ---
+  duration_ms: 4.563047
+  type: 'test'
+  ...
+# Subtest: every classic marks one authored finishing boundary before seeded extras are assembled
+ok 20 - every classic marks one authored finishing boundary before seeded extras are assembled
+  ---
+  duration_ms: 405.212801
+  type: 'test'
+  ...
+# Subtest: pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+ok 21 - pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+  ---
+  duration_ms: 6.921171
+  type: 'test'
+  ...
+# Subtest: seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+ok 22 - seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+  ---
+  duration_ms: 255.194483
+  type: 'test'
+  ...
+# Subtest: cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+ok 23 - cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+  ---
+  duration_ms: 1.911219
+  type: 'test'
+  ...
+# Subtest: classic preparation and final assembly
+    # Subtest: serves hot stuffed shells with slaw and one starch
+    ok 1 - serves hot stuffed shells with slaw and one starch
+      ---
+      duration_ms: 201.010735
+      type: 'test'
+      ...
+    # Subtest: does not add a second cooking step when an existing rice is only renamed
+    ok 2 - does not add a second cooking step when an existing rice is only renamed
+      ---
+      duration_ms: 3.745637
+      type: 'test'
+      ...
+    # Subtest: keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+    ok 3 - keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+      ---
+      duration_ms: 38.700392
+      type: 'test'
+      ...
+    1..3
+ok 24 - classic preparation and final assembly
+  ---
+  duration_ms: 245.755488
+  type: 'suite'
+  ...
+# Subtest: featured classic cards open the displayed recipe
+    # Subtest: uses identical classic, region, diet, servings and heat for each card, image token and opened recipe
+    ok 1 - uses identical classic, region, diet, servings and heat for each card, image token and opened recipe
+      ---
+      duration_ms: 73.713047
+      type: 'test'
+      ...
+    # Subtest: opens a fixed unseeded template without household remixes or extra finishes
+    ok 2 - opens a fixed unseeded template without household remixes or extra finishes
+      ---
+      duration_ms: 9.606897
+      type: 'test'
+      ...
+    1..2
+ok 25 - featured classic cards open the displayed recipe
+  ---
+  duration_ms: 86.315774
+  type: 'suite'
+  ...
+# Subtest: stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+ok 26 - stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+  ---
+  duration_ms: 2270.753487
+  type: 'test'
+  ...
+# Subtest: cottage-pie estimate covers its serial filling, oven and resting stages
+ok 27 - cottage-pie estimate covers its serial filling, oven and resting stages
+  ---
+  duration_ms: 56.013468
+  type: 'test'
+  ...
+# Subtest: BBQ cooking estimates include required rest after the timed heat stages
+ok 28 - BBQ cooking estimates include required rest after the timed heat stages
+  ---
+  duration_ms: 4.796449
+  type: 'test'
+  ...
+# Subtest: burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+ok 29 - burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+  ---
+  duration_ms: 1105.195191
+  type: 'test'
+  ...
+# Subtest: seeded fast mains prepare additions before cooking and retain final fresh service
+ok 30 - seeded fast mains prepare additions before cooking and retain final fresh service
+  ---
+  duration_ms: 332.829668
+  type: 'test'
+  ...
+# Subtest: slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+ok 31 - slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+  ---
+  duration_ms: 25.553659
+  type: 'test'
+  ...
+# Subtest: cleaner meals
+    # Subtest: recognises current vegetable-side ids when ranking accompaniments
+    ok 1 - recognises current vegetable-side ids when ranking accompaniments
+      ---
+      duration_ms: 18.575589
+      type: 'test'
+      ...
+    # Subtest: normalizes clean knobs and scores bottles and steps
+    ok 2 - normalizes clean knobs and scores bottles and steps
+      ---
+      duration_ms: 68.293991
+      type: 'test'
+      ...
+    # Subtest: reduces bottles and ingredients versus an uncleaned seeded plate
+    ok 3 - reduces bottles and ingredients versus an uncleaned seeded plate
+      ---
+      duration_ms: 86.96308
+      type: 'test'
+      ...
+    # Subtest: keeps hard filters and region affinity under clean prefs
+    ok 4 - keeps hard filters and region affinity under clean prefs
+      ---
+      duration_ms: 42.165126
+      type: 'test'
+      ...
+    # Subtest: SAT clean mode prefers fewer bottled umami options on Western plates
+    ok 5 - SAT clean mode prefers fewer bottled umami options on Western plates
+      ---
+      duration_ms: 9.819101
+      type: 'test'
+      ...
+    # Subtest: week planner ranks cleaner dinners without relaxing allergens
+    ok 6 - week planner ranks cleaner dinners without relaxing allergens
+      ---
+      duration_ms: 1713.941251
+      type: 'test'
+      ...
+    1..6
+ok 32 - cleaner meals
+  ---
+  duration_ms: 1943.405373
+  type: 'suite'
+  ...
+# Subtest: a retailer refusal triggers a short backoff instead of repeated search attempts
+ok 33 - a retailer refusal triggers a short backoff instead of repeated search attempts
+  ---
+  duration_ms: 60.473612
+  type: 'test'
+  ...
+# Subtest: Coles reads public product fields and selling price, never comparison or crossed-out prices
+ok 34 - Coles reads public product fields and selling price, never comparison or crossed-out prices
+  ---
+  duration_ms: 3.788238
+  type: 'test'
+  ...
+# Subtest: Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+ok 35 - Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+  ---
+  duration_ms: 19.838901
+  type: 'test'
+  ...
+# Subtest: Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+ok 36 - Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+  ---
+  duration_ms: 1.494215
+  type: 'test'
+  ...
+# Subtest: malformed and oversized public payloads fail clearly without fabricated rows
+ok 37 - malformed and oversized public payloads fail clearly without fabricated rows
+  ---
+  duration_ms: 2.198523
+  type: 'test'
+  ...
+# Subtest: public product links stay on Coles even when a matching href points elsewhere
+ok 38 - public product links stay on Coles even when a matching href points elsewhere
+  ---
+  duration_ms: 0.601806
+  type: 'test'
+  ...
+# Subtest: Coles redirects cannot escape the official secure origin
+ok 39 - Coles redirects cannot escape the official secure origin
+  ---
+  duration_ms: 9.852199
+  type: 'test'
+  ...
+# Subtest: response streaming stops at the byte cap rather than reading an arbitrarily large page
+ok 40 - response streaming stops at the byte cap rather than reading an arbitrarily large page
+  ---
+  duration_ms: 4.139641
+  type: 'test'
+  ...
+# Subtest: identical in-flight searches coalesce and subsequent lookups use the bounded cache
+ok 41 - identical in-flight searches coalesce and subsequent lookups use the bounded cache
+  ---
+  duration_ms: 20.493706
+  type: 'test'
+  ...
+# Subtest: failed searches release their pending entry so a retry can recover
+ok 42 - failed searches release their pending entry so a retry can recover
+  ---
+  duration_ms: 7.460577
+  type: 'test'
+  ...
+# Subtest: an aborted coalesced consumer stops waiting without cancelling the original request
+ok 43 - an aborted coalesced consumer stops waiting without cancelling the original request
+  ---
+  duration_ms: 11.84362
+  type: 'test'
+  ...
+# Subtest: queued Coles requests observe cancellation before a busy request releases its slot
+ok 44 - queued Coles requests observe cancellation before a busy request releases its slot
+  ---
+  duration_ms: 14.441146
+  type: 'test'
+  ...
+# Subtest: community learning
+    # Subtest: keeps an unseeded meal byte-for-byte and only scales a copy
+    ok 1 - keeps an unseeded meal byte-for-byte and only scales a copy
+      ---
+      duration_ms: 55.861865
+      type: 'test'
+      ...
+    # Subtest: requires the reason before saving each current low report and keeps the plate
+    ok 2 - requires the reason before saving each current low report and keeps the plate
+      ---
+      duration_ms: 20.353106
+      type: 'test'
+      ...
+    # Subtest: stops offering a plate only after a large majority, and later votes can bring it back
+    ok 3 - stops offering a plate only after a large majority, and later votes can bring it back
+      ---
+      duration_ms: 19.735101
+      type: 'test'
+      ...
+    # Subtest: keeps a later yes when the same person adds stars, and agrees an amount without removing it
+    ok 4 - keeps a later yes when the same person adds stars, and agrees an amount without removing it
+      ---
+      duration_ms: 3.987442
+      type: 'test'
+      ...
+    # Subtest: writes the book to disk and refuses to wipe a file it cannot read
+    ok 5 - writes the book to disk and refuses to wipe a file it cannot read
+      ---
+      duration_ms: 10.078499
+      type: 'test'
+      ...
+    1..5
+ok 45 - community learning
+  ---
+  duration_ms: 112.761441
+  type: 'suite'
+  ...
+# Subtest: shop prices
+    # Subtest: keeps recorded prices by area, leaves specials out of the average, and never stores a blank as zero
+    ok 1 - keeps recorded prices by area, leaves specials out of the average, and never stores a blank as zero
+      ---
+      duration_ms: 1.881619
+      type: 'test'
+      ...
+    # Subtest: reads one public price and refuses a private or unsigned page
+    ok 2 - reads one public price and refuses a private or unsigned page
+      ---
+      duration_ms: 50.078404
+      type: 'test'
+      ...
+    1..2
+ok 46 - shop prices
+  ---
+  duration_ms: 52.724132
+  type: 'suite'
+  ...
+# Subtest: a first impression cannot silently become a cooked star rating
+ok 47 - a first impression cannot silently become a cooked star rating
+  ---
+  duration_ms: 68.706496
+  type: 'test'
+  ...
+# Subtest: two cooked stars open reasons and save the rating and category atomically without mandatory prose
+ok 48 - two cooked stars open reasons and save the rating and category atomically without mandatory prose
+  ---
+  duration_ms: 89.167704
+  type: 'test'
+  ...
+# Subtest: No and will-not-make-again both require a reason, including first impressions
+ok 49 - No and will-not-make-again both require a reason, including first impressions
+  ---
+  duration_ms: 44.340947
+  type: 'test'
+  ...
+# Subtest: Something else requires a useful note and can bind an exact ingredient and step
+ok 50 - Something else requires a useful note and can bind an exact ingredient and step
+  ---
+  duration_ms: 21.623422
+  type: 'test'
+  ...
+# Subtest: network failure keeps the draft and an exact recipe change resets stale references
+ok 51 - network failure keeps the draft and an exact recipe change resets stale references
+  ---
+  duration_ms: 35.948763
+  type: 'test'
+  ...
+# Subtest: a fresh high rating clears an invisible earlier No and will-not-make-again choice
+ok 52 - a fresh high rating clears an invisible earlier No and will-not-make-again choice
+  ---
+  duration_ms: 22.443827
+  type: 'test'
+  ...
+# Subtest: a doneness report prompts review and shows exact ingredient and step without claiming safety
+ok 53 - a doneness report prompts review and shows exact ingredient and step without claiming safety
+  ---
+  duration_ms: 20.551409
+  type: 'test'
+  ...
+# Subtest: earlier unstructured reasons remain readable beside a current version
+ok 54 - earlier unstructured reasons remain readable beside a current version
+  ---
+  duration_ms: 5.97056
+  type: 'test'
+  ...
+# Subtest: canonical plan derives every dietary default/cut row and all4250 classics without generation
+ok 55 - canonical plan derives every dietary default/cut row and all4250 classics without generation
+  ---
+  duration_ms: 16.409367
+  type: 'test'
+  ...
+# Subtest: zero-based shards partition every index exactly, including uneven and empty workers
+ok 56 - zero-based shards partition every index exactly, including uneven and empty workers
+  ---
+  duration_ms: 2.565126
+  type: 'test'
+  ...
+# Subtest: default CLI is plan-only and never creates its requested output directory
+ok 57 - default CLI is plan-only and never creates its requested output directory
+  ---
+  duration_ms: 526.019228
+  type: 'test'
+  ...
+# Subtest: partial witnesses retain every measured ingredient and resume without duplicates
+ok 58 - partial witnesses retain every measured ingredient and resume without duplicates
+  ---
+  duration_ms: 74.515854
+  type: 'test'
+  ...
+# Subtest: all completed shards are required and their ingredient witnesses form one exact union
+ok 59 - all completed shards are required and their ingredient witnesses form one exact union
+  ---
+  duration_ms: 139.653614
+  type: 'test'
+  ...
+# Subtest: a changed source, changed chunk contract or tampered committed file cannot resume
+ok 60 - a changed source, changed chunk contract or tampered committed file cannot resume
+  ---
+  duration_ms: 25.297756
+  type: 'test'
+  ...
+# Subtest: source changes during a run and complete-dictionary mutations invalidate completion
+ok 61 - source changes during a run and complete-dictionary mutations invalidate completion
+  ---
+  duration_ms: 201.019037
+  type: 'test'
+  ...
+# Subtest: quality and generation failures are witnessed with bounded examples, never silently passed
+ok 62 - quality and generation failures are witnessed with bounded examples, never silently passed
+  ---
+  duration_ms: 38.582291
+  type: 'test'
+  ...
+# Subtest: streamed multi-chunk output handles backpressure without retaining all case records
+ok 63 - streamed multi-chunk output handles backpressure without retaining all case records
+  ---
+  duration_ms: 1054.509185
+  type: 'test'
+  ...
+# Subtest: opt-in audit plans the complete authored matrix without generating it during normal tests
+ok 64 - opt-in audit plans the complete authored matrix without generating it during normal tests
+  ---
+  duration_ms: 21.72952
+  type: 'test'
+  ...
+# Subtest: every region/main-method receives all five seeded heat/serving presets, rotating every side
+ok 65 - every region/main-method receives all five seeded heat/serving presets, rotating every side
+  ---
+  duration_ms: 207.075599
+  type: 'test'
+  ...
+# Subtest: audit detects substantive content and quantity failures with small real fixtures
+ok 66 - audit detects substantive content and quantity failures with small real fixtures
+  ---
+  duration_ms: 24.63405
+  type: 'test'
+  ...
+# Subtest: smoke indices are bounded, unique and include the edges of each phase
+ok 67 - smoke indices are bounded, unique and include the edges of each phase
+  ---
+  duration_ms: 0.457005
+  type: 'test'
+  ...
+# Subtest: audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+ok 68 - audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+  ---
+  duration_ms: 99.875413
+  type: 'test'
+  ...
+# Subtest: classic ingredient references require the verified authored cooking phase
+ok 69 - classic ingredient references require the verified authored cooking phase
+  ---
+  duration_ms: 142.969848
+  type: 'test'
+  ...
+# Subtest: mince and lean chosen cuts never inherit a slow joint's simmer estimate
+ok 70 - mince and lean chosen cuts never inherit a slow joint's simmer estimate
+  ---
+  duration_ms: 168.536508
+  type: 'test'
+  ...
+# Subtest: whole birds are rounded to whole shopping units at every serving size
+ok 71 - whole birds are rounded to whole shopping units at every serving size
+  ---
+  duration_ms: 79.797808
+  type: 'test'
+  ...
+# Subtest: slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+ok 72 - slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+  ---
+  duration_ms: 2.88153
+  type: 'test'
+  ...
+# Subtest: gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+ok 73 - gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+  ---
+  duration_ms: 1.755818
+  type: 'test'
+  ...
+# Subtest: whole-bird portions and advance side preparation survive recipe sharing
+ok 74 - whole-bird portions and advance side preparation survive recipe sharing
+  ---
+  duration_ms: 86.282674
+  type: 'test'
+  ...
+# Subtest: tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+ok 75 - tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+  ---
+  duration_ms: 5.209154
+  type: 'test'
+  ...
+# Subtest: cut × method allowlists
+    # Subtest: forbids stew cuts with steak-style quick methods
+    ok 1 - forbids stew cuts with steak-style quick methods
+      ---
+      duration_ms: 3.842439
+      type: 'test'
+      ...
+    # Subtest: forbids whole birds with schnitzel, patties and stir-fry
+    ok 2 - forbids whole birds with schnitzel, patties and stir-fry
+      ---
+      duration_ms: 4.188942
+      type: 'test'
+      ...
+    # Subtest: forbids mince as schnitzel steaks
+    ok 3 - forbids mince as schnitzel steaks
+      ---
+      duration_ms: 0.361104
+      type: 'test'
+      ...
+    # Subtest: lists only affinity cuts in the builder helper
+    ok 4 - lists only affinity cuts in the builder helper
+      ---
+      duration_ms: 0.95271
+      type: 'test'
+      ...
+    1..4
+ok 76 - cut × method allowlists
+  ---
+  duration_ms: 11.642618
+  type: 'suite'
+  ...
+# Subtest: cut-aware prep wording
+    # Subtest: grinds brisket for patties and never says cut steaks 2 cm thick
+    ok 1 - grinds brisket for patties and never says cut steaks 2 cm thick
+      ---
+      duration_ms: 19.932202
+      type: 'test'
+      ...
+    # Subtest: pulls or shreds brisket when braised
+    ok 2 - pulls or shreds brisket when braised
+      ---
+      duration_ms: 4.751749
+      type: 'test'
+      ...
+    # Subtest: cubes chuck for braise without steak language
+    ok 3 - cubes chuck for braise without steak language
+      ---
+      duration_ms: 5.440155
+      type: 'test'
+      ...
+    # Subtest: keeps steak cuts on the grill at measured thickness
+    ok 4 - keeps steak cuts on the grill at measured thickness
+      ---
+      duration_ms: 4.116442
+      type: 'test'
+      ...
+    # Subtest: shapes mince for grill as patties or crumble, not steaks
+    ok 5 - shapes mince for grill as patties or crumble, not steaks
+      ---
+      duration_ms: 3.763338
+      type: 'test'
+      ...
+    # Subtest: cooks sausages as links
+    ok 6 - cooks sausages as links
+      ---
+      duration_ms: 7.538776
+      type: 'test'
+      ...
+    # Subtest: leaves short ribs whole on the bone for braise
+    ok 7 - leaves short ribs whole on the bone for braise
+      ---
+      duration_ms: 0.521406
+      type: 'test'
+      ...
+    # Subtest: flattens only true steak/fillet forms for schnitzel
+    ok 8 - flattens only true steak/fillet forms for schnitzel
+      ---
+      duration_ms: 0.866109
+      type: 'test'
+      ...
+    1..8
+ok 77 - cut-aware prep wording
+  ---
+  duration_ms: 48.519392
+  type: 'suite'
+  ...
+# Subtest: matrix coverage of every cut form
+    # Subtest: every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+    ok 1 - every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+      ---
+      duration_ms: 20.562909
+      type: 'test'
+      ...
+    1..1
+ok 78 - matrix coverage of every cut form
+  ---
+  duration_ms: 20.813211
+  type: 'suite'
+  ...
+# Subtest: Discover opens the exact featured plate
+    # Subtest: keeps Tonight's Ideas unchanged instead of applying another household recipe
+    ok 1 - keeps Tonight's Ideas unchanged instead of applying another household recipe
+      ---
+      duration_ms: 159.578217
+      type: 'test'
+      ...
+    # Subtest: keeps the Meal of the Week's visible servings, diet and original cooking content
+    ok 2 - keeps the Meal of the Week's visible servings, diet and original cooking content
+      ---
+      duration_ms: 60.718515
+      type: 'test'
+      ...
+    # Subtest: rejects mismatched or invalid card tokens instead of opening a different dish
+    ok 3 - rejects mismatched or invalid card tokens instead of opening a different dish
+      ---
+      duration_ms: 47.473783
+      type: 'test'
+      ...
+    1..3
+ok 79 - Discover opens the exact featured plate
+  ---
+  duration_ms: 270.527242
+  type: 'suite'
+  ...
+# Subtest: representative context boundary remains1496, not a claim about all seeds or sides
+ok 80 - representative context boundary remains1496, not a claim about all seeds or sides
+  ---
+  duration_ms: 3.736339
+  type: 'test'
+  ...
+# Subtest: form checks independently preserve cooking technique, temperature and cold service
+ok 81 - form checks independently preserve cooking technique, temperature and cold service
+  ---
+  duration_ms: 2.812229
+  type: 'test'
+  ...
+# Subtest: broth form requires retained measured liquid in an integrated liquid cooking method
+ok 82 - broth form requires retained measured liquid in an integrated liquid cooking method
+  ---
+  duration_ms: 0.382204
+  type: 'test'
+  ...
+# Subtest: aliases, exact portions and all dietary exclusions are checked outside SAT evaluation
+ok 83 - aliases, exact portions and all dietary exclusions are checked outside SAT evaluation
+  ---
+  duration_ms: 1.840218
+  type: 'test'
+  ...
+# Subtest: fresh capsicum identity is distinct from a dried chilli seasoning alias
+ok 84 - fresh capsicum identity is distinct from a dried chilli seasoning alias
+  ---
+  duration_ms: 0.454904
+  type: 'test'
+  ...
+# Subtest: compressed witnesses contain every model and bind both library and auditor code
+ok 85 - compressed witnesses contain every model and bind both library and auditor code
+  ---
+  duration_ms: 29.453598
+  type: 'test'
+  ...
+# Subtest: context errors preserve other witnesses; incomplete, duplicate and changed-code results fail
+ok 86 - context errors preserve other witnesses; incomplete, duplicate and changed-code results fail
+  ---
+  duration_ms: 46.554072
+  type: 'test'
+  ...
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 184.856974
+      type: 'test'
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 249.501729
+      type: 'test'
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 8899.591456
+      type: 'test'
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 601.836306
+      type: 'test'
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 87.900992
+      type: 'test'
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 333.564086
+      type: 'test'
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 5.221153
+      type: 'test'
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 2.438525
+      type: 'test'
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 201.710747
+      type: 'test'
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 10.998811
+      type: 'test'
+      ...
+    # Subtest: uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+    ok 11 - uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+      ---
+      duration_ms: 53.019838
+      type: 'test'
+      ...
+    # Subtest: keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+    ok 12 - keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+      ---
+      duration_ms: 132.91225
+      type: 'test'
+      ...
+    1..12
+ok 87 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 10767.57331
+  type: 'suite'
+  ...
+# Subtest: finite finish graph exhaustion is complete, unique and hard-constraint checked
+ok 88 - finite finish graph exhaustion is complete, unique and hard-constraint checked
+  ---
+  duration_ms: 193.561463
+  type: 'test'
+  ...
+# Subtest: finish graph caps stay incomplete and whole-word dislikes exclude every model
+ok 89 - finish graph caps stay incomplete and whole-word dislikes exclude every model
+  ---
+  duration_ms: 29.6694
+  type: 'test'
+  ...
+# Subtest: fresh red pepper is the same vegetable as capsicum, while chilli flakes remain a different form
+ok 90 - fresh red pepper is the same vegetable as capsicum, while chilli flakes remain a different form
+  ---
+  duration_ms: 71.351524
+  type: 'test'
+  ...
+# Subtest: fusion overhaul — naming
+    # Subtest: builds appetising titles without the old · method pattern
+    ok 1 - builds appetising titles without the old · method pattern
+      ---
+      duration_ms: 50.980316
+      type: 'test'
+      ...
+    1..1
+ok 91 - fusion overhaul — naming
+  ---
+  duration_ms: 52.650233
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — meal of the week
+    # Subtest: scores wholesome quick plates above slow heavy ones
+    ok 1 - scores wholesome quick plates above slow heavy ones
+      ---
+      duration_ms: 6.135563
+      type: 'test'
+      ...
+    # Subtest: picks a stable MOTW within the same week seed
+    ok 2 - picks a stable MOTW within the same week seed
+      ---
+      duration_ms: 104.601361
+      type: 'test'
+      ...
+    1..2
+ok 92 - fusion overhaul — meal of the week
+  ---
+  duration_ms: 111.068227
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — randomised home suggestions
+    # Subtest: shuffles differently per load seed and keeps MOTW out of the strip
+    ok 1 - shuffles differently per load seed and keeps MOTW out of the strip
+      ---
+      duration_ms: 70.721215
+      type: 'test'
+      ...
+    1..1
+ok 93 - fusion overhaul — randomised home suggestions
+  ---
+  duration_ms: 70.986919
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — recipe-tied images
+    # Subtest: keys and prompts include the actual meal identity, not a generic stock slug
+    ok 1 - keys and prompts include the actual meal identity, not a generic stock slug
+      ---
+      duration_ms: 2.678127
+      type: 'test'
+      ...
+    1..1
+ok 94 - fusion overhaul — recipe-tied images
+  ---
+  duration_ms: 3.436035
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — large generated meal suite
+    # Subtest: samples hundreds of meals for affinity, realism, naming and no duplicate finishes
+    ok 1 - samples hundreds of meals for affinity, realism, naming and no duplicate finishes
+      ---
+      duration_ms: 3613.642739
+      type: 'test'
+      ...
+    # Subtest: covers every curated plate without affinity leaks
+    ok 2 - covers every curated plate without affinity leaks
+      ---
+      duration_ms: 71.623725
+      type: 'test'
+      ...
+    # Subtest: keeps method catalogue and combination count honest
+    ok 3 - keeps method catalogue and combination count honest
+      ---
+      duration_ms: 0.352104
+      type: 'test'
+      ...
+    1..3
+ok 95 - fusion overhaul — large generated meal suite
+  ---
+  duration_ms: 3686.321076
+  type: 'suite'
+  ...
+# Subtest: blocks a plural chilli dislike and does not put fish on a vegan plate
+ok 96 - blocks a plural chilli dislike and does not put fish on a vegan plate
+  ---
+  duration_ms: 32.605031
+  type: 'test'
+  ...
+# Subtest: seeded fusion plates
+    # Subtest: keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+    ok 1 - keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+      ---
+      duration_ms: 573.034012
+      type: 'test'
+      ...
+    # Subtest: keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+    ok 2 - keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+      ---
+      duration_ms: 17.264874
+      type: 'test'
+      ...
+    # Subtest: obeys heat, diet and allergen clauses
+    ok 3 - obeys heat, diet and allergen clauses
+      ---
+      duration_ms: 672.565323
+      type: 'test'
+      ...
+    # Subtest: does not make a seeded week alphabetical or identical, and does not relax a filter
+    ok 4 - does not make a seeded week alphabetical or identical, and does not relax a filter
+      ---
+      duration_ms: 12471.573513
+      type: 'test'
+      ...
+    # Subtest: varies a classic remix without changing the unseeded template
+    ok 5 - varies a classic remix without changing the unseeded template
+      ---
+      duration_ms: 43.135038
+      type: 'test'
+      ...
+    1..5
+ok 97 - seeded fusion plates
+  ---
+  duration_ms: 13778.751472
+  type: 'suite'
+  ...
+# Subtest: ingredient diversity
+    # Subtest: keeps unseeded regional plates byte-stable and expands the explore pool past the fixed plate
+    ok 1 - keeps unseeded regional plates byte-stable and expands the explore pool past the fixed plate
+      ---
+      duration_ms: 50.966016
+      type: 'test'
+      ...
+    # Subtest: varies aromatics within a region across seeds while keeping the signature heat
+    ok 2 - varies aromatics within a region across seeds while keeping the signature heat
+      ---
+      duration_ms: 82.283235
+      type: 'test'
+      ...
+    # Subtest: meets min unique flavours per region over random meals and caps non-staple dominance
+    ok 3 - meets min unique flavours per region over random meals and caps non-staple dominance
+      ---
+      duration_ms: 78905.815628
+      type: 'test'
+      ...
+    # Subtest: softens already-heavy week flavours and labels intentional pantry reuse
+    ok 4 - softens already-heavy week flavours and labels intentional pantry reuse
+      ---
+      duration_ms: 8729.430736
+      type: 'test'
+      ...
+    1..4
+ok 98 - ingredient diversity
+  ---
+  duration_ms: 87771.73495
+  type: 'suite'
+  ...
+# Subtest: household preferences reject invalid persisted controls and routes
+ok 99 - household preferences reject invalid persisted controls and routes
+  ---
+  duration_ms: 3.484235
+  type: 'test'
+  ...
+# Subtest: plan settings identity is stable for reordered exclusions but changes for meaningful edits
+ok 100 - plan settings identity is stable for reordered exclusions but changes for meaningful edits
+  ---
+  duration_ms: 1.061811
+  type: 'test'
+  ...
+# Subtest: recipe snapshots and cookbook imports validate before merging and preserve existing notes
+ok 101 - recipe snapshots and cookbook imports validate before merging and preserve existing notes
+  ---
+  duration_ms: 6.653968
+  type: 'test'
+  ...
+# Subtest: opened recipes report conflicts without rewriting a household or its saved snapshot
+ok 102 - opened recipes report conflicts without rewriting a household or its saved snapshot
+  ---
+  duration_ms: 1.469615
+  type: 'test'
+  ...
+# Subtest: a persisted plan restores its applied brief and rejects corrupt or falsely labelled sessions
+ok 103 - a persisted plan restores its applied brief and rejects corrupt or falsely labelled sessions
+  ---
+  duration_ms: 886.074504
+  type: 'test'
+  ...
+# Subtest: queued ledger changes preserve every successful write and recover from a failed change
+ok 104 - queued ledger changes preserve every successful write and recover from a failed change
+  ---
+  duration_ms: 36.26577
+  type: 'test'
+  ...
+# Subtest: a malformed, wrong-shaped or oversized ledger is never replaced with an empty book
+ok 105 - a malformed, wrong-shaped or oversized ledger is never replaced with an empty book
+  ---
+  duration_ms: 38.537291
+  type: 'test'
+  ...
+# Subtest: the ledger cap counts UTF-8 bytes and an oversized update preserves the original
+ok 106 - the ledger cap counts UTF-8 bytes and an oversized update preserves the original
+  ---
+  duration_ms: 112.376942
+  type: 'test'
+  ...
+# Subtest: post quotas bound identities without evicting an active device quota
+ok 107 - post quotas bound identities without evicting an active device quota
+  ---
+  duration_ms: 1.505916
+  type: 'test'
+  ...
+# Subtest: rotating device strings cannot bypass the aggregate post backstop
+ok 108 - rotating device strings cannot bypass the aggregate post backstop
+  ---
+  duration_ms: 0.391204
+  type: 'test'
+  ...
+# Subtest: bounded JSON reads split Unicode correctly and rejects invalid JSON
+ok 109 - bounded JSON reads split Unicode correctly and rejects invalid JSON
+  ---
+  duration_ms: 53.479044
+  type: 'test'
+  ...
+# Subtest: report bodies enforce the byte cap with or without truthful Content-Length
+ok 110 - report bodies enforce the byte cap with or without truthful Content-Length
+  ---
+  duration_ms: 5.216251
+  type: 'test'
+  ...
+# Subtest: stalled report streams have a deadline and cancel their underlying reader
+ok 111 - stalled report streams have a deadline and cancel their underlying reader
+  ---
+  duration_ms: 17.366975
+  type: 'test'
+  ...
+# (node:2513254) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: location and shop clients use encoded same-origin API paths and accept valid results
+ok 112 - location and shop clients use encoded same-origin API paths and accept valid results
+  ---
+  duration_ms: 75.79747
+  type: 'test'
+  ...
+# Subtest: HTML HTTP errors become a friendly directory error without exposing markup or parser details
+ok 113 - HTML HTTP errors become a friendly directory error without exposing markup or parser details
+  ---
+  duration_ms: 1.891619
+  type: 'test'
+  ...
+# Subtest: JSON service errors preserve actionable instructions, while invalid messages use a safe fallback
+ok 114 - JSON service errors preserve actionable instructions, while invalid messages use a safe fallback
+  ---
+  duration_ms: 1.608717
+  type: 'test'
+  ...
+# Subtest: malformed successful responses and responses for a different search are rejected
+ok 115 - malformed successful responses and responses for a different search are rejected
+  ---
+  duration_ms: 3.263333
+  type: 'test'
+  ...
+# Subtest: a successful HTML response is reported as unreadable, and an empty valid search remains valid
+ok 116 - a successful HTML response is reported as unreadable, and an empty valid search remains valid
+  ---
+  duration_ms: 1.736618
+  type: 'test'
+  ...
+# Subtest: network failures have a useful message instead of a raw fetch exception
+ok 117 - network failures have a useful message instead of a raw fetch exception
+  ---
+  duration_ms: 0.573506
+  type: 'test'
+  ...
+# Subtest: the client aborts a stalled request at 45 seconds and reports timeout as a retriable error
+ok 118 - the client aborts a stalled request at 45 seconds and reports timeout as a retriable error
+  ---
+  duration_ms: 2.587726
+  type: 'test'
+  ...
+# Subtest: caller cancellation remains AbortError, including pre-aborted and custom-reason signals
+ok 119 - caller cancellation remains AbortError, including pre-aborted and custom-reason signals
+  ---
+  duration_ms: 1.293612
+  type: 'test'
+  ...
+# (node:2513262) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: provider fetch uses a Workers-supported redirect mode and successful results are cached
+ok 120 - provider fetch uses a Workers-supported redirect mode and successful results are cached
+  ---
+  duration_ms: 69.700209
+  type: 'test'
+  ...
+# Subtest: an upstream redirect is rejected without forwarding the request to another destination
+ok 121 - an upstream redirect is rejected without forwarding the request to another destination
+  ---
+  duration_ms: 4.034241
+  type: 'test'
+  ...
+# Subtest: a transient shop-provider 503 is retried once and real results retain radius and inventory semantics
+ok 122 - a transient shop-provider 503 is retried once and real results retain radius and inventory semantics
+  ---
+  duration_ms: 25.807462
+  type: 'test'
+  ...
+# Subtest: a transient fetch failure can recover but persistent failure stays an error after two attempts
+ok 123 - a transient fetch failure can recover but persistent failure stays an error after two attempts
+  ---
+  duration_ms: 25.74126
+  type: 'test'
+  ...
+# Subtest: overlapping location and shop searches queue instead of rejecting another visitor immediately
+ok 124 - overlapping location and shop searches queue instead of rejecting another visitor immediately
+  ---
+  duration_ms: 16.76357
+  type: 'test'
+  ...
+# Subtest: the queue has a fixed capacity and expires waiting searches without making extra provider calls
+ok 125 - the queue has a fixed capacity and expires waiting searches without making extra provider calls
+  ---
+  duration_ms: 9.202594
+  type: 'test'
+  ...
+# Subtest: upstream Retry-After is preserved for queued and subsequent callers without retrying the provider
+ok 126 - upstream Retry-After is preserved for queued and subsequent callers without retrying the provider
+  ---
+  duration_ms: 8.555286
+  type: 'test'
+  ...
+# Subtest: two slow attempts share a bounded total timeout instead of doubling the wait
+ok 127 - two slow attempts share a bounded total timeout instead of doubling the wait
+  ---
+  duration_ms: 7.223674
+  type: 'test'
+  ...
+# Subtest: radius and coordinates cannot escape the bounded numeric query
+ok 128 - radius and coordinates cannot escape the bounded numeric query
+  ---
+  duration_ms: 4.778349
+  type: 'test'
+  ...
+# Subtest: service stations and unnamed convenience shops are not offered as grocery stops
+ok 129 - service stations and unnamed convenience shops are not offered as grocery stops
+  ---
+  duration_ms: 2.00002
+  type: 'test'
+  ...
+# Subtest: geodesic distance handles identical points, dateline and antipodes
+ok 130 - geodesic distance handles identical points, dateline and antipodes
+  ---
+  duration_ms: 0.408104
+  type: 'test'
+  ...
+# Subtest: exact radius filter excludes a just-outside shop before display rounding
+ok 131 - exact radius filter excludes a just-outside shop before display rounding
+  ---
+  duration_ms: 0.625106
+  type: 'test'
+  ...
+# Subtest: map geometry centres, missing data and marketplace category are handled honestly
+ok 132 - map geometry centres, missing data and marketplace category are handled honestly
+  ---
+  duration_ms: 0.701507
+  type: 'test'
+  ...
+# Subtest: partial Overpass failure is not presented as an empty successful search
+ok 133 - partial Overpass failure is not presented as an empty successful search
+  ---
+  duration_ms: 0.431504
+  type: 'test'
+  ...
+# Subtest: presentation cap preserves actual counts and discloses upstream truncation
+ok 134 - presentation cap preserves actual counts and discloses upstream truncation
+  ---
+  duration_ms: 6.670769
+  type: 'test'
+  ...
+# Subtest: geocoder keeps country/state distinctions and rejects malformed provider data
+ok 135 - geocoder keeps country/state distinctions and rejects malformed provider data
+  ---
+  duration_ms: 0.851309
+  type: 'test'
+  ...
+# Subtest: external shop links only accept ordinary web URLs
+ok 136 - external shop links only accept ordinary web URLs
+  ---
+  duration_ms: 0.619106
+  type: 'test'
+  ...
+# Subtest: Photon nearby results retain source ids and distinguish a returned count from total coverage
+ok 137 - Photon nearby results retain source ids and distinguish a returned count from total coverage
+  ---
+  duration_ms: 0.875209
+  type: 'test'
+  ...
+# Subtest: liver finishes briefly in cooked sauce instead of inheriting a joint braise
+ok 138 - liver finishes briefly in cooked sauce instead of inheriting a joint braise
+  ---
+  duration_ms: 734.488566
+  type: 'test'
+  ...
+# Subtest: bone-in shopping portions account for bones at household serving scales
+ok 139 - bone-in shopping portions account for bones at household serving scales
+  ---
+  duration_ms: 20.598309
+  type: 'test'
+  ...
+# Subtest: a home mincer never receives bone-in slow joints
+ok 140 - a home mincer never receives bone-in slow joints
+  ---
+  duration_ms: 0.697207
+  type: 'test'
+  ...
+# Subtest: paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+ok 141 - paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+  ---
+  duration_ms: 1.831719
+  type: 'test'
+  ...
+# Subtest: thin stir-fry strips have short batch cooks and larger households include all batches once
+ok 142 - thin stir-fry strips have short batch cooks and larger households include all batches once
+  ---
+  duration_ms: 2.775528
+  type: 'test'
+  ...
+# Subtest: one oven is never assumed to run conflicting main and side temperatures simultaneously
+ok 143 - one oven is never assumed to run conflicting main and side temperatures simultaneously
+  ---
+  duration_ms: 5.166453
+  type: 'test'
+  ...
+# Subtest: a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+ok 144 - a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+  ---
+  duration_ms: 6.606367
+  type: 'test'
+  ...
+# Subtest: ingredient quantities remain four-serving drafts while preparation scales exactly once
+ok 145 - ingredient quantities remain four-serving drafts while preparation scales exactly once
+  ---
+  duration_ms: 1.443814
+  type: 'test'
+  ...
+# Subtest: kilogram inputs and reduced main oil retain measured metric water and exact allocations
+ok 146 - kilogram inputs and reduced main oil retain measured metric water and exact allocations
+  ---
+  duration_ms: 1.081611
+  type: 'test'
+  ...
+# Subtest: only the explicitly scoped regional thin-meat stir-fries receive the coating
+ok 147 - only the explicitly scoped regional thin-meat stir-fries receive the coating
+  ---
+  duration_ms: 1.123512
+  type: 'test'
+  ...
+# Subtest: whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+ok 148 - whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+  ---
+  duration_ms: 1.204712
+  type: 'test'
+  ...
+# Subtest: corn and maize exclusions skip the coating without confusing peppercorn
+ok 149 - corn and maize exclusions skip the coating without confusing peppercorn
+  ---
+  duration_ms: 6.065662
+  type: 'test'
+  ...
+# Subtest: raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+ok 150 - raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+  ---
+  duration_ms: 0.751708
+  type: 'test'
+  ...
+# Subtest: invalid amounts, unknown mass units and absent usable oil do not invent a coating
+ok 151 - invalid amounts, unknown mass units and absent usable oil do not invent a coating
+  ---
+  duration_ms: 0.356804
+  type: 'test'
+  ...
+# Subtest: a pending region stops matching the previous Greek plate and survives a studio remount
+ok 152 - a pending region stops matching the previous Greek plate and survives a studio remount
+  ---
+  duration_ms: 6.121462
+  type: 'test'
+  ...
+# Subtest: main, method, side and explicit cut changes each invalidate only the pending result
+ok 153 - main, method, side and explicit cut changes each invalidate only the pending result
+  ---
+  duration_ms: 30.65121
+  type: 'test'
+  ...
+# Subtest: freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+ok 154 - freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+  ---
+  duration_ms: 5.681459
+  type: 'test'
+  ...
+# Subtest: Greek then Japanese generation replaces regional ingredients without changing the selected main
+ok 155 - Greek then Japanese generation replaces regional ingredients without changing the selected main
+  ---
+  duration_ms: 274.39569
+  type: 'test'
+  ...
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 156 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 148.242207
+  type: 'test'
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 157 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 10.410806
+  type: 'test'
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 158 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 30.024305
+  type: 'test'
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 159 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 1069.354977
+  type: 'test'
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 160 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 2.402725
+  type: 'test'
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 161 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 15.282255
+  type: 'test'
+  ...
+# Subtest: current-version meal feedback
+    # Subtest: groups identical food from different seeds but separates quantity, timing, serving and method changes
+    ok 1 - groups identical food from different seeds but separates quantity, timing, serving and method changes
+      ---
+      duration_ms: 36.459271
+      type: 'test'
+      ...
+    # Subtest: rejects malformed snapshots before fingerprinting and does not retain mutable reason arrays
+    ok 2 - rejects malformed snapshots before fingerprinting and does not retain mutable reason arrays
+      ---
+      duration_ms: 16.055363
+      type: 'test'
+      ...
+    # Subtest: requires a reason before every low rating, downvote or wont report, without saving half a report
+    ok 3 - requires a reason before every low rating, downvote or wont report, without saving half a report
+      ---
+      duration_ms: 10.528707
+      type: 'test'
+      ...
+    # Subtest: accepts category-only reasons but requires useful Other detail and rejects malformed choices
+    ok 4 - accepts category-only reasons but requires useful Other detail and rejects malformed choices
+      ---
+      duration_ms: 5.555957
+      type: 'test'
+      ...
+    # Subtest: binds ingredient and zero-based step references to the complete current snapshot
+    ok 5 - binds ingredient and zero-based step references to the complete current snapshot
+      ---
+      duration_ms: 2.676927
+      type: 'test'
+      ...
+    # Subtest: keeps first impressions out of cooked averages, shelving and confidence
+    ok 6 - keeps first impressions out of cooked averages, shelving and confidence
+      ---
+      duration_ms: 9.483397
+      type: 'test'
+      ...
+    # Subtest: counts one latest report per browser and outcome, with small samples clearly bounded
+    ok 7 - counts one latest report per browser and outcome, with small samples clearly bounded
+      ---
+      duration_ms: 13.893242
+      type: 'test'
+      ...
+    # Subtest: preserves readable legacy votes without treating them as current-version evidence
+    ok 8 - preserves readable legacy votes without treating them as current-version evidence
+      ---
+      duration_ms: 3.02813
+      type: 'test'
+      ...
+    # Subtest: treats safety reports as review requests and never as automatic amount or filter changes
+    ok 9 - treats safety reports as review requests and never as automatic amount or filter changes
+      ---
+      duration_ms: 6.666368
+      type: 'test'
+      ...
+    # Subtest: keeps a historical safety concern visible even if a browser later changes its stars
+    ok 10 - keeps a historical safety concern visible even if a browser later changes its stars
+      ---
+      duration_ms: 5.639658
+      type: 'test'
+      ...
+    1..10
+ok 162 - current-version meal feedback
+  ---
+  duration_ms: 113.599958
+  type: 'suite'
+  ...
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 144.302769
+      type: 'test'
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 23.026735
+      type: 'test'
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 46.586973
+      type: 'test'
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 7.138073
+      type: 'test'
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 5.589156
+      type: 'test'
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 92.32434
+      type: 'test'
+      ...
+    # Subtest: explains the actual seeded sauce instead of the region's unselected default seasonings
+    ok 7 - explains the actual seeded sauce instead of the region's unselected default seasonings
+      ---
+      duration_ms: 53.586346
+      type: 'test'
+      ...
+    # Subtest: keeps raw salads crisp when scheduling sides near the end of a smoke
+    ok 8 - keeps raw salads crisp when scheduling sides near the end of a smoke
+      ---
+      duration_ms: 26.298666
+      type: 'test'
+      ...
+    # Subtest: defers service until a coherent finish without losing the main's endpoint
+    ok 9 - defers service until a coherent finish without losing the main's endpoint
+      ---
+      duration_ms: 422.358598
+      type: 'test'
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 10 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 123.719259
+      type: 'test'
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 11 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 16.048163
+      type: 'test'
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 12 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 2.591127
+      type: 'test'
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 13 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 3.524336
+      type: 'test'
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 14 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 2.427125
+      type: 'test'
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 15 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 5360.861066
+      type: 'test'
+      ...
+    1..15
+ok 163 - complete meal integrity
+  ---
+  duration_ms: 6334.607176
+  type: 'suite'
+  ...
+# Subtest: ingredient-first complete meal engine
+    # Subtest: counts only supported main/method/region/side configurations and exposes every promised chicken method
+    ok 1 - counts only supported main/method/region/side configurations and exposes every promised chicken method
+      ---
+      duration_ms: 3.757439
+      type: 'test'
+      ...
+    # Subtest: generates complete meals for every compatible configuration and dietary preference
+    ok 2 - generates complete meals for every compatible configuration and dietary preference
+      ---
+      duration_ms: 200752.394449
+      type: 'test'
+      ...
+    # Subtest: selects appropriate cuts and meaningfully different processes for the same main
+    ok 3 - selects appropriate cuts and meaningfully different processes for the same main
+      ---
+      duration_ms: 5.782261
+      type: 'test'
+      ...
+    # Subtest: retains the selected main and rejects incompatible diets or methods
+    ok 4 - retains the selected main and rejects incompatible diets or methods
+      ---
+      duration_ms: 51.830642
+      type: 'test'
+      ...
+    # Subtest: starts long braises before fast sides and includes precooking and chilling in patty prep
+    ok 5 - starts long braises before fast sides and includes precooking and chilling in patty prep
+      ---
+      duration_ms: 29.0296
+      type: 'test'
+      ...
+    # Subtest: scales all ingredient quantities for every main and method from one through twelve servings
+    ok 6 - scales all ingredient quantities for every main and method from one through twelve servings
+      ---
+      duration_ms: 481.965723
+      type: 'test'
+      ...
+    # Subtest: uses explicit gluten-free alternatives and their actual cooking instructions
+    ok 7 - uses explicit gluten-free alternatives and their actual cooking instructions
+      ---
+      duration_ms: 4.854851
+      type: 'test'
+      ...
+    # Subtest: only marks exact pantry names or suitable explicit aliases, including restricted products
+    ok 8 - only marks exact pantry names or suitable explicit aliases, including restricted products
+      ---
+      duration_ms: 5.082954
+      type: 'test'
+      ...
+    # Subtest: keeps sufficient doneness instructions and primary safety sources for each animal main
+    ok 9 - keeps sufficient doneness instructions and primary safety sources for each animal main
+      ---
+      duration_ms: 52.274342
+      type: 'test'
+      ...
+    # Subtest: varies heat without dropping required sauce ingredients and keeps recipe identity stable
+    ok 10 - varies heat without dropping required sauce ingredients and keeps recipe identity stable
+      ---
+      duration_ms: 101.979858
+      type: 'test'
+      ...
+    # Subtest: merges shared shopping ingredients while keeping component amounts explicit in the method
+    ok 11 - merges shared shopping ingredients while keeping component amounts explicit in the method
+      ---
+      duration_ms: 1.575117
+      type: 'test'
+      ...
+    # Subtest: normalizes defaults and rejects malformed or unbounded inputs
+    ok 12 - normalizes defaults and rejects malformed or unbounded inputs
+      ---
+      duration_ms: 0.957311
+      type: 'test'
+      ...
+    1..12
+ok 164 - ingredient-first complete meal engine
+  ---
+  duration_ms: 201494.739978
+  type: 'suite'
+  ...
+# Subtest: a base path is taken from the environment or next.config, and nowhere else
+ok 165 - a base path is taken from the environment or next.config, and nowhere else
+  ---
+  duration_ms: 2.816129
+  type: 'test'
+  ...
+# Subtest: public pictures are copied under the prefix without touching other built files
+ok 166 - public pictures are copied under the prefix without touching other built files
+  ---
+  duration_ms: 3.738538
+  type: 'test'
+  ...
+# Subtest: pack and money maths (estimate only)
+    # Subtest: uses ceil packs: 600 g / 500 g → 2 packs; pantry 200 g → 1 pack
+    ok 1 - uses ceil packs: 600 g / 500 g → 2 packs; pantry 200 g → 1 pack
+      ---
+      duration_ms: 2.712228
+      type: 'test'
+      ...
+    # Subtest: never treats unknown price as zero or within-budget when unpriced
+    ok 2 - never treats unknown price as zero or within-budget when unpriced
+      ---
+      duration_ms: 0.525105
+      type: 'test'
+      ...
+    # Subtest: rejects zero or negative pack sizes as unresolved
+    ok 3 - rejects zero or negative pack sizes as unresolved
+      ---
+      duration_ms: 0.450805
+      type: 'test'
+      ...
+    1..3
+ok 167 - pack and money maths (estimate only)
+  ---
+  duration_ms: 5.669059
+  type: 'suite'
+  ...
+# Subtest: oils, butter and flour are pantry consumables, and a steak is not
+ok 168 - oils, butter and flour are pantry consumables, and a steak is not
+  ---
+  duration_ms: 4.383045
+  type: 'test'
+  ...
+# Subtest: making a meal uses what is on hand and shops only the shortfall
+ok 169 - making a meal uses what is on hand and shops only the shortfall
+  ---
+  duration_ms: 3.721839
+  type: 'test'
+  ...
+# Subtest: a week plan warns before the pantry is used up
+ok 170 - a week plan warns before the pantry is used up
+  ---
+  duration_ms: 0.687808
+  type: 'test'
+  ...
+# Subtest: flour left after a cook is marked low and is not given a price
+ok 171 - flour left after a cook is marked low and is not given a price
+  ---
+  duration_ms: 0.570906
+  type: 'test'
+  ...
+# Subtest: a week records oil and flour on the pantry before they are bought
+ok 172 - a week records oil and flour on the pantry before they are bought
+  ---
+  duration_ms: 3.045931
+  type: 'test'
+  ...
+# Subtest: a week shopping list is the shortfall only and has no price
+ok 173 - a week shopping list is the shortfall only and has no price
+  ---
+  duration_ms: 0.712707
+  type: 'test'
+  ...
+# Subtest: preparing shopping repeatedly never consumes stock or mutates the original records
+ok 174 - preparing shopping repeatedly never consumes stock or mutates the original records
+  ---
+  duration_ms: 2.419525
+  type: 'test'
+  ...
+# Subtest: saved metric quantities cover compatible recipe units and are deducted once
+ok 175 - saved metric quantities cover compatible recipe units and are deducted once
+  ---
+  duration_ms: 6.778569
+  type: 'test'
+  ...
+# Subtest: spoons, counts and mass are not guessed from other units
+ok 176 - spoons, counts and mass are not guessed from other units
+  ---
+  duration_ms: 0.97011
+  type: 'test'
+  ...
+# Subtest: automatic ownership allocates pantry once across duplicate ingredient lines
+ok 177 - automatic ownership allocates pantry once across duplicate ingredient lines
+  ---
+  duration_ms: 1.261113
+  type: 'test'
+  ...
+# Subtest: declared ownership and a cook aggregate duplicate requirements before deduction
+ok 178 - declared ownership and a cook aggregate duplicate requirements before deduction
+  ---
+  duration_ms: 0.526405
+  type: 'test'
+  ...
+# Subtest: counted ingredients have readable quantities without blank unit gaps
+ok 179 - counted ingredients have readable quantities without blank unit gaps
+  ---
+  duration_ms: 0.529106
+  type: 'test'
+  ...
+# Subtest: household allergen planner integration
+    # Subtest: accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+    ok 1 - accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+      ---
+      duration_ms: 908.415325
+      type: 'test'
+      ...
+    # Subtest: keeps the hyphenated tree-nut exclusion and its supported alias canonical
+    ok 2 - keeps the hyphenated tree-nut exclusion and its supported alias canonical
+      ---
+      duration_ms: 1401.81009
+      type: 'test'
+      ...
+    # Subtest: uses the same complete supported list as direct generators instead of a separate allowlist
+    ok 3 - uses the same complete supported list as direct generators instead of a separate allowlist
+      ---
+      duration_ms: 621.940686
+      type: 'test'
+      ...
+    1..3
+ok 180 - household allergen planner integration
+  ---
+  duration_ms: 2934.337924
+  type: 'suite'
+  ...
+# Subtest: exact cooked feedback in weekly suggestions
+    # Subtest: keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+    ok 1 - keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+      ---
+      duration_ms: 2941.344408
+      type: 'test'
+      ...
+    # Subtest: moves a comparable exact seeded recipe down after three distinct cooked low reports
+    ok 2 - moves a comparable exact seeded recipe down after three distinct cooked low reports
+      ---
+      duration_ms: 1159.426912
+      type: 'test'
+      ...
+    # Subtest: does not transfer a report from changed ingredients, instructions or a broad legacy identity
+    ok 3 - does not transfer a report from changed ingredients, instructions or a broad legacy identity
+      ---
+      duration_ms: 1685.871222
+      type: 'test'
+      ...
+    # Subtest: uses the same learned ordering for dinner alternatives and a random replacement
+    ok 4 - uses the same learned ordering for dinner alternatives and a random replacement
+      ---
+      duration_ms: 1694.452112
+      type: 'test'
+      ...
+    # Subtest: checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+    ok 5 - checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+      ---
+      duration_ms: 1553.388369
+      type: 'test'
+      ...
+    # Subtest: limits feedback lookups to 16 built candidates per pick or alternatives pass
+    ok 6 - limits feedback lookups to 16 built candidates per pick or alternatives pass
+      ---
+      duration_ms: 558.898347
+      type: 'test'
+      ...
+    # Subtest: keeps variety bands ahead of a strongly liked already-used dinner
+    ok 7 - keeps variety bands ahead of a strongly liked already-used dinner
+      ---
+      duration_ms: 732.460129
+      type: 'test'
+      ...
+    # Subtest: does not make shared board updates part of the stored household brief or stale-plan signature
+    ok 8 - does not make shared board updates part of the stored household brief or stale-plan signature
+      ---
+      duration_ms: 6.832871
+      type: 'test'
+      ...
+    1..8
+ok 181 - exact cooked feedback in weekly suggestions
+  ---
+  duration_ms: 10335.399398
+  type: 'suite'
+  ...
+# Subtest: fusion week planner
+    # Subtest: fills seven different dinners and does not invent a price
+    ok 1 - fills seven different dinners and does not invent a price
+      ---
+      duration_ms: 1029.641184
+      type: 'test'
+      ...
+    # Subtest: stacks vegan and gluten-free without wheat, milk, egg, or oats
+    ok 2 - stacks vegan and gluten-free without wheat, milk, egg, or oats
+      ---
+      duration_ms: 725.367958
+      type: 'test'
+      ...
+    # Subtest: does not relax a sesame filter or a hard dislike, and leaves an unsafe lock empty
+    ok 3 - does not relax a sesame filter or a hard dislike, and leaves an unsafe lock empty
+      ---
+      duration_ms: 1762.065423
+      type: 'test'
+      ...
+    # Subtest: uses gluten-free burger mix without oats and egg-free fried rice without eggs
+    ok 4 - uses gluten-free burger mix without oats and egg-free fried rice without eggs
+      ---
+      duration_ms: 2.486226
+      type: 'test'
+      ...
+    # Subtest: keeps pantry matches off the merged list and refuses to drop every filter
+    ok 5 - keeps pantry matches off the merged list and refuses to drop every filter
+      ---
+      duration_ms: 1031.839713
+      type: 'test'
+      ...
+    # Subtest: rejects an unknown allergen and an unbounded week
+    ok 6 - rejects an unknown allergen and an unbounded week
+      ---
+      duration_ms: 1.181012
+      type: 'test'
+      ...
+    # Subtest: keeps an unseeded week stable and lets a seed change the dinners
+    ok 7 - keeps an unseeded week stable and lets a seed change the dinners
+      ---
+      duration_ms: 9302.413541
+      type: 'test'
+      ...
+    # Subtest: does not relax filters when a seed or a randomise asks for another meal
+    ok 8 - does not relax filters when a seed or a randomise asks for another meal
+      ---
+      duration_ms: 4378.730699
+      type: 'test'
+      ...
+    # Subtest: swaps only the side on a meal-kind dinner and refuses a broccoli dislike on steamed broccoli
+    ok 9 - swaps only the side on a meal-kind dinner and refuses a broccoli dislike on steamed broccoli
+      ---
+      duration_ms: 4836.843542
+      type: 'test'
+      ...
+    1..9
+ok 182 - fusion week planner
+  ---
+  duration_ms: 23074.636239
+  type: 'suite'
+  ...
+# Subtest: identical concurrent image requests share one render and then use the cache
+ok 183 - identical concurrent image requests share one render and then use the cache
+  ---
+  duration_ms: 3.104733
+  type: 'test'
+  ...
+# Subtest: failed images release their slot and can be rendered again
+ok 184 - failed images release their slot and can be rendered again
+  ---
+  duration_ms: 1.415714
+  type: 'test'
+  ...
+# Subtest: image cache evicts least-recently-used entries by both byte and entry budgets
+ok 185 - image cache evicts least-recently-used entries by both byte and entry budgets
+  ---
+  duration_ms: 1.237113
+  type: 'test'
+  ...
+# Subtest: capacity overflow paints immediately instead of queuing model work and retries after a short cache
+ok 186 - capacity overflow paints immediately instead of queuing model work and retries after a short cache
+  ---
+  duration_ms: 0.754308
+  type: 'test'
+  ...
+# Subtest: model configuration has bounded defaults and cannot restore a four-minute request
+ok 187 - model configuration has bounded defaults and cannot restore a four-minute request
+  ---
+  duration_ms: 0.341604
+  type: 'test'
+  ...
+# Subtest: the default allows two full renders while other unique requests get immediate fallbacks
+ok 188 - the default allows two full renders while other unique requests get immediate fallbacks
+  ---
+  duration_ms: 1.690918
+  type: 'test'
+  ...
+# Subtest: a configured-model failure keeps its normal-slot fallback temporary and retries for quality
+ok 189 - a configured-model failure keeps its normal-slot fallback temporary and retries for quality
+  ---
+  duration_ms: 0.570706
+  type: 'test'
+  ...
+# Subtest: the fallback is an explicit restrained placeholder with escaped recipe text
+ok 190 - the fallback is an explicit restrained placeholder with escaped recipe text
+  ---
+  duration_ms: 2.481026
+  type: 'test'
+  ...
+# Subtest: no-model fallback stays normal while a failed configured model is temporary
+ok 191 - no-model fallback stays normal while a failed configured model is temporary
+  ---
+  duration_ms: 87.521702
+  type: 'test'
+  ...
+# Subtest: local image size and step budgets keep the original defaults and reject unsupported values
+ok 192 - local image size and step budgets keep the original defaults and reject unsupported values
+  ---
+  duration_ms: 0.279103
+  type: 'test'
+  ...
+# Subtest: automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+ok 193 - automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+  ---
+  duration_ms: 77.827901
+  type: 'test'
+  ...
+# Subtest: one failed batch preserves other prices and never silently turns the failure into zero
+ok 194 - one failed batch preserves other prices and never silently turns the failure into zero
+  ---
+  duration_ms: 2.212623
+  type: 'test'
+  ...
+# Subtest: stale or foreign response quantities cannot enter a new recipe estimate
+ok 195 - stale or foreign response quantities cannot enter a new recipe estimate
+  ---
+  duration_ms: 1.807419
+  type: 'test'
+  ...
+# Subtest: shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+ok 196 - shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+  ---
+  duration_ms: 0.546505
+  type: 'test'
+  ...
+# Subtest: identical mounted views share one request and detached views cannot get late updates
+ok 197 - identical mounted views share one request and detached views cannot get late updates
+  ---
+  duration_ms: 6.247464
+  type: 'test'
+  ...
+# Subtest: a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+ok 198 - a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+  ---
+  duration_ms: 6.356665
+  type: 'test'
+  ...
+# Subtest: malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+ok 199 - malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+  ---
+  duration_ms: 1.446415
+  type: 'test'
+  ...
+# Subtest: homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+ok 200 - homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+  ---
+  duration_ms: 26.08887
+  type: 'test'
+  ...
+# Subtest: complete recipe sharing identity
+    # Subtest: keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+    ok 1 - keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+      ---
+      duration_ms: 169.871852
+      type: 'test'
+      ...
+    # Subtest: keeps the butcher cut, constraints, seeded regional variety and cook session
+    ok 2 - keeps the butcher cut, constraints, seeded regional variety and cook session
+      ---
+      duration_ms: 46.398378
+      type: 'test'
+      ...
+    # Subtest: keeps classic clean flags and hard filters along with seed and session
+    ok 3 - keeps classic clean flags and hard filters along with seed and session
+      ---
+      duration_ms: 20.177308
+      type: 'test'
+      ...
+    # Subtest: shares pantry-first cooking choices without sharing what is in the household pantry
+    ok 4 - shares pantry-first cooking choices without sharing what is in the household pantry
+      ---
+      duration_ms: 24.559452
+      type: 'test'
+      ...
+    # Subtest: retains input snapshots when a caller later edits their preference objects
+    ok 5 - retains input snapshots when a caller later edits their preference objects
+      ---
+      duration_ms: 24.350252
+      type: 'test'
+      ...
+    # Subtest: still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+    ok 6 - still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+      ---
+      duration_ms: 16.318068
+      type: 'test'
+      ...
+    # Subtest: does not pretend it can reproduce missing cleaner settings in an old saved recipe
+    ok 7 - does not pretend it can reproduce missing cleaner settings in an old saved recipe
+      ---
+      duration_ms: 15.856563
+      type: 'test'
+      ...
+    # Subtest: bounds and validates additional token options rather than silently discarding them
+    ok 8 - bounds and validates additional token options rather than silently discarding them
+      ---
+      duration_ms: 1.673417
+      type: 'test'
+      ...
+    # Subtest: verifies a current recipe while ignoring a renamed display title and pantry ticks
+    ok 9 - verifies a current recipe while ignoring a renamed display title and pantry ticks
+      ---
+      duration_ms: 42.922443
+      type: 'test'
+      ...
+    # Subtest: refuses links that would recreate changed quantities, methods or another recipe
+    ok 10 - refuses links that would recreate changed quantities, methods or another recipe
+      ---
+      duration_ms: 78.503709
+      type: 'test'
+      ...
+    # Subtest: returns false for malformed or unsupported old-token specifications without throwing
+    ok 11 - returns false for malformed or unsupported old-token specifications without throwing
+      ---
+      duration_ms: 5.392757
+      type: 'test'
+      ...
+    1..11
+ok 201 - complete recipe sharing identity
+  ---
+  duration_ms: 450.161341
+  type: 'suite'
+  ...
+# Subtest: complete classic recipe exclusions
+    # Subtest: rejects a recorded allergen in the base recipe even without a random seed
+    ok 1 - rejects a recorded allergen in the base recipe even without a random seed
+      ---
+      duration_ms: 13.61364
+      type: 'test'
+      ...
+    # Subtest: checks hard dislikes against the full base and aliases, with and without a seed
+    ok 2 - checks hard dislikes against the full base and aliases, with and without a seed
+      ---
+      duration_ms: 13.133435
+      type: 'test'
+      ...
+    1..2
+ok 202 - complete classic recipe exclusions
+  ---
+  duration_ms: 27.138679
+  type: 'suite'
+  ...
+# Subtest: full image identity includes every ingredient, quantity and cooking form
+ok 203 - full image identity includes every ingredient, quantity and cooking form
+  ---
+  duration_ms: 108.376918
+  type: 'test'
+  ...
+# Subtest: missing images queue immediately, deduplicate and survive service restart
+ok 204 - missing images queue immediately, deduplicate and survive service restart
+  ---
+  duration_ms: 56.665884
+  type: 'test'
+  ...
+# Subtest: a durable renderer claim prevents duplicate work across service instances
+ok 205 - a durable renderer claim prevents duplicate work across service instances
+  ---
+  duration_ms: 44.826162
+  type: 'test'
+  ...
+# Subtest: retry delays, attempt budgets and pending capacity are enforced
+ok 206 - retry delays, attempt budgets and pending capacity are enforced
+  ---
+  duration_ms: 99.721528
+  type: 'test'
+  ...
+# Subtest: requested images take priority over warm jobs and unavailable model is explicit
+ok 207 - requested images take priority over warm jobs and unavailable model is explicit
+  ---
+  duration_ms: 77.309296
+  type: 'test'
+  ...
+# Subtest: persistent cache obeys entry and byte budgets
+ok 208 - persistent cache obeys entry and byte budgets
+  ---
+  duration_ms: 98.722819
+  type: 'test'
+  ...
+# Subtest: expired renderer leases resume and obsolete queued versions cannot block new work
+ok 209 - expired renderer leases resume and obsolete queued versions cannot block new work
+  ---
+  duration_ms: 43.136644
+  type: 'test'
+  ...
+# Subtest: cookbook cooking-content identity
+    # Subtest: keeps distinct cleaner plates even when their legacy template ids match
+    ok 1 - keeps distinct cleaner plates even when their legacy template ids match
+      ---
+      duration_ms: 52.34024
+      type: 'test'
+      ...
+    # Subtest: distinguishes actual cuts and preparation when a snapshot carries a colliding id
+    ok 2 - distinguishes actual cuts and preparation when a snapshot carries a colliding id
+      ---
+      duration_ms: 7.609278
+      type: 'test'
+      ...
+    # Subtest: does not fork the same cooked recipe for pantry ticks, display copy or generation metadata
+    ok 3 - does not fork the same cooked recipe for pantry ticks, display copy or generation metadata
+      ---
+      duration_ms: 85.154379
+      type: 'test'
+      ...
+    # Subtest: ignores ingredient/equipment/allergen ordering but preserves the cooking sequence and quantities
+    ok 4 - ignores ingredient/equipment/allergen ordering but preserves the cooking sequence and quantities
+      ---
+      duration_ms: 5.581358
+      type: 'test'
+      ...
+    1..4
+ok 210 - cookbook cooking-content identity
+  ---
+  duration_ms: 154.005888
+  type: 'suite'
+  ...
+# Subtest: complete recipe PDF export
+    # Subtest: includes equipment, recorded allergens, preparation/label notes and method guidance
+    ok 1 - includes equipment, recorded allergens, preparation/label notes and method guidance
+      ---
+      duration_ms: 37.566387
+      type: 'test'
+      ...
+    # Subtest: moves a whole cooking step onto the next page when it fits there
+    ok 2 - moves a whole cooking step onto the next page when it fits there
+      ---
+      duration_ms: 12.217625
+      type: 'test'
+      ...
+    # Subtest: retains ingredient-level allergens when an older summary is incomplete
+    ok 3 - retains ingredient-level allergens when an older summary is incomplete
+      ---
+      duration_ms: 9.172196
+      type: 'test'
+      ...
+    # Subtest: wraps wide unbroken words inside the printable area and safely escapes PDF literals
+    ok 4 - wraps wide unbroken words inside the printable area and safely escapes PDF literals
+      ---
+      duration_ms: 6.381666
+      type: 'test'
+      ...
+    # Subtest: writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+    ok 5 - writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+      ---
+      duration_ms: 9.444197
+      type: 'test'
+      ...
+    # Subtest: rejects excessive output rather than silently dropping cooking instructions
+    ok 6 - rejects excessive output rather than silently dropping cooking instructions
+      ---
+      duration_ms: 960.228603
+      type: 'test'
+      ...
+    1..6
+ok 211 - complete recipe PDF export
+  ---
+  duration_ms: 1038.057206
+  type: 'suite'
+  ...
+# Subtest: independent recipe quality postconditions
+    # Subtest: accepts a separately finished sauce before a long main cook
+    ok 1 - accepts a separately finished sauce before a long main cook
+      ---
+      duration_ms: 23.790045
+      type: 'test'
+      ...
+    # Subtest: rejects explicit prolonged reheating of already finished sauce
+    ok 2 - rejects explicit prolonged reheating of already finished sauce
+      ---
+      duration_ms: 5.533657
+      type: 'test'
+      ...
+    # Subtest: rejects hidden invalid portions, duplicate identities and irreconcilable times
+    ok 3 - rejects hidden invalid portions, duplicate identities and irreconcilable times
+      ---
+      duration_ms: 7.457177
+      type: 'test'
+      ...
+    # Subtest: rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+    ok 4 - rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+      ---
+      duration_ms: 9.791801
+      type: 'test'
+      ...
+    # Subtest: checks actual bean-filled shells and delicate liver rather than just meat cases
+    ok 5 - checks actual bean-filled shells and delicate liver rather than just meat cases
+      ---
+      duration_ms: 24.229549
+      type: 'test'
+      ...
+    # Subtest: distinguishes review warnings from broken recipes and never claims a taste probability
+    ok 6 - distinguishes review warnings from broken recipes and never claims a taste probability
+      ---
+      duration_ms: 0.686707
+      type: 'test'
+      ...
+    # Subtest: retains postconditions after seed, serving and cleaner settings
+    ok 7 - retains postconditions after seed, serving and cleaner settings
+      ---
+      duration_ms: 193.842299
+      type: 'test'
+      ...
+    1..7
+ok 212 - independent recipe quality postconditions
+  ---
+  duration_ms: 268.431668
+  type: 'suite'
+  ...
+# Subtest: fusion recipe engine
+    # Subtest: produces complete, bounded recipes for every authored classic, region and dietary preference
+    ok 1 - produces complete, bounded recipes for every authored classic, region and dietary preference
+      ---
+      duration_ms: 2435.495424
+      type: 'test'
+      ...
+    # Subtest: scales every ingredient from one through twelve servings without changing the method's safety endpoint
+    ok 2 - scales every ingredient from one through twelve servings without changing the method's safety endpoint
+      ---
+      duration_ms: 2.516426
+      type: 'test'
+      ...
+    # Subtest: uses actual substitutes in methods and does not ask a vegan to cook chicken, beef or eggs
+    ok 3 - uses actual substitutes in methods and does not ask a vegan to cook chicken, beef or eggs
+      ---
+      duration_ms: 12.810332
+      type: 'test'
+      ...
+    # Subtest: requires exact pantry matches and keeps unsuitable dairy or gluten substitutions unmarked
+    ok 4 - requires exact pantry matches and keeps unsuitable dairy or gluten substitutions unmarked
+      ---
+      duration_ms: 3.367834
+      type: 'test'
+      ...
+    # Subtest: reduces chilli paste for mild and increases it for hot
+    ok 5 - reduces chilli paste for mild and increases it for hot
+      ---
+      duration_ms: 4.115144
+      type: 'test'
+      ...
+    # Subtest: rejects unknown selections and unbounded or fractional servings
+    ok 6 - rejects unknown selections and unbounded or fractional servings
+      ---
+      duration_ms: 1.01141
+      type: 'test'
+      ...
+    # Subtest: formats small and fractional quantities without dropping units
+    ok 7 - formats small and fractional quantities without dropping units
+      ---
+      duration_ms: 27.699985
+      type: 'test'
+      ...
+    1..7
+ok 213 - fusion recipe engine
+  ---
+  duration_ms: 2489.836984
+  type: 'suite'
+  ...
+# Subtest: region ingredient affinity
+    # Subtest: keeps kimchi off non-Korean sides, plates and preferred lists
+    ok 1 - keeps kimchi off non-Korean sides, plates and preferred lists
+      ---
+      duration_ms: 5.558258
+      type: 'test'
+      ...
+    # Subtest: does not put kimchi, sriracha, fish sauce or miso on Western random samples
+    ok 2 - does not put kimchi, sriracha, fish sauce or miso on Western random samples
+      ---
+      duration_ms: 1676.196396
+      type: 'test'
+      ...
+    # Subtest: keeps authored Thai heat and Japanese miso while excluding off-region sauces
+    ok 3 - keeps authored Thai heat and Japanese miso while excluding off-region sauces
+      ---
+      duration_ms: 588.724576
+      type: 'test'
+      ...
+    # Subtest: does not explore sibling strong markers onto the wrong region
+    ok 4 - does not explore sibling strong markers onto the wrong region
+      ---
+      duration_ms: 7.986982
+      type: 'test'
+      ...
+    # Subtest: keeps kimchi out of seeded weeks unless the dinner is Korean with kimchi-rice
+    ok 5 - keeps kimchi out of seeded weeks unless the dinner is Korean with kimchi-rice
+      ---
+      duration_ms: 39892.765906
+      type: 'test'
+      ...
+    # Subtest: aligns authored side marker hints with the affinity table
+    ok 6 - aligns authored side marker hints with the affinity table
+      ---
+      duration_ms: 1.206512
+      type: 'test'
+      ...
+    1..6
+ok 214 - region ingredient affinity
+  ---
+  duration_ms: 42176.276669
+  type: 'suite'
+  ...
+# Subtest: Japanese exploration excludes curry-only seasonings across seeds and heat levels
+ok 215 - Japanese exploration excludes curry-only seasonings across seeds and heat levels
+  ---
+  duration_ms: 78.373312
+  type: 'test'
+  ...
+# Subtest: sharing a staple does not import another region's authored flavour markers
+ok 216 - sharing a staple does not import another region's authored flavour markers
+  ---
+  duration_ms: 46.912286
+  type: 'test'
+  ...
+# Subtest: each region retains its own authored core and deterministic seeded variation
+ok 217 - each region retains its own authored core and deterministic seeded variation
+  ---
+  duration_ms: 42.991946
+  type: 'test'
+  ...
+# Subtest: unseeded profiles remain exactly the authored profiles
+ok 218 - unseeded profiles remain exactly the authored profiles
+  ---
+  duration_ms: 21.769825
+  type: 'test'
+  ...
+# Subtest: region pantry
+    # Subtest: links every catalogue item to a region, and puts bird's eye only on cuisines that use it
+    ok 1 - links every catalogue item to a region, and puts bird's eye only on cuisines that use it
+      ---
+      duration_ms: 54.463265
+      type: 'test'
+      ...
+    # Subtest: keeps the locked condiment names and scales each signature heat from mild to hot
+    ok 2 - keeps the locked condiment names and scales each signature heat from mild to hot
+      ---
+      duration_ms: 21.020318
+      type: 'test'
+      ...
+    # Subtest: keeps peanut off the week-planner plates and repeats an unseeded regional meal
+    ok 3 - keeps peanut off the week-planner plates and repeats an unseeded regional meal
+      ---
+      duration_ms: 29.386504
+      type: 'test'
+      ...
+    1..3
+ok 219 - region pantry
+  ---
+  duration_ms: 107.464214
+  type: 'suite'
+  ...
+# Subtest: quantified regional cooking stages
+    # Subtest: fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+    ok 1 - fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+      ---
+      duration_ms: 9.611799
+      type: 'test'
+      ...
+    # Subtest: tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+    ok 2 - tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+      ---
+      duration_ms: 3.049932
+      type: 'test'
+      ...
+    # Subtest: dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+    ok 3 - dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+      ---
+      duration_ms: 1.605017
+      type: 'test'
+      ...
+    # Subtest: retrieves woody infusions, while finely minced tender lemongrass stays edible
+    ok 4 - retrieves woody infusions, while finely minced tender lemongrass stays edible
+      ---
+      duration_ms: 4.460046
+      type: 'test'
+      ...
+    # Subtest: infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+    ok 5 - infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+      ---
+      duration_ms: 2.00432
+      type: 'test'
+      ...
+    # Subtest: keeps fresh and delicate finishes explicit without adding imaginary ingredients
+    ok 6 - keeps fresh and delicate finishes explicit without adding imaginary ingredients
+      ---
+      duration_ms: 3.923841
+      type: 'test'
+      ...
+    # Subtest: uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+    ok 7 - uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+      ---
+      duration_ms: 2.592727
+      type: 'test'
+      ...
+    # Subtest: allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+    ok 8 - allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+      ---
+      duration_ms: 4703.658854
+      type: 'test'
+      ...
+    # Subtest: defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+    ok 9 - defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+      ---
+      duration_ms: 2.399325
+      type: 'test'
+      ...
+    # Subtest: lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+    ok 10 - lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+      ---
+      duration_ms: 1.578317
+      type: 'test'
+      ...
+    # Subtest: rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+    ok 11 - rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+      ---
+      duration_ms: 1.349014
+      type: 'test'
+      ...
+    # Subtest: blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+    ok 12 - blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+      ---
+      duration_ms: 1.230313
+      type: 'test'
+      ...
+    # Subtest: respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+    ok 13 - respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+      ---
+      duration_ms: 3.732138
+      type: 'test'
+      ...
+    # Subtest: hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+    ok 14 - hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+      ---
+      duration_ms: 1.684219
+      type: 'test'
+      ...
+    # Subtest: toasts raw sesame before the hot stages and references that same portion at the finish
+    ok 15 - toasts raw sesame before the hot stages and references that same portion at the finish
+      ---
+      duration_ms: 2.020222
+      type: 'test'
+      ...
+    1..15
+ok 220 - quantified regional cooking stages
+  ---
+  duration_ms: 4749.735231
+  type: 'suite'
+  ...
+# Subtest: runtime selection keeps Worker as the default and requires an explicit Node profile
+ok 221 - runtime selection keeps Worker as the default and requires an explicit Node profile
+  ---
+  duration_ms: 2.238122
+  type: 'test'
+  ...
+# Subtest: all512 two-variable CNFs enumerate exactly the independent truth-table models
+ok 222 - all512 two-variable CNFs enumerate exactly the independent truth-table models
+  ---
+  duration_ms: 62.008843
+  type: 'test'
+  ...
+# Subtest: random small models and scored optima agree with an independent exhaustive oracle
+ok 223 - random small models and scored optima agree with an independent exhaustive oracle
+  ---
+  duration_ms: 469.971072
+  type: 'test'
+  ...
+# Subtest: independent RUP replay binds an UNSAT certificate to the actual original clauses
+ok 224 - independent RUP replay binds an UNSAT certificate to the actual original clauses
+  ---
+  duration_ms: 1.129612
+  type: 'test'
+  ...
+# Subtest: resource limits and bad decisions remain UNKNOWN rather than false UNSAT claims
+ok 225 - resource limits and bad decisions remain UNKNOWN rather than false UNSAT claims
+  ---
+  duration_ms: 1.061212
+  type: 'test'
+  ...
+# Subtest: caps report incomplete best-known results, including the exact model-cap boundary
+ok 226 - caps report incomplete best-known results, including the exact model-cap boundary
+  ---
+  duration_ms: 0.902709
+  type: 'test'
+  ...
+# Subtest: soft scores cannot violate a hard exclusion, mutate models or claim unknown optima
+ok 227 - soft scores cannot violate a hard exclusion, mutate models or claim unknown optima
+  ---
+  duration_ms: 2.204723
+  type: 'test'
+  ...
+# Subtest: seeded ties stay deterministic while full model sets and optimum values remain invariant
+ok 228 - seeded ties stay deterministic while full model sets and optimum values remain invariant
+  ---
+  duration_ms: 3.450035
+  type: 'test'
+  ...
+# Subtest: malformed literals are rejected even when hidden after a tautology or empty clause
+ok 229 - malformed literals are rejected even when hidden after a tautology or empty clause
+  ---
+  duration_ms: 0.610507
+  type: 'test'
+  ...
+# Subtest: seeded CDCL
+    # Subtest: rejects a contradiction and accepts a forced literal
+    ok 1 - rejects a contradiction and accepts a forced literal
+      ---
+      duration_ms: 3.137233
+      type: 'test'
+      ...
+    # Subtest: matches brute force on small random formulas and returns a real model
+    ok 2 - matches brute force on small random formulas and returns a real model
+      ---
+      duration_ms: 25.08706
+      type: 'test'
+      ...
+    # Subtest: lets the seed change which member of an exactly-one group is chosen
+    ok 3 - lets the seed change which member of an exactly-one group is chosen
+      ---
+      duration_ms: 2.01962
+      type: 'test'
+      ...
+    1..3
+ok 230 - seeded CDCL
+  ---
+  duration_ms: 32.382336
+  type: 'suite'
+  ...
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 160.713567
+      type: 'test'
+      ...
+    # Subtest: serves exact inspiration images and an honest labelled placeholder for recipes without an image
+    ok 2 - serves exact inspiration images and an honest labelled placeholder for recipes without an image
+      ---
+      duration_ms: 80.684237
+      type: 'test'
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 187.026238
+      type: 'test'
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 9.974404
+      type: 'test'
+      ...
+    1..4
+ok 231 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 441.679679
+  type: 'suite'
+  ...
+# Subtest: shopping requests normalize the area and bound six distinct ingredient lines
+ok 232 - shopping requests normalize the area and bound six distinct ingredient lines
+  ---
+  duration_ms: 5.225154
+  type: 'test'
+  ...
+# Subtest: invalid names, identifiers, amounts, units and shapes are rejected before provider work
+ok 233 - invalid names, identifiers, amounts, units and shapes are rejected before provider work
+  ---
+  duration_ms: 1.486715
+  type: 'test'
+  ...
+# Subtest: oversized or malformed shop metadata cannot become an association by prefix truncation
+ok 234 - oversized or malformed shop metadata cannot become an association by prefix truncation
+  ---
+  duration_ms: 1.471015
+  type: 'test'
+  ...
+# Subtest: the streamed request size cap rejects large JSON without reading the entire body
+ok 235 - the streamed request size cap rejects large JSON without reading the entire body
+  ---
+  duration_ms: 54.836869
+  type: 'test'
+  ...
+# Subtest: Woolworths failure leaves Coles and exact local recorded prices available
+ok 236 - Woolworths failure leaves Coles and exact local recorded prices available
+  ---
+  duration_ms: 33.484447
+  type: 'test'
+  ...
+# Subtest: synchronous provider failures are isolated like rejected asynchronous calls
+ok 237 - synchronous provider failures are isolated like rejected asynchronous calls
+  ---
+  duration_ms: 2.113822
+  type: 'test'
+  ...
+# Subtest: local ledger failure and per-item catalogue errors leave honest partial results
+ok 238 - local ledger failure and per-item catalogue errors leave honest partial results
+  ---
+  duration_ms: 1.472115
+  type: 'test'
+  ...
+# Subtest: no successful provider yields a missing estimate rather than a zero basket
+ok 239 - no successful provider yields a missing estimate rather than a zero basket
+  ---
+  duration_ms: 0.676907
+  type: 'test'
+  ...
+# Subtest: non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+ok 240 - non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+  ---
+  duration_ms: 1.627816
+  type: 'test'
+  ...
+# Subtest: generic GPS locations can use online guides without borrowing a shared generic area's records
+ok 241 - generic GPS locations can use online guides without borrowing a shared generic area's records
+  ---
+  duration_ms: 1.666018
+  type: 'test'
+  ...
+# Subtest: explicitly disabling online checks prevents retailer requests
+ok 242 - explicitly disabling online checks prevents retailer requests
+  ---
+  duration_ms: 7.304875
+  type: 'test'
+  ...
+# Subtest: duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+ok 243 - duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+  ---
+  duration_ms: 2.346925
+  type: 'test'
+  ...
+# Subtest: special filtering receives Sydney's date rather than the previous UTC day
+ok 244 - special filtering receives Sydney's date rather than the previous UTC day
+  ---
+  duration_ms: 0.650707
+  type: 'test'
+  ...
+# Subtest: aborting catalogue checks retains finished local evidence and gives a partial-source notice
+ok 245 - aborting catalogue checks retains finished local evidence and gives a partial-source notice
+  ---
+  duration_ms: 27.735388
+  type: 'test'
+  ...
+# Subtest: metric packs round up whole purchases and preserve purchased quantity
+ok 246 - metric packs round up whole purchases and preserve purchased quantity
+  ---
+  duration_ms: 3.960742
+  type: 'test'
+  ...
+# Subtest: multipacks and explicit count units are costed without discarding their contents
+ok 247 - multipacks and explicit count units are costed without discarding their contents
+  ---
+  duration_ms: 0.635306
+  type: 'test'
+  ...
+# Subtest: explicit rates use the needed quantity with money rounded once
+ok 248 - explicit rates use the needed quantity with money rounded once
+  ---
+  duration_ms: 0.382804
+  type: 'test'
+  ...
+# Subtest: unknown units, densities and approximate pack sizes never become free or guessed food
+ok 249 - unknown units, densities and approximate pack sizes never become free or guessed food
+  ---
+  duration_ms: 0.503105
+  type: 'test'
+  ...
+# Subtest: Woolworths and Coles are separate online evidence, never the default local fulfilment store
+ok 250 - Woolworths and Coles are separate online evidence, never the default local fulfilment store
+  ---
+  duration_ms: 4.465145
+  type: 'test'
+  ...
+# Subtest: only explicitly associated local records belong to a nearby shop
+ok 251 - only explicitly associated local records belong to a nearby shop
+  ---
+  duration_ms: 11.183116
+  type: 'test'
+  ...
+# Subtest: different areas and different item keys cannot contaminate local costs
+ok 252 - different areas and different item keys cannot contaminate local costs
+  ---
+  duration_ms: 0.722008
+  type: 'test'
+  ...
+# Subtest: old manual observations remain readable without treating their unknown pack as the whole recipe
+ok 253 - old manual observations remain readable without treating their unknown pack as the whole recipe
+  ---
+  duration_ms: 0.721807
+  type: 'test'
+  ...
+# Subtest: manual selling quantities survive normalizing and legacy observations remain compatible
+ok 254 - manual selling quantities survive normalizing and legacy observations remain compatible
+  ---
+  duration_ms: 3.266834
+  type: 'test'
+  ...
+# Subtest: latest observation for the same shop, item and pack supersedes its earlier cheaper price
+ok 255 - latest observation for the same shop, item and pack supersedes its earlier cheaper price
+  ---
+  duration_ms: 0.829309
+  type: 'test'
+  ...
+# Subtest: stale, future and missing timestamps remain visible but cannot silently enter an estimate
+ok 256 - stale, future and missing timestamps remain visible but cannot silently enter an estimate
+  ---
+  duration_ms: 1.04871
+  type: 'test'
+  ...
+# Subtest: special end dates are interpreted as Australian local days and malformed dates fail closed
+ok 257 - special end dates are interpreted as Australian local days and malformed dates fail closed
+  ---
+  duration_ms: 11.270616
+  type: 'test'
+  ...
+# Subtest: dietary wording still requires explicit matching product evidence before automatic cost choice
+ok 258 - dietary wording still requires explicit matching product evidence before automatic cost choice
+  ---
+  duration_ms: 7.919983
+  type: 'test'
+  ...
+# Subtest: plain staple brand ties produce a suggested estimate while preserving explicit choice
+ok 259 - plain staple brand ties produce a suggested estimate while preserving explicit choice
+  ---
+  duration_ms: 2.498826
+  type: 'test'
+  ...
+# Subtest: actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+ok 260 - actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+  ---
+  duration_ms: 1.797119
+  type: 'test'
+  ...
+# Subtest: generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+ok 261 - generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+  ---
+  duration_ms: 1.763018
+  type: 'test'
+  ...
+# Subtest: Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+ok 262 - Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+  ---
+  duration_ms: 4.396845
+  type: 'test'
+  ...
+# Subtest: unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+ok 263 - unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+  ---
+  duration_ms: 6.378267
+  type: 'test'
+  ...
+# Subtest: official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+ok 264 - official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+  ---
+  duration_ms: 2.121622
+  type: 'test'
+  ...
+# Subtest: a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+ok 265 - a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+  ---
+  duration_ms: 0.488905
+  type: 'test'
+  ...
+# Subtest: fresh produce cannot be automatically replaced by powder, paste or preserved products
+ok 266 - fresh produce cannot be automatically replaced by powder, paste or preserved products
+  ---
+  duration_ms: 2.333525
+  type: 'test'
+  ...
+# Subtest: brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+ok 267 - brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+  ---
+  duration_ms: 4.685848
+  type: 'test'
+  ...
+# Subtest: unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+ok 268 - unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+  ---
+  duration_ms: 1.859919
+  type: 'test'
+  ...
+# Subtest: all meaningful requested staple words must occur even if the catalogue matcher chose one row
+ok 269 - all meaningful requested staple words must occur even if the catalogue matcher chose one row
+  ---
+  duration_ms: 1.093411
+  type: 'test'
+  ...
+# Subtest: partial list totals expose missing lines during progressive batches and never call them zero
+ok 270 - partial list totals expose missing lines during progressive batches and never call them zero
+  ---
+  duration_ms: 0.526805
+  type: 'test'
+  ...
+# Subtest: nearby shopping-list relevance
+    # Subtest: explains likely list coverage separately from stock, prices or cheapest claims
+    ok 1 - explains likely list coverage separately from stock, prices or cheapest claims
+      ---
+      duration_ms: 5.319256
+      type: 'test'
+      ...
+    # Subtest: matches only the relevant fresh, bakery and spice categories
+    ok 2 - matches only the relevant fresh, bakery and spice categories
+      ---
+      duration_ms: 12.503829
+      type: 'test'
+      ...
+    # Subtest: infers old/custom ingredient categories without mistaking substitutes or condiments for meat
+    ok 3 - infers old/custom ingredient categories without mistaking substitutes or condiments for meat
+      ---
+      duration_ms: 2.560726
+      type: 'test'
+      ...
+    # Subtest: uses pantry needs, de-duplicates ids, applies name filters and leaves inputs unchanged
+    ok 4 - uses pantry needs, de-duplicates ids, applies name filters and leaves inputs unchanged
+      ---
+      duration_ms: 4.590948
+      type: 'test'
+      ...
+    # Subtest: orders equal coverage by real distance, then stable name/id, and preserves unknown distances honestly
+    ok 5 - orders equal coverage by real distance, then stable name/id, and preserves unknown distances honestly
+      ---
+      duration_ms: 1.630918
+      type: 'test'
+      ...
+    # Subtest: respects the exact selected radius and source subtype
+    ok 6 - respects the exact selected radius and source subtype
+      ---
+      duration_ms: 0.361705
+      type: 'test'
+      ...
+    1..6
+ok 271 - nearby shopping-list relevance
+  ---
+  duration_ms: 29.944111
+  type: 'suite'
+  ...
+# Subtest: public retailer ingredient links
+    # Subtest: encodes full dietary/product terms in verified Woolworths and Coles searches
+    ok 1 - encodes full dietary/product terms in verified Woolworths and Coles searches
+      ---
+      duration_ms: 1.202112
+      type: 'test'
+      ...
+    # Subtest: uses official ALDI/IGA destinations without inventing stock or unsupported search parameters
+    ok 2 - uses official ALDI/IGA destinations without inventing stock or unsupported search parameters
+      ---
+      duration_ms: 0.532605
+      type: 'test'
+      ...
+    # Subtest: offers a public shop website and area-specific web fallback, rejecting unsafe destinations
+    ok 3 - offers a public shop website and area-specific web fallback, rejecting unsafe destinations
+      ---
+      duration_ms: 1.169412
+      type: 'test'
+      ...
+    1..3
+ok 272 - public retailer ingredient links
+  ---
+  duration_ms: 3.680637
+  type: 'suite'
+  ...
+# Subtest: shopping list sources
+    # Subtest: gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+    ok 1 - gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+      ---
+      duration_ms: 2.395925
+      type: 'test'
+      ...
+    # Subtest: merges exact metric conversions so one product is not bought twice
+    ok 2 - merges exact metric conversions so one product is not bought twice
+      ---
+      duration_ms: 2.159722
+      type: 'test'
+      ...
+    # Subtest: does not guess fresh-food density or spoon-to-weight conversions
+    ok 3 - does not guess fresh-food density or spoon-to-weight conversions
+      ---
+      duration_ms: 0.418405
+      type: 'test'
+      ...
+    # Subtest: preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+    ok 4 - preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+      ---
+      duration_ms: 0.829608
+      type: 'test'
+      ...
+    # Subtest: loads valid custom entries without trusting persisted extra fields
+    ok 5 - loads valid custom entries without trusting persisted extra fields
+      ---
+      duration_ms: 0.517505
+      type: 'test'
+      ...
+    1..5
+ok 273 - shopping list sources
+  ---
+  duration_ms: 8.777791
+  type: 'suite'
+  ...
+# Subtest: six products from one retailer cannot hide the second retailer
+ok 274 - six products from one retailer cannot hide the second retailer
+  ---
+  duration_ms: 7.367877
+  type: 'test'
+  ...
+# Subtest: only safe eligible choices are ranked by quantity cost
+ok 275 - only safe eligible choices are ranked by quantity cost
+  ---
+  duration_ms: 0.320903
+  type: 'test'
+  ...
+# Subtest: unresolved brand choices show the first reviewable candidate without inferring cheapest food
+ok 276 - unresolved brand choices show the first reviewable candidate without inferring cheapest food
+  ---
+  duration_ms: 0.262502
+  type: 'test'
+  ...
+# Subtest: an explicit pack choice remains visible, including a seller outside the four-source preview
+ok 277 - an explicit pack choice remains visible, including a seller outside the four-source preview
+  ---
+  duration_ms: 0.669107
+  type: 'test'
+  ...
+# Subtest: separate local shops and online catalogue scope remain distinct
+ok 278 - separate local shops and online catalogue scope remain distinct
+  ---
+  duration_ms: 0.452505
+  type: 'test'
+  ...
+# Subtest: a failed retailer remains visible with unknown cost beside available prices
+ok 279 - a failed retailer remains visible with unknown cost beside available prices
+  ---
+  duration_ms: 1.035911
+  type: 'test'
+  ...
+# Subtest: review-only and unmatched retailer results stay unknown, never zero
+ok 280 - review-only and unmatched retailer results stay unknown, never zero
+  ---
+  duration_ms: 0.305704
+  type: 'test'
+  ...
+# Subtest: local recorded evidence stays separate from a failed chain guide
+ok 281 - local recorded evidence stays separate from a failed chain guide
+  ---
+  duration_ms: 0.306003
+  type: 'test'
+  ...
+# Subtest: miso is never matched to a bakery, cheese shop, spice shop, deli or generic specialty shop
+ok 282 - miso is never matched to a bakery, cheese shop, spice shop, deli or generic specialty shop
+  ---
+  duration_ms: 4.299245
+  type: 'test'
+  ...
+# Subtest: fresh produce, meat and seafood stay in their actual specialized shop families
+ok 283 - fresh produce, meat and seafood stay in their actual specialized shop families
+  ---
+  duration_ms: 0.685307
+  type: 'test'
+  ...
+# Subtest: bakery recommendations are for actual bread products, never flour or condiments
+ok 284 - bakery recommendations are for actual bread products, never flour or condiments
+  ---
+  duration_ms: 0.463505
+  type: 'test'
+  ...
+# Subtest: cheese shops require dairy cheese, not any dairy or a plant-based substitute
+ok 285 - cheese shops require dairy cheese, not any dairy or a plant-based substitute
+  ---
+  duration_ms: 0.685108
+  type: 'test'
+  ...
+# Subtest: spice shops match dried spices and exclude fresh herbs, pastes and oils
+ok 286 - spice shops match dried spices and exclude fresh herbs, pastes and oils
+  ---
+  duration_ms: 0.522905
+  type: 'test'
+  ...
+# Subtest: delicatessens only match narrow deli families; generic markets imply no stock
+ok 287 - delicatessens only match narrow deli families; generic markets imply no stock
+  ---
+  duration_ms: 0.438604
+  type: 'test'
+  ...
+# Subtest: specialized sources rank before supermarkets, then distance orders equivalent sources
+ok 288 - specialized sources rank before supermarkets, then distance orders equivalent sources
+  ---
+  duration_ms: 2.143322
+  type: 'test'
+  ...
+# Subtest: original subtype overrides an inconsistent broad label and duplicate ids are removed
+ok 289 - original subtype overrides an inconsistent broad label and duplicate ids are removed
+  ---
+  duration_ms: 0.289203
+  type: 'test'
+  ...
+# Subtest: all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+ok 290 - all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+  ---
+  duration_ms: 194.033813
+  type: 'test'
+  ...
+# Subtest: cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+ok 291 - cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+  ---
+  duration_ms: 1.791418
+  type: 'test'
+  ...
+# Subtest: tostones soften, flatten and refry with separate measured oil portions
+ok 292 - tostones soften, flatten and refry with separate measured oil portions
+  ---
+  duration_ms: 0.692008
+  type: 'test'
+  ...
+# Subtest: sticky rice counts advance soaking separately and steams hydrated grains above the water
+ok 293 - sticky rice counts advance soaking separately and steams hydrated grains above the water
+  ---
+  duration_ms: 0.413105
+  type: 'test'
+  ...
+# Subtest: miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+ok 294 - miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+  ---
+  duration_ms: 18.005787
+  type: 'test'
+  ...
+# Subtest: named side flavours have real portions, cooking actions and removal of inedible infusions
+ok 295 - named side flavours have real portions, cooking actions and removal of inedible infusions
+  ---
+  duration_ms: 0.851209
+  type: 'test'
+  ...
+# Subtest: oil divisions and cooked-rice forms survive servings and regional staple handling
+ok 296 - oil divisions and cooked-rice forms survive servings and regional staple handling
+  ---
+  duration_ms: 11.69982
+  type: 'test'
+  ...
+# Subtest: long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+ok 297 - long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+  ---
+  duration_ms: 1.99482
+  type: 'test'
+  ...
+# Subtest: prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+ok 298 - prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+  ---
+  duration_ms: 1.85542
+  type: 'test'
+  ...
+# Subtest: expanded side catalogue
+    # Subtest: exposes ninety distinct sides and keeps combination maths honest
+    ok 1 - exposes ninety distinct sides and keeps combination maths honest
+      ---
+      duration_ms: 2.058422
+      type: 'test'
+      ...
+    # Subtest: builds every side for balanced, gluten-free and dairy-free without inventing prices
+    ok 2 - builds every side for balanced, gluten-free and dairy-free without inventing prices
+      ---
+      duration_ms: 178.784154
+      type: 'test'
+      ...
+    # Subtest: tags wheat and sesame sides clearly and substitutes under gluten-free
+    ok 3 - tags wheat and sesame sides clearly and substitutes under gluten-free
+      ---
+      duration_ms: 5.355455
+      type: 'test'
+      ...
+    # Subtest: covers meal regions with preferred sides and keeps curated plates on known sides
+    ok 4 - covers meal regions with preferred sides and keeps curated plates on known sides
+      ---
+      duration_ms: 3.105532
+      type: 'test'
+      ...
+    1..4
+ok 299 - expanded side catalogue
+  ---
+  duration_ms: 192.536997
+  type: 'suite'
+  ...
+# Subtest: whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+ok 300 - whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+  ---
+  duration_ms: 7.166773
+  type: 'test'
+  ...
+# Subtest: short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+ok 301 - short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+  ---
+  duration_ms: 6.286764
+  type: 'test'
+  ...
+# Subtest: soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+ok 302 - soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+  ---
+  duration_ms: 2.686429
+  type: 'test'
+  ...
+# Subtest: all ninety sides keep plausible four-person starch portions across form and diet variants
+ok 303 - all ninety sides keep plausible four-person starch portions across form and diet variants
+  ---
+  duration_ms: 48.330901
+  type: 'test'
+  ...
+# Subtest: powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+ok 304 - powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+  ---
+  duration_ms: 5.298255
+  type: 'test'
+  ...
+# Subtest: powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+ok 305 - powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+  ---
+  duration_ms: 2.89853
+  type: 'test'
+  ...
+# Subtest: counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+ok 306 - counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+  ---
+  duration_ms: 3.522537
+  type: 'test'
+  ...
+# Subtest: implicit sauce water scales independently of whether supplied quantities were already scaled
+ok 307 - implicit sauce water scales independently of whether supplied quantities were already scaled
+  ---
+  duration_ms: 0.801309
+  type: 'test'
+  ...
+# Subtest: a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+ok 308 - a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+  ---
+  duration_ms: 2.315024
+  type: 'test'
+  ...
+# Subtest: substantive secondary side cooking starts with the accompaniment, before a quick main
+ok 309 - substantive secondary side cooking starts with the accompaniment, before a quick main
+  ---
+  duration_ms: 50.580225
+  type: 'test'
+  ...
+# Subtest: simpler methods retain main cooking and the delicate finishing boundary
+ok 310 - simpler methods retain main cooking and the delicate finishing boundary
+  ---
+  duration_ms: 105.744696
+  type: 'test'
+  ...
+# Subtest: long preparation and special side handling remain visible in full recipes
+ok 311 - long preparation and special side handling remain visible in full recipes
+  ---
+  duration_ms: 2.653428
+  type: 'test'
+  ...
+# Subtest: regional rice names never rewrite rice miso or its measured glaze water
+ok 312 - regional rice names never rewrite rice miso or its measured glaze water
+  ---
+  duration_ms: 122.654572
+  type: 'test'
+  ...
+# Subtest: regional coconut rice counts its listed milk toward packet cooking liquid
+ok 313 - regional coconut rice counts its listed milk toward packet cooking liquid
+  ---
+  duration_ms: 3.315334
+  type: 'test'
+  ...
+# Subtest: smoke method allow / deny
+    # Subtest: offers smoked only on realistic mains
+    ok 1 - offers smoked only on realistic mains
+      ---
+      duration_ms: 11.285316
+      type: 'test'
+      ...
+    # Subtest: forbids mince and steak cuts on smoked; allows brisket, ribs, belly
+    ok 2 - forbids mince and steak cuts on smoked; allows brisket, ribs, belly
+      ---
+      duration_ms: 5.539357
+      type: 'test'
+      ...
+    # Subtest: lists smoke staple cuts without inventing mince smoking
+    ok 3 - lists smoke staple cuts without inventing mince smoking
+      ---
+      duration_ms: 0.308603
+      type: 'test'
+      ...
+    1..3
+ok 314 - smoke method allow / deny
+  ---
+  duration_ms: 19.657404
+  type: 'suite'
+  ...
+# Subtest: smoked prep wording
+    # Subtest: defaults brisket for beef smoked and talks bark, rest, slice — not patties
+    ok 1 - defaults brisket for beef smoked and talks bark, rest, slice — not patties
+      ---
+      duration_ms: 21.597223
+      type: 'test'
+      ...
+    # Subtest: smokes pork ribs and duck with realistic endpoints
+    ok 2 - smokes pork ribs and duck with realistic endpoints
+      ---
+      duration_ms: 10.252606
+      type: 'test'
+      ...
+    # Subtest: keeps sauce separate and never asks to smoke shaped patties
+    ok 3 - keeps sauce separate and never asks to smoke shaped patties
+      ---
+      duration_ms: 3.586038
+      type: 'test'
+      ...
+    1..3
+ok 315 - smoked prep wording
+  ---
+  duration_ms: 36.133075
+  type: 'suite'
+  ...
+# Subtest: regional staples
+    # Subtest: covers every classic and meal region, and gluten-free staples do not list wheat
+    ok 1 - covers every classic and meal region, and gluten-free staples do not list wheat
+      ---
+      duration_ms: 7.651179
+      type: 'test'
+      ...
+    # Subtest: specialises existing rice while keeping complete classic plates to their chosen starch
+    ok 2 - specialises existing rice while keeping complete classic plates to their chosen starch
+      ---
+      duration_ms: 83.236065
+      type: 'test'
+      ...
+    # Subtest: names 100% teff injera without a wheat tag, and keeps gluten-free Indian plates wheat-free
+    ok 3 - names 100% teff injera without a wheat tag, and keeps gluten-free Indian plates wheat-free
+      ---
+      duration_ms: 4.139743
+      type: 'test'
+      ...
+    # Subtest: maps plancha almonds to tree-nut and keeps every curated plate compatible
+    ok 4 - maps plancha almonds to tree-nut and keeps every curated plate compatible
+      ---
+      duration_ms: 1.695517
+      type: 'test'
+      ...
+    1..4
+ok 316 - regional staples
+  ---
+  duration_ms: 99.33683
+  type: 'suite'
+  ...
+# Subtest: one cooking concern is visible immediately before any trending threshold
+ok 317 - one cooking concern is visible immediately before any trending threshold
+  ---
+  duration_ms: 57.510897
+  type: 'test'
+  ...
+# Subtest: empty and historical review states remain visible without inventing reports
+ok 318 - empty and historical review states remain visible without inventing reports
+  ---
+  duration_ms: 11.709121
+  type: 'test'
+  ...
+1..318
+# tests 527
+# suites 46
+# pass 527
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 252945.5256

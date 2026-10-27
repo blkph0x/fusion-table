@@ -1,0 +1,21 @@
+Final pricing validation captured from the tool result, 2026-10-27.
+This file preserves the final run summary, rather than a newly repeated run.
+
+Command:
+node --experimental-strip-types --test --test-reporter=spec tests/catalogue.test.ts tests/shopping-costs.test.ts tests/coles-catalogue.test.ts tests/shopping-compare.test.ts
+
+Exit code: 0
+tests 74
+suites 3
+pass 74
+fail 0
+cancelled 0
+skipped 0
+todo 0
+duration_ms 512.9624
+
+Included regressions:
+- Explicit retailer cooked-rice ingredient/category metadata survives name matching.
+- Woolworths Family Size Jasmine Rice 450g / stockcode 528193 is excluded from dry-rice quantity estimates and manual quantity selection.
+- Genuine dry 450g rice remains costable; explicitly cooked quantities can match cooked-labelled packs.
+- Price, quantity, stock, dietary, freshness, scope and cancellation tests remain passing.

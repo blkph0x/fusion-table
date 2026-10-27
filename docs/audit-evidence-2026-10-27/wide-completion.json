@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "status": "passed-by-phase-union",
+  "finishedAt": "2026-10-27T04:23:18.922Z",
+  "source": {
+    "sha256": "594c87090d6920bb7e8d2c11bf1237852cd1456883c09ba279b8753c09437cd9",
+    "files": 64
+  },
+  "uniqueChecked": 2012468,
+  "failedCases": 0,
+  "phases": [
+    {
+      "id": "authored",
+      "planned": 1819440,
+      "scheduled": 1819440,
+      "checked": 1819440,
+      "failedCases": 0,
+      "coverage": "Every region × supported default main/method × explicitly selected side; balanced, authored, four servings.",
+      "report": "wide-full.json"
+    },
+    {
+      "id": "variants",
+      "planned": 101080,
+      "scheduled": 101080,
+      "checked": 101080,
+      "failedCases": 0,
+      "coverage": "Every region/main-method receives five seeded cases, all five heats and servings 1/2/4/6/12; cleaner knobs and all sides rotate.",
+      "report": "wide-full.json"
+    },
+    {
+      "id": "cuts",
+      "planned": 49248,
+      "scheduled": 49248,
+      "checked": 49248,
+      "failedCases": 0,
+      "coverage": "Every supported chosen-cut/method × every region; sides, heat, servings and authored/seeded cases rotate.",
+      "report": "wide-full.json"
+    },
+    {
+      "id": "diets",
+      "planned": 34200,
+      "scheduled": 34200,
+      "checked": 34200,
+      "failedCases": 0,
+      "coverage": "Every diet × every region × every side; compatible main/methods rotate. This is not every dietary main/method Cartesian product.",
+      "report": "wide-full.json"
+    },
+    {
+      "id": "classics",
+      "planned": 8500,
+      "scheduled": 8500,
+      "checked": 8500,
+      "failedCases": 0,
+      "coverage": "Every classic × classic regional profile × all five diets, authored and seed7; heat and servings rotate.",
+      "report": "wide-classics.json"
+    }
+  ],
+  "smoke": {
+    "report": "wide-smoke.json",
+    "checked": 240,
+    "status": "smoke-passed"
+  },
+  "sideDietPreflight": {
+    "report": "wide-side-preflight.json",
+    "checked": 900,
+    "status": "passed"
+  },
+  "verifierTests": {
+    "report": "wide-verifier-tests.log",
+    "passed": 6
+  },
+  "verifierFiles": [
+    {
+      "file": "scripts/audit-culinary-matrix.mjs",
+      "sha256": "f144c4bdd5b4e80b65ac991eb7ff33b5d0cef789b417ee0ca0be9eea3595e993"
+    },
+    {
+      "file": "tests/culinary-coverage.test.ts",
+      "sha256": "2ae7e92045463c58cd55e0ad488db9c7af68b5894081e392cb97f7396d1efb7b"
+    }
+  ],
+  "notes": [
+    "The initial full report remains raw and failed only in its classic phase:1,530 legitimate instruction shorthand references. Its four meal-builder phases passed2,003,968 cases unchanged.",
+    "Classic verification was corrected only for explicit ingredientID+authored phase title+whole-phrase instruction references; shopping aliases and recipe source were unchanged. Removing the actual authored phase still fails unused-ingredient regressions.",
+    "The corrected classic phase reran all8,500 cases on the identical lib source hash and passed. Its earlier50-reference intermediate result remains in wide-classics-initial.json.",
+    "Interrupted pre-fix and pre-grain-fix reports are retained and contribute no completed coverage."
+  ],
+  "limits": [
+    "This checks authored content and recorded ingredient tags, not actual cooking, taste, packet contents or cross-contact.",
+    "All authored balanced combinations are exhaustive only after a completed full authored phase.",
+    "Seed/heat/serving/clean and cut/diet variants use the stated rotating cases, not every possible input Cartesian product.",
+    "Source hash covers local lib/*.ts at start and end; changing source invalidates the run."
+  ]
+}

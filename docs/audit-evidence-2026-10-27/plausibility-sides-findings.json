@@ -1,0 +1,88 @@
+{
+  "scope": {
+    "sideCases": 1080,
+    "regionalCases": 2280,
+    "generatedMealSamples": 4
+  },
+  "source": {
+    "sidePlans": "751a48105a820fa1da951b1843eda72eeafd215ff2282e3298584a52e97e5bc1",
+    "regionalCooking": "520a465cddfbdee9d386ad9686de9eb8654ab21ae30b14a1f5ac091e50d19d43"
+  },
+  "observedFourServingPortions": {
+    "dryStarchGramsPerPerson": [
+      50,
+      87.5
+    ],
+    "oliveOilMlPerPerson": [
+      0,
+      15
+    ],
+    "lemonOrLimeMlPerPerson": [
+      0,
+      7.5
+    ]
+  },
+  "reviewedDimensions": [
+    "Read the actual four-serving method for each of the 90 sides, including ingredient forms and full cooking/dressing sequence.",
+    "Compared gluten-free/dairy-free forms at 1, 4 and 12 servings; evaluated long grain cooking windows, water starting quantities, cooling and hot holding.",
+    "Inspected regional spice/seed/herb/paste forms and measured sauce inputs; reviewed real Japanese, Persian, Italian and long-grain side meal outputs."
+  ],
+  "changes": [
+    {
+      "finding": "Whole sorghum was assigned 40 minutes to become tender.",
+      "result": "50–60-minute producer window, 65-minute grain step and 70-minute side budget; scaled generous boiling water and topping-up instruction.",
+      "source": "https://www.bobsredmill.com/recipes/how-to-make/basic-preparation-instructions-for-gluten-free-sorghum-grain"
+    },
+    {
+      "finding": "Freekeh and farro product forms were unspecified while the plan assumed short cooking.",
+      "result": "Cracked freekeh and pearled farro named explicitly; longer whole-grain packet methods are not interchangeable. Separate quinoa and brown-rice substitute windows.",
+      "sources": [
+        "https://www.bobsredmill.com/recipes/how-to-make/basic-cooking-instructions-cracked-freekeh",
+        "https://www.bobsredmill.com/recipes/how-to-make/basic-preparation-instructions-for-organic-farro"
+      ]
+    },
+    {
+      "finding": "Dairy-free polenta, millet, oats/rice flakes and risotto gave no measurable starting liquid; risotto could dry out while awaiting its pea finish.",
+      "result": "Scaled water starting quantities with packet/texture overrides; risotto reserves hot water for finishing. Dairy polenta already scaled its 1000 ml suggestion; it was not a pre-existing scaling defect.",
+      "sources": [
+        "https://www.delallo.com/delallo-instant-polenta-9-2-oz/",
+        "https://www.bobsredmill.com/recipes/how-to-make/basic-cooking-instructions-for-whole-grain-millet"
+      ]
+    },
+    {
+      "finding": "Most cooked-grain sides lacked holding/cooling guidance.",
+      "result": "Prompt service or 60°C hot holding, cold garnishes chilled, shallow rapid cooling to refrigeration at 5°C, one reheating; thermometer equipment.",
+      "source": "https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/bacteria-foodborne-illness/bacillus-cereus"
+    },
+    {
+      "finding": "Garlic/ginger/onion powder retaining a fresh catalogue ID inherited mincing and 1–2-minute frying.",
+      "result": "Explicit powdered forms now bloom briefly as spices."
+    },
+    {
+      "finding": "Powdered or flaked dried chilli inherited whole-chilli stem preparation; counted cloves and cinnamon quills missed whole-piece handling.",
+      "result": "Preparation follows actual supplied form; counted woody pieces removed; edible cardamom seeds ground rather than discarded."
+    },
+    {
+      "finding": "Fallback water used the ingredient scaling ratio, leaving already-scaled 12-serving no-liquid sauce at 30 ml; delicate-only miso borrowed nonexistent warm sauce.",
+      "result": "Water scales from servings independently of input quantity basis, and delicate-only warm sauces establish an actual liquid base."
+    }
+  ],
+  "notChanged": [
+    "All 90 side IDs, default food quantities, oil/acid amounts and dietary alternatives retained; cooking forms/timing/liquids were the clear issues, not arbitrary portion reductions.",
+    "Japanese medium yuzu kosho remained at the authored amount. S&B producer recipes include a tablespoon for a four-serving chicken sauce; the evidence did not establish a universal lower limit. Heat settings are intentionally different, and saltiness is product dependent.",
+    "Cassava restriction, two-stage tostones, sticky-rice soaking and miso-aubergine glaze staging were already corrected in the preceding audit and were rechecked, not claimed as new changes."
+  ],
+  "quantityComparisonSource": "https://www.sbfoods-worldwide.com/recipes/042.html",
+  "validation": {
+    "focusedTests": 43,
+    "failed": 0,
+    "log": "plausibility-sides-tests.log",
+    "newRegressionTests": 9,
+    "whitespaceCheck": "passed"
+  },
+  "limits": [
+    "Plausibility review and producer guidance, not kitchen tasting or a claim that every combination is a traditional dish.",
+    "No full 2,012,924-case rerun, build or deployment performed in this subtask.",
+    "Generated meal samples reflect concurrent root-owned meal-generator changes; owned-source hashes identify side/helper state."
+  ]
+}

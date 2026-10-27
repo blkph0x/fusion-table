@@ -1,0 +1,72 @@
+FUSION TABLE — VERIFIED LOCAL SHOPPING DEPLOYMENT
+26 October 2026
+
+Live website: https://gearsqueens.online/fusion/?view=shops
+Server: 10.1.1.111
+Current release: /home/blkph0x/fusion-releases/20261026-090546
+Source archive: releases/fusion-table-20261026-090546.tar.gz
+Archive SHA-256:
+b474e136717514695243aff91ec12fcfa49d574cce45f00573e0e7c6cacfbf2a
+Source manifest SHA-256:
+3db1d699ed29d20a410cae5d7947a68351945b51323d4e7eaed0006104560592
+292 source files were verified against their manifest before the native Linux
+Node build. No dependency changes; the release has its own dependency copy.
+Public /fusion/deployment.json returned this release and manifest identity.
+
+Release sequence
+
+20261026-085508 introduced the shopping workspace. Final live review caught the
+generator wording Plain firm tofu versus an explicitly Original firm tofu product.
+20261026-090546 fixes that narrow equivalence; flavoured, prepared, wrong-form,
+unknown dietary and unavailable products retain their safeguards.
+
+Runtime and data
+
+fusion-table.service is enabled, active and running the Node profile on loopback
+127.0.0.1:8792. Verified main PID 1851088 and NRestarts 0 after the final cutover.
+The existing persistent /home/blkph0x/fusion-data directory and image-model
+environment were retained. Only the service WorkingDirectory changed. Apache,
+TLS, original checkout and separately hosted Android APK were preserved.
+
+Pre-cutover unit and ledger backup:
+/home/blkph0x/fusion-deploy-backups/20261026-090546
+Rollback: restore that directory's fusion-table.service to
+/etc/systemd/system/fusion-table.service, run systemctl daemon-reload and restart
+fusion-table.service. This returns to the first shopping release 085508. The
+085508 backup similarly returns to quality-pass release 075845. Do not overwrite
+the current ledger with a historical backup during an ordinary code rollback.
+
+Verification
+
+- Final regression run: 318 passed, 0 failed, 40 suites. The unchanged expensive
+  meals.test.ts matrix was excluded from this repeat; its prior 668,430-case
+  quality-pass run remains recorded separately.
+- Full TypeScript check passed; lint had zero errors and eight existing
+  image/unused-variable advisories. Final touched price files also passed lint.
+- Node production builds succeeded locally and on the server. Separate loopback
+  canary runs each passed 14 initial checks and four restart checks.
+- Canary validation covered invalid requests, pack-size storage, whole-pack
+  rounding, persistence across full restart, area/country isolation, legacy
+  records without pack size, independent retailer failure and online/local scope.
+- Synthetic canary price records used only a release-specific .canary-data
+  directory. Browser local record checks used .sites-runtime/ui-test-ledger.
+  Neither synthetic ledger was copied into production data.
+- Real Woolworths search returned priced offers. Coles returned an interruption
+  page during the final run; this remains explicitly unavailable with a direct
+  link. No account, cookies, CAPTCHA workaround or invented price was used.
+- Public new endpoint was reachable; a missing price stayed null and an invalid
+  negative quantity returned 400. Desktop/phone browser evidence and current
+  custom-list CSV are saved under docs/audit-evidence-2026-10-26/shopping-*.
+- All 17 recorded browser checks passed. The final live check priced 750 g plain
+  firm tofu plus 450 g jasmine rice as one 900 g tofu pack (A$5.00) and one 1 kg
+  rice pack (A$3.15), A$8.15 total at that observation. Coles stayed explicitly
+  unknown. Desktop shop filters/details and the 390-pixel phone pane were checked;
+  local testing also covered the 320-pixel layout and a 92-item week plan.
+
+The website now provides practical store discovery and available quantity costs.
+It does not claim complete independent-store feeds, confirmed branch stock or
+the universally cheapest complete basket. Ambiguous products require a choice;
+unavailable sources or incompatible quantities remain unknown.
+
+Documentation status files were updated after deployment. The immutable source
+archive retains documentation as captured when its manifest was generated.

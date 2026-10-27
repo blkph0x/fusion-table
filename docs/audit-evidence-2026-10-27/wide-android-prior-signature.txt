@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=MealPlanner AU Test, O=Local, C=AU
+Signer #1 certificate SHA-256 digest: 62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6
+Signer #1 certificate SHA-1 digest: 188d7aa9202c3b5d9723ae706e883f681b642470
+Signer #1 certificate MD5 digest: 65711a8d323c016f67c67a18c5f180e0
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 93006ba888960c728dc91c0ad4e2fe1b1bd7ed9111801b685a3936f3974b4328
+Signer #1 public key SHA-1 digest: 4dd73367289ca3ebcc611c4695b8247576b052c5
+Signer #1 public key MD5 digest: 4fab7c1f0d9d6becfbca47e8df9b21fe

@@ -1,0 +1,77 @@
+[
+  {
+    "feature": "automatic pack-aware estimate uses known prices and shows both retailer statuses",
+    "passed": true
+  },
+  {
+    "feature": "explicit pack choice recalculates full basket",
+    "passed": true
+  },
+  {
+    "feature": "explicit exclusion remains a partial subtotal",
+    "passed": true
+  },
+  {
+    "feature": "refreshing quotes preserves reviewed pack choice and explicit exclusion",
+    "passed": true
+  },
+  {
+    "feature": "custom list and bought tick survive page refresh",
+    "passed": true
+  },
+  {
+    "feature": "nearby store name search narrows the local directory",
+    "passed": true
+  },
+  {
+    "feature": "shop details appear directly under the selected store",
+    "passed": true
+  },
+  {
+    "feature": "selected nearby shop and explicit pack size are saved and repriced",
+    "passed": true
+  },
+  {
+    "feature": "phone store search is one tap away from prices",
+    "passed": true
+  },
+  {
+    "feature": "whole week adapts shopping without thousands of hidden record options",
+    "passed": true
+  },
+  {
+    "name": "Radius change automatically reloads nearby results",
+    "passed": true,
+    "detail": "49 listings within 1 km"
+  },
+  {
+    "name": "Custom kilogram display preserved",
+    "passed": true,
+    "detail": "0.45 kg stays selected and displayed"
+  },
+  {
+    "name": "Complete list comparison spans multiple batches",
+    "passed": true,
+    "detail": "11 of 11 checked; ambiguous products remain explicit review choices"
+  },
+  {
+    "name": "Changing area clears quotes and replaces stores",
+    "passed": true,
+    "detail": "Melbourne Central3000 shows local LaTrobe andElizabethStreet shops; Sydney quotes removed"
+  },
+  {
+    "name": "Live export uses selected custom list and area",
+    "passed": true,
+    "detail": "Downloaded CSV has current quantities, area and suggested stores"
+  },
+  {
+    "name": "Final live recipe wording and real price guides",
+    "passed": true,
+    "detail": "20261026-090546: Plain firm tofu750g + Jasmine rice450g -> A$8.15 full packs; Coles explicitly unavailable"
+  },
+  {
+    "name": "Live phone store pane preserves results and fits width",
+    "passed": true,
+    "detail": "390px viewport,375px client/scroll width; Coles filter and inline details retained"
+  }
+]

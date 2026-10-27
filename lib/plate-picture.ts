@@ -6,9 +6,9 @@ import type { Recipe } from "./recipe-types.ts";
 
 const WIDTH = 640;
 const HEIGHT = 400;
-const PAINT_NOTE = "Painted on this computer from the ingredient list. Not a photograph of a cooked dish.";
+const PLACEHOLDER_NOTE = "Recipe image unavailable. This labelled placeholder does not depict the finished meal.";
 const MODEL_NOTE = "Drawn by the local image model on this computer. Not a photograph of a cooked dish.";
-const STILL_NOTE = "Template photograph for this style of plate. Not a photo of a dish you have cooked.";
+const STILL_NOTE = "Generated inspiration image for this style of plate. Not a photograph of a cooked dish.";
 
 const STILLS: Record<string, string> = {
   "pasta|japanese|vegetarian": "fusion-table-hero.png",
@@ -16,22 +16,25 @@ const STILLS: Record<string, string> = {
   "roast|moroccan|vegan": "moroccan-traybake.png",
 };
 
-/** Exact unseeded meals. Any other main, method or region is painted. */
+/** Exact unseeded meals. Other meals use the configured model or an honest placeholder. */
 const MEAL_STILLS: Record<string, string> = {
-  "thai|curry|chicken": "meals/thai-chicken-curry.jpg",
-  "korean|stir-fried|beef": "meals/korean-beef-stirfry.jpg",
-  "japanese|grilled|salmon": "meals/japanese-salmon-grilled.jpg",
-  "indian|curry|chickpeas": "meals/indian-chickpea-curry.jpg",
-  "mexican|grilled|chicken": "meals/mexican-chicken-grilled.jpg",
-  "levantine|grilled|chicken": "meals/levantine-chicken-grilled.jpg",
-  "ethiopian|braised|lentils": "meals/ethiopian-lentil-braise.jpg",
-  "vietnamese|grilled|chicken": "meals/vietnamese-chicken-grilled.jpg",
+  "thai|curry|chicken|rice-greens": "meals/thai-chicken-curry.jpg",
+  "korean|stir-fried|beef|rice-greens": "meals/korean-beef-stirfry.jpg",
+  "japanese|grilled|salmon|rice-greens": "meals/japanese-salmon-grilled.jpg",
+  "indian|curry|chickpeas|rice-greens": "meals/indian-chickpea-curry.jpg",
+  "mexican|grilled|chicken|rice-greens": "meals/mexican-chicken-grilled.jpg",
+  "levantine|grilled|chicken|flatbread-salad": "meals/levantine-chicken-grilled.jpg",
+  "ethiopian|braised|lentils|injera-salad": "meals/ethiopian-lentil-braise.jpg",
+  "vietnamese|grilled|chicken|rice-greens": "meals/vietnamese-chicken-grilled.jpg",
 };
 
 export interface PlatePicture {
   bytes: Uint8Array;
-  contentType: "image/png" | "image/jpeg";
+  contentType: "image/png" | "image/jpeg" | "image/webp" | "image/svg+xml";
   note: string;
+  /** A configured model failed; retry soon rather than caching this fallback for a day. */
+  temporary?: boolean;
+  placeholder?: boolean;
 }
 
 /** A local image server is accepted only on this machine. Nothing else is called. */
@@ -53,18 +56,36 @@ export function localImageEndpoint(raw: string | undefined | null): string | nul
 export async function renderPlate(recipe: Recipe, options?: { model?: boolean }): Promise<PlatePicture> {
   const still = readStill(recipe);
   if (still) return still;
+  let temporary = false;
   if (options?.model !== false) {
+    temporary = !!localImageEndpoint(process.env.FUSION_LOCAL_IMAGE_URL);
     const drawn = await askLocalModel(recipe);
     if (drawn) return drawn;
   }
-  const painted = paintPlate(recipe);
-  return { bytes: encodePng(WIDTH, HEIGHT, painted), contentType: "image/png", note: PAINT_NOTE };
+  return { bytes: platePlaceholder(recipe), contentType: "image/svg+xml", note: PLACEHOLDER_NOTE, placeholder: true, ...(temporary ? { temporary: true } : {}) };
+}
+
+/** A restrained, explicit empty state, never a fabricated picture of another meal. */
+export function platePlaceholder(recipe: Pick<Recipe, "title">): Uint8Array {
+  const title = recipe.title.replace(/[\u0000-\u001f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 120);
+  const words = title.split(" ");
+  const lines: string[] = [];
+  let line = "";
+  for (const word of words) {
+    if (line && `${line} ${word}`.length > 48) { lines.push(line); line = ""; }
+    line = line ? `${line} ${word}` : word;
+  }
+  if (line) lines.push(line);
+  const escape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  const labelled = lines.slice(0, 2).map((text, index) => `<text x="320" y="${267 + index * 24}" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#516347">${escape(text)}${index === 1 && lines.length > 2 ? "…" : ""}</text>`).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400" role="img" aria-labelledby="title description"><title id="title">Recipe image unavailable</title><desc id="description">${escape(title)}. Follow the ingredient list and cooking method.</desc><rect width="640" height="400" fill="#f4f5ee"/><rect x="40" y="32" width="560" height="336" rx="18" fill="#fbfaf6" stroke="#dfe4d7"/><g fill="none" stroke="#748461" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="294" y="92" width="52" height="42" rx="7"/><circle cx="320" cy="113" r="10"/><path d="M303 92l5-8h24l5 8"/></g><text x="320" y="186" text-anchor="middle" font-family="Georgia, serif" font-size="26" fill="#315940">Recipe image unavailable</text><text x="320" y="217" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#516347">Ingredients and method are ready below.</text>${labelled}</svg>`;
+  return new TextEncoder().encode(svg);
 }
 
 function stillName(recipe: Recipe): string | null {
   if (/-sat-\d+$/.test(recipe.id)) return null;
   if (recipe.kind === "meal" && recipe.methodId && recipe.mainId) {
-    return MEAL_STILLS[`${recipe.regionId}|${recipe.methodId}|${recipe.mainId}`] ?? null;
+    return MEAL_STILLS[`${recipe.regionId}|${recipe.methodId}|${recipe.mainId}|${recipe.sideId}`] ?? null;
   }
   if (recipe.kind === "meal") return null;
   return STILLS[`${recipe.classicId}|${recipe.regionId}|${recipe.diet}`] ?? null;
@@ -78,13 +99,15 @@ function readStill(recipe: Recipe): PlatePicture | null {
     join(process.cwd(), "public", "images"),
     join(process.cwd(), "dist", "client", "images"),
   ];
-  for (const root of roots) {
+  const candidates = file.endsWith(".png") ? [file.replace(/\.png$/, "-960.webp"), file] : [file];
+  for (const candidate of candidates) for (const root of roots) {
     try {
-      const bytes = new Uint8Array(readFileSync(join(root, file)));
+      const bytes = new Uint8Array(readFileSync(join(root, candidate)));
       const png = bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
       const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8;
-      if (!png && !jpeg) continue;
-      return { bytes, contentType: jpeg ? "image/jpeg" : "image/png", note: STILL_NOTE };
+      const webp = Buffer.from(bytes.subarray(0, 4)).toString() === "RIFF" && Buffer.from(bytes.subarray(8, 12)).toString() === "WEBP";
+      if (!png && !jpeg && !webp) continue;
+      return { bytes, contentType: webp ? "image/webp" : jpeg ? "image/jpeg" : "image/png", note: STILL_NOTE };
     } catch {
       /* Try the next place the build may have copied public images. */
     }
@@ -149,14 +172,14 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
       method: "POST",
       // workerd rejects redirect:"error". "manual" still does not follow a redirect.
       redirect: "manual",
-      signal: AbortSignal.timeout(240_000),
+      signal: AbortSignal.timeout(plateModelTimeout()),
       headers: { Accept: "application/json, image/png, image/jpeg", "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt,
         negative_prompt: "text, watermark, logo, people, hands, cartoon, illustration, painting, plastic food, blurry, deformed, raw poultry, raw mince, wrong cuisine, generic buffet, stock photo collage",
-        steps: 4,
-        width: 512,
-        height: 512,
+        steps: plateModelSteps(),
+        width: plateModelSize(),
+        height: plateModelSize(),
         cfg_scale: 1,
         scheduler: "karras",
         // Seed the local model from the plate identity so the same meal redraws consistently.
@@ -177,6 +200,22 @@ async function askLocalModel(recipe: Recipe): Promise<PlatePicture | null> {
   } catch {
     return null;
   }
+}
+
+/** Keep ordinary requests responsive; a slower local model can opt in up to one minute. */
+export function plateModelTimeout(raw = process.env.FUSION_LOCAL_IMAGE_TIMEOUT_MS): number {
+  const parsed = Number(raw);
+  return Number.isInteger(parsed) && parsed > 0 ? Math.min(60_000, Math.max(1000, parsed)) : 20_000;
+}
+
+export function plateModelSize(raw = process.env.FUSION_LOCAL_IMAGE_SIZE): 256 | 384 | 512 {
+  const size = Number(raw);
+  return size === 256 || size === 384 || size === 512 ? size : 512;
+}
+
+export function plateModelSteps(raw = process.env.FUSION_LOCAL_IMAGE_STEPS): number {
+  const steps = Number(raw);
+  return Number.isInteger(steps) && steps >= 1 && steps <= 4 ? steps : 4;
 }
 
 function checkedImage(bytes: Uint8Array, contentType: "image/png" | "image/jpeg"): PlatePicture | null {

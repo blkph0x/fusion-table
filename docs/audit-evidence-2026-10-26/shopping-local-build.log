@@ -1,0 +1,80 @@
+Website: D:\fusion-table
+Android: D:\MealPlannerAU
+Public site: https://gearsqueens.online/fusion/
+Node: C:\Users\Blkph0x\AppData\Roaming\nvm\v22.13.0\node.exe
+Runtime profile: node
+Preview path: /fusion
+
+  vinext build  (Vite 8.0.13)
+
+(node:62924) ExperimentalWarning: glob is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[1/5] analyze client references...
+[2K
+transforming...✓ 267 modules transformed.
+rendering chunks...
+[PLUGIN_TIMINGS] Your build spent significant time in plugins. Here is a breakdown:
+  - vinext:middleware-server-only (17%)
+  - rsc:virtual-client-package (14%)
+  - alias (10%)
+  - rsc:scan-strip (9%)
+  - vinext:css-data-url (8%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 7.04s
+[2/5] analyze server references...
+[2K
+transforming...✓ 169 modules transformed.
+rendering chunks...
+✓ built in 613ms
+[3/5] build rsc environment...
+[2K
+transforming...✓ 264 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.03s
+[4/5] build client environment...
+[2K
+transforming...✓ 1954 modules transformed.
+rendering chunks...
+computing gzip size...
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[PLUGIN_TIMINGS] Your build spent significant time in plugins. Here is a breakdown:
+  - vinext:css-data-url (26%)
+  - alias (20%)
+  - vinext:og-inline-fetch-assets (17%)
+  - rsc:virtual-client-package (14%)
+  - vinext:middleware-server-only (12%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 5.78s
+[5/5] build ssr environment...
+[2K
+transforming...✓ 170 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 457ms
+[0m
+  Route (app)
+  ┌ ? /                   
+  ├ λ /api/community      
+  ├ λ /api/locations      
+  ├ λ /api/plate          
+  ├ λ /api/price-memory   
+  ├ λ /api/prices         
+  ├ λ /api/recipe-pdf     
+  ├ λ /api/shopping-prices
+  ├ λ /api/shops          
+  └ ƒ /r/:token           
+
+  λ API  ƒ Dynamic  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+  Build complete. Run `vinext start` to start the production server.
+

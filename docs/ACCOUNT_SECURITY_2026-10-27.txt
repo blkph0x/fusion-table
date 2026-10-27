@@ -1,0 +1,98 @@
+FUSION TABLE OPTIONAL ACCOUNTS
+27 October 2026
+
+Browser mode remains available without registration. Account mode stores a
+private kitchen snapshot on the host SQL server after the person explicitly
+chooses the browser or saved account version. This is independent of the
+anonymous public cooking-feedback ledger. Signing in does not upload the
+anonymous feedback/device identifier as an authentication credential.
+
+The account email is a self-declared sign-in name. There is no configured mail
+verification or password-reset sender, so the site must not claim that email
+ownership was verified or offer a nonworking reset-by-email flow. An already
+authenticated person can change their password with their current password and
+can revoke all signed-in sessions. Passwords are never retrievable from SQL.
+
+Host database configuration (outside the Git repository)
+FUSION_AUTH_DB_HOST=127.0.0.1
+FUSION_AUTH_DB_PORT=<dedicated local SQL port>
+FUSION_AUTH_DB_NAME=<dedicated Fusion Table account database>
+FUSION_AUTH_DB_USER=<runtime DML-only database user>
+FUSION_AUTH_DB_PASSWORD=<private randomly generated credential>
+FUSION_AUTH_ORIGIN=https://gearsqueens.online
+FUSION_AUTH_RATE_SECRET=<private random value of at least 32 characters>
+NEXT_PUBLIC_BASE_PATH=/fusion
+
+Optional FUSION_AUTH_PROXY_HEADER names one trusted proxy-overwritten client-IP
+header. The reverse proxy must discard the incoming value and set the actual
+remote address. Unconfigured arbitrary X-Forwarded-For values are not trusted.
+Global and normalized-email throttles still operate without an IP header.
+Database files and the root-owned 0600 environment file must be backed up
+privately; SQL credentials and session cookies must not enter source control.
+
+An administrator applies migrations/20261027-accounts.sql once in the dedicated
+database. The runtime role has SELECT, INSERT, UPDATE and DELETE only, with no
+schema, user-management, file, root or other application-database privileges.
+The driver refuses non-loopback database hosts rather than transmitting a
+password over an accidentally unencrypted remote connection. A deliberate
+remote deployment would need an explicitly reviewed TLS adapter.
+
+Authentication and sessions
+- Passwords: 15-128 Unicode characters, at most 512 UTF-8 bytes. Passwords are
+  not trimmed. Node crypto.scrypt uses independent 16-byte random salts,
+  N=32768, r=8, p=3 and 32-byte derived hashes. Fixed validated work factors and
+  at most two asynchronous hash operations bound CPU and memory consumption.
+- Login failure gives the same response for an unknown email or wrong password;
+  unknown emails perform a dummy hash. SQL driver messages are never returned.
+- Session secrets contain 256 random bits. SQL stores only SHA-256 token hashes.
+  Successful sign-in rotates the old cookie. An incrementing account generation
+  plus session deletion makes password changes and revoke-all invalidate every
+  old session, including a stale row surviving cleanup.
+- On HTTPS, the __Secure-fusion_session cookie has Secure, HttpOnly,
+  SameSite=Lax and the /fusion/ path, with no Domain attribute. A browser session
+  has no cookie Max-Age and an absolute server limit of 12 hours. Remembered
+  sessions have 30-day absolute and 7-day idle limits; activity never extends
+  the absolute limit. At most ten sessions are retained per account.
+- Local HTTP development is allowed only on localhost/loopback, using a
+  separate unprefixed development cookie. Production origin is explicit.
+- Mutations require exact configured Origin, an X-Fusion-Request: account
+  custom header, application/json and acceptable browser fetch metadata. No
+  client-provided forwarded Host is used to establish the allowed origin.
+- SQL-backed fixed-window throttles precede expensive credential verification:
+  normalized email 12 attempts/15 minutes; global signup 40/15 minutes; global
+  login/password 300/15 minutes; configured trusted client IP 40/15 minutes.
+  Expired counter/session cleanup is bounded during ordinary requests.
+
+Private state consistency
+- Each snapshot is bounded to 4 MiB serialized UTF-8, 150000 JSON nodes and
+  nesting depth 40; prototype-mutating field names are rejected.
+- Writes bind both the displayed account ID and the expected snapshot version.
+  Account identity prevents a stale tab from saving account A's data into a
+  newly logged-in account B whose cookie and numeric version changed elsewhere.
+- A single prepared UPDATE with a matching version implements compare-and-swap;
+  stale writes return 409 and the current saved version for an explicit choice.
+- Accounts and sessions use SQL transactions/prepared parameters, four pooled
+  connections and a finite waiting queue. Nothing falls back to unauthenticated
+  private state when SQL is unavailable. Browser mode remains usable.
+
+Verification
+tests/accounts.test.ts covers cryptography, concurrency bounds, input/body size
+validation, cookie flags, CSRF, signup/login, token rotation, browser/remembered
+absolute and idle expiry, account privacy, stale and cross-account writes,
+password changes, revoke-all and persistent throttle behavior.
+
+scripts/check-account-sql.mjs runs prepared-statement and actual transaction
+concurrency checks only against a database named fusion_accounts_*test, with
+FUSION_AUTH_SQL_TEST=1. It removes only its exact random test rows.
+
+scripts/check-account-api.mjs exercises actual HTTP account/cookie/state flows
+with FUSION_AUTH_API_TEST=1 and an explicit test URL/origin. Its report lists
+the exact created test-account IDs/emails for isolated SQL cleanup and never
+contains their passwords or session cookies. Full published verification is
+recorded in the release audit rather than inferred from unit tests alone.
+
+Primary implementation references checked on 27 October 2026
+https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
+https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
+https://sidorares.github.io/node-mysql2/docs

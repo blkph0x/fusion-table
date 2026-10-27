@@ -1,14 +1,15 @@
-import { catalogueSearchPhrases, matchProducts, audToCents, type CatalogueProduct, type ProductMatch } from "./product-match.ts";
+import { catalogueSearchPhrases, isNonFoodCatalogueProduct, matchProducts, audToCents, type CatalogueProduct, type ProductMatch } from "./product-match.ts";
+import { SharedPriceCache } from "./price-provider-cache.ts";
 
 export const CATALOGUE_LABEL = "Woolworths online catalogue. Not a confirmed price on the shelf at your local shop, and not a butcher or fruit-shop board.";
 const SEARCH_URL = "https://www.woolworths.com.au/apis/ui/Search/products";
 const MAX_BODY = 2_000_000;
 const CACHE_MS = 10 * 60 * 1000;
-const CACHE_LIMIT = 40;
+const CACHE_LIMIT = 512;
 
 export interface PriceQuote {
   query: string;
-  source: "woolworths-online-catalogue";
+  source: "woolworths-online-catalogue" | "coles-online-catalogue";
   label: string;
   fetchedAt: string | null;
   cached: boolean;
@@ -35,13 +36,15 @@ interface CachedCatalogue {
   fetchedAt: string;
 }
 
-const cache = new Map<string, CachedCatalogue>();
+const catalogueCache = new SharedPriceCache<CachedCatalogue>(CACHE_LIMIT, CACHE_MS);
+const providerBackoff = new WeakMap<typeof fetch, number>();
 let catalogueInFlight = 0;
 const catalogueWaiters: (() => void)[] = [];
 const CATALOGUE_IN_FLIGHT = 8;
 const CATALOGUE_QUEUE = 16;
 
-function acquireCatalogueSlot(): Promise<void> {
+function acquireCatalogueSlot(signal?: AbortSignal): Promise<void> {
+  signal?.throwIfAborted();
   if (catalogueInFlight < CATALOGUE_IN_FLIGHT) {
     catalogueInFlight += 1;
     return Promise.resolve();
@@ -49,11 +52,21 @@ function acquireCatalogueSlot(): Promise<void> {
   if (catalogueWaiters.length >= CATALOGUE_QUEUE) {
     return Promise.reject(new Error("The catalogue is busy. No price was invented."));
   }
-  return new Promise((resolve) => {
-    catalogueWaiters.push(() => {
+  return new Promise((resolve, reject) => {
+    const cleanup = () => signal?.removeEventListener("abort", abort);
+    const start = () => {
+      cleanup();
       catalogueInFlight += 1;
       resolve();
-    });
+    };
+    const abort = () => {
+      const index = catalogueWaiters.indexOf(start);
+      if (index >= 0) catalogueWaiters.splice(index, 1);
+      cleanup();
+      reject(signal?.reason ?? new DOMException("Price lookup cancelled.", "AbortError"));
+    };
+    signal?.addEventListener("abort", abort, { once: true });
+    catalogueWaiters.push(start);
   });
 }
 
@@ -86,14 +99,54 @@ function productPrice(row: Record<string, unknown>): number | null {
   return null;
 }
 
+function productCategories(row: Record<string, unknown>): string[] {
+  const categories: string[] = [];
+  for (const field of ["Department", "DepartmentName", "Category", "CategoryName", "Categories", "ProductCategories"]) {
+    const values = Array.isArray(row[field]) ? (row[field] as unknown[]).slice(0, 12) : [row[field]];
+    for (const value of values) {
+      const label = typeof value === "string" ? value : value && typeof value === "object"
+        ? textField((value as Record<string, unknown>).Name) ?? textField((value as Record<string, unknown>).Label) : null;
+      if (label) categories.push(label.slice(0, 160));
+      if (categories.length >= 12) return categories;
+    }
+  }
+  return categories;
+}
+
+function productDietaryClaims(row: Record<string, unknown>): string[] {
+  // Only explicit product-level claims are considered. Department/category names
+  // such as "vegan & vegetarian" do not establish a particular product's label.
+  const raw = row.DietaryClaims;
+  return (Array.isArray(raw) ? raw.slice(0, 12) : typeof raw === "string" ? [raw] : [])
+    .filter((claim): claim is string => typeof claim === "string" && claim.length <= 160);
+}
+
+function productPreparedForm(row: Record<string, unknown>): CatalogueProduct["preparedForm"] {
+  const raw = row.AdditionalAttributes;
+  const attributes = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {};
+  const ingredients = [row.Ingredients, attributes.ingredients]
+    .filter((value): value is string => typeof value === "string")
+    .map(value => value.slice(0, 4_000)).join(" ").toLowerCase();
+  const segment = [attributes.sapsegmentname, attributes.sapsubcategoryname]
+    .filter((value): value is string => typeof value === "string")
+    .map(value => value.slice(0, 160)).join(" ").toLowerCase();
+  // Category and ingredient facts establish a prepared food. Generic microwave
+  // instructions/flags do not: dry rice can also be cooked in a microwave.
+  const cookedIngredients = /\bcooked\s+(?:(?:jasmine|basmati|white|brown)\s+)?rice\b|\brice\s*\(\s*cooked\b/.test(ingredients);
+  const preparedCategory = /\brice\b.{0,32}\bmicrowav(?:e)?able\b|\b(?:ready|pre)[ -]*cooked\s+rice\b/.test(segment);
+  return cookedIngredients || preparedCategory ? "cooked-rice" : undefined;
+}
+
 function pushProduct(row: Record<string, unknown>, products: CatalogueProduct[], seen: Set<string>): string | null {
   const name = textField(row.Name) ?? textField(row.DisplayName);
-  if (!name) return textField(row.FulfilmentStoreId);
+  if (!name || name.length > 500) return textField(row.FulfilmentStoreId);
   const stockcode = textField(row.Stockcode);
   const key = stockcode ?? name;
   if (seen.has(key)) return textField(row.FulfilmentStoreId);
-  seen.add(key);
-  products.push({
+  const categories = productCategories(row);
+  const dietaryClaims = productDietaryClaims(row);
+  const preparedForm = productPreparedForm(row);
+  const product: CatalogueProduct = {
     name,
     priceCents: productPrice(row),
     packageSize: textField(row.PackageSize),
@@ -101,7 +154,13 @@ function pushProduct(row: Record<string, unknown>, products: CatalogueProduct[],
     inStock: flag(row.IsInStock),
     available: flag(row.IsAvailable),
     url: stockcode ? `https://www.woolworths.com.au/shop/productdetails/${encodeURIComponent(stockcode)}` : null,
-  });
+    ...(categories.length ? { categories } : {}),
+    ...(dietaryClaims.length ? { dietaryClaims } : {}),
+    ...(preparedForm ? { preparedForm } : {}),
+  };
+  if (isNonFoodCatalogueProduct(product)) return textField(row.FulfilmentStoreId);
+  seen.add(key);
+  products.push(product);
   return textField(row.FulfilmentStoreId);
 }
 
@@ -154,8 +213,30 @@ async function readJson(url: string, fetchImpl: typeof fetch, signal: AbortSigna
     if (!next) throw new Error("Woolworths redirected the lookup somewhere else. No price was taken.");
     return readJson(next, fetchImpl, signal, redirectsLeft - 1);
   }
-  if (!response.ok) throw new Error("The Woolworths catalogue did not respond. No price was invented.");
-  const text = await response.text();
+  if (!response.ok) {
+    if ([403, 429, 503].includes(response.status)) providerBackoff.set(fetchImpl, Date.now() + 60_000);
+    await response.body?.cancel().catch(() => undefined);
+    throw new Error("The Woolworths catalogue did not respond. No price was invented.");
+  }
+  const declaredLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY) { await response.body?.cancel().catch(() => undefined); throw new Error("The Woolworths response was too large to read. No price was taken."); }
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error("The Woolworths catalogue was empty. No price was taken.");
+  const chunks: Uint8Array[] = [];
+  let bytes = 0;
+  try {
+    while (true) {
+      const next = await reader.read();
+      if (next.done) break;
+      bytes += next.value.byteLength;
+      if (bytes > MAX_BODY) throw new Error("The Woolworths response was too large to read. No price was taken.");
+      chunks.push(next.value);
+    }
+  } finally { await reader.cancel().catch(() => undefined); }
+  const buffer = new Uint8Array(bytes);
+  let offset = 0;
+  for (const chunk of chunks) { buffer.set(chunk, offset); offset += chunk.byteLength; }
+  const text = new TextDecoder().decode(buffer);
   if (!text || text.length > MAX_BODY || text.trimStart().startsWith("<")) {
     throw new Error("The Woolworths catalogue was not readable. No price was invented.");
   }
@@ -166,26 +247,24 @@ async function readJson(url: string, fetchImpl: typeof fetch, signal: AbortSigna
   }
 }
 
-async function loadCatalogue(query: string, fetchImpl: typeof fetch, signal?: AbortSignal): Promise<CachedCatalogue> {
+async function loadCatalogue(query: string, fetchImpl: typeof fetch, signal?: AbortSignal): Promise<{ value: CachedCatalogue; cached: boolean }> {
+  signal?.throwIfAborted();
   const key = query.toLocaleLowerCase("en-AU");
-  const hit = cache.get(key);
-  if (hit && Date.now() - hit.at < CACHE_MS) return { ...hit };
-  await acquireCatalogueSlot();
-  try {
+  return catalogueCache.load(key, fetchImpl, async sharedSignal => {
+    if ((providerBackoff.get(fetchImpl) ?? 0) > Date.now()) throw new Error("Woolworths is temporarily blocking price checks. Planning estimates remain available; retry later.");
+    await acquireCatalogueSlot(sharedSignal);
+    try {
+    if ((providerBackoff.get(fetchImpl) ?? 0) > Date.now()) throw new Error("Woolworths is temporarily blocking price checks. Planning estimates remain available; retry later.");
     const timeout = AbortSignal.timeout(12_000);
-    const combined = signal ? AbortSignal.any([signal, timeout]) : timeout;
+    const combined = AbortSignal.any([sharedSignal, timeout]);
     const payload = await readJson(`${SEARCH_URL}?searchTerm=${encodeURIComponent(query)}`, fetchImpl, combined, 2);
     const parsed = parseWoolworthsSearch(payload);
     const stored: CachedCatalogue = { at: Date.now(), fetchedAt: new Date().toISOString(), ...parsed };
-    cache.set(key, stored);
-    if (cache.size > CACHE_LIMIT) {
-      const oldest = [...cache.entries()].sort((a, b) => a[1].at - b[1].at)[0];
-      if (oldest) cache.delete(oldest[0]);
-    }
     return stored;
   } finally {
     releaseCatalogueSlot();
   }
+  }, signal);
 }
 
 function quoteError(error: unknown): string {
@@ -214,11 +293,9 @@ export async function lookupQuery(raw: string, fetchImpl: typeof fetch = fetch, 
   for (let index = 0; index < base.searched.length; index += 1) {
     const phrase = base.searched[index];
     try {
-      const key = phrase.toLocaleLowerCase("en-AU");
-      const before = cache.get(key);
-      const loaded = await loadCatalogue(phrase, fetchImpl, signal);
-      const phraseCached = before != null && before.fetchedAt === loaded.fetchedAt && Date.now() - before.at < CACHE_MS;
-      if (!phraseCached) cached = false;
+      const response = await loadCatalogue(phrase, fetchImpl, signal);
+      const loaded = response.value;
+      if (!response.cached) cached = false;
       any = true;
       fetchedAt = loaded.fetchedAt;
       fulfilmentStoreId ??= loaded.fulfilmentStoreId;
@@ -231,6 +308,7 @@ export async function lookupQuery(raw: string, fetchImpl: typeof fetch = fetch, 
       }
     } catch (error) {
       if (index === 0) primaryError = error;
+      if (signal?.aborted) break;
     }
     if (products.length >= 48) break;
   }

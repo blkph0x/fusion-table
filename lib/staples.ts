@@ -12,6 +12,8 @@ import { MEAL_STAPLE_FAMILY } from "./region-pantry.ts";
 export interface StapleOptions {
   glutenFree: boolean;
   dairyFree: boolean;
+  /** A complete ingredient-led plate keeps its chosen side; only rename generic rice. */
+  preservePlate?: boolean;
 }
 
 const RICE_IDS = new Set(["rice", "bbq-rice", "jasmine-rice", "basmati-rice", "short-grain-rice", "medium-grain-rice", "long-grain-rice", "mexican-rice", "brazilian-rice", "risotto-rice", "sticky-rice", "samba-rice"]);
@@ -24,8 +26,9 @@ export function canonAllergen(name: string): string {
   const value = name.trim().toLowerCase();
   if (value === "tree nuts" || value === "tree nut" || value === "tree-nuts") return "tree-nut";
   if (value === "crustaceans") return "crustacean";
+  if (value === "molluscs" || value === "mollusks" || value === "mollusk") return "mollusc";
   if (value === "peanuts") return "peanut";
-  if (value === "sulphite") return "sulphites";
+  if (value === "sulphite" || value === "sulfite" || value === "sulfites") return "sulphites";
   return value;
 }
 
@@ -175,6 +178,8 @@ export interface StapleApplication<T extends DraftIngredient> {
   ingredients: T[];
   /** Staples that were added, or a generic rice that was renamed. Already-present foods are not repeated. */
   served: DraftIngredient[];
+  /** New accompaniments needing preparation; renamed rice is already in the base method. */
+  added: DraftIngredient[];
 }
 
 function familySkip(stapleId: string, ids: Set<string>): boolean {
@@ -193,6 +198,7 @@ export function applyStaples<T extends DraftIngredient>(ingredients: readonly T[
   const staples = staplesFor(regionId, options);
   let next = ingredients.map((entry) => ({ ...entry, allergens: [...entry.allergens] })) as T[];
   const served: DraftIngredient[] = [];
+  const added: DraftIngredient[] = [];
   for (const staple of staples) {
     if (next.some((entry) => entry.id === staple.id)) continue;
     if (RICE_IDS.has(staple.id)) {
@@ -207,12 +213,14 @@ export function applyStaples<T extends DraftIngredient>(ingredients: readonly T[
         continue;
       }
     }
+    if (options.preservePlate) continue;
     if (options.glutenFree && staple.id === "quinoa") {
       const wheat = next.find((entry) => entry.id === "couscous");
       if (wheat) {
         const replaced = { ...staple, amount: wheat.amount, unit: wheat.unit } as T;
         next = next.map((entry) => (entry.id === "couscous" ? replaced : entry));
         served.push(replaced);
+        added.push(replaced);
         continue;
       }
     }
@@ -220,14 +228,27 @@ export function applyStaples<T extends DraftIngredient>(ingredients: readonly T[
     if (familySkip(staple.id, ids)) continue;
     next = [...next, staple as T];
     served.push(staple);
+    added.push(staple);
   }
-  return { ingredients: next, served };
+  return { ingredients: next, served, added };
 }
 
-export function stapleStep(served: readonly DraftIngredient[], dish: string): string {
-  const names = served.map((entry) => entry.name).join(", ");
+export function stapleStep(served: readonly DraftIngredient[], dish: string, servings = 4): string {
+  const preparation = served.map((entry) => {
+    const quantity = Number((entry.amount * servings / 4).toFixed(4));
+    const label = `${quantity}${entry.unit ? ` ${entry.unit}` : ""} ${entry.name}`;
+    if (RICE_IDS.has(entry.id)) return `Rinse ${label}, then cook in a saucepan using the packet's water ratio, cooking and resting time.`;
+    if (NOODLE_IDS.has(entry.id)) return `Soak or boil ${label} as the packet directs, then drain.`;
+    if (entry.id === "quinoa" || entry.id === "burghul") return `Prepare ${label} using the packet's water ratio and simmering or soaking directions, then drain or fluff as directed.`;
+    if (entry.id === "couscous") return `Put ${label} in a heatproof bowl, add the amount of boiling water directed on the packet, cover until hydrated, then fluff.`;
+    if (entry.id === "potatoes") return `Peel ${label} if preferred, cut into even chunks and simmer in water until fork-tender, then drain.`;
+    if (["pinto-beans", "chickpeas", "brown-lentils", "kidney-beans", "black-beans"].includes(entry.id)) return `Warm ${label}, already cooked and drained, until steaming hot. Do not use raw dried beans in this step.`;
+    if (entry.id === "polenta" || entry.id === "maize-meal") return `Whisk ${label} into simmering water using the packet's ratio and cooking time; stir until thick and cooked through.`;
+    if (entry.id === "farofa") return `Toast ${label} in a dry pan until lightly golden, stirring.`;
+    return `Warm ${label} as the packet directs.`;
+  }).join(" ");
   const injera = served.some((entry) => entry.id === "injera")
     ? " Many injera mixes include wheat or barley. This template means a packet labelled 100% teff injera. It does not add a wheat tag, and that is not a packet test."
     : "";
-  return `Serve ${names} with the ${dish}.${injera} Template staple, not a kitchen-tested traditional dish. Check the packet.`;
+  return `Prepare these accompaniments alongside the ${dish}; check each packet's cooking or soaking time first so they finish near service. ${preparation}${injera} Keep them ready for the final assembly. Template staple, not a kitchen-tested traditional dish. Check the packet.`;
 }

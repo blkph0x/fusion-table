@@ -1,0 +1,137 @@
+[
+  {
+    "name": "Expected shopping release",
+    "passed": true,
+    "detail": {
+      "releaseId": "20261026-090546",
+      "sourceManifestSha256": "3db1d699ed29d20a410cae5d7947a68351945b51323d4e7eaed0006104560592",
+      "runtime": "node",
+      "basePath": "/fusion",
+      "feature": "local-shopping"
+    }
+  },
+  {
+    "name": "Application renders",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Reject missing area",
+    "passed": true,
+    "detail": {
+      "error": "Choose a suburb or postcode for your shopping area."
+    }
+  },
+  {
+    "name": "Reject negative quantity",
+    "passed": true,
+    "detail": {
+      "error": "Each ingredient needs its own name, a positive quantity and a unit."
+    }
+  },
+  {
+    "name": "Reject more than six lines",
+    "passed": true,
+    "detail": {
+      "error": "Check between 1 and 6 ingredients at a time."
+    }
+  },
+  {
+    "name": "Record pack size in isolated ledger",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Whole pack estimate is correct",
+    "passed": true,
+    "detail": {
+      "area": "2000",
+      "checkedAt": "2026-10-26T09:06:52.191Z",
+      "label": "Online price guides and local recorded prices; quantities and source are shown for each offer.",
+      "lines": [
+        {
+          "id": "rice",
+          "name": "Jasmine rice",
+          "amount": 450,
+          "unit": "g",
+          "offers": [
+            {
+              "id": "recorded:price-mvp18wpk-3368a683",
+              "productName": "Jasmine rice",
+              "retailerId": null,
+              "shopId": "qa-shop",
+              "shopName": "QA canary grocer",
+              "source": "recorded",
+              "scope": "shop-recorded",
+              "evidenceLabel": "You recorded this. Not a live catalogue and not a shelf check. Stock and the current shelf price are unconfirmed.",
+              "priceCents": 250,
+              "packageSize": "1 kg",
+              "stock": "UNKNOWN",
+              "fetchedAt": "2026-10-26T09:06:52.184Z",
+              "freshness": "current",
+              "match": "matched",
+              "reviewable": true,
+              "reviewReason": "User-recorded item wording. Verify the pack and current shelf price.",
+              "eligible": true,
+              "cost": {
+                "lineCents": 250,
+                "packs": 1,
+                "purchasedAmount": 1,
+                "purchasedUnit": "kg",
+                "reason": null
+              },
+              "url": null
+            }
+          ],
+          "chosenOfferId": "recorded:price-mvp18wpk-3368a683",
+          "estimatedCents": 250,
+          "reason": null
+        }
+      ],
+      "summary": {
+        "knownSubtotalCents": 250,
+        "pricedLines": 1,
+        "totalLines": 1,
+        "unpricedLines": 0,
+        "complete": true,
+        "label": "Estimate for the listed quantities from the available sources. This is not a confirmed basket at one shop."
+      },
+      "warnings": []
+    }
+  },
+  {
+    "name": "Recorded offer belongs to exact local shop",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Other areas do not borrow local record",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Other countries do not borrow Australian prices",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Legacy price records remain readable",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Missing pack size does not become zero or a guessed cost",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Real retailer response is structured",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "Online offers do not claim local branch stock",
+    "passed": true,
+    "detail": null
+  }
+]

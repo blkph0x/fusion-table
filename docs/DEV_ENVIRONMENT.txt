@@ -1,0 +1,123 @@
+FUSION TABLE — VERIFIED DEVELOPMENT ENVIRONMENT
+Updated 27 October 2026
+
+Deployment update: the quality pass, homepage/image fixes, local shopping
+workspace, regional quality corrections and ingredient-aware cooking methods
+are now live.
+Active release: /home/blkph0x/fusion-releases/20261027-075114, supervised by
+fusion-table.service using the Node profile and /home/blkph0x/fusion-data.
+The original server checkout below is preserved for recovery, not the active
+runtime. See SCIENCE_QUALITY_DEPLOYMENT_2026-10-27.txt for the current verified release
+and rollback details. CULINARY_DEPLOYMENT_2026-10-27.txt,
+REGIONAL_DEPLOYMENT_2026-10-27.txt,
+SHOPPING_DEPLOYMENT_2026-10-26.txt and
+DEPLOYMENT_2026-10-26.txt record the earlier deployments.
+
+Project map
+
+Website source: D:\fusion-table
+Website repository: https://github.com/blkph0x/fusion-table
+Working branch: cursor/fusion-overhaul-91e1
+Source HEAD at inspection: 2d0cee19080190039d98b56a45f586e117d5820e
+Application-code baseline: 765cfea796d5374735f249c7e59ccadc4204ad96
+The difference between those two commits is the handoff document only.
+
+Public website: https://gearsqueens.online/fusion/
+Server source: /home/blkph0x/src/fusion-table
+Server branch: deploy/fusion-overhaul-91e1
+Server HEAD: 765cfea796d5374735f249c7e59ccadc4204ad96
+Host-only source patches observed: next.config.ts basePath /fusion and
+vite.config.ts NEXT_PUBLIC_BASE_PATH define /fusion.
+Original runtime observed before the deployments above: Apache proxied a
+Wrangler/workerd local runner listening on
+127.0.0.1:8792. Its cwd is the server source directory. The named system service
+was inactive; that process belonged to an SSH session scope. This historical
+runtime was replaced by the supervised Node service described above.
+
+Android source: D:\MealPlannerAU
+Android branch: cursor/fusion-overhaul-91e1
+Android HEAD: c29b83d (no Git remote configured)
+Public download: https://gearsqueens.online/downloads/MealPlannerAU.apk
+Actual public binary: 1.5.7, versionCode 14, 13,982,261 bytes.
+SHA-256: 1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef
+Same signer as prior releases. Signed release and 154 unit tests passed.
+Matches app/build/outputs/apk/release/app-release.apk and dist/MealPlannerAU.apk.
+See SCIENCE_QUALITY_DEPLOYMENT_2026-10-27.txt for current scope, evidence and rollback.
+No physical device was connected; existing emulator image path could not boot.
+
+Local preview matching production URL paths
+
+From D:\fusion-table:
+  powershell -NoProfile -File scripts/Start-Fusion.ps1
+Open http://127.0.0.1:5173/fusion/
+
+The launcher selects a compatible installed Node >=22.13 for its own process.
+It now selects the conventional Node runtime by default so shared cook reports
+and recorded prices use a real persistent filesystem. The original Worker
+profile remains available explicitly with -Runtime worker. Bare package scripts
+and the managed Sites build keep their Worker default.
+It avoids the default shell's older Node and failing global pnpm launcher.
+It does not change global Node, pnpm, PATH or execution-policy settings.
+NEXT_PUBLIC_BASE_PATH is selected for that invocation and restored afterward.
+The checked-in configuration now supports this environment variable, eliminating
+the need to hard-code host-only path edits in a local preview.
+
+Other tasks:
+  powershell -NoProfile -File scripts/Start-Fusion.ps1 -Task status
+  powershell -NoProfile -File scripts/Start-Fusion.ps1 -Task build
+  powershell -NoProfile -File scripts/Start-Fusion.ps1 -Task start
+  powershell -NoProfile -File scripts/Start-Fusion.ps1 -Task verify
+  .\scripts\Start-Fusion.ps1 -BasePath ''
+
+An empty BasePath preserves the normal portable root-path build. The /fusion
+profile matches paths, not every host service: the server's optional local image
+model is not installed or configured by this launcher. Android downloads on the
+live domain are served separately by Apache at /downloads, not inside /fusion.
+A local web-only preview does not contain that separately hosted APK by default.
+
+Node self-hosting (Linux shell with the required Node/pnpm already selected):
+  FUSION_RUNTIME=node NEXT_PUBLIC_BASE_PATH=/fusion pnpm build
+  FUSION_RUNTIME=node NEXT_PUBLIC_BASE_PATH=/fusion FUSION_DATA_DIR=/persistent/fusion-data node scripts/run-framework.mjs start --port 8792
+Use one supervised Node writer process for this JSON ledger, and back up its
+FUSION_DATA_DIR. A Worker --persist-to directory does not make arbitrary node:fs
+writes durable; this was confirmed by failing local Worker writes. Node dev and
+production writes were tested across independent requests and a full restart.
+Use a separate storage adapter before scaling this ledger across processes.
+Worker and Node builds share dist, so build the intended profile before starting;
+the launcher detects an incompatible build instead of silently starting it.
+
+Image rendering can be bounded with FUSION_LOCAL_IMAGE_CONCURRENCY (1-4, default2)
+and FUSION_LOCAL_IMAGE_TIMEOUT_MS (1000-60000, default20000). Render/cache behaviour
+does not establish that a recipe was cooked or photographed.
+For the Node profile, supply FUSION_LOCAL_IMAGE_URL explicitly with the existing
+host model's loopback endpoint if wanted. Node does not automatically read the
+Worker .dev.vars file. Without a model endpoint, the image fallback still works.
+
+Open FusionTable.code-workspace to keep the website and Android sources named
+separately. They are two companion applications, not interchangeable builds.
+D:\New project is unrelated. D:\fusion-table-before-affinity was empty at
+inspection; neither directory was removed or merged.
+
+Cleanup and recovery
+
+Ten untracked generator/debug scripts, audit JSON files and the backup fragment
+were moved intact to D:\fusion-table-dev-archive\2026-10-26. manifest.json records
+original paths, archived paths and hashes. To restore any file, move that exact
+archived file back to its original path after checking for a conflicting file.
+Tracked recipe code, templates, Git branches and production files were preserved.
+
+Android dist/archive/MealPlannerAU-1.5.1-code8-2026-10-24.apk preserves the former
+generic APK. Its SHA-256 is
+3DCCF389EB82D6F936D6FB9F8E179BEDCBE0F3D1A7AA2148D2CA8BF363B59FCC.
+dist/RELEASE-IDENTITY.txt records the current generic binary's identity.
+No APK was rebuilt, installed or uploaded during this cleanup.
+
+The first local-only audit is retained but marked superseded. The current audit
+is docs/live-site-audit-2026-10-26.txt; evidence is under
+docs/audit-evidence-2026-10-26. That initial cleanup did not deploy or restart the
+server; the later requested deployment is recorded separately above.
+
+Current quality/price/image update: exhaustive authored-catalogue evidence and exact
+coverage are recorded in SCIENCE_QUALITY_AUDIT_2026-10-27.txt. Automatic recipe
+shopping costs retain explicit partial/unknown labels. Background pictures use the
+supervised local model and persistent bounded cache; no cloud key was added.

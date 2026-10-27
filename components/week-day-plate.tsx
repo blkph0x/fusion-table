@@ -1,5 +1,7 @@
 "use client";
 
+import { RecipeImage } from "./recipe-image";
+
 import { ArrowRight } from "lucide-react";
 import { WeekNote } from "@/components/community-panel";
 import type { CommunityBoard } from "@/lib/community";
@@ -16,6 +18,7 @@ type Props = {
   plateSrc: (recipe: Recipe, spec: ShareSpec | null) => string;
   keepImage: (event: { currentTarget: HTMLImageElement }) => void;
   locked: boolean;
+  settingsChanged?: boolean;
   sideChoices: SideOption[];
   onOpen: (recipe: Recipe) => void;
   onRandomise: () => void;
@@ -30,6 +33,7 @@ export function WeekDayPlate({
   plateSrc,
   keepImage,
   locked,
+  settingsChanged = false,
   sideChoices,
   onOpen,
   onRandomise,
@@ -55,6 +59,7 @@ export function WeekDayPlate({
           type="button"
           className={`text-button plate-lock ${locked ? "is-locked" : ""}`}
           aria-pressed={locked}
+          disabled={settingsChanged}
           onClick={onToggleLock}
         >
           {locked ? "Locked" : "Lock"}
@@ -63,7 +68,7 @@ export function WeekDayPlate({
       {recipe ? (
         <>
           <WeekNote recipe={recipe} board={board} />
-          <img className="week-plate" src={plateSrc(recipe, null)} alt="" onError={keepImage} />
+          <RecipeImage className="week-plate" src={plateSrc(recipe, null)} alt="" onError={keepImage} />
           <div className="plate-main-block">
             <p className="plate-label">Main</p>
             <p><strong>{recipe.title}</strong></p>
@@ -87,7 +92,7 @@ export function WeekDayPlate({
             <button className="text-button" type="button" onClick={() => onOpen(recipe)}>
               Open recipe <ArrowRight size={14} />
             </button>
-            <button className="text-button" type="button" disabled={locked} onClick={onRandomise}>
+            <button className="text-button" type="button" disabled={locked || settingsChanged} onClick={onRandomise}>
               Randomise dinner
             </button>
           </div>
@@ -98,7 +103,7 @@ export function WeekDayPlate({
                 <button
                   key={option.sideId}
                   type="button"
-                  disabled={locked}
+                  disabled={locked || settingsChanged}
                   className={option.suggested ? "suggested-side" : undefined}
                   onClick={() => onChangeSide(option.sideId)}
                   title={option.suggested ? "Suggested for this region" : undefined}
@@ -108,7 +113,7 @@ export function WeekDayPlate({
               ))}
             </div>
           )}
-          {recipe.kind === "meal" && sideChoices.length === 0 && (
+          {recipe.kind === "meal" && sideChoices.length === 0 && !settingsChanged && (
             <p className="subtle-small plate-side-empty" role="status">
               No other side matches your allergens and dislikes for this dinner. The main stays as it is.
             </p>
@@ -120,7 +125,7 @@ export function WeekDayPlate({
                 <button
                   key={`${option.classicId}:${option.regionId}`}
                   type="button"
-                  disabled={locked}
+                  disabled={locked || settingsChanged}
                   onClick={() => onPickDinner(option.classicId, option.regionId)}
                 >
                   {option.title}

@@ -1,0 +1,5 @@
+ActiveState=active
+UnitFileState=enabled
+MainPID=2340608
+NRestarts=0
+WorkingDirectory=/home/blkph0x/fusion-releases/20261027-014236

@@ -1,0 +1,1968 @@
+{
+  "generatedAt": "2026-10-27T05:14:41.502Z",
+  "reviewScope": "Actual methods and quantities for all 90 sides; cooking-form, liquid, timing, holding and regional sauce review. This is plausibility review, not kitchen validation or a full two-million-case rerun.",
+  "source": {
+    "sidePlans": "751a48105a820fa1da951b1843eda72eeafd215ff2282e3298584a52e97e5bc1",
+    "regionalCooking": "520a465cddfbdee9d386ad9686de9eb8654ab21ae30b14a1f5ac091e50d19d43"
+  },
+  "checked": {
+    "sideCases": 1080,
+    "regionalCases": 2280,
+    "generatedMealSamples": 4
+  },
+  "summaries": [
+    {
+      "id": "rice-greens",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "potato-slaw",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "couscous-veg",
+      "cookingWindowMinutes": [
+        17,
+        27
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Couscous",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 7.5,
+      "acidMlPerPerson": 0,
+      "forms": []
+    },
+    {
+      "id": "noodles-crunch",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Egg-free wheat noodles",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "flatbread-salad",
+      "cookingWindowMinutes": [
+        11,
+        11
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "lentil-salad",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "garden-salad",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "mashed-potato",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": []
+    },
+    {
+      "id": "roast-pumpkin",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "steamed-broccoli",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Jasmine rice",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Jasmine rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "garlic-bread",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "jasmine-cucumber",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Jasmine rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": [
+        {
+          "name": "Jasmine rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "coconut-rice",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Jasmine rice",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Jasmine rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "kimchi-rice",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Short-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Short-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "basmati-raita",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Basmati rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Basmati rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "chapati-salad",
+      "cookingWindowMinutes": [
+        11,
+        11
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "bulgur-tabbouleh",
+      "cookingWindowMinutes": [
+        17,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Fine bulgur wheat",
+          "grams": 55
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "hummus-salad",
+      "cookingWindowMinutes": [
+        11,
+        11
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "polenta-greens",
+      "cookingWindowMinutes": [
+        18,
+        18
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Instant polenta",
+          "grams": 62.5
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Instant polenta",
+          "notes": "Dry weight; check the packet for wheat cross-contact."
+        }
+      ]
+    },
+    {
+      "id": "chips-salad",
+      "cookingWindowMinutes": [
+        40,
+        40
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "coleslaw-corn",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "roast-veg-tray",
+      "cookingWindowMinutes": [
+        45,
+        45
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "sweet-potato-mash",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": []
+    },
+    {
+      "id": "black-bean-rice",
+      "cookingWindowMinutes": [
+        20,
+        20
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "tortilla-salsa",
+      "cookingWindowMinutes": [
+        11,
+        11
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "quinoa-avocado",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Quinoa",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "vermicelli-herb",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": [
+        {
+          "name": "Rice vermicelli",
+          "notes": "Dry weight; usually wheat-free — check the packet."
+        }
+      ]
+    },
+    {
+      "id": "sesame-spinach",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Short-grain or long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Short-grain or long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "injera-salad",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "cauli-rice-greens",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "orzo-salad",
+      "cookingWindowMinutes": [
+        17,
+        17
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Orzo pasta",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "plantain-greens",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Ripe plantain",
+          "notes": "Peeled and sliced on the diagonal. Firm banana is a last resort if plantain is unavailable."
+        }
+      ]
+    },
+    {
+      "id": "focaccia-salad",
+      "cookingWindowMinutes": [
+        13,
+        13
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "sticky-rice-greens",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 360,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Sticky rice",
+          "grams": 80
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Sticky rice",
+          "notes": "Dry weight; soak as the packet directs."
+        }
+      ]
+    },
+    {
+      "id": "spring-onion-fried-rice",
+      "cookingWindowMinutes": [
+        16,
+        16
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Cooked long-grain rice",
+          "notes": "Cooked weight, not dry rice. Use a ready-cooked packet as directed, freshly cooked rice straightaway, or leftovers cooled and refrigerated promptly; never rice left on the bench."
+        }
+      ]
+    },
+    {
+      "id": "miso-aubergine-rice",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Short-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Short-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "soba-greens",
+      "cookingWindowMinutes": [
+        16,
+        16
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Soba noodles",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "pickle-cucumber-rice",
+      "cookingWindowMinutes": [
+        27,
+        27
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "pandan-rice-beans",
+      "cookingWindowMinutes": [
+        27,
+        27
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight."
+        },
+        {
+          "name": "Pandan leaf for the rice",
+          "notes": "Fresh or frozen food-grade leaf; wash, knot and remove after cooking. Not pandan extract."
+        }
+      ]
+    },
+    {
+      "id": "banana-leaf-rice",
+      "cookingWindowMinutes": [
+        40,
+        40
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Jasmine rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Jasmine rice",
+          "notes": "Dry weight."
+        },
+        {
+          "name": "Food-grade banana leaf for the rice",
+          "notes": "A large fresh or frozen leaf sold for food wrapping. Thaw as directed, rinse and wipe clean; it is a wrapper, not an edible vegetable."
+        }
+      ]
+    },
+    {
+      "id": "papaya-salad-side",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "lemongrass-rice",
+      "cookingWindowMinutes": [
+        27,
+        27
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Jasmine rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Jasmine rice",
+          "notes": "Dry weight."
+        },
+        {
+          "name": "Lemongrass stalk for the rice",
+          "notes": "Trim, bruise and keep in large retrievable pieces. Remove before serving."
+        }
+      ]
+    },
+    {
+      "id": "gai-lan-rice",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "asian-slaw-noodles",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Rice noodles",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": [
+        {
+          "name": "Rice noodles",
+          "notes": "Dry weight; usually wheat-free — check the packet."
+        }
+      ]
+    },
+    {
+      "id": "shanghainese-greens-rice",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Short-grain or long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Short-grain or long-grain rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "yunnan-potato-salad",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "jeera-rice-raita",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Basmati rice",
+          "notes": "Dry weight."
+        }
+      ]
+    },
+    {
+      "id": "paratha-salad",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "idli-veg",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "khichdi-greens",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 50
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "pappadum-salad",
+      "cookingWindowMinutes": [
+        9,
+        9
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "biryani-style-rice",
+      "cookingWindowMinutes": [
+        29,
+        29
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Basmati rice",
+          "notes": "Dry weight."
+        },
+        {
+          "name": "Cumin seeds for the rice",
+          "notes": "Whole seeds; not chilli."
+        },
+        {
+          "name": "Green cardamom pods for the rice",
+          "notes": "Lightly crack; remove whole pods before serving."
+        },
+        {
+          "name": "Cinnamon stick for the rice",
+          "notes": "One small stick for four servings; remove before serving."
+        }
+      ]
+    },
+    {
+      "id": "roti-salad",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "xinjiang-bread-salad",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "freekeh-salad",
+      "cookingWindowMinutes": [
+        30,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Cracked freekeh",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": [
+        {
+          "name": "Cracked freekeh",
+          "notes": "Dry weight. Use cracked freekeh; whole freekeh needs its packet's longer cooking time."
+        }
+      ]
+    },
+    {
+      "id": "pita-fattoush",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": []
+    },
+    {
+      "id": "jewelled-rice",
+      "cookingWindowMinutes": [
+        28,
+        28
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Basmati rice",
+          "notes": "Dry weight."
+        },
+        {
+          "name": "Pomegranate arils for the rice",
+          "notes": "Ready-extracted arils, without peel or pith."
+        }
+      ]
+    },
+    {
+      "id": "harissa-carrots-couscous",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Couscous",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "baba-salad",
+      "cookingWindowMinutes": [
+        10,
+        10
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "georgian-walnut-salad",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "ratatouille-side",
+      "cookingWindowMinutes": [
+        38,
+        38
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 0,
+      "forms": []
+    },
+    {
+      "id": "egg-free-spaetzle-greens",
+      "cookingWindowMinutes": [
+        20,
+        20
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Egg-free soft noodles",
+          "grams": 87.5
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "risotto-style-side",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Arborio rice",
+          "notes": "Dry weight; stir as the packet directs."
+        }
+      ]
+    },
+    {
+      "id": "patatas-bravas-side",
+      "cookingWindowMinutes": [
+        45,
+        45
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "beans-tomato-side",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "kale-farro",
+      "cookingWindowMinutes": [
+        40,
+        50
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Pearled farro",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Pearled farro",
+          "notes": "Dry weight. Use pearled farro; unpearled whole farro needs its packet's longer cooking or soaking method."
+        }
+      ]
+    },
+    {
+      "id": "beetroot-salad",
+      "cookingWindowMinutes": [
+        55,
+        55
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "zucchini-ribbons",
+      "cookingWindowMinutes": [
+        12,
+        12
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "mushroom-rice-side",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "tzatziki-potatoes",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "barley-veg",
+      "cookingWindowMinutes": [
+        45,
+        45
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Pearl barley",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "tostones-side",
+      "cookingWindowMinutes": [
+        40,
+        40
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Green plantain",
+          "notes": "Peeled and sliced."
+        }
+      ]
+    },
+    {
+      "id": "congri-rice",
+      "cookingWindowMinutes": [
+        30,
+        30
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "arepa-salad",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "chimichurri-potatoes",
+      "cookingWindowMinutes": [
+        43,
+        43
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 15,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "yuca-greens",
+      "cookingWindowMinutes": [
+        35,
+        35
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Fully cooked peeled yuca (cassava)",
+          "notes": "Use commercially processed, peeled and fully cooked cassava sold ready to reheat, with clear packet instructions. Not raw root, raw frozen cassava, bitter cassava or leaves. Home peeling and a short boil are not a validated detoxification process."
+        }
+      ]
+    },
+    {
+      "id": "elote-style-corn",
+      "cookingWindowMinutes": [
+        18,
+        18
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 6.25,
+      "forms": []
+    },
+    {
+      "id": "avocado-tomato-rice",
+      "cookingWindowMinutes": [
+        23,
+        23
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "jollof-style-rice",
+      "cookingWindowMinutes": [
+        37,
+        37
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 0,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "ugali-greens",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Maize meal",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "sukuma-wiki-side",
+      "cookingWindowMinutes": [
+        20,
+        20
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "gomen-style-greens",
+      "cookingWindowMinutes": [
+        28,
+        28
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "mozambican-rice-coconut",
+      "cookingWindowMinutes": [
+        24,
+        24
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 0,
+      "acidMlPerPerson": 5,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "millet-greens",
+      "cookingWindowMinutes": [
+        33,
+        33
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Millet",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "sorghum-salad",
+      "cookingWindowMinutes": [
+        70,
+        70
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Sorghum grain",
+          "grams": 70
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 7.5,
+      "forms": [
+        {
+          "name": "Sorghum grain",
+          "notes": "Dry weight; simmer until chewy-tender."
+        }
+      ]
+    },
+    {
+      "id": "pumpkin-mash-salad",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "pea-mash-beans",
+      "cookingWindowMinutes": [
+        18,
+        18
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    },
+    {
+      "id": "damper-salad",
+      "cookingWindowMinutes": [
+        15,
+        15
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [],
+      "oliveOilMlPerPerson": 5,
+      "acidMlPerPerson": 5,
+      "forms": []
+    },
+    {
+      "id": "creole-rice-okra",
+      "cookingWindowMinutes": [
+        28,
+        28
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Long-grain rice",
+          "grams": 75
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": [
+        {
+          "name": "Long-grain rice",
+          "notes": "Dry weight; use the packet's liquid ratio, cooking time and resting instructions."
+        }
+      ]
+    },
+    {
+      "id": "oat-risotto-greens",
+      "cookingWindowMinutes": [
+        25,
+        25
+      ],
+      "advancePreparationMinutes": 0,
+      "dryStarchGramsPerPerson": [
+        {
+          "name": "Rolled oats",
+          "grams": 50
+        }
+      ],
+      "oliveOilMlPerPerson": 10,
+      "acidMlPerPerson": 3.75,
+      "forms": []
+    }
+  ],
+  "samples": [
+    {
+      "input": {
+        "mainId": "chicken",
+        "methodId": "pan-fried",
+        "regionId": "japanese",
+        "sideId": "rice-greens",
+        "servings": 4
+      },
+      "totalMinutes": 43,
+      "ingredients": [
+        {
+          "id": "chicken",
+          "name": "Chicken breast fillets",
+          "amount": 600,
+          "unit": "g"
+        },
+        {
+          "id": "short-grain-rice",
+          "name": "Japanese short-grain rice",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "id": "green-beans",
+          "name": "Green beans",
+          "amount": 400,
+          "unit": "g"
+        },
+        {
+          "id": "garlic",
+          "name": "Garlic",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "ginger",
+          "name": "Fresh ginger",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "miso",
+          "name": "White miso",
+          "amount": 1.5,
+          "unit": "tbsp"
+        },
+        {
+          "id": "soy-sauce",
+          "name": "Soy sauce",
+          "amount": 2,
+          "unit": "tbsp"
+        },
+        {
+          "id": "shichimi",
+          "name": "Shichimi togarashi",
+          "amount": 1,
+          "unit": "tsp"
+        },
+        {
+          "id": "sansho",
+          "name": "Sansho pepper",
+          "amount": 0.25,
+          "unit": "tsp"
+        },
+        {
+          "id": "yuzu-kosho",
+          "name": "Yuzu kosho",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "rice-vinegar",
+          "name": "Rice vinegar",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "spring-onion",
+          "name": "Spring onion",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "sesame-seeds",
+          "name": "Toasted sesame seeds",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "sesame-oil",
+          "name": "Toasted sesame oil",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "neutral-oil",
+          "name": "Neutral cooking oil",
+          "amount": 3,
+          "unit": "tbsp"
+        },
+        {
+          "id": "vegetable-stock",
+          "name": "Vegetable stock",
+          "amount": 120,
+          "unit": "ml"
+        }
+      ],
+      "relevantSteps": [
+        {
+          "title": "Start the rice",
+          "detail": "Rinse 300 g Japanese short-grain rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Make the regional sauce base",
+          "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 15 g fresh ginger, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Pour in 120 ml vegetable stock and stir, scraping the base of the pan. Bring to a gentle simmer. Stir in 2 tbsp soy sauce only after liquid is present. Dissolve over low heat for 1–2 minutes, stirring; keep sweet or salty condiments away from a dry, very hot pan. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+          "minutes": 7
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed.  Once the sauce base is ready, take the pan off the heat. Loosen 1.5 tbsp white miso, 1 tbsp yuzu kosho with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 1 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, stir in or scatter over 1 tsp shichimi togarashi, 0.25 tsp sansho pepper, 1 tbsp toasted sesame seeds. Off the heat, fold in 15 g spring onion, 1 tbsp toasted sesame oil. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. Finish and plate immediately so the fresh seasoning stays bright.",
+          "minutes": 3
+        }
+      ]
+    },
+    {
+      "input": {
+        "mainId": "chicken",
+        "methodId": "pan-fried",
+        "regionId": "persian",
+        "sideId": "rice-greens",
+        "servings": 4
+      },
+      "totalMinutes": 47,
+      "ingredients": [
+        {
+          "id": "chicken",
+          "name": "Chicken breast fillets",
+          "amount": 600,
+          "unit": "g"
+        },
+        {
+          "id": "basmati-rice",
+          "name": "Basmati rice",
+          "amount": 300,
+          "unit": "g"
+        },
+        {
+          "id": "green-beans",
+          "name": "Green beans",
+          "amount": 400,
+          "unit": "g"
+        },
+        {
+          "id": "garlic",
+          "name": "Garlic",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "dried-lime",
+          "name": "Dried limes",
+          "amount": 2,
+          "unit": ""
+        },
+        {
+          "id": "advieh",
+          "name": "Advieh",
+          "amount": 1.5,
+          "unit": "tsp"
+        },
+        {
+          "id": "saffron",
+          "name": "Saffron threads",
+          "amount": 0.1,
+          "unit": "g"
+        },
+        {
+          "id": "black-pepper",
+          "name": "Freshly ground black pepper",
+          "amount": 0.5,
+          "unit": "tsp"
+        },
+        {
+          "id": "lemon-juice",
+          "name": "Lemon juice",
+          "amount": 15,
+          "unit": "ml"
+        },
+        {
+          "id": "mint",
+          "name": "Fresh mint",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "neutral-oil",
+          "name": "Neutral cooking oil",
+          "amount": 3,
+          "unit": "tbsp"
+        },
+        {
+          "id": "vegetable-stock",
+          "name": "Vegetable stock",
+          "amount": 120,
+          "unit": "ml"
+        }
+      ],
+      "relevantSteps": [
+        {
+          "title": "Start the rice",
+          "detail": "Rinse 300 g Basmati rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Make the regional sauce base",
+          "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Lower the heat. Stir in 1.5 tsp advieh, 0.5 tsp freshly ground black pepper for 15–20 seconds just until fragrant, then add the liquid promptly so the ground spices do not scorch. Pour in 120 ml vegetable stock and stir, scraping the base of the pan. Bring to a gentle simmer. Spoon a little of the hot cooking liquid into a cup and soak 0.1 g saffron threads in it for 5 minutes. Return all the saffron and borrowed liquid to the pan; this uses the liquid already listed, not a second portion. Add 2 dried limes. Pierce the dried limes. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+          "minutes": 13
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of dried limes before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 15 ml lemon juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh mint. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+          "minutes": 1
+        }
+      ]
+    },
+    {
+      "input": {
+        "mainId": "chickpeas",
+        "methodId": "roasted",
+        "regionId": "home-kitchen",
+        "sideId": "sorghum-salad",
+        "servings": 12,
+        "diet": "vegan"
+      },
+      "totalMinutes": 85,
+      "ingredients": [
+        {
+          "id": "chickpeas",
+          "name": "Canned chickpeas, drained",
+          "amount": 1800,
+          "unit": "g"
+        },
+        {
+          "id": "sorghum",
+          "name": "Sorghum grain",
+          "amount": 840,
+          "unit": "g"
+        },
+        {
+          "id": "tomato",
+          "name": "Cherry tomatoes",
+          "amount": 750,
+          "unit": "g"
+        },
+        {
+          "id": "side-parsley",
+          "name": "Parsley for the side",
+          "amount": 75,
+          "unit": "g"
+        },
+        {
+          "id": "olive-oil",
+          "name": "Olive oil",
+          "amount": 6,
+          "unit": "tbsp"
+        },
+        {
+          "id": "lemon-juice",
+          "name": "Lemon juice",
+          "amount": 180,
+          "unit": "ml"
+        },
+        {
+          "id": "garlic",
+          "name": "Garlic",
+          "amount": 45,
+          "unit": "g"
+        },
+        {
+          "id": "bay-leaves",
+          "name": "Bay leaves",
+          "amount": 6,
+          "unit": ""
+        },
+        {
+          "id": "thyme",
+          "name": "Dried thyme",
+          "amount": 3,
+          "unit": "tsp"
+        },
+        {
+          "id": "oregano",
+          "name": "Dried oregano",
+          "amount": 4.5,
+          "unit": "tsp"
+        },
+        {
+          "id": "black-pepper",
+          "name": "Freshly ground black pepper",
+          "amount": 1.5,
+          "unit": "tsp"
+        },
+        {
+          "id": "parsley",
+          "name": "Flat-leaf parsley",
+          "amount": 45,
+          "unit": "g"
+        },
+        {
+          "id": "neutral-oil",
+          "name": "Neutral cooking oil",
+          "amount": 9,
+          "unit": "tbsp"
+        },
+        {
+          "id": "vegetable-stock",
+          "name": "Vegetable stock",
+          "amount": 360,
+          "unit": "ml"
+        }
+      ],
+      "relevantSteps": [
+        {
+          "title": "Cook the sorghum",
+          "detail": "Rinse 840 g whole sorghum grain. Bring 6000 ml water to a boil in a roomy saucepan, add the grain and simmer uncovered for about 50–60 minutes, or the packet's longer time, until chewy-tender with no hard centre. Keep submerged with boiling water as needed, then drain thoroughly. Spread in a shallow dish to lose excess steam briefly before dressing.",
+          "minutes": 65
+        },
+        {
+          "title": "Make the regional sauce base",
+          "detail": "Heat 3 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 45 g garlic, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Lower the heat. Stir in 1.5 tsp freshly ground black pepper for 15–20 seconds just until fragrant, then add the liquid promptly so the ground spices do not scorch. Pour in 360 ml vegetable stock and stir, scraping the base of the pan. Bring to a gentle simmer. Add 6 bay leaves. Leave the whole aromatic pieces intact so they can be lifted out. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Stir in 3 tsp dried thyme, 4.5 tsp dried oregano. Simmer gently in the liquid for 2–3 minutes, stirring until evenly dispersed. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+          "minutes": 11
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of bay leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 90 ml lemon juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 45 g flat-leaf parsley. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+          "minutes": 1
+        }
+      ]
+    },
+    {
+      "input": {
+        "mainId": "chicken",
+        "methodId": "braised",
+        "regionId": "italian",
+        "sideId": "kale-farro",
+        "servings": 4,
+        "diet": "gluten-free"
+      },
+      "totalMinutes": 82,
+      "ingredients": [
+        {
+          "id": "chicken",
+          "name": "Chicken boneless skinless thigh",
+          "amount": 600,
+          "unit": "g"
+        },
+        {
+          "id": "brown-rice",
+          "name": "Brown rice",
+          "amount": 280,
+          "unit": "g"
+        },
+        {
+          "id": "kale",
+          "name": "Kale",
+          "amount": 250,
+          "unit": "g"
+        },
+        {
+          "id": "olive-oil",
+          "name": "Olive oil",
+          "amount": 2,
+          "unit": "tbsp"
+        },
+        {
+          "id": "lemon-juice",
+          "name": "Lemon juice",
+          "amount": 50,
+          "unit": "ml"
+        },
+        {
+          "id": "garlic",
+          "name": "Garlic",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "oregano",
+          "name": "Dried oregano",
+          "amount": 1.5,
+          "unit": "tsp"
+        },
+        {
+          "id": "fennel-seeds",
+          "name": "Fennel seeds",
+          "amount": 1,
+          "unit": "tsp"
+        },
+        {
+          "id": "calabrian-chilli-paste",
+          "name": "Gluten-free calabrian chilli paste",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "basil",
+          "name": "Fresh basil",
+          "amount": 15,
+          "unit": "g"
+        },
+        {
+          "id": "neutral-oil",
+          "name": "Neutral cooking oil",
+          "amount": 3,
+          "unit": "tbsp"
+        },
+        {
+          "id": "passata",
+          "name": "Tomato passata",
+          "amount": 400,
+          "unit": "ml"
+        },
+        {
+          "id": "vegetable-stock",
+          "name": "Gluten-free vegetable stock",
+          "amount": 250,
+          "unit": "ml"
+        },
+        {
+          "id": "onion",
+          "name": "Brown onion",
+          "amount": 150,
+          "unit": "g"
+        }
+      ],
+      "relevantSteps": [
+        {
+          "title": "Cook the grain",
+          "detail": "Rinse 280 g brown rice. Add to 2000 ml boiling water and simmer for 25–40 minutes, or the packet's time, until tender with no hard centre. Top up boiling water to keep submerged, then drain well. Start the kale during the grain's final 10 minutes.",
+          "minutes": 45
+        },
+        {
+          "title": "Wilt the kale",
+          "detail": "Start these side-finishing actions about 8 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Heat 2 tbsp olive oil over medium heat, add 250 g thinly sliced kale leaves and 30 ml water. Cover briefly, then stir for 6–8 minutes until tender; add a spoonful of water if needed. Take off the heat and finish with 20 ml lemon juice. Serve cooked grains and noodles promptly, or keep them at 60°C or hotter while waiting; keep cold garnishes chilled until assembly. For advance preparation, divide into shallow containers and refrigerate as soon as they stop steaming, at 5°C or colder. Do not leave a pot of rice cooling on the bench. Reheat only once until steaming hot throughout.",
+          "minutes": 8
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "Finish when the main has reached its endpoint and the side is ready.  Off the heat, add 30 ml lemon juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh basil. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+          "minutes": 1
+        }
+      ]
+    }
+  ]
+}

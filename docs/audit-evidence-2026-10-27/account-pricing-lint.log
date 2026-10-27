@@ -1,0 +1,6 @@
+
+D:\fusion-table\lib\locations.ts
+  203:79  warning  '_kind' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+

@@ -1,0 +1,90 @@
+FUSION TABLE - WEBSITE AND ANDROID PLAUSIBILITY AUDIT
+27 October 2026
+
+Scope and standard
+
+This pass reviewed actual generated meals and the rules composing them: identity,
+ingredient form and purpose, portions, filling capacity, grain liquids, regional
+flavour, texture, cooking sequence, equipment and realistic time. The earlier
+large matrix checked structure; it did not prove that food combinations made
+culinary sense. This pass adds focused tests for observed semantic failures.
+The user's Aussie-Thai parma/steak-wrap benchmark remains the reference for a
+recognisable main, purposeful additions and a practical method.
+
+Concrete problems corrected
+
+1. Chosen cuts: liver inherited beef's roughly two-hour simmer. It now has a short
+   final cook of evenly sliced pieces to 75 C, without a preceding long sear.
+   Bone-in purchased weights allow for bones; four-serving chicken marylands now
+   use 1.5 kg rather than 600 g. Whole racks become individual rib cutlets for
+   quick direct heat. Bone-in shanks/ribs/hocks cannot enter a home-mincer patty
+   method. Paneer schnitzel/grilling uses broad slabs, not cubes.
+2. Small-batch cooking: thin beef strips previously received 7-10 minutes PER
+   batch. The instruction now distinguishes a short batch from the total
+   household batch time, divides oil, limits crowding, and preserves thermometer
+   endpoints. Fragile fish is turned gently. Long-cook ranges avoid false
+   minute-level precision. Conflicting oven temperatures now have an explicit
+   one-oven sequence with prompt side cooling/refrigeration when needed and a
+   thorough reheat during the main's rest; the estimate budgets that sequence.
+3. Classic plate feasibility: stuffed shells no longer receive extra buns.
+   Filling is about 30 g per open jumbo shell, pasta is packet-cooked, and the
+   filled shells cook moist and covered before a brief uncovered finish. Long
+   cannelloni tubes are not interchangeable aliases. Burnt ends receive their
+   delicate miso/herb/citrus finish after the long pan stage. Pie/BBQ estimates
+   include required serial cooking and rests. Seeded prep is ready before a
+   quick main finishes, preserving crisp coatings and hot pasta.
+4. Sides and regional forms: whole sorghum has a 50-60-minute window. Freekeh
+   and farro specify cracked/pearled forms and longer-substitute directions.
+   Soft-grain liquid starting points scale; risotto reserves finishing liquid.
+   Garlic/ginger/onion powders and chilli flakes no longer receive fresh-piece
+   preparation. Counted whole cloves/cinnamon are removable infusions. Implicit
+   water scales for already-scaled callers, and delicate-only sauces have an
+   actual moist base. No unsupported blanket salt/heat reductions were made.
+5. Android composition: sweet fruit/yoghurt/cereal breakfasts reject savoury
+   chilli remixes with a clear explanation. Re-fusing an existing fusion is
+   blocked so sauces do not stack. Warm meals keep a compatible warm finish;
+   genuine cold meals receive ready-mix dressings, avoiding an unbudgeted
+   cook-then-fridge wait. Added acid/hot-condiment/strong-condiment lanes are
+   bounded. The household heat setting now affects newly added chilli while
+   preserving the saved main, and the visible copy matches that contract.
+   Studio plates include a measured vegetable portion. Cooked-rice dinner and
+   lunch quantities are explicit and appropriate to the four-serving yield.
+   Seven native sides have meaningful named flavours/dressings; barley has
+   BARLEY/GLUTEN tags rather than a false wheat tag.
+
+Review evidence and verification
+
+Findings and bounded before/after samples are under
+  docs/audit-evidence-2026-10-27/plausibility-*
+The web classic review checks 779 focused fixtures. The side/form review builds
+1,080 side variants and 2,280 regional profiles. Main/cut tests exercise all 76
+regions for short liver cooks plus household portions, bone handling, stir-fry
+batch totals, sharing and one-oven sequencing. Native tests include sweet/cold/
+warm/heat compatibility, original-body preservation and side allocation.
+
+Final full-test counts, the completed current-source matrix, build identity,
+public browser/HTTP/PDF checks and APK signature/download verification are in
+PLAUSIBILITY_DEPLOYMENT_2026-10-27.txt. An old source fingerprint is not evidence
+for this release. Previous interrupted or failed logs are preserved separately.
+
+Selected primary references
+
+Australian FSIC endpoints: https://www.foodsafety.asn.au/safe-cooking-temperatures/
+NSW safe leftovers: https://www.foodauthority.nsw.gov.au/consumer/food-extra-care/leftovers
+Australian Beef short stir-fry batches:
+https://www.australianbeef.com.au/recipes/vietnamese-style-beef-stir-fry/
+Nagi Maehashi's maryland weight/cooking reference:
+https://www.recipetineats.com/herb-garlic-chicken-marylands/
+Chef Dominic Chapman's sliced liver method (Australian 75 C endpoint retained):
+https://www.greatbritishchefs.com/recipes/calfs-liver-and-bacon-recipe
+Barilla open-shell moist cooking: https://www.barilla.com/en-us/recipe/all/stuffed-jumbo-shells
+Hikari delicate miso finish: https://hikarimiso.com/what-is-miso/how-to-use-miso-paste/
+Further grain/form/native-side references are recorded in the component reports.
+
+Limits
+
+The result is a reviewed template catalogue with explicit guards, not proof of
+universal culinary authenticity, taste, nutrition or successful cooking. Actual
+packet contents, equipment capacity, cross-contact and kitchen timings require
+real checks. Saved user methods/snapshots are retained; generating a fresh meal
+uses current rules. Templates remain clearly labelled not kitchen-tested.

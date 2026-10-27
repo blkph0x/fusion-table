@@ -1,0 +1,56 @@
+(node:36836) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:61204) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent recipe quality postconditions
+    # Subtest: accepts a separately finished sauce before a long main cook
+    ok 1 - accepts a separately finished sauce before a long main cook
+      ---
+      duration_ms: 12.1814
+      ...
+    # Subtest: rejects explicit prolonged reheating of already finished sauce
+    ok 2 - rejects explicit prolonged reheating of already finished sauce
+      ---
+      duration_ms: 3.7938
+      ...
+    # Subtest: rejects hidden invalid portions, duplicate identities and irreconcilable times
+    ok 3 - rejects hidden invalid portions, duplicate identities and irreconcilable times
+      ---
+      duration_ms: 3.2121
+      ...
+    # Subtest: rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+    ok 4 - rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+      ---
+      duration_ms: 1.1306
+      ...
+    # Subtest: checks actual bean-filled shells and delicate liver rather than just meat cases
+    ok 5 - checks actual bean-filled shells and delicate liver rather than just meat cases
+      ---
+      duration_ms: 1.6668
+      ...
+    # Subtest: distinguishes review warnings from broken recipes and never claims a taste probability
+    ok 6 - distinguishes review warnings from broken recipes and never claims a taste probability
+      ---
+      duration_ms: 0.5369
+      ...
+    # Subtest: retains postconditions after seed, serving and cleaner settings
+    ok 7 - retains postconditions after seed, serving and cleaner settings
+      ---
+      duration_ms: 101.8551
+      ...
+    1..7
+ok 1 - independent recipe quality postconditions
+  ---
+  duration_ms: 125.6557
+  type: 'suite'
+  ...
+1..1
+# tests 7
+# suites 1
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 784.7666

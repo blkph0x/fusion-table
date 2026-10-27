@@ -1,0 +1,13 @@
+{
+  "versionName": "1.5.6",
+  "versionCode": 13,
+  "bytes": 13952621,
+  "sha256": "c4ee721139527a7ce902a1770db45c4a0051cf2577c7ca4c0c05b44b66f0f11f",
+  "certificateSha256": "62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6",
+  "sourceSha256": "87713507f7f7a8cc75bb03800e0d1dfc4aac3e1af303e3a0f146478ae63738f0",
+  "assetSha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab",
+  "tests": 135,
+  "suites": 19,
+  "sameSignerAsPrevious": true,
+  "zipVerified": true
+}

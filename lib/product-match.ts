@@ -17,6 +17,12 @@ export interface CatalogueProduct {
   inStock: boolean | null;
   available: boolean | null;
   url?: string | null;
+  /** Optional retailer department/category labels; never dietary certification. */
+  categories?: readonly string[];
+  /** Explicit product label claims if supplied; not an allergy-safety guarantee. */
+  dietaryClaims?: readonly string[];
+  /** Explicit retailer preparation evidence, independent of pack weight or title. */
+  preparedForm?: "cooked-rice";
 }
 
 export interface ProductMatch {
@@ -26,8 +32,11 @@ export interface ProductMatch {
   stock: StockFlag;
   url: string | null;
   score: number;
-  /** Safe to buy for this query: cut and breed agree, catalogue says in stock, and a positive price exists. */
+  /** Matching catalogue candidate with the requested wording, known stock and price; verify the packet. */
   selected: boolean;
+  /** May be chosen after review; requested explicit dietary claims must still be established. */
+  reviewable?: boolean;
+  preparedForm?: "cooked-rice";
   reason: string;
 }
 
@@ -37,6 +46,32 @@ const STOP = new Set([
 ]);
 
 const PROTEINS = ["chicken", "turkey", "beef", "lamb", "pork", "prawn", "salmon", "tofu"] as const;
+
+/** Drop obvious non-food listings without treating a matching title as dietary evidence. */
+export function isNonFoodCatalogueProduct(product: Pick<CatalogueProduct, "name" | "categories">): boolean {
+  const name = product.name.slice(0, 500).toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  const petAccessory = /\b(?:dogs?|pupp(?:y|ies)|cats?|kittens?|pets?)\b.{0,64}\b(?:leads?|leashes?|collars?|harness(?:es)?|toys?|beds?|bowls?|treats?|food|kibble|litter|shampoo|grooming)\b/;
+  const kitchenTool = /\b(?:juicers?|squeezers?|citrus press|lemon press|garlic press|garlic crusher|tofu press|vegetable peeler|potato peeler|cheese grater|zester|knife sharpener|knife block|chopping board|cutting board|kitchen utensil|measuring cups?|measuring spoons?|baking trays?|baking tins?|muffin trays?|muffin tins?|food processor)\b/;
+  const hardware = /\b(?:cordless drill|power drill|hammer drill|drill bits?|screwdrivers?|socket sets?|garden hoses?|garden stakes?|power tools?|wall plugs?|paint brushes?|spray paint|sandpaper|wood screws?|allen keys?|hex keys?|chicken wire|wire mesh)\b/;
+  const household = /\b(?:dishwashing liquid|dishwasher (?:tablets?|capsules?|detergent)|laundry detergent|cleaning spray|surface cleaner|hand wash|body wash|scented candles?)\b/;
+  if (petAccessory.test(name) || kitchenTool.test(name) || hardware.test(name) || household.test(name)) return true;
+  return (product.categories || []).slice(0, 12).some((value) => {
+    const category = value.slice(0, 160).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    return /\b(?:pets|pet care|pet food|pet supplies|pet accessories|dog food|cat food|kitchenware|kitchen tools|kitchen dining|homeware|household cleaning|hardware|power tools|health beauty)\b/.test(category);
+  });
+}
+
+type DietaryClaim = "vegan" | "vegetarian" | "gluten-free" | "dairy-free";
+
+function dietaryClaimsOf(values: readonly string[]): Set<DietaryClaim> {
+  const text = values.slice(0, 16).map((value) => value.slice(0, 500)).join(" ").toLowerCase().replace(/[^a-z0-9]+/g, " ");
+  const claims = new Set<DietaryClaim>();
+  if (/\bvegans?\b/.test(text) && !/\b(?:non vegan|not vegan|not suitable for vegans?)\b/.test(text)) claims.add("vegan");
+  if (/\bvegetarians?\b/.test(text) && !/\b(?:non vegetarian|not vegetarian|not suitable for vegetarians?)\b/.test(text)) claims.add("vegetarian");
+  if (/\bgluten free\b/.test(text) && !/\b(?:not gluten free|non gluten free)\b/.test(text)) claims.add("gluten-free");
+  if (/\bdairy free\b/.test(text) && !/\b(?:not dairy free|non dairy free)\b/.test(text)) claims.add("dairy-free");
+  return claims;
+}
 
 const PHRASES: readonly { family: string; phrase: string }[] = [
   { family: "eye-fillet", phrase: "eye fillet" },
@@ -137,6 +172,7 @@ function stem(token: string): string {
 /** Fold shop wording onto the words our list uses, without treating bare "fillet" as its own cut. */
 export function canonicalizeProductText(value: string): string {
   let text = value.toLowerCase()
+    .replace(/\s+for the (?:side sauce|side|rice|corn)\s*$/g, "")
     .replace(/\bwagu\b/g, "wagyu")
     .replace(/\byoghurt\b/g, "yogurt")
     .replace(/\bcilantro\b/g, "coriander")
@@ -234,10 +270,11 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
   const wantedProteins = proteinsOf(wanted);
   const wantedBreed = breedOf(wanted);
   const wantedBone = boneStyle(wanted);
+  const requiredClaims = dietaryClaimsOf([query]);
   const ranked: ProductMatch[] = [];
 
   for (const product of products) {
-    if (!product.name.trim()) continue;
+    if (!product.name.trim() || product.name.length > 500 || isNonFoodCatalogueProduct(product)) continue;
     const seen = canonicalizeProductText(product.name);
     if (/\bsausage roll\b/.test(seen) && !/\bsausage roll\b/.test(wanted)) continue;
     if (/\bsauce\b/.test(seen) && !/\bsauce\b/.test(wanted)) continue;
@@ -270,7 +307,10 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     if (boneMismatch) score -= 15;
 
     const priced = product.priceCents != null && product.priceCents > 0;
+    const claims = dietaryClaimsOf([product.name, ...(product.dietaryClaims || [])]);
+    const missingClaims = [...requiredClaims].filter((claim) => !claims.has(claim) && !(claim === "vegetarian" && claims.has("vegan")));
     let selected = !premium && !boneMismatch && stock === "IN_STOCK" && priced && overlap > 0;
+    if (missingClaims.length) selected = false;
     if (wantedCuts.size > 0 && !sharedCut) selected = false;
     if (wantedProteins.size > 0 && seenProteins.size > 0 && ![...wantedProteins].every((protein) => seenProteins.has(protein))) selected = false;
     if (!(overlap === wantedTokens.length || sharedCut || score >= 40)) selected = false;
@@ -285,8 +325,10 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
             ? "The catalogue did not say whether this is in stock. Not selected."
             : !priced
               ? "No catalogue price. Not selected, and not counted as $0."
+              : missingClaims.length
+                ? `The product label does not establish ${missingClaims.join(" and ")}. Verify the packet; not selected automatically.`
               : selected
-                ? "Cut and name agree. In stock in the online catalogue."
+                ? "Catalogue name matches the request. In stock online; verify the packet and dietary/allergen labels."
                 : "Shown as another catalogue wording. Not the automatic pick.";
 
     ranked.push({
@@ -297,6 +339,8 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
       url: product.url ?? null,
       score,
       selected,
+      reviewable: stock === "IN_STOCK" && priced && missingClaims.length === 0 && !boneMismatch && overlap > 0,
+      ...(product.preparedForm ? { preparedForm: product.preparedForm } : {}),
       reason,
     });
   }
@@ -342,9 +386,9 @@ const SEARCH_SWAPS: readonly (readonly [RegExp, string])[] = [
   [/\bwagu\b/gi, "wagyu"],
 ];
 
-/** Names to send to a catalogue. The first is the list wording. The rest are other shop words for the same item. */
+/** Names to send to a catalogue. Omit authored serving-role suffixes, retaining food form and dietary words. */
 export function catalogueSearchPhrases(query: string): string[] {
-  const primary = query.replace(/\s+/g, " ").trim();
+  const primary = query.replace(/\s+/g, " ").trim().replace(/\s+for the (?:side sauce|side|rice|corn)$/i, "");
   if (primary.length < 2) return [];
   const folded = primary.toLocaleLowerCase("en-AU");
   const phrases = [primary.slice(0, 80)];

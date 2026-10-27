@@ -52,33 +52,32 @@ describe("community learning", () => {
     assert.equal(first.sourceLabel, "Template-generated · not kitchen-tested");
   });
 
-  it("asks why after three poor reports and does not throw the plate away", () => {
+  it("requires the reason before saving each current low report and keeps the plate", () => {
     let ledger = book();
-    for (let n = 1; n <= 3; n += 1) {
-      const saved = submitVote(ledger, { device: device(n), plate: plate(), stars: n === 3 ? 0 : 1 }, now, `v${n}`);
+    const current = generateRecipe({ classicId: "pasta", regionId: "japanese", diet: "vegetarian", servings: 2 });
+    const rejected = submitVote(ledger, { device: device(1), plate: current, experience: "cooked", stars: 1 }, now, "rejected");
+    assert.ok(rejected.error);
+    assert.equal(rejected.ledger.votes.length, 0);
+    for (let n = 1; n <= 3; n++) {
+      const saved = submitVote(ledger, { device: device(n), plate: current, experience: "cooked", stars: n === 3 ? 0 : 1,
+        feedback: { categories: ["too-salty"] } }, now, `v${n}`);
+      assert.equal(saved.error, undefined);
       ledger = saved.ledger;
-      assert.equal(saved.askWhy, true);
     }
     const standing = buildBoard(ledger).plates[0];
     assert.equal(standing.lowPeople, 3);
-    assert.equal(standing.askWhy, true);
+    assert.equal(standing.askWhy, false);
     assert.equal(standing.shelved, false);
     assert.equal(ledger.votes.length, 3);
-    assert.match(ledger.news.map((item) => item.text).join(" "), /0 or 1 star/);
-    for (let n = 1; n <= 2; n += 1) {
-      ledger = submitWhy(ledger, { device: device(n), plate: plate(), wrong: "The sauce was too salty.", change: "Use less soy sauce." }, now, `w${n}`).ledger;
-    }
-    assert.equal(buildBoard(ledger).plates[0].askWhy, true);
-    ledger = submitWhy(ledger, { device: device(3), plate: plate(), wrong: "It was bland and heavy.", change: "More lime and less soy." }, now, "w3").ledger;
-    assert.equal(buildBoard(ledger).plates[0].askWhy, false);
     assert.equal(ledger.whys.length, 3);
+    assert.equal(standing.feedbackSummary?.reasonCounts[0].cookedDevices, 3);
   });
 
   it("stops offering a plate only after a large majority, and later votes can bring it back", () => {
     let ledger = book();
-    for (let n = 1; n <= 4; n += 1) ledger = submitVote(ledger, { device: device(n), plate: plate(), again: "wont", want: "no" }, now, `wont${n}`).ledger;
+    for (let n = 1; n <= 4; n += 1) ledger = submitVote(ledger, { device: device(n), plate: plate(), again: "wont", want: "no", feedback: { categories: ["bland"] } }, now, `wont${n}`).ledger;
     assert.equal(buildBoard(ledger).plates[0].shelved, false);
-    ledger = submitVote(ledger, { device: device(5), plate: plate(), again: "wont", want: "no" }, now, "wont5").ledger;
+    ledger = submitVote(ledger, { device: device(5), plate: plate(), again: "wont", want: "no", feedback: { categories: ["bland"] } }, now, "wont5").ledger;
     const shelved = buildBoard(ledger);
     assert.equal(shelved.plates[0].shelved, true);
     assert.equal(shelved.offers.length, 0);

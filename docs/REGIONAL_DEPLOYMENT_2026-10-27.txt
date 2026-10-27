@@ -1,0 +1,69 @@
+FUSION TABLE — VERIFIED REGIONAL QUALITY DEPLOYMENT
+27 October 2026
+
+Public website: https://gearsqueens.online/fusion/
+Server: 10.1.1.111
+Active release: /home/blkph0x/fusion-releases/20261027-014236
+Source archive: releases/fusion-table-20261027-014236.tar.gz
+Archive SHA-256:
+6d2e62e389eff3d3608fad71debf4b0c217bca39425e0dc02a894d2fc7a5b0fb
+Source manifest SHA-256:
+5192acae4d4f0c2265d50604f70b7bd4d80cba43182627c4a8faff32a0d306cb
+297 source files were verified before building on the Linux host.
+
+Changes are described in REGIONAL_QUALITY_2026-10-27.txt. New production assets
+contain the recipe draft separation, coherent seeded finishes, regional pool
+isolation, side timing correction, accurate sauce explanation, shopping setup
+guidance and evidence-based cooked/dry rice price gate.
+
+Verification
+
+- Final regression run: 339 passed, zero failed, 41 suites. The new 1,344-recipe
+  coherence matrix covers every meal region, compatible main/method and classic/
+  region pairing. The unchanged expensive meals.test.ts baseline was excluded
+  from this repeat. Regional seed/heat, state, sharing, dietary and pricing cases
+  are included in the full run.
+- TypeScript and touched-file lint passed, with five pre-existing native image
+  advisories in app/page.tsx. The final pricing files have no lint errors/warnings.
+- Production builds succeeded locally and on the host. A separate loopback
+  canary verified the release identity, application render, unknown-cost shopping
+  response and 83 regional/sharing/pricing tests on the production host.
+- Live browser checks verified region switching, old-result hiding, pending
+  choices through navigation, fresh Japanese and Italian ingredients, classic
+  switching, a seven-dinner plan and published retailer data. Before final rice
+  correction, a real misleadingly named cooked rice pack exposed the need to
+  carry explicit retailer preparation evidence into the cost calculation.
+- All 13 recorded browser checks passed. The final estimate selected dry jasmine
+  rice and excluded the cooked pack with a visible reason and no guessed yield.
+  The final flavour explanation matched its actual sauce. The recipe page had
+  equal 305 px client/scroll widths under the 320 px phone viewport override.
+- Both Woolworths and Coles returned real products earlier in the live session;
+  Coles was unavailable on the final repeat. That variability remains explicit.
+- All test product matching and canary fixtures stayed isolated from production
+  recorded-price data. No synthetic community reports were posted.
+
+Service
+
+fusion-table.service is enabled/active, main PID 2340608, NRestarts 0 after cutover.
+It uses the Node profile at 127.0.0.1:8792 and persistent
+/home/blkph0x/fusion-data. The existing image-model environment was retained.
+Apache, TLS, original checkout and Android APK were not modified by this pass.
+
+Rollback unit and data backup:
+/home/blkph0x/fusion-deploy-backups/20261027-014236
+Restore its fusion-table.service to /etc/systemd/system/fusion-table.service,
+run systemctl daemon-reload, then restart fusion-table.service. This returns to
+the earlier regional release 20261027-013034. Do not restore an old ledger merely
+to roll back code. Its preceding unit backup returns to shopping release 090546.
+
+Intermediate 013551 passed staged checks but was not cut over; the rice-form fix
+was added to the final immutable source release above. Documentation status files
+were updated after deployment and are newer than the archived source snapshot.
+
+Evidence: docs/audit-evidence-2026-10-27, especially final-regression.log,
+verification.json, final-local-build.log, final-server-build.log,
+final-server-regional-canary-tests.log, browser-checks.json and live-release.json.
+
+This pass establishes functional and structural consistency, not kitchen testing
+or traditional authenticity. Price coverage and local stock remain qualified by
+the source evidence shown in the application.

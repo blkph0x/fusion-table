@@ -1,0 +1,83 @@
+FUSION TABLE — VERIFIED CULINARY METHOD DEPLOYMENT
+27 October 2026
+
+Public website: https://gearsqueens.online/fusion/
+Server: 10.1.1.111
+Active release: /home/blkph0x/fusion-releases/20261027-022643
+Source archive: releases/fusion-table-20261027-022643.tar.gz
+Archive SHA-256:
+5adb3797727e538e9f3daa55762969dcb9203d9ba9e72cf37a598b8ce5e9bc31
+Source manifest SHA-256:
+e66a433df5e553b7161c5243cf0f984678919426d3675ef2de5af99e1a8846bd
+304 source files were verified before the Linux build. Package dependencies
+match the previous release; no package installation or upgrade was required.
+
+Scope
+
+The user's Aussie–Thai parma and steak-wrap images were used as the quality
+benchmark for ingredient purpose, cooking order, texture and coherent assembly.
+The release improves shared regional cooking rules across meals and classics.
+It does not publish the two supplied recipe images or establish kitchen testing.
+See CULINARY_QUALITY_2026-10-27.txt for changes and culinary references.
+
+Regional ingredients now have specific cooking stages. Paste frying and spice
+blooming precede liquid; wet condiments avoid a dry hot pan; delicate ingredients
+finish late. Woody infusions are removed, while spoon-measured star anise is
+explicitly ground and bloomed. Dried ancho preparation precedes browning, and
+long-smoke sauces are scheduled near service. Oil and other ingredient portions
+are allocated once and scaled consistently.
+
+Suitable Chinese-family boneless stir-fry meats receive a measured refrigerated
+starch coating. Crisp mains keep sauce alongside. Classic formats retain their
+original starch, seeded preparation happens before delicate finishing, pasta
+does not wait drained during extra preparation, and commercial cold-smoked mains
+stay chilled while their separate sauce is cooked and cooled.
+
+Verification
+
+- Final broad regression: 380/380 passed, 42 suites. The expensive meals.test.ts
+  suite ran separately and passed 12/12, including 668,430 generation/diet cases
+  across seven sampled regions, five dietary settings and all 90 sides.
+- Focused matrices include 6,840 regional cooking plans and 4,250 classic/region/
+  diet cases. These are structural checks, not kitchen or taste tests.
+- TypeScript and touched recipe-file lint passed. The app has five pre-existing
+  image-element lint warnings and no lint errors in the checked files.
+- Native Node production builds passed locally and on the Linux host.
+- An isolated loopback canary passed 113 culinary, dietary, sharing, PDF and
+  shopping tests on the host, plus release identity, render and unknown-price
+  API checks. Test data used a release-specific directory, not the real ledger.
+- Seven recorded browser/endpoint checks passed: Thai crisp-coating/paste order,
+  Chinese measured chilled coating, Japanese pasta, cold-smoked Japanese platter,
+  live Thai output, phone width and a real public PDF response (200, 12,315 bytes).
+  Sharing reproduction is covered by automated tests; no external share was sent.
+- At the 320 px phone viewport, document client and scroll widths were both
+  305 px. The viewport override was reset after testing.
+- The public deployment marker confirms the release and manifest above.
+
+Service and recovery
+
+fusion-table.service is enabled and active, PID 2362569, NRestarts 0 after cutover.
+It listens only at 127.0.0.1:8792 behind the existing Apache /fusion route.
+Persistent data remains /home/blkph0x/fusion-data and the existing local-image
+environment remains in place. Apache, TLS, original server checkout and the
+separate native Android APK were not modified. The isolated canary was stopped.
+
+Rollback backup: /home/blkph0x/fusion-deploy-backups/20261027-022643
+Restore its fusion-table.service to /etc/systemd/system/fusion-table.service,
+run systemctl daemon-reload and restart fusion-table.service. This returns to
+regional release 20261027-014236. Do not restore an old ledger for a code rollback.
+
+Reload the browser and choose Create my fusion for a new recipe. Existing saved
+recipe snapshots retain their original ingredients and instructions. Old share
+specifications may regenerate current methods; exact old snapshots remain
+downloadable as JSON when they cannot be reproduced by a current link or PDF.
+
+Evidence: docs/audit-evidence-2026-10-27/culinary-* logs, checks, release marker,
+public PDF and desktop/phone screenshots. Final status documents were updated
+after packaging and are newer than the immutable archived source snapshot.
+Local C: had no free space; tests used a D: temporary directory for their own
+processes. No global environment setting or unrelated user file was changed.
+
+Functional and structural checks pass. Taste, tenderness, seasoning balance and
+real kitchen timings still require cooking trials. Templates remain labelled
+not kitchen-tested.

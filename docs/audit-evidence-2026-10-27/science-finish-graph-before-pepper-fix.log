@@ -1,0 +1,17 @@
+(node:58632) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"contexts":100,"total":1496,"models":2035,"failures":0}
+{"contexts":200,"total":1496,"models":4130,"failures":0}
+{"contexts":300,"total":1496,"models":5952,"failures":0}
+{"contexts":400,"total":1496,"models":7830,"failures":0}
+{"contexts":500,"total":1496,"models":9533,"failures":0}
+{"contexts":600,"total":1496,"models":11220,"failures":0}
+{"contexts":700,"total":1496,"models":12939,"failures":0}
+{"contexts":800,"total":1496,"models":14408,"failures":0}
+{"contexts":900,"total":1496,"models":15647,"failures":0}
+{"contexts":1000,"total":1496,"models":16656,"failures":25}
+{"contexts":1100,"total":1496,"models":17675,"failures":50}
+{"contexts":1200,"total":1496,"models":18891,"failures":75}
+{"contexts":1300,"total":1496,"models":20458,"failures":75}
+{"contexts":1400,"total":1496,"models":21664,"failures":75}
+{"status":"failed","contexts":1496,"models":22859,"failedContexts":75,"out":"D:/fusion-table/docs/audit-evidence-2026-10-27/science-finish-graph.json","witnesses":"D:/fusion-table/docs/audit-evidence-2026-10-27/science-finish-graph-models.ndjson.gz"}

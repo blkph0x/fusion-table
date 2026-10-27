@@ -1,5 +1,6 @@
 import { buildBoard, submitVote, submitWhy } from "@/lib/community";
-import { allowPost, ledgerFile, newId, withLedger } from "@/lib/ledger";
+import { ReportBodyError, allowPost, ledgerFile, newId, readReportJson, validPostDevice, withLedger } from "@/lib/ledger";
+import { feedbackExperience, isFeedbackRecipe } from "@/lib/meal-feedback";
 
 export const dynamic = "force-dynamic";
 
@@ -22,13 +23,18 @@ export async function GET() {
 export async function POST(request: Request) {
   let body: unknown;
   try {
-    body = await request.json();
-  } catch {
+    body = await readReportJson(request);
+  } catch (error) {
+    if (error instanceof ReportBodyError) return bad(error.message, error.status);
     return bad("Send the cook's report as JSON.");
   }
   if (!body || typeof body !== "object" || Array.isArray(body)) return bad("Send the cook's report as JSON.");
-  const row = body as { action?: unknown; device?: unknown };
+  const row = body as { action?: unknown; device?: unknown; plate?: unknown; experience?: unknown };
+  if (row.action !== "vote" && row.action !== "why") return bad("Say whether this is a vote or a note about what went wrong.");
+  if (!isFeedbackRecipe(row.plate)) return bad("Send the complete current recipe snapshot with this report.");
+  if (!feedbackExperience(row.experience)) return bad("Say whether you cooked this recipe version or are deciding whether to try it.");
   const device = typeof row.device === "string" ? row.device : "anon";
+  if (!validPostDevice(device) || !/^[a-z0-9]{16,64}$/i.test(device)) return bad("That browser id is not valid. The report was not shared.");
   if (!allowPost(device)) return bad("Slow down a moment. Nothing was discarded.", 429);
   const now = new Date().toISOString();
   try {

@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "status": "complete",
+  "coverageComplete": true,
+  "passed": true,
+  "source": {
+    "sha256": "025b745dab67aa68f0058886f654bae70ed3b0cac6bd8e1daa908bf97f693b88",
+    "files": 69,
+    "scope": "lib/**/*.ts and both catalogue auditors"
+  },
+  "plan": {
+    "definition": "canonical-medium-four-authored-v1",
+    "total": 20414810,
+    "meals": 20410560,
+    "classics": 4250,
+    "catalogue": {
+      "mealRegions": 76,
+      "sides": 90,
+      "classics": 34,
+      "classicRegions": 25,
+      "diets": 5,
+      "rows": 2984,
+      "dietRows": {
+        "balanced": {
+          "default": 266,
+          "chosenCut": 641
+        },
+        "vegetarian": {
+          "default": 148,
+          "chosenCut": 0
+        },
+        "vegan": {
+          "default": 129,
+          "chosenCut": 0
+        },
+        "gluten-free": {
+          "default": 266,
+          "chosenCut": 641
+        },
+        "dairy-free": {
+          "default": 252,
+          "chosenCut": 641
+        }
+      }
+    },
+    "boundary": "All compatible dietary default/chosen-cut main-method rows × every meal region × every side, plus every classic × classic region × diet. Four servings, medium heat, authored/unseeded. Custom filters, cleaner flags, pantry text, other heats/servings and seeds are separate spaces.",
+    "allHeatServingProjection": "1224888600"
+  },
+  "checked": 20414810,
+  "failedCases": 0,
+  "distinctIngredientEntries": 1137,
+  "manifests": [
+    {
+      "file": "shard-0-of-6/manifest.json",
+      "sha256": "e1a109169b932e05c752ece2394a3b95be15e762836fa4fc916df495bb6ca158",
+      "processed": 3402469,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 883
+    },
+    {
+      "file": "shard-1-of-6/manifest.json",
+      "sha256": "fa7d9117c1d100a29c2015d13180aa37040b7143d459af76ca2d7651a2795c2b",
+      "processed": 3402469,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 886
+    },
+    {
+      "file": "shard-2-of-6/manifest.json",
+      "sha256": "9e98cf6bfb9345d50f9b49c23780b65905b9b40a8eb93936071a896939def1a4",
+      "processed": 3402468,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 890
+    },
+    {
+      "file": "shard-3-of-6/manifest.json",
+      "sha256": "88161cc3bceff5b494825c0c104a56bbf1a40f3b003714fbf052b361349752e7",
+      "processed": 3402468,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 905
+    },
+    {
+      "file": "shard-4-of-6/manifest.json",
+      "sha256": "54afe756ac614295d249e8dc259b4d1c9978170fafde25b982b62d1696c2d9f6",
+      "processed": 3402468,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 881
+    },
+    {
+      "file": "shard-5-of-6/manifest.json",
+      "sha256": "42f6daea4027bd05b69a7c8b2b17b71ea0165fea3b500c3252797a79729d2b26",
+      "processed": 3402468,
+      "failedCases": 0,
+      "warningCases": 0,
+      "chunks": 35,
+      "ingredients": 908
+    }
+  ],
+  "verifiedAt": "2026-10-27T07:44:05.762Z"
+}

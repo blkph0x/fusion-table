@@ -1,0 +1,125 @@
+{
+  "status": "focused-regressions-passed",
+  "frozenAt": "2026-10-27T05:16:21.512Z",
+  "scope": "Web classic templates, BBQ assembly and seeded meal finishing; substantive cooking review, not a repeat of the structural matrix.",
+  "files": [
+    {
+      "file": "lib/recipes.ts",
+      "sha256": "f3becd64b1d6f2143af79dddffac8e430a06b353ec858292452f04d5e5c0010b"
+    },
+    {
+      "file": "lib/fusion-sat.ts",
+      "sha256": "9dddb95c665b01fe60c42ec45078e4850387607367abf1122ccd113cea6da520"
+    },
+    {
+      "file": "lib/bbq-classics.ts",
+      "sha256": "3616533f7dc4c0bc6524234aed20e3b314ab07363b4febffaf24870e677ab6e1"
+    },
+    {
+      "file": "tests/classic-plausibility.test.ts",
+      "sha256": "c43100ef760f2cd371330191f30426265a8d9d3c0eeb93d352f2430253d74696"
+    },
+    {
+      "file": "tests/classic-finish.test.ts",
+      "sha256": "a99c29bb09961d88aee239c31d2bf283afbfd80348e7c64a1399323a6c8a33b1"
+    },
+    {
+      "file": "tests/fusion-coherence.test.ts",
+      "sha256": "af0725b41902b04ad066d240ee8f235ffd2ac26391eea4a799fd2d7c9444bba6"
+    }
+  ],
+  "findings": [
+    {
+      "input": {
+        "classicId": "shotgun-shells",
+        "regionId": "korean-bbq",
+        "servings": 4,
+        "seed": 651244
+      },
+      "before": "12 open jumbo shells,650g raw sausage+120g onion (~64g filling/shell), an additional4buns,2-minute initial boil and a dry45–70-minute smoke; cannelloni and open-shell shapes were interchangeable aliases.",
+      "after": "20 open jumbo shells,500g sausage or500g drained beans+120g onion (~31g filling/shell), slaw without buns. Packet al-dente boil, opening-up in a covered dish with100mlwater/4servings, brief final smoke only once cooked. Raw sausage retains75C endpoint. Cannelloni identity alias removed."
+    },
+    {
+      "input": {
+        "classicId": "burnt-ends",
+        "regionId": "japanese",
+        "servings": 2,
+        "seed": 42
+      },
+      "before": "Miso/fresh regional finish was completed before its sauce cooked with cubed brisket for45–90minutes; small recipe advertised160minutes while its required serial braise/rest/pan stages could exceed4hours.",
+      "after": "Only cooked regional sauce base enters the pan cook; one explicit fresh finish follows tender cubes and the cooked sauce base, off heat. Small cook estimate290min and full350min cover stated stages. Plant cubes also finish after their heat stage."
+    },
+    {
+      "input": {
+        "classicId": "cottage-pie",
+        "regionId": "japanese",
+        "servings": 4
+      },
+      "before": "45min cooking despite6min vegetables+6–8min mince+10–12min simmer+20–25min bake+5min rest.",
+      "after": "60min meat/55min lentil cooking estimate; potatoes and regional sauce still overlap other cooking."
+    },
+    {
+      "input": {
+        "classicId": "grill-roasted-whole-chicken",
+        "regionId": "japanese",
+        "servings": 4
+      },
+      "before": "110min cooking excluded the explicitly required15min rest. Similar omissions occurred in brisket/pulled shoulder/mince loaf.",
+      "after": "BBQ estimate is at least the sum of its authored serial main heat/rest stages, excluding the first prep stage and without double-counting overlapping sides/sauce. Whole chicken125min; brisket385min; pulled shoulder440min; mince loaf100min."
+    },
+    {
+      "input": {
+        "mainId": "chicken",
+        "methodId": "schnitzel",
+        "regionId": "thai",
+        "sideId": "rice-greens",
+        "servings": 2,
+        "seed": 42
+      },
+      "before": "Seed finishing vegetables were prepared only after the main endpoint, adding8minutes before sauce finishing and plating.",
+      "after": "Fast-main mise en place precedes its final cooking step; warm additions are timed during its final minutes. Slow-main preparation overlaps its final8cooking/rest minutes. Fresh garnish and delicate sauce finish remain after cooking; no8-minute wait imposed on a fresh crust."
+    }
+  ],
+  "validation": {
+    "newFocusedTests": 6,
+    "newFixtureRecipes": 779,
+    "coverage": {
+      "stuffedShells": "25regions×5diets×servings1/4/12=375",
+      "burntEnds": "25regions×5diets×servings2/4=250",
+      "cottagePie": "25regions×5diets=125",
+      "fastSeedReadiness": "6methods×4seeds=24inputs",
+      "serialBBQTimes": 4,
+      "slowSeedReadinessAndShare": 1
+    },
+    "focusedRegressionTests": {
+      "passed": 46,
+      "failed": 0,
+      "log": "plausibility-classics-regression.log"
+    },
+    "typecheck": "passed",
+    "typecheckLog": "plausibility-classics-typecheck.log",
+    "ownedFileLint": "passed",
+    "lintLog": "plausibility-classics-lint.log",
+    "samples": "plausibility-classics-samples.json"
+  },
+  "sources": [
+    {
+      "url": "https://www.barilla.com/en-us/recipe/all/stuffed-jumbo-shells",
+      "supports": "Open jumbo shell identity, packet-directed partial cooking and moist covered baking to keep shells soft. Our dairy-free smoker recipe is an authored adaptation, not this manufacturer recipe."
+    },
+    {
+      "url": "https://www.mccormick.com/blogs/recipes/stuffed-shells",
+      "supports": "Producer recipe uses modest spoonfuls of filling in open jumbo shells, rather than our previous oversized mound. Our measured filling per shell is calculated from our own recipe quantities."
+    },
+    {
+      "url": "https://hikarimiso.com/what-is-miso/how-to-use-miso-paste/",
+      "supports": "For soup/sauce aroma, dissolve miso and add near the end off heat. This does not claim miso can never be cooked as a glaze or marinade."
+    }
+  ],
+  "limits": [
+    "This is a source-backed recipe-content review, not tasting, physical kitchen validation or allergy/cross-contact certification.",
+    "No full2million-case matrix, website deployment, Android build or APK installation performed in this subtask.",
+    "Whole meats, main cuts,90meal-builder sides and Android generators are audited by other owners.",
+    "Existing dirty-tree work was preserved; only the listed owned source/tests and bounded evidence outputs changed here."
+  ]
+}

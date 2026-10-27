@@ -1,0 +1,21 @@
+{
+  "publicRelease": {
+    "releaseId": "20261027-075114",
+    "sourceManifestSha256": "3b3f1343a9b341f422c5f410fa4211dccf6476a06f3aa05b9862706616cb46a9",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "constraint-quality-feedback"
+  },
+  "homepageCount": 20414810,
+  "verifiedAfterSshClosed": true,
+  "androidBytes": 13982261,
+  "imageLayout": {
+    "objectFit": "contain",
+    "width": 720,
+    "height": 520,
+    "naturalWidth": 384,
+    "naturalHeight": 384
+  },
+  "publicImageSwapVerified": true,
+  "publicPriceSubtotalVerified": true
+}

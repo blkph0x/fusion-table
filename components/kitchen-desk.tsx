@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Star } from "lucide-react";
-import { VERDICTS, isConsumable, makeRecipe, pantryKey, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
+import { VERDICTS, formatPantryQuantity, isConsumable, makeRecipe, pantryOwnedIds, prepareRecipe, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
+
+const pantrySignature = (pantry: readonly Stock[]) => JSON.stringify(pantry.map((item) => [item.key, item.unit, item.onHand]).sort());
 
 export function KitchenDesk({
   ingredients,
@@ -23,26 +25,26 @@ export function KitchenDesk({
   onStars: (next: number) => void;
   onShopping: (lines: ShopNeed[], warnings: string[]) => void;
 }) {
-  const initial = useMemo(() => {
-    const owned = new Set<string>();
-    for (const item of ingredients) {
-      const stock = pantry.find((entry) => entry.key === pantryKey(item.name) && entry.unit.toLowerCase() === item.unit.toLowerCase());
-      if (stock && stock.onHand + 1e-9 >= item.amount) owned.add(item.id);
-    }
-    return owned;
-  }, [ingredients, pantry]);
-  const [owned, setOwned] = useState<Set<string>>(initial);
+  const initial = useMemo(() => pantryOwnedIds(pantry, ingredients), [ingredients, pantry]);
+  const signature = pantrySignature(pantry);
+  const [selection, setSelection] = useState({ signature, owned: initial });
+  const owned = selection.signature === signature ? selection.owned : initial;
   const [message, setMessage] = useState("");
+  const [receipt, setReceipt] = useState<{ before: Stock[]; after: string } | null>(null);
+  const recorded = useRef(false);
 
-  function cook() {
-    const lines: UseLine[] = ingredients.map((item) => ({
+  function selectedLines(): UseLine[] {
+    return ingredients.map((item) => ({
       id: item.id,
       name: item.name,
       amount: item.amount,
       unit: item.unit,
       have: owned.has(item.id),
     }));
-    const result = makeRecipe(pantry, lines);
+  }
+
+  function shopping() {
+    const result = prepareRecipe(pantry, selectedLines());
     onPantry(result.pantry);
     onShopping(result.shopping, result.warnings);
     setMessage(result.shopping.length
@@ -50,10 +52,29 @@ export function KitchenDesk({
       : "The pantry covers this meal. Nothing extra to buy.");
   }
 
+  function cook() {
+    if (recorded.current) return;
+    recorded.current = true;
+    const lines = selectedLines();
+    const before = prepareRecipe(pantry, lines).pantry;
+    const result = makeRecipe(before, lines);
+    setReceipt({ before, after: pantrySignature(result.pantry) });
+    onPantry(result.pantry);
+    setMessage("Cook recorded. Tracked pantry amounts have been used. You can undo this below.");
+  }
+
+  function undoCook() {
+    if (!receipt || signature !== receipt.after) return;
+    onPantry(receipt.before);
+    setReceipt(null);
+    recorded.current = false;
+    setMessage("Undid this cook. Pantry amounts have been restored.");
+  }
+
   return (
     <section className="kitchen-desk" aria-label="Pantry and shopping">
       <div className="subheading"><h3>Pantry and shopping</h3></div>
-      <p className="subtle-small">Tick what you already have. Oils, butter and flour stay on the pantry list and are used before they are bought again. Nothing here has a shelf price.</p>
+      <p className="subtle-small">Tick what you already have, then make your shopping list. Pantry amounts are only used when you record a finished cook. Nothing here has a shelf price.</p>
       <ul className="ingredient-list">
         {ingredients.map((item) => (
           <li key={item.id}>
@@ -61,33 +82,38 @@ export function KitchenDesk({
               <input
                 type="checkbox"
                 checked={owned.has(item.id)}
-                onChange={() => setOwned((current) => {
-                  const next = new Set(current);
+                onChange={() => {
+                  const next = new Set(owned);
                   if (next.has(item.id)) next.delete(item.id);
                   else next.add(item.id);
-                  return next;
-                })}
+                  setSelection({ signature, owned: next });
+                }}
               />
               <span>
                 <strong>{item.name}</strong>
                 {isConsumable(item.name) && <small>Pantry staple</small>}
               </span>
-              <em>{item.amount} {item.unit}</em>
+              <em>{formatPantryQuantity(item.amount, item.unit)}</em>
             </label>
           </li>
         ))}
       </ul>
-      <button className="button primary" type="button" onClick={cook}>I&apos;m making this</button>
+      <div className="recipe-actions">
+        <button className="button primary" type="button" onClick={shopping}>Make shopping list</button>
+        <button className="button secondary" type="button" onClick={cook} disabled={!!receipt}>{receipt ? "Cook recorded" : "Finished cooking"}</button>
+        {receipt && <button className="text-button" type="button" onClick={undoCook} disabled={signature !== receipt.after}>Undo pantry use</button>}
+      </div>
+      {receipt && signature !== receipt.after && <p className="subtle-small">The pantry changed after this cook. Undo is unavailable so newer amounts are kept.</p>}
       {message && <p className="subtle-small" role="status">{message}</p>}
-      <div className="rating-row" role="group" aria-label="Rate this recipe">
+      <div className="rating-row" role="group" aria-label="Personal cookbook rating">
         {[1, 2, 3, 4, 5].map((n) => (
-          <button key={n} type="button" aria-label={`Rate ${n} out of 5`} aria-pressed={stars === n} onClick={() => onStars(stars === n ? 0 : n)}>
+          <button key={n} type="button" aria-label={`Personal rating ${n} out of 5`} aria-pressed={stars === n} onClick={() => onStars(stars === n ? 0 : n)}>
             <Star size={23} fill={stars >= n ? "currentColor" : "none"} />
           </button>
         ))}
       </div>
-      <p className="subtle-small">Stars are yours. They do not mean this template was kitchen-tested.</p>
-      <div className="avoid-row" role="group" aria-label="Would you make this again?">
+      <p className="subtle-small">These stars and make-again notes stay in this browser&apos;s cookbook. They do not change shared suggestions. Use “Tell us about this recipe” to share a cooked report. Ratings do not verify food safety.</p>
+      <div className="avoid-row" role="group" aria-label="Personal make-again note">
         {VERDICTS.map((choice) => (
           <button key={choice.id} type="button" className={verdict === choice.id ? "button primary small" : "text-button"} aria-pressed={verdict === choice.id} onClick={() => onVerdict(choice.id)}>
             {choice.label}

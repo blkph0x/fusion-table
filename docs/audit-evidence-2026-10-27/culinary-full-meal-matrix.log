@@ -1,0 +1,66 @@
+(node:19512) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:56252) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+▶ ingredient-first complete meal engine
+  ✔ counts only supported main/method/region/side configurations and exposes every promised chicken method (2.8938ms)
+  ✔ generates complete meals for every compatible configuration and dietary preference (91693.0886ms)
+  ✔ selects appropriate cuts and meaningfully different processes for the same main (2.5196ms)
+  ✔ retains the selected main and rejects incompatible diets or methods (20.455ms)
+  ✖ starts long braises before fast sides and includes precooking and chilling in patty prep (1.028ms)
+    AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Keep it hot and serve promptly/. Input:
+    
+    'Prepare sides alongside the main: begin this side during the final 22 minutes of the simmer, once the main is nearly tender. Rinse 300 g Japanese short-grain rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff. Keep the prepared side ready, following its own serving instructions.'
+    
+        at TestContext.<anonymous> (file:///D:/fusion-table/tests/meals.test.ts:123:14)
+        at Test.runInAsyncScope (node:async_hooks:211:14)
+        at Test.run (node:internal/test_runner/test:931:25)
+        at Suite.processPendingSubtests (node:internal/test_runner/test:629:18)
+        at Test.postRun (node:internal/test_runner/test:1042:19)
+        at Test.run (node:internal/test_runner/test:970:12)
+        at async Suite.processPendingSubtests (node:internal/test_runner/test:629:7) {
+      generatedMessage: true,
+      code: 'ERR_ASSERTION',
+      actual: 'Prepare sides alongside the main: begin this side during the final 22 minutes of the simmer, once the main is nearly tender. Rinse 300 g Japanese short-grain rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff. Keep the prepared side ready, following its own serving instructions.',
+      expected: /Keep it hot and serve promptly/,
+      operator: 'match'
+    }
+
+  ✔ scales all ingredient quantities for every main and method from one through twelve servings (231.8737ms)
+  ✔ uses explicit gluten-free alternatives and their actual cooking instructions (2.42ms)
+  ✔ only marks exact pantry names or suitable explicit aliases, including restricted products (1.3572ms)
+  ✔ keeps sufficient doneness instructions and primary safety sources for each animal main (22.5727ms)
+  ✔ varies heat without dropping required sauce ingredients and keeps recipe identity stable (59.7869ms)
+  ✔ merges shared shopping ingredients while keeping component amounts explicit in the method (0.8446ms)
+  ✔ normalizes defaults and rejects malformed or unbounded inputs (0.6231ms)
+✖ ingredient-first complete meal engine (92041.6006ms)
+ℹ tests 12
+ℹ suites 1
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 92425.1052
+
+✖ failing tests:
+
+test at tests\meals.test.ts:116:3
+✖ starts long braises before fast sides and includes precooking and chilling in patty prep (1.028ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Keep it hot and serve promptly/. Input:
+  
+  'Prepare sides alongside the main: begin this side during the final 22 minutes of the simmer, once the main is nearly tender. Rinse 300 g Japanese short-grain rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff. Keep the prepared side ready, following its own serving instructions.'
+  
+      at TestContext.<anonymous> (file:///D:/fusion-table/tests/meals.test.ts:123:14)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:931:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:629:18)
+      at Test.postRun (node:internal/test_runner/test:1042:19)
+      at Test.run (node:internal/test_runner/test:970:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:629:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Prepare sides alongside the main: begin this side during the final 22 minutes of the simmer, once the main is nearly tender. Rinse 300 g Japanese short-grain rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff. Keep the prepared side ready, following its own serving instructions.',
+    expected: /Keep it hot and serve promptly/,
+    operator: 'match'
+  }

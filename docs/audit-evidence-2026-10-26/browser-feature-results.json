@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-26",
+  "target": "http://127.0.0.1:5173/fusion/",
+  "environment": "Local Node preview; isolated synthetic report and price ledger",
+  "cases": [
+    {
+      "feature": "weekly stale settings and rebuild",
+      "passed": true
+    },
+    {
+      "feature": "lock, randomise, undo",
+      "passed": true
+    },
+    {
+      "feature": "weekly plan survives refresh",
+      "passed": true
+    },
+    {
+      "feature": "320px navigation fits without horizontal scrolling",
+      "passed": true
+    },
+    {
+      "feature": "cooking mode next/previous/Escape",
+      "passed": true
+    },
+    {
+      "feature": "shopping preserves stock, cook once, undo",
+      "passed": true
+    },
+    {
+      "feature": "current cleaner meal has verified share and PDF links",
+      "passed": true
+    },
+    {
+      "feature": "shared recipe title and ingredients",
+      "passed": true,
+      "detail": "Fresh classic recipe, full ordered ingredient names and displayed quantities match shared page"
+    },
+    {
+      "feature": "cookbook export/import preserves existing recipes and feedback",
+      "passed": true
+    },
+    {
+      "feature": "new recipe after shared link survives refresh",
+      "passed": true
+    },
+    {
+      "feature": "community report saves and trend threshold empty state",
+      "passed": true
+    },
+    {
+      "feature": "meat cuts follow method and preserve chosen brisket",
+      "passed": true
+    },
+    {
+      "feature": "external household diet change removes incompatible builder main",
+      "passed": true
+    },
+    {
+      "feature": "recorded price refreshes its visible item quote",
+      "passed": true
+    },
+    {
+      "feature": "Sydney lookup and nearby-shop discovery",
+      "passed": true
+    },
+    {
+      "feature": "catalogue check completes with sourced results or explicit unavailable states",
+      "passed": true
+    },
+    {
+      "feature": "shopping CSV downloads",
+      "passed": true
+    },
+    {
+      "feature": "infeasible plan clearly reports no matches and disables shopping",
+      "passed": true
+    },
+    {
+      "feature": "all 16 displayed allergen exclusions accepted by week planner",
+      "passed": true
+    },
+    {
+      "feature": "classic adds scaled rice preparation before final assembly and defers service",
+      "passed": true
+    }
+  ]
+}

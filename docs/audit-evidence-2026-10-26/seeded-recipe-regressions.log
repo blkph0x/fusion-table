@@ -1,0 +1,274 @@
+(node:7732) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:58084) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cleaner meals
+    # Subtest: recognises current vegetable-side ids when ranking accompaniments
+    ok 1 - recognises current vegetable-side ids when ranking accompaniments
+      ---
+      duration_ms: 17.9652
+      ...
+    # Subtest: normalizes clean knobs and scores bottles and steps
+    ok 2 - normalizes clean knobs and scores bottles and steps
+      ---
+      duration_ms: 13.9579
+      ...
+    # Subtest: reduces bottles and ingredients versus an uncleaned seeded plate
+    ok 3 - reduces bottles and ingredients versus an uncleaned seeded plate
+      ---
+      duration_ms: 12.0179
+      ...
+    # Subtest: keeps hard filters and region affinity under clean prefs
+    ok 4 - keeps hard filters and region affinity under clean prefs
+      ---
+      duration_ms: 9.6806
+      ...
+    # Subtest: SAT clean mode prefers fewer bottled umami options on Western plates
+    ok 5 - SAT clean mode prefers fewer bottled umami options on Western plates
+      ---
+      duration_ms: 10.6591
+      ...
+    # Subtest: week planner ranks cleaner dinners without relaxing allergens
+    ok 6 - week planner ranks cleaner dinners without relaxing allergens
+      ---
+      duration_ms: 482.4989
+      ...
+    1..6
+ok 1 - cleaner meals
+  ---
+  duration_ms: 548.1922
+  type: 'suite'
+  ...
+# (node:60852) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: blocks a plural chilli dislike and does not put fish on a vegan plate
+ok 2 - blocks a plural chilli dislike and does not put fish on a vegan plate
+  ---
+  duration_ms: 9.8337
+  ...
+# Subtest: seeded fusion plates
+    # Subtest: keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+    ok 1 - keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+      ---
+      duration_ms: 63.0877
+      ...
+    # Subtest: keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+    ok 2 - keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+      ---
+      duration_ms: 3.34
+      ...
+    # Subtest: obeys heat, diet and allergen clauses
+    ok 3 - obeys heat, diet and allergen clauses
+      ---
+      duration_ms: 92.5804
+      ...
+    # Subtest: does not make a seeded week alphabetical or identical, and does not relax a filter
+    ok 4 - does not make a seeded week alphabetical or identical, and does not relax a filter
+      ---
+      duration_ms: 3054.7589
+      ...
+    # Subtest: varies a classic remix without changing the unseeded template
+    ok 5 - varies a classic remix without changing the unseeded template
+      ---
+      duration_ms: 3.7613
+      ...
+    1..5
+ok 3 - seeded fusion plates
+  ---
+  duration_ms: 3218.2766
+  type: 'suite'
+  ...
+# (node:16680) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 45.9256
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 7.5009
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 6.7494
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 2.6372
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 2.0539
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 24.3462
+      ...
+    # Subtest: defers service until a transformed finish without losing the main's endpoint
+    ok 7 - defers service until a transformed finish without losing the main's endpoint
+      ---
+      duration_ms: 39.5647
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 8 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 30.356
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 9 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 2.0284
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 10 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 1.36
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 11 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 1.1387
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 12 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 1.3179
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 13 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 574.8058
+      ...
+    1..13
+ok 4 - complete meal integrity
+  ---
+  duration_ms: 743.8171
+  type: 'suite'
+  ...
+# (node:38388) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete recipe sharing identity
+    # Subtest: keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+    ok 1 - keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+      ---
+      duration_ms: 31.946
+      ...
+    # Subtest: keeps the butcher cut, constraints, seeded regional variety and cook session
+    ok 2 - keeps the butcher cut, constraints, seeded regional variety and cook session
+      ---
+      duration_ms: 9.3997
+      ...
+    # Subtest: keeps classic clean flags and hard filters along with seed and session
+    ok 3 - keeps classic clean flags and hard filters along with seed and session
+      ---
+      duration_ms: 8.9534
+      ...
+    # Subtest: shares pantry-first cooking choices without sharing what is in the household pantry
+    ok 4 - shares pantry-first cooking choices without sharing what is in the household pantry
+      ---
+      duration_ms: 7.3152
+      ...
+    # Subtest: retains input snapshots when a caller later edits their preference objects
+    ok 5 - retains input snapshots when a caller later edits their preference objects
+      ---
+      duration_ms: 7.1525
+      ...
+    # Subtest: still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+    ok 6 - still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+      ---
+      duration_ms: 7.9285
+      ...
+    # Subtest: does not pretend it can reproduce missing cleaner settings in an old saved recipe
+    ok 7 - does not pretend it can reproduce missing cleaner settings in an old saved recipe
+      ---
+      duration_ms: 16.1073
+      ...
+    # Subtest: bounds and validates additional token options rather than silently discarding them
+    ok 8 - bounds and validates additional token options rather than silently discarding them
+      ---
+      duration_ms: 3.2561
+      ...
+    # Subtest: verifies a current recipe while ignoring a renamed display title and pantry ticks
+    ok 9 - verifies a current recipe while ignoring a renamed display title and pantry ticks
+      ---
+      duration_ms: 7.8817
+      ...
+    # Subtest: refuses links that would recreate changed quantities, methods or another recipe
+    ok 10 - refuses links that would recreate changed quantities, methods or another recipe
+      ---
+      duration_ms: 9.9099
+      ...
+    # Subtest: returns false for malformed or unsupported old-token specifications without throwing
+    ok 11 - returns false for malformed or unsupported old-token specifications without throwing
+      ---
+      duration_ms: 1.9028
+      ...
+    1..11
+ok 5 - complete recipe sharing identity
+  ---
+  duration_ms: 114.2316
+  type: 'suite'
+  ...
+# Subtest: complete classic recipe exclusions
+    # Subtest: rejects a recorded allergen in the base recipe even without a random seed
+    ok 1 - rejects a recorded allergen in the base recipe even without a random seed
+      ---
+      duration_ms: 2.362
+      ...
+    # Subtest: checks hard dislikes against the full base and aliases, with and without a seed
+    ok 2 - checks hard dislikes against the full base and aliases, with and without a seed
+      ---
+      duration_ms: 4.4886
+      ...
+    1..2
+ok 6 - complete classic recipe exclusions
+  ---
+  duration_ms: 7.1367
+  type: 'suite'
+  ...
+# (node:64704) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 38.3567
+      ...
+    # Subtest: serves a saved picture for the example plates and an exact meal, and paints every other recipe
+    ok 2 - serves a saved picture for the example plates and an exact meal, and paints every other recipe
+      ---
+      duration_ms: 196.6922
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 41.9695
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 1.5609
+      ...
+    1..4
+ok 7 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 280.2514
+  type: 'suite'
+  ...
+1..7
+# tests 42
+# suites 6
+# pass 42
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3692.3752

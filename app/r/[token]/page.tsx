@@ -1,7 +1,11 @@
+import { RecipeImage } from "@/components/recipe-image";
+import { IngredientCost } from "@/components/ingredient-cost";
+import { SharedRecipeShopping } from "@/components/shared-recipe-shopping";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { COOK_PACE_LABELS } from "@/lib/cook-pace";
 import { publicPath } from "@/lib/public-path";
+import { PLATE_IMAGE_VERSION } from "@/lib/plate-version";
 import { decodeShare, recipeFromShare } from "@/lib/share-recipe";
 
 async function origin(): Promise<string> {
@@ -18,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ token: st
   try {
     const recipe = recipeFromShare(decodeShare(decodeURIComponent(token)));
     const root = await origin();
-    const image = `${root}${publicPath("/api/plate")}?t=${encodeURIComponent(token)}`;
+    const image = `${root}${publicPath("/api/plate")}?t=${encodeURIComponent(token)}&v=${PLATE_IMAGE_VERSION}`;
     return {
       title: `${recipe.title} — Fusion Table`,
       description: `${recipe.description} Template-generated, not kitchen-tested. Check the packet.`,
@@ -46,7 +50,7 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
   if (!recipe) {
     return <main className="page-width inner-page"><h1>This link is not a recipe.</h1><p>Ask for a new Fusion Table link. Nothing was opened from this address.</p><a className="button primary" href={publicPath("/")}>Back to Fusion Table</a></main>;
   }
-  const plate = `${publicPath("/api/plate")}?t=${encodeURIComponent(token)}`;
+  const plate = `${publicPath("/api/plate")}?t=${encodeURIComponent(token)}&v=${PLATE_IMAGE_VERSION}`;
   const pdf = `${publicPath("/api/recipe-pdf")}?t=${encodeURIComponent(token)}`;
   return <main className="page-width inner-page shared-recipe">
     <p className="eyebrow">FUSION TABLE · SHARED RECIPE</p>
@@ -54,24 +58,24 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
     <p>{recipe.description}</p>
     <p className="meal-source-badge">{recipe.sourceLabel}. Check the packet.</p>
     <figure className="recipe-plate">
-      <img src={plate} alt={`Plate picture for ${recipe.title}`} />
-      <figcaption>Each dish has its own picture, made on the computer that hosts this site. It is not a photograph of a cooked dish.</figcaption>
+      <RecipeImage src={plate} alt={`Recipe preview for ${recipe.title}`} />
+      <figcaption>Generated inspiration image. Missing pictures prepare in the background and appear automatically when ready. Follow the ingredient list and method.</figcaption>
     </figure>
     <p className="recipe-meta">{recipe.servings} servings · about {recipe.totalMinutes} minutes · {recipe.diet} · {recipe.spiceHeat}{recipe.cookPace ? ` · ${COOK_PACE_LABELS[recipe.cookPace]}` : ""}</p>
     <div className="recipe-actions">
       <a className="button primary" href={pdf}>Save PDF</a>
       <a className="button secondary" href={publicPath(`/?r=${encodeURIComponent(token)}`)}>Open in the planner</a>
     </div>
-    <section className="ingredients-panel">
+    <SharedRecipeShopping recipe={recipe} token={token}><section className="ingredients-panel">
       <h2>Ingredients</h2>
-      <ul className="ingredient-list">{recipe.ingredients.map((item) => <li key={item.id}><span><strong>{item.name}</strong></span><em>{Number(item.amount.toFixed(2))} {item.unit}</em></li>)}</ul>
+      <ul className="ingredient-list">{recipe.ingredients.map((item) => <li key={item.id}><span><strong>{item.name}</strong></span><span className="ingredient-quantity-cost"><em>{Number(item.amount.toFixed(2))} {item.unit}</em><IngredientCost ingredient={item} /></span></li>)}</ul>
       {recipe.allergens.length > 0 && <p>Lists {recipe.allergens.join(", ")}. Check the packet.</p>}
-    </section>
+    </section></SharedRecipeShopping>
     <section>
       <h2>Method</h2>
       <ol className="method-list">{recipe.steps.map((step, index) => <li key={`${step.title}-${index}`}><span className="step-number">{String(index + 1).padStart(2, "0")}</span><div><h3>{step.title}</h3><p>{step.detail}</p></div></li>)}</ol>
       {recipe.sessionNote && <section className="bbq-method-notes"><h2>Cook session</h2><p>{recipe.sessionNote}</p></section>}
-      {recipe.methodNotes?.length ? <section className="bbq-method-notes"><h2>Smoking, grilling & kitchen options</h2><ul>{recipe.methodNotes.map((note) => <li key={note}>{note}</li>)}</ul></section> : null}
+      {recipe.methodNotes?.length ? <section className="bbq-method-notes"><h2>Technique notes</h2><ul>{recipe.methodNotes.map((note) => <li key={note}>{note}</li>)}</ul></section> : null}
       {recipe.safetyNote && <p>{recipe.safetyNote}</p>}
     </section>
   </main>;

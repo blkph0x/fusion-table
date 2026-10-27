@@ -1,0 +1,2802 @@
+[
+  {
+    "input": {
+      "mainId": "beef",
+      "cutId": "beef-liver",
+      "methodId": "curry"
+    },
+    "title": "Thai beef curry with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 129,
+    "ingredients": [
+      {
+        "id": "beef",
+        "name": "Beef liver",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Keep the beef liver cold until cooking and trim ducts, hard white cores, valves or sinew as appropriate. Cut into even 2–3 cm pieces for the gentle simmer. Do not serve offal rare. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "beef",
+          "ox liver",
+          "Beef liver"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 400,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 250,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "onion",
+        "name": "Brown onion",
+        "amount": 150,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Finely diced.",
+        "aliases": [
+          "onion",
+          "brown onion"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g beef liver. Keep the beef liver cold until cooking and trim ducts, hard white cores, valves or sinew as appropriate. Cut into even 2–3 cm pieces for the gentle simmer. Do not serve offal rare. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Build the curry-style sauce",
+        "detail": "Heat 3 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 150 g brown onion, finely sliced or diced. Soften for 4–5 minutes over medium-low heat, stirring, without browning hard. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 250 ml vegetable stock, 400 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable.",
+        "minutes": 15
+      },
+      {
+        "title": "Simmer the main",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Add the prepared beef to the sauce. Cover with a lid slightly ajar and keep at a low, gentle simmer, stirring occasionally. Cook for about 107–113 minutes. Add a splash of water if it catches or reduces before the main is cooked; uncover briefly to reduce if the finished sauce is too thin. During the final 10 minutes, prepare the sides in the following steps so they finish close to serving time. The centre must reach 75°C on a clean food thermometer.",
+        "minutes": 110
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the simmer, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "Finish when the main has reached its endpoint and the side is ready. After the main has reached its cooking endpoint, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the curry-style simmer beef with its sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Heavy saucepan with lid"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "chicken",
+      "cutId": "chicken-liver",
+      "methodId": "braised"
+    },
+    "title": "Thai braised chicken with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 67,
+    "ingredients": [
+      {
+        "id": "chicken",
+        "name": "Chicken livers",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Keep the chicken livers cold until cooking and trim ducts, hard white cores, valves or sinew as appropriate. Cut into even 2–3 cm pieces for the gentle simmer. Do not serve offal rare. Do not wash raw poultry. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "chicken",
+          "chicken liver",
+          "livers",
+          "Chicken livers"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 400,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 250,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "onion",
+        "name": "Brown onion",
+        "amount": 150,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Finely diced.",
+        "aliases": [
+          "onion",
+          "brown onion"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g chicken livers. Keep the chicken livers cold until cooking and trim ducts, hard white cores, valves or sinew as appropriate. Cut into even 2–3 cm pieces for the gentle simmer. Do not serve offal rare. Do not wash raw poultry. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Brown the main for the braise",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat 2 tbsp neutral cooking oil in the heavy pan over medium-high heat. Pat the prepared pieces dry and brown them in uncrowded batches, turning to colour their surfaces. Allow about 6–8 minutes, or longer for extra batches. Lift onto a clean heatproof plate and immediately continue with the sauce in this same pan. The browning stage does not replace the full cooking endpoint below.",
+        "minutes": 8
+      },
+      {
+        "title": "Build the braising base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 150 g brown onion, finely sliced or diced. Soften for 4–5 minutes over medium-low heat, stirring, without browning hard. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 250 ml vegetable stock, 400 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable.",
+        "minutes": 15
+      },
+      {
+        "title": "Braise gently",
+        "detail": "Return the browned main and its plate juices to the sauce. Cover with a lid slightly ajar and keep at a low, gentle simmer, stirring occasionally. Cook for about 37–43 minutes. Add a splash of water if it catches or reduces before the main is cooked; uncover briefly to reduce if the finished sauce is too thin. During the final 10 minutes, prepare the sides in the following steps so they finish close to serving time. The centre must reach 75°C on a clean food thermometer.",
+        "minutes": 40
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the simmer, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "Finish when the main has reached its endpoint and the side is ready. After the main has reached its cooking endpoint, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the braised chicken with its sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Heavy saucepan with lid"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "chicken",
+      "cutId": "chicken-maryland",
+      "methodId": "roasted"
+    },
+    "title": "Thai roast chicken with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 49,
+    "ingredients": [
+      {
+        "id": "chicken",
+        "name": "Chicken marylands",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Pat the chicken marylands dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Do not wash raw poultry. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "chicken",
+          "maryland",
+          "chicken maryland",
+          "Chicken marylands"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g chicken marylands. Pat the chicken marylands dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Do not wash raw poultry. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Roast the main",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat the oven to 200°C conventional (180°C fan). Toss or brush the prepared chicken with 2 tbsp neutral cooking oil. Spread in one layer on a roomy tray with space between pieces, so they brown instead of steaming. Cook for about 32–38 minutes. Check next to the bone with a clean food thermometer: the centre must reach 75°C. Keep the regional sauce separate until serving.",
+        "minutes": 35
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the main cooking stage, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the roasted chicken and coconut, red curry & lime sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Small saucepan",
+      "Baking tray or ovenproof dish"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "chicken",
+      "cutId": "chicken-wing",
+      "methodId": "air-fried"
+    },
+    "title": "Thai air-fried chicken with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 37,
+    "ingredients": [
+      {
+        "id": "chicken",
+        "name": "Chicken wings",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Pat the chicken wings dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Do not wash raw poultry. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "chicken",
+          "chicken wing",
+          "wings",
+          "Chicken wings"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g chicken wings. Pat the chicken wings dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Do not wash raw poultry. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Air-fry in batches",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Preheat the air fryer to 190°C if the manufacturer recommends it. Pat the prepared chicken dry and brush or toss with 2 tbsp neutral cooking oil. Arrange in one uncrowded layer, using batches if needed. Cook for about 20–26 minutes, turning or shaking halfway. Check early because air fryers vary. Check next to the bone with a clean food thermometer: the centre must reach 75°C. Allow extra time for additional batches; add the sauce after cooking.",
+        "minutes": 23
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the main cooking stage, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the air-fried chicken and coconut, red curry & lime sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Small saucepan",
+      "Air fryer"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "lamb",
+      "cutId": "lamb-shank",
+      "methodId": "braised"
+    },
+    "title": "Thai braised lamb with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 152,
+    "ingredients": [
+      {
+        "id": "lamb",
+        "name": "Lamb shanks",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Pat the lamb shanks dry. Leave the pieces whole on the bone; do not cut into steaks. Brown lightly if the method allows, then simmer gently. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "lamb",
+          "lamb shank",
+          "Lamb shanks"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 400,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 700,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "onion",
+        "name": "Brown onion",
+        "amount": 150,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Finely diced.",
+        "aliases": [
+          "onion",
+          "brown onion"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g lamb shanks. Pat the lamb shanks dry. Leave the pieces whole on the bone; do not cut into steaks. Brown lightly if the method allows, then simmer gently. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Brown the main for the braise",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat 2 tbsp neutral cooking oil in the heavy pan over medium-high heat. Pat the prepared pieces dry and brown them in uncrowded batches, turning to colour their surfaces. Allow about 6–8 minutes, or longer for extra batches. Lift onto a clean heatproof plate and immediately continue with the sauce in this same pan. The browning stage does not replace the full cooking endpoint below.",
+        "minutes": 8
+      },
+      {
+        "title": "Build the braising base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 150 g brown onion, finely sliced or diced. Soften for 4–5 minutes over medium-low heat, stirring, without browning hard. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 700 ml vegetable stock, 400 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable.",
+        "minutes": 15
+      },
+      {
+        "title": "Braise gently",
+        "detail": "Return the browned main and its plate juices to the sauce. Cover with a lid slightly ajar and keep at a low, gentle simmer, stirring occasionally. Cook for about 122–128 minutes, or longer if needed for the meat to become fork-tender. Add a splash of water if it catches or reduces before the main is cooked; uncover briefly to reduce if the finished sauce is too thin. During the final 10 minutes, prepare the sides in the following steps so they finish close to serving time. Cook until fork-tender and at least 71°C in the centre next to the bone. Extend the gentle simmer if still tough.",
+        "minutes": 125
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the simmer, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "Finish when the main has reached its endpoint and the side is ready. After the main has reached its cooking endpoint, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the braised lamb with its sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Heavy saucepan with lid"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "lamb",
+      "cutId": "lamb-shank",
+      "methodId": "patties"
+    },
+    "title": "Thai lamb patties with garden salad",
+    "prepMinutes": 35,
+    "cookMinutes": 28,
+    "ingredients": [
+      {
+        "id": "lamb",
+        "name": "Lamb shanks",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Ask the butcher to grind the lamb shanks, or mince it finely at home with a clean mincer or food processor. Keep the raw mince refrigerated until shaping. Do not portion this cut into steaks. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "lamb",
+          "lamb shank",
+          "Lamb shanks"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 5,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "breadcrumbs",
+        "name": "Vegan breadcrumbs",
+        "amount": 60,
+        "unit": "g",
+        "category": "grocery",
+        "allergens": [
+          "wheat"
+        ],
+        "notes": "Choose crumbs without milk or egg.",
+        "aliases": [
+          "vegan breadcrumbs"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cornflour",
+        "name": "Cornflour (corn starch)",
+        "amount": 15,
+        "unit": "g",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Use pure maize starch, not wheat starch.",
+        "aliases": [
+          "corn starch",
+          "maize starch"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g lamb shanks. Ask the butcher to grind the lamb shanks, or mince it finely at home with a clean mincer or food processor. Keep the raw mince refrigerated until shaping. Do not portion this cut into steaks. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Prepare the side ingredients",
+        "detail": "Start this side before the main and allow about 10 minutes for its full cooking window. Overlap the independent pans as directed; time the main to finish with it. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber.",
+        "minutes": 5
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Shape the patties",
+        "detail": "Combine the prepared, chilled lamb with 60 g vegan breadcrumbs, 15 g cornflour (corn starch). Add 30 ml cold water and mix just until the mixture holds together. Shape 8 small patties about 1.5 cm thick. Refrigerate for 15 minutes to firm up; keep raw animal mixtures chilled.",
+        "minutes": 20
+      },
+      {
+        "title": "Cook the patties",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat 4 tbsp neutral cooking oil in a wide pan over medium heat. Fry the patties in batches for about 11–17 minutes total, turning once carefully, until a firm crust forms on both sides. Lower the heat if the outside browns before the centre is ready. The centre of each patty must reach 75°C on a clean food thermometer; check several pieces and cook longer if needed.",
+        "minutes": 14
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Keep the sauce alongside the crisp coating, adding it only at the table.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the patties lamb and coconut, red curry & lime sauce. Serve the sauce beside the main to preserve its crisp surface. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Small saucepan",
+      "Wide frying pan"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "paneer",
+      "methodId": "schnitzel"
+    },
+    "title": "Thai paneer schnitzel with garden salad",
+    "prepMinutes": 25,
+    "cookMinutes": 22,
+    "ingredients": [
+      {
+        "id": "paneer",
+        "name": "Paneer",
+        "amount": 500,
+        "unit": "g",
+        "category": "grocery",
+        "allergens": [
+          "milk"
+        ],
+        "notes": "Use plain paneer, not a fried or syrup-soaked product. Drain, pat dry and cut into 2 cm cubes. It contains milk.",
+        "aliases": [
+          "paneer"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 5,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coating-flour",
+        "name": "Plain flour",
+        "amount": 80,
+        "unit": "g",
+        "category": "grocery",
+        "allergens": [
+          "wheat"
+        ],
+        "notes": "For the coating batter.",
+        "aliases": [
+          "plain flour"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "breadcrumbs",
+        "name": "Vegan breadcrumbs",
+        "amount": 140,
+        "unit": "g",
+        "category": "grocery",
+        "allergens": [
+          "wheat"
+        ],
+        "notes": "Choose crumbs without milk or egg.",
+        "aliases": [
+          "vegan breadcrumbs"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 500 g paneer. Use plain paneer, not a fried or syrup-soaked product. Drain, pat dry and cut into 2 cm cubes. It contains milk. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Prepare the side ingredients",
+        "detail": "Start this side before the main and allow about 10 minutes for its full cooking window. Overlap the independent pans as directed; time the main to finish with it. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber.",
+        "minutes": 5
+      },
+      {
+        "title": "Crumb the schnitzel",
+        "detail": "Pat the prepared pieces dry. Whisk 80 g plain flour with 110 ml water to make a smooth, coating batter. Put 140 g vegan breadcrumbs in another shallow bowl. Dip the prepared paneer in the batter, let excess drip away, then press into the crumbs on both sides. Put on a clean tray and refrigerate for 5–10 minutes while making the sauce base, so the crumb adheres. Discard any leftover coating mixture that touched raw ingredients.",
+        "minutes": 8
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Shallow-fry until crisp",
+        "detail": "Start this main cooking stage when the longest-cooking side has about 8 minutes remaining; keep the raw main refrigerated until needed. Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat the 4 tbsp neutral cooking oil allocated to the main in a wide frying pan over medium heat. Fry the crumbed pieces in uncrowded batches for about 5–11 minutes total, turning carefully halfway, until golden on both sides. Reduce the heat if the crumbs brown too quickly. Cook until golden at the edges and hot through. Paneer is already set; do not boil it hard or it toughens. Drain briefly on a rack or kitchen paper.",
+        "minutes": 8
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Keep the sauce alongside the crisp coating, adding it only at the table.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the schnitzel paneer and coconut, red curry & lime sauce. Serve the sauce beside the main to preserve its crisp surface. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Slotted spoon",
+      "Small saucepan",
+      "Wide frying pan",
+      "Two shallow bowls"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "beef",
+      "methodId": "stir-fried"
+    },
+    "title": "Thai stir-fried beef with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 21,
+    "ingredients": [
+      {
+        "id": "beef",
+        "name": "Beef rump steaks",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Slice the steak across the grain into thin 5 mm strips.",
+        "aliases": [
+          "beef"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g beef rump steaks. Slice the steak across the grain into thin 5 mm strips. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Prepare the side ingredients",
+        "detail": "Start this side before the main and allow about 10 minutes for its full cooking window. Overlap the independent pans as directed; time the main to finish with it. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber.",
+        "minutes": 5
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Stir-fry the main",
+        "detail": "Start this main cooking stage when the longest-cooking side has about 7 minutes remaining; keep the raw main refrigerated until needed. Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat a wok or large frying pan over medium-high heat. Add 2 tbsp neutral cooking oil and the prepared beef in small batches. Stir-fry for about 4–10 minutes per batch, turning frequently. Check the centre of the thickest pieces reaches at least 71°C for a medium result, then rest for 3 minutes before slicing. Lift cooked batches onto a clean plate. Finish the regional sauce as directed below before gently coating the cooked main.",
+        "minutes": 7
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Return the cooked batches and fold gently through the finished sauce without another prolonged cook.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the stir-fried beef and coconut, red curry & lime sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Small saucepan",
+      "Wok or large frying pan"
+    ]
+  },
+  {
+    "input": {
+      "mainId": "lamb",
+      "cutId": "lamb-rack",
+      "methodId": "pan-fried"
+    },
+    "title": "Thai pan-fried lamb with garden salad",
+    "prepMinutes": 15,
+    "cookMinutes": 31,
+    "ingredients": [
+      {
+        "id": "lamb",
+        "name": "Lamb rack",
+        "amount": 600,
+        "unit": "g",
+        "category": "butcher",
+        "allergens": [],
+        "notes": "Pat the lamb rack dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Check the packet. This name does not confirm a breed or a marble grade.",
+        "aliases": [
+          "lamb",
+          "rack of lamb",
+          "lamb rib roast",
+          "Lamb rack"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lettuce",
+        "name": "Cos or iceberg lettuce",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and torn.",
+        "aliases": [
+          "lettuce",
+          "cos lettuce",
+          "iceberg"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "tomato",
+        "name": "Tomatoes",
+        "amount": 300,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Chopped.",
+        "aliases": [
+          "tomatoes",
+          "tomato"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "cucumber",
+        "name": "Cucumber",
+        "amount": 250,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Sliced.",
+        "inPantry": false
+      },
+      {
+        "id": "olive-oil",
+        "name": "Olive oil",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "aliases": [
+          "olive oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemon-juice",
+        "name": "Lemon juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "inPantry": false
+      },
+      {
+        "id": "garlic",
+        "name": "Garlic",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely minced.",
+        "aliases": [
+          "garlic cloves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "galangal",
+        "name": "Galangal",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Peeled and finely sliced. Ginger is the usual substitute at the same weight, and it is not the same flavour.",
+        "aliases": [
+          "galangal"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lemongrass",
+        "name": "Lemongrass",
+        "amount": 20,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tender inner part only, very finely minced.",
+        "aliases": [
+          "lemongrass"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "kaffir-lime-leaves",
+        "name": "Kaffir lime leaves",
+        "amount": 6,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Tear and bruise them. Also sold as makrut lime leaves.",
+        "aliases": [
+          "kaffir lime leaves",
+          "makrut lime leaves"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "red-curry-paste",
+        "name": "Vegan red curry paste",
+        "amount": 2,
+        "unit": "tbsp",
+        "category": "specialty",
+        "allergens": [],
+        "notes": "Choose a paste without fish sauce or shrimp; check allergens and heat.",
+        "aliases": [
+          "vegan red curry paste"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "birds-eye-chilli",
+        "name": "Bird's eye chillies",
+        "amount": 4,
+        "unit": "",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Slice. Seeds carry most of the heat. Wash hands after cutting.",
+        "aliases": [
+          "bird's eye chillies",
+          "birds eye chillies",
+          "bird's eye chilli",
+          "birds eye chilli",
+          "prik kee noo",
+          "cili padi",
+          "cabai rawit",
+          "siling labuyo",
+          "chilli",
+          "chili"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "lime-juice",
+        "name": "Lime juice",
+        "amount": 30,
+        "unit": "ml",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Freshly squeezed; measure the juice.",
+        "aliases": [
+          "lime juice"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coriander",
+        "name": "Fresh coriander",
+        "amount": 15,
+        "unit": "g",
+        "category": "produce",
+        "allergens": [],
+        "notes": "Washed and finely chopped.",
+        "aliases": [
+          "coriander",
+          "cilantro",
+          "fresh coriander"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "neutral-oil",
+        "name": "Neutral cooking oil",
+        "amount": 3,
+        "unit": "tbsp",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "For example, rapeseed or sunflower oil.",
+        "aliases": [
+          "neutral cooking oil",
+          "rapeseed oil",
+          "sunflower oil"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "coconut-milk",
+        "name": "Coconut milk",
+        "amount": 150,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [],
+        "notes": "Unsweetened canned coconut milk.",
+        "aliases": [
+          "coconut milk"
+        ],
+        "inPantry": false
+      },
+      {
+        "id": "vegetable-stock",
+        "name": "Vegetable stock",
+        "amount": 60,
+        "unit": "ml",
+        "category": "grocery",
+        "allergens": [
+          "celery"
+        ],
+        "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+        "aliases": [
+          "vegetable stock"
+        ],
+        "inPantry": false
+      }
+    ],
+    "steps": [
+      {
+        "title": "Prepare your main",
+        "detail": "For 4 people, prepare 600 g lamb rack. Pat the lamb rack dry and leave on the bone. This cut is bone-in, so allow extra time and check next to the bone. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+        "minutes": 15
+      },
+      {
+        "title": "Make the regional sauce base",
+        "detail": "Heat 1 tbsp neutral cooking oil in the pan over medium-low heat; do not let it smoke. Add 15 g garlic, 20 g lemongrass, 4 bird's eye chillies, finely minced, grated or sliced as appropriate. Stir for 1–2 minutes until fragrant, without burning. Stir in 2 tbsp vegan red curry paste. Fry gently in the existing oil for 1–2 minutes, stirring constantly, until aromatic; lower the heat if it catches. Cook the paste before adding the liquid. Pour in 60 ml vegetable stock, 150 ml coconut milk and stir, scraping the base of the pan. Bring to a gentle simmer. Add 15 g galangal, 6 g kaffir lime leaves. Keep the galangal slices intact enough to retrieve. Tear and bruise the makrut lime leaves. Infuse at a gentle simmer for at least 5 minutes, leaving them in during the main's simmer when applicable. Take off the heat and cover the base briefly while cooking the main; leave the delicate finishing ingredients for the final sauce step.",
+        "minutes": 10
+      },
+      {
+        "title": "Pan-fry the main",
+        "detail": "Read the later side-finishing steps now: they need about 2 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat 2 tbsp neutral cooking oil in a wide frying pan over medium heat. Add the prepared lamb in one uncrowded layer. Cook for about 14–20 minutes total, turning carefully to brown the surfaces. Check next to the bone: the centre must reach at least 71°C, then rest briefly. Serve the regional sauce alongside.",
+        "minutes": 17
+      },
+      {
+        "title": "Near the end: prepare the side ingredients",
+        "detail": "Prepare sides alongside the main: begin this side during the final 10 minutes of the main cooking stage, allowing the bird's rest where applicable. Wash and dry the produce and use a clean board. Prepare these listed portions once; later steps use the same portions, not additional ingredients. 300 g cos or iceberg lettuce: Wash well, drain and dry; tear any large leaves. 300 g tomatoes: Chopped. 250 g cucumber: Sliced. Read all side steps first: start long-cooking grains or roasting first, and overlap independent pan/steamer work so the components finish together. Keep cold products and undressed salad chilled until the final assembly. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Build the garden salad",
+        "detail": "Prepare sides alongside the main: Continue these side steps during that same cooking window; do not wait until the main is finished. Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber. Follow this side's own serving instructions.",
+        "minutes": 5
+      },
+      {
+        "title": "Dress just before serving",
+        "detail": "Start these side-finishing actions about 2 minutes before serving, overlapping the main's final cooking or rest. For a main that cooks faster than this, begin these actions before starting the main. Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+        "minutes": 2
+      },
+      {
+        "title": "Finish the regional sauce",
+        "finishBoundary": true,
+        "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal, kaffir lime leaves before the final garnishes; do not eat these whole aromatic pieces. Off the heat, add 30 ml lime juice gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh coriander. Wash and finely chop the fresh produce first. Finish and plate immediately so the fresh seasoning stays bright.",
+        "minutes": 1
+      },
+      {
+        "title": "Bring the meal together",
+        "detail": "Divide the garden salad and lemon-dressed lettuce, tomato & cucumber between 4 plates. Add the pan-fried lamb and coconut, red curry & lime sauce. Taste the cooked sauce before adding any extra seasoning. Serve promptly.",
+        "minutes": 3
+      }
+    ],
+    "equipment": [
+      "Chopping board and knife",
+      "Mixing bowl",
+      "Food thermometer",
+      "Slotted spoon",
+      "Small saucepan",
+      "Wide frying pan"
+    ]
+  }
+]

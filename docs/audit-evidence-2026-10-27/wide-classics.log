@@ -1,0 +1,5 @@
+(node:57252) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"mode":"full","catalogue":{"regions":76,"sides":90,"defaultMainMethods":266,"supportedCutMethods":648,"diets":5,"classics":34,"classicRegions":25},"planned":{"classics":8500},"plannedTotal":8500}
+{"phase":"classics","checked":8500,"planned":8500,"failedCases":0}
+{"status":"passed","checked":8500,"failedCases":0,"violations":0,"elapsedSeconds":7.9,"report":"D:/fusion-table/docs/audit-evidence-2026-10-27/wide-classics.json"}

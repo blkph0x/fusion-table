@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checked": 900,
+  "findings": [],
+  "coverage": "Every90side×5diet×authored/seed7; first compatible main/method, Indonesian profile, four servings. Preflight, not exhaustive regional coverage.",
+  "source": {
+    "sha256": "594c87090d6920bb7e8d2c11bf1237852cd1456883c09ba279b8753c09437cd9",
+    "files": 64
+  }
+}

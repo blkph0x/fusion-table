@@ -1,0 +1,68 @@
+{
+  "target": "http://127.0.0.1:5176/fusion",
+  "checks": [
+    {
+      "feature": "built application",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "feature": "optimized WebP asset",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "image/webp"
+    },
+    {
+      "feature": "community ledger read",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "application/json"
+    },
+    {
+      "feature": "invalid community report rejected",
+      "status": 400,
+      "expected": 400,
+      "passed": true,
+      "contentType": "application/json"
+    },
+    {
+      "feature": "price memory read",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "application/json"
+    },
+    {
+      "feature": "oversized report rejected",
+      "status": 413,
+      "expected": 413,
+      "passed": true,
+      "contentType": "application/json"
+    },
+    {
+      "feature": "invalid recipe PDF rejected",
+      "status": 404,
+      "expected": 404,
+      "passed": true,
+      "contentType": "text/plain; charset=utf-8"
+    },
+    {
+      "feature": "recipe PDF export",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "application/pdf"
+    },
+    {
+      "feature": "shared classic recipe",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "contentType": "text/html; charset=utf-8"
+    }
+  ]
+}

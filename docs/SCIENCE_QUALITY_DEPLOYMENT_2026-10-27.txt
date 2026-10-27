@@ -1,0 +1,46 @@
+FUSION TABLE RELEASE RECORD - 27 OCTOBER 2026
+
+Website: https://gearsqueens.online/fusion/
+Host: 10.1.1.111, user blkph0x. Credentials are not recorded here.
+Active release: /home/blkph0x/fusion-releases/20261027-075114
+Service: fusion-table.service, enabled/active, PID2526310, NRestarts0.
+Persistent data: /home/blkph0x/fusion-data
+Source archive: releases/fusion-table-20261027-075114.tar.gz
+Archive SHA256:449319e40602614eeb0b2fc48d9156de5b20adb2deb091041fbf957c3cfb8957
+Source manifest (342 files):3b3f1343a9b341f422c5f410fa4211dccf6476a06f3aa05b9862706616cb46a9
+Final recipe/checker source (69 files):025b745dab67aa68f0058886f654bae70ed3b0cac6bd8e1daa908bf97f693b88
+20,414,810 canonical cases passed;527 host tests passed;15 live feature checks passed.
+Final CSS-only framing release rebuilt and passed16 canary+16 public checks;
+source-manifest delta against fully tested20261027-072707 is app/globals.css only.
+See SCIENCE_QUALITY_AUDIT_2026-10-27.txt for exact coverage and limitations.
+
+Rollback and recovery
+Latest unit+data backup:/home/blkph0x/fusion-deploy-backups/20261027-075114
+Prior functional release:/home/blkph0x/fusion-releases/20261027-072707
+Pre-feature release:/home/blkph0x/fusion-releases/20261027-052531
+Its backup is /home/blkph0x/fusion-deploy-backups/20261027-072707.
+Do not replace current user data with a snapshot casually; restore the unit first
+and inspect any new reports before considering data recovery.
+Original checkout/Apache/TLS are preserved. Temporary canaries are stopped.
+
+Local image model
+fusion-image-model.service is enabled/active, PID2506763,NRestarts0.
+Executable:/home/blkph0x/opt/sd/sd-server; loopback127.0.0.1:7860.
+Model:models/sd_turbo-f16-q8_0.gguf. Website requests384px/2steps,60s timeout.
+Drop-in:/etc/systemd/system/fusion-table.service.d/30-background-images.conf
+This declares the model dependency and FUSION_IMAGE_AUTOWARM=1.
+Queue/cache:/home/blkph0x/fusion-data/plate-images;9ready entries at final check.
+Limits:64pending,24attempts/hour,3retries,500entries/128MiB,8curated warm/day.
+Backup of former unsupervised process:/home/blkph0x/fusion-deploy-backups/science-image-model-20261027
+Generated cache is separate from community/pricing ledgers.
+
+Android publication
+1.5.7/code14,au.mealplanner,13,982,261bytes.
+Public:https://gearsqueens.online/downloads/MealPlannerAU.apk
+SHA256:1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef
+Signer:62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6
+Staged:/home/blkph0x/fusion-releases/android-1.5.7-code14/MealPlannerAU.apk
+Published:/var/www/html/downloads/MealPlannerAU.apk (root:root0644,no-cache)
+Prior APK:/home/blkph0x/fusion-deploy-backups/android-1.5.7-code14/MealPlannerAU-1.5.6-code13.apk
+154tests passed;signed build and independent public-download hash verified.
+No physical-device/emulator installation test was available.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatAudCents } from "@/lib/product-match";
 import { publicPath } from "@/lib/public-path";
 import type { ItemQuote, PriceMemory, ShopPage } from "@/lib/price-memory";
@@ -19,6 +19,21 @@ interface ShopRef {
   website: string | null;
 }
 
+type QuoteData = { quotes?: ItemQuote[]; pages?: ShopPage[]; error?: string };
+
+async function requestQuotes(area: string, itemNames: string, signal?: AbortSignal): Promise<QuoteData> {
+  const response = await fetch(publicPath("/api/price-memory"), {
+    method: "POST",
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
+    body: JSON.stringify({ action: "quote", device: deviceId(), area, items: itemNames ? itemNames.split("|") : [] }),
+    cache: "no-store",
+    signal,
+  });
+  const data = await response.json() as QuoteData;
+  if (!response.ok) throw new Error(data.error || "Saved prices could not be read. Nothing was invented.");
+  return data;
+}
+
 function deviceId(): string {
   try {
     const existing = localStorage.getItem("fusion-device") || "";
@@ -33,65 +48,58 @@ function deviceId(): string {
 }
 
 export function ShopPrices({ lines, shops, area }: { lines: Line[]; shops: ShopRef[]; area: string }) {
-  const [quotes, setQuotes] = useState<ItemQuote[]>([]);
-  const [pages, setPages] = useState<ShopPage[]>([]);
+  const [book, setBook] = useState<{ key: string; quotes: ItemQuote[]; pages: ShopPage[] }>({ key: "", quotes: [], pages: [] });
   const [shopId, setShopId] = useState("");
   const [shopName, setShopName] = useState("");
   const [pageUrl, setPageUrl] = useState("");
   const [drafts, setDrafts] = useState<Record<string, string>>({});
   const [specials, setSpecials] = useState<Record<string, boolean>>({});
   const [until, setUntil] = useState("");
-  const [note, setNote] = useState("");
-  const [linesSeen, setLinesSeen] = useState<string[]>([]);
+  const [feedback, setFeedback] = useState({ key: "", note: "" });
+  const [readLines, setReadLines] = useState<{ key: string; lines: string[] }>({ key: "", lines: [] });
   const [busy, setBusy] = useState(false);
+  const contextRevision = useRef(0);
+  const quoteRevision = useRef(0);
+  const itemNames = lines.slice(0, 16).map((line) => line.name).join("|");
+  const contextKey = JSON.stringify([area, itemNames]);
+  const quotes = book.key === contextKey ? book.quotes : [];
+  const pages = book.key === contextKey ? book.pages : [];
+  const note = feedback.key === contextKey ? feedback.note : "";
+  const linesSeen = readLines.key === contextKey ? readLines.lines : [];
+  const setNote = (note: string) => setFeedback({ key: contextKey, note });
   const chosen = shops.find((shop) => shop.id === shopId);
   const namedShop = (chosen?.name || shopName).trim();
   const knownUrl = chosen?.website || pages.find((page) => page.shopName === namedShop)?.url || "";
 
-  const itemNames = lines.slice(0, 16).map((line) => line.name).join("|");
-
-  async function load(nextArea = area) {
-    const response = await fetch(publicPath("/api/price-memory"), {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "quote", device: deviceId(), area: nextArea, items: itemNames ? itemNames.split("|") : [] }),
-      cache: "no-store",
-    });
-    const data = await response.json() as { quotes?: ItemQuote[]; pages?: ShopPage[]; error?: string };
-    if (!response.ok) throw new Error(data.error || "Saved prices could not be read. Nothing was invented.");
-    return data;
+  async function load(revision: number) {
+    const latestQuote = ++quoteRevision.current;
+    const data = await requestQuotes(area, itemNames);
+    if (revision !== contextRevision.current || latestQuote !== quoteRevision.current) return;
+    setBook({ key: contextKey, quotes: data.quotes || [], pages: data.pages || [] });
   }
 
   useEffect(() => {
-    if (!area || !itemNames) return;
-    let cancel = false;
-    void fetch(publicPath("/api/price-memory"), {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "quote", device: deviceId(), area, items: itemNames.split("|") }),
-      cache: "no-store",
-    }).then(async (response) => {
-      const data = await response.json() as { quotes?: ItemQuote[]; pages?: ShopPage[]; error?: string };
-      if (cancel) return;
-      if (!response.ok) {
-        setNote(data.error || "Saved prices could not be read. Nothing was invented.");
-        return;
-      }
-      setQuotes(data.quotes || []);
-      setPages(data.pages || []);
-    }).catch(() => {
-      if (!cancel) setNote("Saved prices could not be read. Nothing was invented.");
+    const revision = ++contextRevision.current;
+    const latestQuote = ++quoteRevision.current;
+    const controller = new AbortController();
+    if (area && itemNames) void requestQuotes(area, itemNames, controller.signal).then((data) => {
+      if (revision !== contextRevision.current || latestQuote !== quoteRevision.current) return;
+      setBook({ key: contextKey, quotes: data.quotes || [], pages: data.pages || [] });
+    }).catch((error) => {
+      if (revision === contextRevision.current && latestQuote === quoteRevision.current && !controller.signal.aborted) setFeedback({ key: contextKey, note: error instanceof Error ? error.message : "Saved prices could not be read. Nothing was invented." });
     });
-    return () => { cancel = true; };
-  }, [area, itemNames]);
+    return () => { controller.abort(); if (contextRevision.current === revision) contextRevision.current += 1; };
+  }, [area, itemNames, contextKey]);
 
   async function remember(line: Line) {
+    if (busy) return;
     if (!area) {
       setNote("Set a suburb or postcode first. A price is kept for that area, and a missing price is not $0.");
       return;
     }
     setBusy(true);
     setNote("");
+    const revision = contextRevision.current;
     try {
       const response = await fetch(publicPath("/api/price-memory"), {
         method: "POST",
@@ -110,14 +118,15 @@ export function ShopPrices({ lines, shops, area }: { lines: Line[]; shops: ShopR
         cache: "no-store",
       });
       const data = await response.json() as { error?: string; price?: PriceMemory };
+      if (revision !== contextRevision.current) return;
       if (!response.ok || !data.price) {
         setNote(data.error || "That price was not saved. Nothing was invented.");
         return;
       }
       setNote(`${data.price.label} ${formatAudCents(data.price.cents)} at ${data.price.shopName}.`);
-      await load();
+      await load(revision);
     } catch {
-      setNote("The price book could not be reached. Nothing was invented.");
+      if (revision === contextRevision.current) setNote("The price book could not be reached. Nothing was invented.");
     } finally {
       setBusy(false);
     }
@@ -128,13 +137,15 @@ export function ShopPrices({ lines, shops, area }: { lines: Line[]; shops: ShopR
   }
 
   async function readPage(url: string) {
+    if (busy) return;
     if (!url) {
       setNote("Add the shop's public https page. A butcher's own specials page is fine.");
       return;
     }
     setBusy(true);
     setNote("");
-    setLinesSeen([]);
+    setReadLines({ key: contextKey, lines: [] });
+    const revision = contextRevision.current;
     openPage(url);
     try {
       const response = await fetch(publicPath("/api/price-memory"), {
@@ -151,21 +162,24 @@ export function ShopPrices({ lines, shops, area }: { lines: Line[]; shops: ShopR
         cache: "no-store",
       });
       const data = await response.json() as { error?: string; note?: string; lines?: string[]; saved?: PriceMemory[] };
+      if (revision !== contextRevision.current) return;
       if (!response.ok) {
         setNote(data.error || "Open the page on this device and type the price you see. Nothing was invented.");
         return;
       }
-      setLinesSeen(data.lines || []);
+      setReadLines({ key: contextKey, lines: data.lines || [] });
       setNote(data.note || "If the price is not listed, type what you saw.");
-      await load();
+      await load(revision);
     } catch {
-      setNote("Open the page on this device and type the price you see. Nothing was invented.");
+      if (revision === contextRevision.current) setNote("Open the page on this device and type the price you see. Nothing was invented.");
     } finally {
       setBusy(false);
     }
   }
 
   return <section className="shop-prices" aria-label="Prices by shop and area">
+    <details>
+    <summary>Record or view prices by shop</summary>
     <h3>Prices people have seen</h3>
     <p>A public shop page can be opened on this device and read when it is ordinary https. Coles and other blocked catalogues are not forced open. If a price cannot be read, type what you paid. It is saved for that shop and area. A missing price is never $0.</p>
     {!area && <p>Set a suburb or postcode. Prices are kept for that area.</p>}
@@ -205,5 +219,6 @@ export function ShopPrices({ lines, shops, area }: { lines: Line[]; shops: ShopR
     </ul>
     {Object.values(specials).some(Boolean) && <label className="field">Special until, if it ends<input aria-label="Special end date" value={until} placeholder="YYYY-MM-DD" maxLength={10} onChange={(event) => setUntil(event.target.value)} /></label>}
     {pages.length > 0 && <ul className="shop-ask">{pages.map((page) => <li key={page.id}><button type="button" className="text-button" onClick={() => { setPageUrl(page.url); setShopName(page.shopName); openPage(page.url); }}>{page.shopName} page</button></li>)}</ul>}
+    </details>
   </section>;
 }

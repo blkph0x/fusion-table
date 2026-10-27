@@ -1,0 +1,78 @@
+FUSION TABLE - WIDE CULINARY WEBSITE DEPLOYMENT
+27 October 2026
+
+Public website: https://gearsqueens.online/fusion/
+Server: 10.1.1.111
+Active release: /home/blkph0x/fusion-releases/20261027-042809
+Archive: releases/fusion-table-20261027-042809.tar.gz
+Archive SHA-256:
+793c78e5d8914e25f98359edaa2c58c2cbaec802674e8da8e1eaf7d7e3b4082d
+Source manifest SHA-256:
+ba28abbfe0083205bf5b279f92845f5c0c8d7e412d3e5f007adc45b6c1d59ca0
+311 source files verified before the Linux build. Existing locked dependencies.
+Lib audit fingerprint (64 TypeScript files):
+594c87090d6920bb7e8d2c11bf1237852cd1456883c09ba279b8753c09437cd9
+
+Changes
+
+See WIDE_CULINARY_QUALITY_2026-10-27.txt for the cooking decisions and references.
+All 76 regional profiles and 90 sides were reviewed. Ingredient form controls
+blooming, infusion, removal and finishing. Sides have measured ordered cooking,
+advance preparation, equipment and serving windows. Main cuts use appropriate
+portions, preparation and timing: whole birds, mince, sausages, gizzards, tongue
+and slow-roast joints. Stock frames are not offered as meaty main cuts.
+Rice liquid changes target actual grain cooking, not rice miso or its glaze.
+Coconut milk counts toward total grain liquid. Simpler-method preferences retain
+cooking and delicate finishing boundaries. Sharing/PDF reproduce current rules.
+
+Verification
+
+- 2,012,468 unique structural cases passed by phase union on the fingerprint
+  above: 1,819,440 authored region/main-method/side cases; 101,080 rotating
+  seed/heat/serving/clean cases; 49,248 cut/region cases; 34,200 dietary cases;
+  8,500 classic/regional/diet/authored-or-seeded cases.
+- wide-completion.json records exact coverage, fingerprints and raw reports.
+  The original classic checker had 1,530 instruction-shorthand false positives.
+  Explicit scoped references corrected only the checker; all 8,500 classics
+  reran successfully on the unchanged recipe source. Interrupted earlier runs
+  contribute no completed coverage.
+- Broad regression: 421/421 tests passed, 43 suites. Final verifier checks passed
+  6/6 separately. TypeScript and checked source lint passed.
+- Final Linux Node production build passed. Isolated canary passed 156 focused
+  culinary, filter, sharing, PDF and shopping tests plus render/identity/API checks.
+- 16/16 real HTTP rendered-page and PDF checks passed both before cutover and
+  against the public URL afterward, including whole chicken, sticky rice,
+  tostones, cassava, mince, tongue and preserved method boundaries.
+- Browser automation was unavailable during this wider pass. These are HTTP,
+  content, PDF, build and automated checks, not fresh visual/browser interaction
+  or kitchen tests. Previous deployment screenshots describe earlier releases.
+
+Runtime and recovery
+
+fusion-table.service is active/enabled, PID 2423165, NRestarts 0 at verification.
+WorkingDirectory is the active release above; loopback port 8792 behind Apache.
+Persistent ledger: /home/blkph0x/fusion-data. Existing image environment retained.
+Apache/TLS/original checkout retained. The isolated port-8793 canary was stopped.
+Public /fusion/deployment.json confirms the release and manifest.
+
+Rollback: /home/blkph0x/fusion-deploy-backups/20261027-042809 contains the prior
+unit (release 20261027-022643). Restore its fusion-table.service to
+/etc/systemd/system/fusion-table.service, daemon-reload and restart the service.
+A code rollback does not require restoring an old user-data ledger.
+Intermediate source releases 035549, 040208 and 041703 were never activated.
+
+Reload and create a new plate to use current rules. Existing saved recipe
+snapshots keep their original instructions. Exact old JSON snapshots remain
+available where current sharing cannot reproduce their specification.
+
+Android is a separate native application. Its expanded quality pass and new
+signed APK are recorded in ANDROID_CULINARY_DEPLOYMENT_2026-10-27.txt after their
+own build and download verification. Website deployment alone cannot update an
+installed offline app.
+
+Evidence: docs/audit-evidence-2026-10-27/wide-*; final status documents were
+written after packaging and are newer than the immutable source archive.
+Tests/builds use a process-local D: temporary directory because C: is full.
+
+Templates remain not kitchen-tested. Checks cannot establish taste, cultural
+authenticity, actual packet contents, cross-contact or real kitchen performance.

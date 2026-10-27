@@ -1,0 +1,60 @@
+(node:27560) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:34484) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+ok 1 - stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+  ---
+  duration_ms: 918.4686
+  ...
+# Subtest: cottage-pie estimate covers its serial filling, oven and resting stages
+ok 2 - cottage-pie estimate covers its serial filling, oven and resting stages
+  ---
+  duration_ms: 36.7084
+  ...
+# Subtest: BBQ cooking estimates include required rest after the timed heat stages
+not ok 3 - BBQ cooking estimates include required rest after the timed heat stages
+  ---
+  duration_ms: 2.4413
+  location: 'D:\\fusion-table\\tests\\classic-plausibility.test.ts:45:1'
+  failureType: 'testCodeFailure'
+  error: 'smoked-brisket: 385'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///D:/fusion-table/tests/classic-plausibility.test.ts:48:12)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:931:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:629:18)
+    Test.postRun (node:internal/test_runner/test:1042:19)
+    Test.run (node:internal/test_runner/test:970:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:629:7)
+  ...
+# Subtest: burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+ok 4 - burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+  ---
+  duration_ms: 393.492
+  ...
+# Subtest: seeded fast mains prepare additions before cooking and retain final fresh service
+ok 5 - seeded fast mains prepare additions before cooking and retain final fresh service
+  ---
+  duration_ms: 92.7245
+  ...
+# Subtest: slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+ok 6 - slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+  ---
+  duration_ms: 12.3972
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 5
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1925.4215

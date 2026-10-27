@@ -32,17 +32,19 @@ describe("shared recipes, pictures and PDF", () => {
     assert.deepEqual(generateMeal({ mainId: "chicken", methodId: "schnitzel", regionId: "thai", sideId: "rice-greens", servings: 2, diet: "balanced", spiceHeat: "hot", seed: 3, dislikes: ["chillies"] }).id, meal.id);
   });
 
-  it("serves a saved picture for the example plates and an exact meal, and paints every other recipe", async () => {
+  it("serves exact inspiration images and an honest labelled placeholder for recipes without an image", async () => {
     const pasta = generateRecipe({ classicId: "pasta", regionId: "japanese", diet: "vegetarian", servings: 4, spiceHeat: "medium" });
     const photo = await renderPlate(pasta, { model: false });
-    const file = readFileSync(new URL("../public/images/fusion-table-hero.png", import.meta.url));
+    const file = readFileSync(new URL("../public/images/fusion-table-hero-960.webp", import.meta.url));
     assert.equal(Buffer.compare(Buffer.from(photo.bytes), file), 0);
+    assert.equal(photo.contentType, "image/webp");
     const tacos = await renderPlate(generateRecipe({ classicId: "tacos", regionId: "korean", diet: "vegan", servings: 2, spiceHeat: "hot" }), { model: false });
-    assert.equal(tacos.bytes[0], 0x89);
+    assert.equal(tacos.contentType, "image/webp");
+    assert.ok(tacos.bytes.byteLength < 300_000);
     const seeded = await renderPlate(generateRecipe({ classicId: "pasta", regionId: "thai", diet: "balanced", servings: 2, spiceHeat: "hot", seed: 7 }), { model: false });
-    assert.equal(seeded.contentType, "image/png");
-    assert.equal(seeded.bytes[0], 0x89);
-    assert.equal(seeded.bytes[1], 0x50);
+    assert.equal(seeded.contentType, "image/svg+xml");
+    assert.equal(seeded.placeholder, true);
+    assert.match(new TextDecoder().decode(seeded.bytes), /Recipe image unavailable/);
     assert.notEqual(Buffer.compare(Buffer.from(seeded.bytes), file), 0);
     const again = await renderPlate(generateRecipe({ classicId: "pasta", regionId: "thai", diet: "balanced", servings: 2, spiceHeat: "hot", seed: 7 }), { model: false });
     assert.equal(Buffer.compare(Buffer.from(seeded.bytes), Buffer.from(again.bytes)), 0);
@@ -56,18 +58,21 @@ describe("shared recipes, pictures and PDF", () => {
     assert.equal(Buffer.compare(Buffer.from(meal.bytes), Buffer.from(mealAgain.bytes)), 0);
     const saved = readFileSync(new URL("../public/images/meals/thai-chicken-curry.jpg", import.meta.url));
     assert.equal(Buffer.compare(Buffer.from(meal.bytes), saved), 0);
+    const changedSide = await renderPlate(generateMeal({ mainId: "chicken", methodId: "curry", regionId: "thai", sideId: "flatbread-salad", servings: 2 }), { model: false });
+    assert.equal(changedSide.contentType, "image/svg+xml", "a different side must not be represented by the wrong saved food image");
+    assert.notEqual(Buffer.compare(Buffer.from(changedSide.bytes), saved), 0);
     const seededMeal = await renderPlate(generateMeal({ mainId: "chicken", methodId: "curry", regionId: "thai", sideId: "rice-greens", servings: 2, diet: "balanced", spiceHeat: "hot", seed: 4 }), { model: false });
-    assert.equal(seededMeal.contentType, "image/png");
+    assert.equal(seededMeal.contentType, "image/svg+xml");
     assert.notEqual(Buffer.compare(Buffer.from(seededMeal.bytes), saved), 0);
     for (const classicId of ["shotgun-shells", "ribs-on-the-rack", "foil-boat-ribs", "burnt-ends", "smoked-meatloaf", "rotisserie-roast"]) {
       const plate = await renderPlate(generateRecipe({ classicId, regionId: "home-style", diet: "balanced", servings: 4, spiceHeat: "medium" }), { model: false });
-      assert.equal(plate.contentType, "image/png", classicId);
-      assert.equal(plate.bytes[0], 0x89, classicId);
-      assert.match(plate.note, /Painted on this computer/, classicId);
+      assert.equal(plate.contentType, "image/svg+xml", classicId);
+      assert.equal(plate.placeholder, true, classicId);
+      assert.match(plate.note, /placeholder does not depict the finished meal/, classicId);
     }
     const homeMeal = await renderPlate(generateMeal({ mainId: "chickpeas", methodId: "braised", regionId: "home-kitchen", sideId: "lentil-salad", servings: 2, diet: "vegan", spiceHeat: "medium" }), { model: false });
-    assert.equal(homeMeal.contentType, "image/png");
-    assert.match(homeMeal.note, /Painted on this computer|Drawn by the local image model/);
+    assert.equal(homeMeal.contentType, "image/svg+xml");
+    assert.match(homeMeal.note, /Recipe image unavailable/);
     const paced = generateRecipe({ classicId: "bbq-ribs", regionId: "texas-bbq", servings: 4, diet: "balanced", spiceHeat: "medium", cookPace: "morning", seed: 9 });
     const rebuilt = recipeFromShare(decodeShare(encodeShare(specFromRecipe(paced))));
     assert.equal(rebuilt.id, paced.id);

@@ -1,0 +1,309 @@
+(node:62488) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:39756) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Coles reads public product fields and selling price, never comparison or crossed-out prices
+ok 1 - Coles reads public product fields and selling price, never comparison or crossed-out prices
+  ---
+  duration_ms: 6.4319
+  ...
+# Subtest: Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+ok 2 - Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+  ---
+  duration_ms: 63.4449
+  ...
+# Subtest: Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+ok 3 - Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+  ---
+  duration_ms: 0.7374
+  ...
+# Subtest: malformed and oversized public payloads fail clearly without fabricated rows
+ok 4 - malformed and oversized public payloads fail clearly without fabricated rows
+  ---
+  duration_ms: 0.9633
+  ...
+# Subtest: public product links stay on Coles even when a matching href points elsewhere
+ok 5 - public product links stay on Coles even when a matching href points elsewhere
+  ---
+  duration_ms: 0.3453
+  ...
+# Subtest: Coles redirects cannot escape the official secure origin
+ok 6 - Coles redirects cannot escape the official secure origin
+  ---
+  duration_ms: 4.2323
+  ...
+# Subtest: response streaming stops at the byte cap rather than reading an arbitrarily large page
+ok 7 - response streaming stops at the byte cap rather than reading an arbitrarily large page
+  ---
+  duration_ms: 1.7617
+  ...
+# Subtest: identical in-flight searches coalesce and subsequent lookups use the bounded cache
+ok 8 - identical in-flight searches coalesce and subsequent lookups use the bounded cache
+  ---
+  duration_ms: 7.4643
+  ...
+# Subtest: failed searches release their pending entry so a retry can recover
+ok 9 - failed searches release their pending entry so a retry can recover
+  ---
+  duration_ms: 1.7091
+  ...
+# Subtest: an aborted coalesced consumer stops waiting without cancelling the original request
+ok 10 - an aborted coalesced consumer stops waiting without cancelling the original request
+  ---
+  duration_ms: 3.3475
+  ...
+# Subtest: queued Coles requests observe cancellation before a busy request releases its slot
+ok 11 - queued Coles requests observe cancellation before a busy request releases its slot
+  ---
+  duration_ms: 2.8952
+  ...
+# (node:52252) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shopping requests normalize the area and bound six distinct ingredient lines
+ok 12 - shopping requests normalize the area and bound six distinct ingredient lines
+  ---
+  duration_ms: 6.668
+  ...
+# Subtest: invalid names, identifiers, amounts, units and shapes are rejected before provider work
+ok 13 - invalid names, identifiers, amounts, units and shapes are rejected before provider work
+  ---
+  duration_ms: 1.959
+  ...
+# Subtest: oversized or malformed shop metadata cannot become an association by prefix truncation
+ok 14 - oversized or malformed shop metadata cannot become an association by prefix truncation
+  ---
+  duration_ms: 2.0517
+  ...
+# Subtest: the streamed request size cap rejects large JSON without reading the entire body
+ok 15 - the streamed request size cap rejects large JSON without reading the entire body
+  ---
+  duration_ms: 24.5549
+  ...
+# Subtest: Woolworths failure leaves Coles and exact local recorded prices available
+ok 16 - Woolworths failure leaves Coles and exact local recorded prices available
+  ---
+  duration_ms: 22.8949
+  ...
+# Subtest: synchronous provider failures are isolated like rejected asynchronous calls
+ok 17 - synchronous provider failures are isolated like rejected asynchronous calls
+  ---
+  duration_ms: 0.7165
+  ...
+# Subtest: local ledger failure and per-item catalogue errors leave honest partial results
+ok 18 - local ledger failure and per-item catalogue errors leave honest partial results
+  ---
+  duration_ms: 0.7695
+  ...
+# Subtest: no successful provider yields a missing estimate rather than a zero basket
+ok 19 - no successful provider yields a missing estimate rather than a zero basket
+  ---
+  duration_ms: 0.4189
+  ...
+# Subtest: non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+ok 20 - non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+  ---
+  duration_ms: 0.7324
+  ...
+# Subtest: generic GPS locations can use online guides without borrowing a shared generic area's records
+ok 21 - generic GPS locations can use online guides without borrowing a shared generic area's records
+  ---
+  duration_ms: 0.7479
+  ...
+# Subtest: explicitly disabling online checks prevents retailer requests
+ok 22 - explicitly disabling online checks prevents retailer requests
+  ---
+  duration_ms: 0.4031
+  ...
+# Subtest: duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+ok 23 - duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+  ---
+  duration_ms: 0.7673
+  ...
+# Subtest: special filtering receives Sydney's date rather than the previous UTC day
+ok 24 - special filtering receives Sydney's date rather than the previous UTC day
+  ---
+  duration_ms: 0.4729
+  ...
+# Subtest: aborting catalogue checks retains finished local evidence and gives a partial-source notice
+ok 25 - aborting catalogue checks retains finished local evidence and gives a partial-source notice
+  ---
+  duration_ms: 8.9282
+  ...
+# (node:40412) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: metric packs round up whole purchases and preserve purchased quantity
+ok 26 - metric packs round up whole purchases and preserve purchased quantity
+  ---
+  duration_ms: 5.0113
+  ...
+# Subtest: multipacks and explicit count units are costed without discarding their contents
+ok 27 - multipacks and explicit count units are costed without discarding their contents
+  ---
+  duration_ms: 0.3658
+  ...
+# Subtest: explicit rates use the needed quantity with money rounded once
+ok 28 - explicit rates use the needed quantity with money rounded once
+  ---
+  duration_ms: 0.375
+  ...
+# Subtest: unknown units, densities and approximate pack sizes never become free or guessed food
+ok 29 - unknown units, densities and approximate pack sizes never become free or guessed food
+  ---
+  duration_ms: 0.4175
+  ...
+# Subtest: Woolworths and Coles are separate online evidence, never the default local fulfilment store
+ok 30 - Woolworths and Coles are separate online evidence, never the default local fulfilment store
+  ---
+  duration_ms: 4.748
+  ...
+# Subtest: only explicitly associated local records belong to a nearby shop
+ok 31 - only explicitly associated local records belong to a nearby shop
+  ---
+  duration_ms: 17.1069
+  ...
+# Subtest: different areas and different item keys cannot contaminate local costs
+ok 32 - different areas and different item keys cannot contaminate local costs
+  ---
+  duration_ms: 0.4087
+  ...
+# Subtest: old manual observations remain readable without treating their unknown pack as the whole recipe
+ok 33 - old manual observations remain readable without treating their unknown pack as the whole recipe
+  ---
+  duration_ms: 0.4363
+  ...
+# Subtest: manual selling quantities survive normalizing and legacy observations remain compatible
+ok 34 - manual selling quantities survive normalizing and legacy observations remain compatible
+  ---
+  duration_ms: 1.2872
+  ...
+# Subtest: latest observation for the same shop, item and pack supersedes its earlier cheaper price
+ok 35 - latest observation for the same shop, item and pack supersedes its earlier cheaper price
+  ---
+  duration_ms: 0.5571
+  ...
+# Subtest: stale, future and missing timestamps remain visible but cannot silently enter an estimate
+ok 36 - stale, future and missing timestamps remain visible but cannot silently enter an estimate
+  ---
+  duration_ms: 1.0172
+  ...
+# Subtest: special end dates are interpreted as Australian local days and malformed dates fail closed
+ok 37 - special end dates are interpreted as Australian local days and malformed dates fail closed
+  ---
+  duration_ms: 9.0916
+  ...
+# Subtest: dietary wording still requires explicit matching product evidence before automatic cost choice
+ok 38 - dietary wording still requires explicit matching product evidence before automatic cost choice
+  ---
+  duration_ms: 4.3747
+  ...
+# Subtest: plain staple brand ties produce a suggested estimate while preserving explicit choice
+ok 39 - plain staple brand ties produce a suggested estimate while preserving explicit choice
+  ---
+  duration_ms: 1.7258
+  ...
+# Subtest: actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+ok 40 - actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+  ---
+  duration_ms: 1.9552
+  ...
+# Subtest: unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+ok 41 - unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+  ---
+  duration_ms: 3.3088
+  ...
+# Subtest: fresh produce cannot be automatically replaced by powder, paste or preserved products
+ok 42 - fresh produce cannot be automatically replaced by powder, paste or preserved products
+  ---
+  duration_ms: 1.2128
+  ...
+# Subtest: brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+ok 43 - brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+  ---
+  duration_ms: 1.6804
+  ...
+# Subtest: unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+ok 44 - unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+  ---
+  duration_ms: 0.3987
+  ...
+# Subtest: all meaningful requested staple words must occur even if the catalogue matcher chose one row
+ok 45 - all meaningful requested staple words must occur even if the catalogue matcher chose one row
+  ---
+  duration_ms: 0.3379
+  ...
+# Subtest: partial list totals expose missing lines during progressive batches and never call them zero
+ok 46 - partial list totals expose missing lines during progressive batches and never call them zero
+  ---
+  duration_ms: 0.2139
+  ...
+# (node:39044) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shopping list sources
+    # Subtest: gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+    ok 1 - gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+      ---
+      duration_ms: 2.5215
+      ...
+    # Subtest: merges exact metric conversions so one product is not bought twice
+    ok 2 - merges exact metric conversions so one product is not bought twice
+      ---
+      duration_ms: 1.63
+      ...
+    # Subtest: does not guess fresh-food density or spoon-to-weight conversions
+    ok 3 - does not guess fresh-food density or spoon-to-weight conversions
+      ---
+      duration_ms: 0.3306
+      ...
+    # Subtest: preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+    ok 4 - preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+      ---
+      duration_ms: 0.4398
+      ...
+    # Subtest: loads valid custom entries without trusting persisted extra fields
+    ok 5 - loads valid custom entries without trusting persisted extra fields
+      ---
+      duration_ms: 0.3868
+      ...
+    1..5
+ok 47 - shopping list sources
+  ---
+  duration_ms: 7.5441
+  type: 'suite'
+  ...
+# (node:7532) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: six products from one retailer cannot hide the second retailer
+ok 48 - six products from one retailer cannot hide the second retailer
+  ---
+  duration_ms: 2.9408
+  ...
+# Subtest: only safe eligible choices are ranked by quantity cost
+ok 49 - only safe eligible choices are ranked by quantity cost
+  ---
+  duration_ms: 0.8116
+  ...
+# Subtest: unresolved brand choices show the first reviewable candidate without inferring cheapest food
+ok 50 - unresolved brand choices show the first reviewable candidate without inferring cheapest food
+  ---
+  duration_ms: 0.2815
+  ...
+# Subtest: an explicit pack choice remains visible, including a seller outside the four-source preview
+ok 51 - an explicit pack choice remains visible, including a seller outside the four-source preview
+  ---
+  duration_ms: 0.31
+  ...
+# Subtest: separate local shops and online catalogue scope remain distinct
+ok 52 - separate local shops and online catalogue scope remain distinct
+  ---
+  duration_ms: 0.8567
+  ...
+1..52
+# tests 56
+# suites 1
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 479.6878

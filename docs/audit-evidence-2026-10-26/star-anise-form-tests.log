@@ -1,0 +1,182 @@
+(node:47168) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:20588) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 67.3906
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 87.9082
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 2833.9727
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 137.2219
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 27.2787
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 92.6185
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 1.863
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 1.6255
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 54.1065
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 5.0419
+      ...
+    # Subtest: uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+    ok 11 - uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+      ---
+      duration_ms: 19.0209
+      ...
+    # Subtest: keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+    ok 12 - keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+      ---
+      duration_ms: 40.7689
+      ...
+    1..12
+ok 1 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 3370.9779
+  type: 'suite'
+  ...
+# (node:42848) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 2 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 39.2929
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 3 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 3.8977
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 4 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 17.125
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 5 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 332.4955
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 6 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 1.2217
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 7 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 2.8164
+  ...
+# (node:38032) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: quantified regional cooking stages
+    # Subtest: fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+    ok 1 - fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+      ---
+      duration_ms: 4.6377
+      ...
+    # Subtest: tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+    ok 2 - tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+      ---
+      duration_ms: 1.3411
+      ...
+    # Subtest: dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+    ok 3 - dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+      ---
+      duration_ms: 0.7274
+      ...
+    # Subtest: retrieves woody infusions, while finely minced tender lemongrass stays edible
+    ok 4 - retrieves woody infusions, while finely minced tender lemongrass stays edible
+      ---
+      duration_ms: 1.2924
+      ...
+    # Subtest: infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+    ok 5 - infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+      ---
+      duration_ms: 0.8339
+      ...
+    # Subtest: keeps fresh and delicate finishes explicit without adding imaginary ingredients
+    ok 6 - keeps fresh and delicate finishes explicit without adding imaginary ingredients
+      ---
+      duration_ms: 0.9362
+      ...
+    # Subtest: uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+    ok 7 - uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+      ---
+      duration_ms: 0.8137
+      ...
+    # Subtest: allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+    ok 8 - allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+      ---
+      duration_ms: 1369.5595
+      ...
+    # Subtest: defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+    ok 9 - defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+      ---
+      duration_ms: 1.241
+      ...
+    # Subtest: lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+    ok 10 - lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+      ---
+      duration_ms: 0.7914
+      ...
+    # Subtest: rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+    ok 11 - rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+      ---
+      duration_ms: 0.3992
+      ...
+    # Subtest: blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+    ok 12 - blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+      ---
+      duration_ms: 1.3952
+      ...
+    1..12
+ok 8 - quantified regional cooking stages
+  ---
+  duration_ms: 1386.0345
+  type: 'suite'
+  ...
+1..8
+# tests 30
+# suites 2
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3884.0059

@@ -1,0 +1,114 @@
+MEALPLANNER AU / FUSION TABLE - ANDROID CULINARY RELEASE
+27 October 2026
+
+Public APK: https://gearsqueens.online/downloads/MealPlannerAU.apk
+Version: 1.5.5 / versionCode 12 / au.mealplanner
+Bytes: 13896349
+SHA-256: e36d9e5568ef28f383131698880cd84e9399c9e353ecf33568e0ab4caf8f5fab
+Signing certificate SHA-256: 62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6
+Same verified signing certificate as the preceding 1.5.3/code10 APK.
+
+Scope
+
+This is the separate native Kotlin/Compose application at D:\MealPlannerAU.
+It has its own offline generators; the website deployment cannot update it.
+The pass covers its existing 8 Fusion cuisines, 8 Studio mains, 12 Studio flavour
+choices, 5 heats, all 74 native sides and all 27 cookable demonstration meals.
+The two diagnostic examples retain their IDs and diagnostic ingredient tags but
+are explicitly not cookable, cannot be planned, and cannot be fused.
+This does not add the full arbitrary 76-region website builder to Android.
+
+All native sides and base meals now have ordered, measured preparation, cooking
+and finishing steps, realistic estimates and equipment. Regional ingredients
+receive appropriate tempering/blooming/liquid/infusion/off-heat/finishing stages.
+Main methods retain the saved meal's form and cooking endpoint. A parma stays a
+crumbed cutlet with a cheese melt; wet accompaniment does not destroy its crumb.
+Quantities are allocated once. Seeded remixes preserve the original main and starch; extra fish, prawns and tofu are no longer random additions. Fresh herbs follow each selected cuisine rather than a universal coriander garnish.
+Cooked rice is distinct from dry rice; unknown product costs remain unknown.
+Cassava sides require commercially processed fully cooked product.
+
+The cooking/pantry panel now has Show cooking method. Template/demo measured
+quantities follow the planned servings; per-person fish sizes, cut thickness,
+temperatures and times remain fixed. User/imported instructions retain their
+original yield with an explicit adaptation note rather than rewriting them.
+
+The bundled website catalogue was refreshed to 9,292 templates: 8,500 classic
+variants plus 792 curated ingredient-led plates across 10 dietary variants.
+It includes method notes/equipment and contentVersion
+20261027-wide-catalogue-quality. The planner streams one template at a time on
+an IO dispatcher and retains the selected dietary variant; it no longer builds
+a full 77 MB String plus all ten dietary recipe graphs for each weekly plan.
+Asset bytes: 76,785,017
+Asset SHA-256: af72fdf6e4ee2eba32adc9cc7d30520b66e078a1937f1ca4bd948fa05f33a1e8
+
+Catalogue import preserves mollusc, lupin and celery tags; declared celery also
+matches a custom celery exclusion even when a stock name is generic. Celery
+and mustard now have allergy choices. Declared animal-product/seafood tags drive
+vegan/vegetarian checks. These are recorded ingredient filters, not packet or
+cross-contact guarantees.
+
+Locked recipe snapshots are retained when refreshing the catalogue, including
+their shopping ingredients. Filter warnings evaluate that actual saved snapshot
+even after switching dietary variants, appear in plan notes and the visible
+completion banner. A missing locked snapshot is explicitly reported.
+
+Verification
+
+Final offline Gradle testDebugUnitTest: 126 tests, 18 suites, zero failures,
+errors or skipped tests. Full Android repository/ViewModel/Compose compilation
+passed, not just isolated domain compilation. Tests include 7,680 Studio input
+combinations and 8,640 built-in-base/cuisine/seed remixes preserving the main and starch, all native Fusion cuisines and built-in bases, parma/seed/filter
+checks, every side's measured allocation, all 27 complete base methods, all
+9,292 catalogue identities/counts/positive ingredients and selected-variant
+reader parsing, display scaling and locked-snapshot filter regressions.
+
+Initial full testing exposed out-of-memory catalogue test setup and stale
+expectations that cooked rice had a dry-rice price and pasta had a second rice
+starch. Tests now stream the complete catalogue and retain selected slices,
+check actual unknown cooked-rice cost, and require the coherent pasta structure.
+The initial failed log is retained; the final full Gradle run passed.
+
+Final combined offline Gradle testDebugUnitTest + assembleRelease passed (wide-android-final-build.log). Android apksigner verified both old/new APKs and
+the identical signer; aapt confirms application ID/versionCode/versionName.
+ZIP integrity and bundled catalogue SHA-256 match the audited asset. All 76
+manifested source/test/build/asset files were unchanged through testing/build:
+65c863757eda98b4717d6d8ca89662873c5ed023294939eead5401b5a843a2ca
+
+No phone/emulator was connected. No device installation, screen interaction,
+upgrade-data behaviour or performance on a real handset is claimed here.
+Recipes remain template-generated and not kitchen-tested.
+
+Delivery and rollback
+
+Local signed copies: D:\MealPlannerAU\dist\MealPlannerAU.apk and
+D:\MealPlannerAU\dist\MealPlannerAU-1.5.5-code12.apk.
+Prior 1.5.3/code10 and interim 1.5.4/code11 signed binaries were preserved and
+hash-verified in D:\MealPlannerAU\dist\archive. The interim 1.5.4 build was briefly
+public during verification, then superseded after the final content review
+removed random extra proteins and corrected the regional herb garnish.
+
+Server target: /var/www/html/downloads/MealPlannerAU.apk, root:root, mode 644.
+Previous 1.5.4 APK was verified and backed up at
+/home/blkph0x/fusion-deploy-backups/android-1.5.5-code12/MealPlannerAU-1.5.4-code11.apk,
+then atomically replaced with the final verified APK. Original 1.5.3 is retained
+in fusion-deploy-backups/android-1.5.4-code11/MealPlannerAU-1.5.3-code10.apk.
+The public HTTPS download is 200 and byte-for-byte the signed 1.5.5 build;
+existing no-cache response retained.
+Server source: /home/blkph0x/fusion-releases/android-1.5.5-code12/MealPlannerAU.apk.
+Restore a preserved APK atomically to roll back the public download; an
+installed higher-version app will not silently downgrade itself.
+
+Install the new APK as an update and create a fresh Fusion Table week or Studio
+meal. Existing saved recipes retain their stored instructions. To use rewritten
+built-in examples, explicitly use Load example recipes; it refreshes those
+example IDs, so finish any older planned example before choosing that refresh.
+No automatic saved-recipe database rewrite was introduced.
+
+Evidence is under D:\fusion-table\docs\audit-evidence-2026-10-27\wide-android-*:
+Gradle logs, zipped JUnit XML/summary, source manifest, APK identity, signature
+reports, badging and the independently verified public download record.
+
+Regional herb references: Japanese shiso guidance from the author at
+https://www.justonecookbook.com/shiso-perilla/ and Korean perilla guidance at
+https://www.maangchi.com/ingredient/perilla-leaves . These support the herb
+selection; they do not establish that generated meals are kitchen-tested.

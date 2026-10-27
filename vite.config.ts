@@ -1,7 +1,9 @@
 import vinext from "vinext";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
 import { readExecutionProfile } from "./scripts/execution-profile.mjs";
+import { readRuntimeProfile } from "./scripts/runtime-profile.mjs";
 import { configureToolEnvironment } from "./scripts/tool-environment.mjs";
 import { sites } from "./scripts/vite/sites-vite-plugin";
 import { connectorPreview } from "./scripts/vite/connector-preview-plugin.mjs";
@@ -38,14 +40,49 @@ const localBindingConfig = {
 };
 
 export default defineConfig(async ({ command }) => {
-  configureToolEnvironment(process.cwd());
+  const nodeRuntime = readRuntimeProfile() === "node";
+  if (!nodeRuntime) configureToolEnvironment(process.cwd());
 
-  // Wrangler snapshots its log path while the Cloudflare plugin is imported.
-  const { cloudflare } = await import("@cloudflare/vite-plugin");
+  // Import Worker tooling only for the Worker profile. Normal Node requests need
+  // real filesystem storage for the shared ledger, not a Worker virtual FS.
+  const workerPlugins = [];
+  if (!nodeRuntime) {
+    // Wrangler snapshots its log path while the Cloudflare plugin is imported.
+    const { cloudflare } = await import("@cloudflare/vite-plugin");
+    workerPlugins.push(connectorPreview(), cloudflare({
+      viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
+      inspectorPort: false,
+      config: {
+        ...localBindingConfig,
+        ...(command === "serve" ? {
+          services: [{ binding: "CONNECTORS", service: "sites-connector-preview", entrypoint: "ConnectorPreview" }],
+        } : {}),
+      },
+      ...(command === "serve" ? {
+        auxiliaryWorkers: [{
+          config: {
+            name: "sites-connector-preview",
+            main: "./scripts/connector-preview/worker.mjs",
+            compatibility_date: "2026-05-15",
+          },
+        }],
+      } : {}),
+    }));
+  }
 
   return {
+    ...(nodeRuntime ? { cacheDir: "node_modules/.vite-fusion-node" } : {}),
+    ...(nodeRuntime ? { resolve: { alias: {
+      "cloudflare:workers": fileURLToPath(new URL("./scripts/node-worker-env.mjs", import.meta.url)),
+    } } } : {}),
+    // Match the host profile without keeping an uncommitted /fusion patch.
+    define: {
+      "process.env.NEXT_PUBLIC_BASE_PATH": JSON.stringify((process.env.NEXT_PUBLIC_BASE_PATH || "").replace(/\/$/, "")),
+    },
     server: {
-      ...(managedLinux
+      ...(nodeRuntime
+        ? { host: "127.0.0.1", strictPort: true }
+        : managedLinux
         ? { host: "0.0.0.0", allowedHosts: ["terminal.local"] }
         : {}),
       ...(isCodexSeatbeltSandbox
@@ -54,39 +91,8 @@ export default defineConfig(async ({ command }) => {
     },
     plugins: [
       vinext(),
-      sites({ mockAuth: !managedLinux }),
-      connectorPreview(),
-      cloudflare({
-        viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
-        inspectorPort: false,
-        config: {
-          ...localBindingConfig,
-          ...(command === "serve"
-            ? {
-                services: [
-                  {
-                    binding: "CONNECTORS",
-                    service: "sites-connector-preview",
-                    entrypoint: "ConnectorPreview",
-                  },
-                ],
-              }
-            : {}),
-        },
-        ...(command === "serve"
-          ? {
-              auxiliaryWorkers: [
-                {
-                  config: {
-                    name: "sites-connector-preview",
-                    main: "./scripts/connector-preview/worker.mjs",
-                    compatibility_date: "2026-05-15",
-                  },
-                },
-              ],
-            }
-          : {}),
-      }),
+      sites({ mockAuth: nodeRuntime || !managedLinux }),
+      ...workerPlugins,
     ],
   };
 });

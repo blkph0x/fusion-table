@@ -1,0 +1,5790 @@
+{
+  "schemaVersion": 1,
+  "run": {
+    "definition": "canonical-medium-four-authored-v1",
+    "source": {
+      "sha256": "a0cd84856437962059e73cd555c8c20ec30ced66bcb06d9010589732294c239e",
+      "files": 69,
+      "scope": "lib/**/*.ts and both catalogue auditors"
+    },
+    "shard": {
+      "index": 0,
+      "count": 6
+    },
+    "total": 20414810,
+    "scheduled": 3402469,
+    "chunkRecords": 100000,
+    "gzipLevel": 1,
+    "catalogue": {
+      "mealRegions": 76,
+      "sides": 90,
+      "classics": 34,
+      "classicRegions": 25,
+      "diets": 5,
+      "rows": 2984,
+      "dietRows": {
+        "balanced": {
+          "default": 266,
+          "chosenCut": 641
+        },
+        "vegetarian": {
+          "default": 148,
+          "chosenCut": 0
+        },
+        "vegan": {
+          "default": 129,
+          "chosenCut": 0
+        },
+        "gluten-free": {
+          "default": 266,
+          "chosenCut": 641
+        },
+        "dairy-free": {
+          "default": 252,
+          "chosenCut": 641
+        }
+      }
+    }
+  },
+  "status": "complete",
+  "coverageComplete": true,
+  "passed": true,
+  "startedAt": "2026-10-27T05:58:11.784Z",
+  "updatedAt": "2026-10-27T07:05:18.727Z",
+  "processed": 3402469,
+  "failedCases": 0,
+  "warningCases": 0,
+  "issueCounts": {},
+  "examples": [],
+  "chunks": [
+    {
+      "file": "cases-000000.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 0,
+      "lastIndex": 599994,
+      "bytes": 3178222,
+      "sha256": "3ef75bde0f592e670ebbe8c10bc031efca25725174cd9b3e9fdda42f0e6b4575"
+    },
+    {
+      "file": "cases-000001.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 600000,
+      "lastIndex": 1199994,
+      "bytes": 3153620,
+      "sha256": "0bcd7910d0f18ad3050653537e89d6faa2eb0c282aa1905364fd851291a459e4"
+    },
+    {
+      "file": "cases-000002.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 1200000,
+      "lastIndex": 1799994,
+      "bytes": 3230386,
+      "sha256": "00e1824e4f1e2e7272042fcbf26edddc918477d57b5578def0dcf76e21ad4728"
+    },
+    {
+      "file": "cases-000003.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 1800000,
+      "lastIndex": 2399994,
+      "bytes": 3256253,
+      "sha256": "cc6fd89d3d18721c2c594b510552dd8eab3aca5c2a9604fdf03494416cdc1de6"
+    },
+    {
+      "file": "cases-000004.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 2400000,
+      "lastIndex": 2999994,
+      "bytes": 3151457,
+      "sha256": "1e34650b87562ca7e54ee0064fcdd2468a2ea4f1237a1c4276a85ab145ee2f6a"
+    },
+    {
+      "file": "cases-000005.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 3000000,
+      "lastIndex": 3599994,
+      "bytes": 3218349,
+      "sha256": "73b225bb6b1812519118f546caf8736587d3bc1f9b4fc1ffa98ed550b620d5fc"
+    },
+    {
+      "file": "cases-000006.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 3600000,
+      "lastIndex": 4199994,
+      "bytes": 3182467,
+      "sha256": "3a5fb5af3b0e0db810ad455a91806737b1e247f607f5126b45addcc8ceba349c"
+    },
+    {
+      "file": "cases-000007.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 4200000,
+      "lastIndex": 4799994,
+      "bytes": 3177633,
+      "sha256": "24b3c8007eb71c7d4d629aec23fd33a8a25e337f87ebd86962ef06e10be37ab7"
+    },
+    {
+      "file": "cases-000008.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 4800000,
+      "lastIndex": 5399994,
+      "bytes": 3207042,
+      "sha256": "ab6ad82a3b3e067394be1fa8315479d8b4b40aed4b4d368c0b0d2474db393ce4"
+    },
+    {
+      "file": "cases-000009.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 5400000,
+      "lastIndex": 5999994,
+      "bytes": 3184601,
+      "sha256": "b095fe8a8f8dad92c50ec96a61885d5184df415c620770e0f164238c95d6e162"
+    },
+    {
+      "file": "cases-000010.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 6000000,
+      "lastIndex": 6599994,
+      "bytes": 3201710,
+      "sha256": "c50b589a770ca2526a6aa341b9f3218e77f48f6294967dba4e96787f156c1b21"
+    },
+    {
+      "file": "cases-000011.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 6600000,
+      "lastIndex": 7199994,
+      "bytes": 3186413,
+      "sha256": "176135759a9f06a4aa1e6d62cb19dd2d561287cd0312f5203b53177a7eadca29"
+    },
+    {
+      "file": "cases-000012.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 7200000,
+      "lastIndex": 7799994,
+      "bytes": 3142163,
+      "sha256": "604c8b12e4ed103fc0581103f3c1045507718d843277625808c0e35b4287b59f"
+    },
+    {
+      "file": "cases-000013.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 7800000,
+      "lastIndex": 8399994,
+      "bytes": 3130896,
+      "sha256": "08a883b268feedd6d4faad221211935ab4d96d35033c6f8f6352c862043256fb"
+    },
+    {
+      "file": "cases-000014.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 8400000,
+      "lastIndex": 8999994,
+      "bytes": 3084375,
+      "sha256": "af46c29bbc9210cdb08810c1e3d53532662a5b089eace029c39cef014e2e6e76"
+    },
+    {
+      "file": "cases-000015.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 9000000,
+      "lastIndex": 9599994,
+      "bytes": 3141046,
+      "sha256": "3f8005b50e3ff51499837c61812a74438714d53f414ef3e8d2e04b060c4ef5d4"
+    },
+    {
+      "file": "cases-000016.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 9600000,
+      "lastIndex": 10199994,
+      "bytes": 3188513,
+      "sha256": "c0b55e641bc29ae905ea425dfa05b62fa8c978c5ebcfaddd23c7322f4f477368"
+    },
+    {
+      "file": "cases-000017.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 10200000,
+      "lastIndex": 10799994,
+      "bytes": 3143394,
+      "sha256": "0899ab4c542c7a4360e1f75556fca6e03e19141313fbafe5d03316eac38c6e80"
+    },
+    {
+      "file": "cases-000018.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 10800000,
+      "lastIndex": 11399994,
+      "bytes": 3120707,
+      "sha256": "16f505d1c7f0a1b4578bb6ce4fe9872137af6d465a80e77091ecce35f568f506"
+    },
+    {
+      "file": "cases-000019.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 11400000,
+      "lastIndex": 11999994,
+      "bytes": 3135817,
+      "sha256": "d7f883b2c67e48ea39dacf190b9c59b9aa7b360fdd0802a38dc337bd8c705aa7"
+    },
+    {
+      "file": "cases-000020.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 12000000,
+      "lastIndex": 12599994,
+      "bytes": 3143610,
+      "sha256": "8c09507ed9809f88c8407179847a739c7fce00d49e09559eb8285903e2edd436"
+    },
+    {
+      "file": "cases-000021.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 12600000,
+      "lastIndex": 13199994,
+      "bytes": 3149861,
+      "sha256": "4ad9976d4b559fe9d918cfd8bb7eb0b70b45c1f3a7cb2fee2576497a731f04ae"
+    },
+    {
+      "file": "cases-000022.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 13200000,
+      "lastIndex": 13799994,
+      "bytes": 3141211,
+      "sha256": "08ee2640a859eab32694ce2e983506950eadf4e82df3e3bbd27965762ade86ff"
+    },
+    {
+      "file": "cases-000023.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 13800000,
+      "lastIndex": 14399994,
+      "bytes": 3158282,
+      "sha256": "0f38596fde1f42927adcbb224c66006c129bf811b657e534addd0c95557cad64"
+    },
+    {
+      "file": "cases-000024.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 14400000,
+      "lastIndex": 14999994,
+      "bytes": 3134340,
+      "sha256": "7448ab772683b138cd5d3987b2f81c20adbf78f455f0941c2a253f9f5537b58b"
+    },
+    {
+      "file": "cases-000025.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 15000000,
+      "lastIndex": 15599994,
+      "bytes": 3126236,
+      "sha256": "6d2bd11d6cb1e5ef0e6314f27a6eff0c428749be83682218acd7989e74ff1c83"
+    },
+    {
+      "file": "cases-000026.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 15600000,
+      "lastIndex": 16199994,
+      "bytes": 3202209,
+      "sha256": "63bcac670555005fe4feef0d90ee1bd2bac145fb6980cf7457c3c2ba822c8d3b"
+    },
+    {
+      "file": "cases-000027.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 16200000,
+      "lastIndex": 16799994,
+      "bytes": 3197826,
+      "sha256": "e5cbcb55781765aee9f801f1ef631f594c053db827e66a58024b6db0ef264dc1"
+    },
+    {
+      "file": "cases-000028.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 16800000,
+      "lastIndex": 17399994,
+      "bytes": 3121138,
+      "sha256": "80074d684e45a6ed02bd19e8ff930a9f6c3b8ceb92a6e724ce27cfe156f8c2cd"
+    },
+    {
+      "file": "cases-000029.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 17400000,
+      "lastIndex": 17999994,
+      "bytes": 3171482,
+      "sha256": "6dc0366f429268778d00285e65fdf33e3555bfe3ab623ba83337f891de251ccf"
+    },
+    {
+      "file": "cases-000030.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 18000000,
+      "lastIndex": 18599994,
+      "bytes": 3157230,
+      "sha256": "1e116773a06a01d27d9bb3a06f11e4201ccd301f071245a459eadeaec485eb72"
+    },
+    {
+      "file": "cases-000031.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 18600000,
+      "lastIndex": 19199994,
+      "bytes": 3147321,
+      "sha256": "2c9bbc59b1ec52ad3c0cc0a9727b326e8cae282c81da26bffb5fa17e42ab3573"
+    },
+    {
+      "file": "cases-000032.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 19200000,
+      "lastIndex": 19799994,
+      "bytes": 3164808,
+      "sha256": "1d4834ea4acc5c7239a5b5c4ad498d6bdc36bff1e6102dbb75d8105faaebea05"
+    },
+    {
+      "file": "cases-000033.ndjson.gz",
+      "records": 100000,
+      "firstIndex": 19800000,
+      "lastIndex": 20399994,
+      "bytes": 3164830,
+      "sha256": "743eddceb67a1ff3176581eceee3e49410e57740adb82d5b64d5b6da69baecf2"
+    },
+    {
+      "file": "cases-000034.ndjson.gz",
+      "records": 2469,
+      "firstIndex": 20400000,
+      "lastIndex": 20414808,
+      "bytes": 87618,
+      "sha256": "38b1cc554aefce423c7b03130f893a36b3e01e269dfe30531a925a4a84df308f"
+    }
+  ],
+  "dictionary": {
+    "file": "ingredients.ndjson",
+    "entries": 883,
+    "bytes": 302614,
+    "sha256": "d0805acce89135e8086f4b4cda1114fda77cf281e97d2d711f061944a5768d20"
+  },
+  "ingredientSummary": {
+    "1": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "2": {
+      "occurrences": 5968,
+      "totalAmount": 1790400,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "3": {
+      "occurrences": 226784,
+      "totalAmount": 90713600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "4": {
+      "occurrences": 3401760,
+      "totalAmount": 51026400,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "5": {
+      "occurrences": 1656120,
+      "totalAmount": 24841800,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "6": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "7": {
+      "occurrences": 280395,
+      "totalAmount": 560790,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "8": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "9": {
+      "occurrences": 44760,
+      "totalAmount": 11190,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "10": {
+      "occurrences": 31155,
+      "totalAmount": 31155,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "11": {
+      "occurrences": 402840,
+      "totalAmount": 402840,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "12": {
+      "occurrences": 537120,
+      "totalAmount": 8056800,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "13": {
+      "occurrences": 179040,
+      "totalAmount": 179040,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "14": {
+      "occurrences": 268560,
+      "totalAmount": 268560,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "15": {
+      "occurrences": 3401760,
+      "totalAmount": 10253160,
+      "minimum": 1,
+      "maximum": 5
+    },
+    "16": {
+      "occurrences": 2367780,
+      "totalAmount": 445642650,
+      "minimum": 60,
+      "maximum": 920
+    },
+    "17": {
+      "occurrences": 114000,
+      "totalAmount": 9120000,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "18": {
+      "occurrences": 248520,
+      "totalAmount": 26402400,
+      "minimum": 60,
+      "maximum": 140
+    },
+    "19": {
+      "occurrences": 226784,
+      "totalAmount": 68035200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "20": {
+      "occurrences": 226784,
+      "totalAmount": 68035200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "21": {
+      "occurrences": 226784,
+      "totalAmount": 56696000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "22": {
+      "occurrences": 2572296,
+      "totalAmount": 4691024,
+      "minimum": 1,
+      "maximum": 3
+    },
+    "23": {
+      "occurrences": 805680,
+      "totalAmount": 22156200,
+      "minimum": 20,
+      "maximum": 30
+    },
+    "24": {
+      "occurrences": 226784,
+      "totalAmount": 63499520,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "25": {
+      "occurrences": 1020528,
+      "totalAmount": 225149050,
+      "minimum": 150,
+      "maximum": 600
+    },
+    "26": {
+      "occurrences": 226784,
+      "totalAmount": 90713600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "27": {
+      "occurrences": 226784,
+      "totalAmount": 56696000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "28": {
+      "occurrences": 226784,
+      "totalAmount": 90713600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "29": {
+      "occurrences": 149112,
+      "totalAmount": 4473360,
+      "minimum": 30,
+      "maximum": 30
+    },
+    "30": {
+      "occurrences": 80180,
+      "totalAmount": 641440,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "31": {
+      "occurrences": 226784,
+      "totalAmount": 79374400,
+      "minimum": 350,
+      "maximum": 350
+    },
+    "32": {
+      "occurrences": 226784,
+      "totalAmount": 18142720,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "33": {
+      "occurrences": 226784,
+      "totalAmount": 4535680,
+      "minimum": 20,
+      "maximum": 20
+    },
+    "34": {
+      "occurrences": 402840,
+      "totalAmount": 9399600,
+      "minimum": 20,
+      "maximum": 30
+    },
+    "35": {
+      "occurrences": 157852,
+      "totalAmount": 44198560,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "36": {
+      "occurrences": 226784,
+      "totalAmount": 68035200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "37": {
+      "occurrences": 226784,
+      "totalAmount": 6803520,
+      "minimum": 30,
+      "maximum": 30
+    },
+    "38": {
+      "occurrences": 80180,
+      "totalAmount": 22450400,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "39": {
+      "occurrences": 453568,
+      "totalAmount": 90713600,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "40": {
+      "occurrences": 17912,
+      "totalAmount": 5254080,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "41": {
+      "occurrences": 226784,
+      "totalAmount": 90713600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "42": {
+      "occurrences": 80180,
+      "totalAmount": 641440,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "43": {
+      "occurrences": 226784,
+      "totalAmount": 45356800,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "44": {
+      "occurrences": 453568,
+      "totalAmount": 136070400,
+      "minimum": 200,
+      "maximum": 400
+    },
+    "45": {
+      "occurrences": 157852,
+      "totalAmount": 44198560,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "46": {
+      "occurrences": 226784,
+      "totalAmount": 56696000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "47": {
+      "occurrences": 453568,
+      "totalAmount": 12473120,
+      "minimum": 25,
+      "maximum": 30
+    },
+    "48": {
+      "occurrences": 226784,
+      "totalAmount": 68035200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "49": {
+      "occurrences": 226784,
+      "totalAmount": 68035200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "50": {
+      "occurrences": 226784,
+      "totalAmount": 136070400,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "51": {
+      "occurrences": 226784,
+      "totalAmount": 27214080,
+      "minimum": 120,
+      "maximum": 120
+    },
+    "52": {
+      "occurrences": 224124,
+      "totalAmount": 67237200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "53": {
+      "occurrences": 226784,
+      "totalAmount": 56696000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "54": {
+      "occurrences": 226784,
+      "totalAmount": 63499520,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "55": {
+      "occurrences": 226784,
+      "totalAmount": 56696000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "56": {
+      "occurrences": 2984,
+      "totalAmount": 895200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "57": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "58": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "59": {
+      "occurrences": 8960,
+      "totalAmount": 2628160,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "60": {
+      "occurrences": 35808,
+      "totalAmount": 10742400,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "61": {
+      "occurrences": 358080,
+      "totalAmount": 5371200,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "62": {
+      "occurrences": 537120,
+      "totalAmount": 10742400,
+      "minimum": 20,
+      "maximum": 20
+    },
+    "63": {
+      "occurrences": 179040,
+      "totalAmount": 1074240,
+      "minimum": 6,
+      "maximum": 6
+    },
+    "64": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "65": {
+      "occurrences": 626640,
+      "totalAmount": 2327520,
+      "minimum": 2,
+      "maximum": 4
+    },
+    "66": {
+      "occurrences": 1387560,
+      "totalAmount": 48102080,
+      "minimum": 30,
+      "maximum": 60
+    },
+    "67": {
+      "occurrences": 1835160,
+      "totalAmount": 27527400,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "68": {
+      "occurrences": 107427,
+      "totalAmount": 31511880,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "69": {
+      "occurrences": 8952,
+      "totalAmount": 2685600,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "70": {
+      "occurrences": 895200,
+      "totalAmount": 1342800,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "71": {
+      "occurrences": 89520,
+      "totalAmount": 134280,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "72": {
+      "occurrences": 134280,
+      "totalAmount": 134280,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "73": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "74": {
+      "occurrences": 44760,
+      "totalAmount": 358080,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "75": {
+      "occurrences": 716160,
+      "totalAmount": 178416000,
+      "minimum": 200,
+      "maximum": 400
+    },
+    "76": {
+      "occurrences": 26864,
+      "totalAmount": 7880000,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "77": {
+      "occurrences": 50728,
+      "totalAmount": 15218400,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "78": {
+      "occurrences": 89520,
+      "totalAmount": 179040,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "79": {
+      "occurrences": 671400,
+      "totalAmount": 335700,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "80": {
+      "occurrences": 492360,
+      "totalAmount": 738540,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "81": {
+      "occurrences": 313320,
+      "totalAmount": 290940,
+      "minimum": 0.5,
+      "maximum": 1
+    },
+    "82": {
+      "occurrences": 1387560,
+      "totalAmount": 56218560,
+      "minimum": 15,
+      "maximum": 60
+    },
+    "83": {
+      "occurrences": 152190,
+      "totalAmount": 44642320,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "84": {
+      "occurrences": 47744,
+      "totalAmount": 14323200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "85": {
+      "occurrences": 134280,
+      "totalAmount": 201420,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "86": {
+      "occurrences": 268560,
+      "totalAmount": 313320,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "87": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "88": {
+      "occurrences": 760920,
+      "totalAmount": 11413800,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "89": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "90": {
+      "occurrences": 47744,
+      "totalAmount": 14323200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "91": {
+      "occurrences": 95488,
+      "totalAmount": 27691520,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "92": {
+      "occurrences": 402840,
+      "totalAmount": 604260,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "93": {
+      "occurrences": 134280,
+      "totalAmount": 134280,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "94": {
+      "occurrences": 31155,
+      "totalAmount": 31155,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "95": {
+      "occurrences": 44760,
+      "totalAmount": 671400,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "96": {
+      "occurrences": 313320,
+      "totalAmount": 156660,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "97": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "98": {
+      "occurrences": 62310,
+      "totalAmount": 93465,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "99": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "100": {
+      "occurrences": 134280,
+      "totalAmount": 2014200,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "101": {
+      "occurrences": 134280,
+      "totalAmount": 13428.00000003132,
+      "minimum": 0.1,
+      "maximum": 0.1
+    },
+    "102": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "103": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "104": {
+      "occurrences": 44760,
+      "totalAmount": 67140,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "105": {
+      "occurrences": 313320,
+      "totalAmount": 313320,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "106": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "107": {
+      "occurrences": 44760,
+      "totalAmount": 358080,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "108": {
+      "occurrences": 32824,
+      "totalAmount": 9847200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "109": {
+      "occurrences": 179040,
+      "totalAmount": 2685600,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "110": {
+      "occurrences": 44760,
+      "totalAmount": 447600,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "111": {
+      "occurrences": 98479,
+      "totalAmount": 28887080,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "112": {
+      "occurrences": 89520,
+      "totalAmount": 44760,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "113": {
+      "occurrences": 447600,
+      "totalAmount": 1342800,
+      "minimum": 3,
+      "maximum": 3
+    },
+    "114": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "115": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "116": {
+      "occurrences": 179040,
+      "totalAmount": 179040,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "117": {
+      "occurrences": 71620,
+      "totalAmount": 21127840,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "118": {
+      "occurrences": 134280,
+      "totalAmount": 268560,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "119": {
+      "occurrences": 44760,
+      "totalAmount": 671400,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "120": {
+      "occurrences": 47744,
+      "totalAmount": 14084480,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "121": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "122": {
+      "occurrences": 31155,
+      "totalAmount": 15577.5,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "123": {
+      "occurrences": 44760,
+      "totalAmount": 447600,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "124": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "125": {
+      "occurrences": 223800,
+      "totalAmount": 111900,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "126": {
+      "occurrences": 44760,
+      "totalAmount": 89520,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "127": {
+      "occurrences": 2984,
+      "totalAmount": 895200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "128": {
+      "occurrences": 447600,
+      "totalAmount": 671400,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "129": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "130": {
+      "occurrences": 89520,
+      "totalAmount": 89520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "131": {
+      "occurrences": 179040,
+      "totalAmount": 179040,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "132": {
+      "occurrences": 8955,
+      "totalAmount": 2626760,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "133": {
+      "occurrences": 2984,
+      "totalAmount": 895200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "134": {
+      "occurrences": 179040,
+      "totalAmount": 89520,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "135": {
+      "occurrences": 44760,
+      "totalAmount": 134280,
+      "minimum": 3,
+      "maximum": 3
+    },
+    "136": {
+      "occurrences": 8952,
+      "totalAmount": 2625920,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "137": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "138": {
+      "occurrences": 134280,
+      "totalAmount": 2014200,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "139": {
+      "occurrences": 358080,
+      "totalAmount": 716160,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "140": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "141": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "142": {
+      "occurrences": 89520,
+      "totalAmount": 89520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "143": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "144": {
+      "occurrences": 2984,
+      "totalAmount": 895200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "145": {
+      "occurrences": 134280,
+      "totalAmount": 134280,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "146": {
+      "occurrences": 8952,
+      "totalAmount": 2625920,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "147": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "148": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "149": {
+      "occurrences": 134280,
+      "totalAmount": 134280,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "150": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "151": {
+      "occurrences": 89520,
+      "totalAmount": 89520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "152": {
+      "occurrences": 179040,
+      "totalAmount": 1432320,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "153": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "154": {
+      "occurrences": 223800,
+      "totalAmount": 111900,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "155": {
+      "occurrences": 89520,
+      "totalAmount": 44760,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "156": {
+      "occurrences": 89520,
+      "totalAmount": 89520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "157": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "158": {
+      "occurrences": 2984,
+      "totalAmount": 895200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "159": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "160": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "161": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "162": {
+      "occurrences": 8952,
+      "totalAmount": 2625920,
+      "minimum": 280,
+      "maximum": 300
+    },
+    "163": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "164": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "165": {
+      "occurrences": 44760,
+      "totalAmount": 179040,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "166": {
+      "occurrences": 44760,
+      "totalAmount": 1790400,
+      "minimum": 40,
+      "maximum": 40
+    },
+    "167": {
+      "occurrences": 31155,
+      "totalAmount": 31155,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "168": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "169": {
+      "occurrences": 179040,
+      "totalAmount": 89520,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "170": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "171": {
+      "occurrences": 44760,
+      "totalAmount": 1342800,
+      "minimum": 30,
+      "maximum": 30
+    },
+    "172": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "173": {
+      "occurrences": 44760,
+      "totalAmount": 447600,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "174": {
+      "occurrences": 31155,
+      "totalAmount": 62310,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "175": {
+      "occurrences": 89520,
+      "totalAmount": 22380,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "176": {
+      "occurrences": 44760,
+      "totalAmount": 11190,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "177": {
+      "occurrences": 44760,
+      "totalAmount": 89520,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "178": {
+      "occurrences": 44760,
+      "totalAmount": 67140,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "179": {
+      "occurrences": 44760,
+      "totalAmount": 89520,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "180": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "181": {
+      "occurrences": 44760,
+      "totalAmount": 67140,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "182": {
+      "occurrences": 31155,
+      "totalAmount": 46732.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "183": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "184": {
+      "occurrences": 44760,
+      "totalAmount": 67140,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "185": {
+      "occurrences": 134280,
+      "totalAmount": 134280,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "186": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "187": {
+      "occurrences": 44760,
+      "totalAmount": 1790400,
+      "minimum": 40,
+      "maximum": 40
+    },
+    "188": {
+      "occurrences": 44760,
+      "totalAmount": 67140,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "189": {
+      "occurrences": 89520,
+      "totalAmount": 179040,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "190": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "191": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "192": {
+      "occurrences": 268560,
+      "totalAmount": 134280,
+      "minimum": 0.25,
+      "maximum": 1
+    },
+    "193": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "194": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "195": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "196": {
+      "occurrences": 89520,
+      "totalAmount": 358080,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "197": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "198": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "199": {
+      "occurrences": 44760,
+      "totalAmount": 22380,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "200": {
+      "occurrences": 44760,
+      "totalAmount": 44760,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "201": {
+      "occurrences": 44760,
+      "totalAmount": 89520,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "202": {
+      "occurrences": 89520,
+      "totalAmount": 5371200,
+      "minimum": 60,
+      "maximum": 60
+    },
+    "203": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "204": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "205": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "206": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "207": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "208": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "209": {
+      "occurrences": 30780,
+      "totalAmount": 30780000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "210": {
+      "occurrences": 30780,
+      "totalAmount": 30780000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "211": {
+      "occurrences": 30780,
+      "totalAmount": 36936000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "212": {
+      "occurrences": 30780,
+      "totalAmount": 36936000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "213": {
+      "occurrences": 27360,
+      "totalAmount": 16416000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "214": {
+      "occurrences": 30780,
+      "totalAmount": 46170000,
+      "minimum": 1500,
+      "maximum": 1500
+    },
+    "215": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "216": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "217": {
+      "occurrences": 20520,
+      "totalAmount": 20520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "218": {
+      "occurrences": 20520,
+      "totalAmount": 20520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "219": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "220": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "221": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "222": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "223": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "224": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "225": {
+      "occurrences": 3420,
+      "totalAmount": 3420000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "226": {
+      "occurrences": 3420,
+      "totalAmount": 3420000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "227": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "228": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "229": {
+      "occurrences": 3420,
+      "totalAmount": 5130000,
+      "minimum": 1500,
+      "maximum": 1500
+    },
+    "230": {
+      "occurrences": 3420,
+      "totalAmount": 3420,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "231": {
+      "occurrences": 3420,
+      "totalAmount": 3420,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "232": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "233": {
+      "occurrences": 11655,
+      "totalAmount": 104895,
+      "minimum": 9,
+      "maximum": 9
+    },
+    "234": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "235": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "236": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "237": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "238": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "239": {
+      "occurrences": 835620,
+      "totalAmount": 125343000,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "240": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "241": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "242": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "243": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "244": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "245": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "246": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "247": {
+      "occurrences": 186960,
+      "totalAmount": 3915900,
+      "minimum": 15,
+      "maximum": 30
+    },
+    "248": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "249": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "250": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "251": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "252": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "253": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "254": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "255": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "256": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "257": {
+      "occurrences": 20520,
+      "totalAmount": 20520,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "258": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "259": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "260": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "261": {
+      "occurrences": 3420,
+      "totalAmount": 3420,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "262": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "263": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "264": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "265": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "266": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "267": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "268": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "269": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "270": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "271": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "272": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "273": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "274": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "275": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "276": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "277": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "278": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "279": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "280": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "281": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "282": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "283": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "284": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "285": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "286": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "287": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "288": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "289": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "290": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "291": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "292": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "293": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "294": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "295": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "296": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "297": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "298": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "299": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "300": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "301": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "302": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "303": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "304": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "305": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "306": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "307": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "308": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "309": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "310": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "311": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "312": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "313": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "314": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "315": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "316": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "317": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "318": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "319": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "320": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "321": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "322": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "323": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "324": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "325": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "326": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "327": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "328": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "329": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "330": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "331": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "332": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "333": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "334": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "335": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "336": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "337": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "338": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "339": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "340": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "341": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "342": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "343": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "344": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "345": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "346": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "347": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "348": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "349": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "350": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "351": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "352": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "353": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "354": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "355": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "356": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "357": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "358": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "359": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "360": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "361": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "362": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "363": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "364": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "365": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "366": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "367": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "368": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "369": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "370": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "371": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "372": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "373": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "374": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "375": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "376": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "377": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "378": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "379": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "380": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "381": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "382": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "383": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "384": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "385": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "386": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "387": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "388": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "389": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "390": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "391": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "392": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "393": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "394": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "395": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "396": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "397": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "398": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "399": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "400": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "401": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "402": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "403": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "404": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "405": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "406": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "407": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "408": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "409": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "410": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "411": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "412": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "413": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "414": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "415": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "416": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "417": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "418": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "419": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "420": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "421": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "422": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "423": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "424": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "425": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "426": {
+      "occurrences": 20520,
+      "totalAmount": 20520000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "427": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "428": {
+      "occurrences": 20520,
+      "totalAmount": 20520000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "429": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "430": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "431": {
+      "occurrences": 10260,
+      "totalAmount": 10260000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "432": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "433": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "434": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "435": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "436": {
+      "occurrences": 3420,
+      "totalAmount": 4788000,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "437": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "438": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "439": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "440": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "441": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "442": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "443": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "444": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "445": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "446": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "447": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "448": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "449": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "450": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "451": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "452": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "453": {
+      "occurrences": 6840,
+      "totalAmount": 9576000,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "454": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "455": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "456": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "457": {
+      "occurrences": 10260,
+      "totalAmount": 10260000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "458": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "459": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "460": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "461": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "462": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "463": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "464": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "465": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "466": {
+      "occurrences": 3420,
+      "totalAmount": 4788000,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "467": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "468": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "469": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "470": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "471": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "472": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "473": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "474": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "475": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "476": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "477": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "478": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "479": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "480": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "481": {
+      "occurrences": 27360,
+      "totalAmount": 16416000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "482": {
+      "occurrences": 23940,
+      "totalAmount": 23940000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "483": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "484": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "485": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "486": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "487": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "488": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "489": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "490": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "491": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "492": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "493": {
+      "occurrences": 3420,
+      "totalAmount": 4104000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "494": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "495": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "496": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "497": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "498": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "499": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "500": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "501": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "502": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "503": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "504": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "505": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "506": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "507": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "508": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "509": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "510": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "511": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "512": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "513": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "514": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "515": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "516": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "517": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "518": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "519": {
+      "occurrences": 6840,
+      "totalAmount": 8208000,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "520": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "521": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "522": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "523": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "524": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "525": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "526": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "527": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "528": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "529": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "530": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "531": {
+      "occurrences": 27360,
+      "totalAmount": 16416000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "532": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "533": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "534": {
+      "occurrences": 23940,
+      "totalAmount": 14364000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "535": {
+      "occurrences": 11400,
+      "totalAmount": 6840000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "536": {
+      "occurrences": 45600,
+      "totalAmount": 27360000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "537": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "538": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "539": {
+      "occurrences": 11400,
+      "totalAmount": 6840000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "540": {
+      "occurrences": 45600,
+      "totalAmount": 27360000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "541": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "542": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "543": {
+      "occurrences": 20520,
+      "totalAmount": 10260000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "544": {
+      "occurrences": 18240,
+      "totalAmount": 145920,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "545": {
+      "occurrences": 4560,
+      "totalAmount": 36480,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "546": {
+      "occurrences": 34200,
+      "totalAmount": 20520000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "547": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "548": {
+      "occurrences": 11400,
+      "totalAmount": 6840000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "549": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "550": {
+      "occurrences": 28500,
+      "totalAmount": 17100000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "551": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "552": {
+      "occurrences": 11400,
+      "totalAmount": 9120000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "553": {
+      "occurrences": 45600,
+      "totalAmount": 36480000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "554": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "555": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "556": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "557": {
+      "occurrences": 39900,
+      "totalAmount": 31920000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "558": {
+      "occurrences": 11400,
+      "totalAmount": 9120000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "559": {
+      "occurrences": 11400,
+      "totalAmount": 9120000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "560": {
+      "occurrences": 45600,
+      "totalAmount": 36480000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "561": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "562": {
+      "occurrences": 34200,
+      "totalAmount": 27360000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "563": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "564": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "565": {
+      "occurrences": 34200,
+      "totalAmount": 27360000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "566": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "567": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "568": {
+      "occurrences": 11400,
+      "totalAmount": 9120000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "569": {
+      "occurrences": 45600,
+      "totalAmount": 36480000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "570": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "571": {
+      "occurrences": 45600,
+      "totalAmount": 36480000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "572": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "573": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "574": {
+      "occurrences": 20520,
+      "totalAmount": 12312000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "575": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "576": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "577": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "578": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "579": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "580": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "581": {
+      "occurrences": 13680,
+      "totalAmount": 8208000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "582": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "583": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "584": {
+      "occurrences": 3420,
+      "totalAmount": 2052000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "585": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "586": {
+      "occurrences": 6840,
+      "totalAmount": 4104000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "587": {
+      "occurrences": 17100,
+      "totalAmount": 10260000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "588": {
+      "occurrences": 31920,
+      "totalAmount": 19152000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "589": {
+      "occurrences": 2280,
+      "totalAmount": 2052000,
+      "minimum": 900,
+      "maximum": 900
+    },
+    "590": {
+      "occurrences": 5320,
+      "totalAmount": 3192000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "591": {
+      "occurrences": 380,
+      "totalAmount": 342000,
+      "minimum": 900,
+      "maximum": 900
+    },
+    "592": {
+      "occurrences": 28500,
+      "totalAmount": 17100000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "593": {
+      "occurrences": 5700,
+      "totalAmount": 3420000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "594": {
+      "occurrences": 34200,
+      "totalAmount": 27360000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "595": {
+      "occurrences": 5700,
+      "totalAmount": 4560000,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "596": {
+      "occurrences": 6840,
+      "totalAmount": 3420000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "597": {
+      "occurrences": 20520,
+      "totalAmount": 10260000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "598": {
+      "occurrences": 77672,
+      "totalAmount": 621376,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "599": {
+      "occurrences": 77672,
+      "totalAmount": 21748160,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "600": {
+      "occurrences": 77672,
+      "totalAmount": 621376,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "601": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "602": {
+      "occurrences": 122445,
+      "totalAmount": 244890,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "603": {
+      "occurrences": 13605,
+      "totalAmount": 13605,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "604": {
+      "occurrences": 1033980,
+      "totalAmount": 200679900,
+      "minimum": 60,
+      "maximum": 920
+    },
+    "605": {
+      "occurrences": 50160,
+      "totalAmount": 4012800,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "606": {
+      "occurrences": 102600,
+      "totalAmount": 10761600,
+      "minimum": 60,
+      "maximum": 140
+    },
+    "607": {
+      "occurrences": 68932,
+      "totalAmount": 551456,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "608": {
+      "occurrences": 68932,
+      "totalAmount": 19300960,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "609": {
+      "occurrences": 68932,
+      "totalAmount": 19300960,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "610": {
+      "occurrences": 68932,
+      "totalAmount": 551456,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "611": {
+      "occurrences": 68932,
+      "totalAmount": 19300960,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "612": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "613": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "614": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "615": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "616": {
+      "occurrences": 13605,
+      "totalAmount": 13605,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "617": {
+      "occurrences": 27210,
+      "totalAmount": 40815,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "618": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "619": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "620": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "621": {
+      "occurrences": 13605,
+      "totalAmount": 6802.5,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "622": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "623": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "624": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "625": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "626": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "627": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "628": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "629": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "630": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "631": {
+      "occurrences": 13605,
+      "totalAmount": 13605,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "632": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "633": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "634": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "635": {
+      "occurrences": 13605,
+      "totalAmount": 27210,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "636": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "637": {
+      "occurrences": 13605,
+      "totalAmount": 20407.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "638": {
+      "occurrences": 17,
+      "totalAmount": 5440,
+      "minimum": 320,
+      "maximum": 320
+    },
+    "639": {
+      "occurrences": 42,
+      "totalAmount": 16800,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "640": {
+      "occurrences": 84,
+      "totalAmount": 84,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "641": {
+      "occurrences": 167,
+      "totalAmount": 459,
+      "minimum": 2,
+      "maximum": 4
+    },
+    "642": {
+      "occurrences": 709,
+      "totalAmount": 2002,
+      "minimum": 2,
+      "maximum": 3
+    },
+    "643": {
+      "occurrences": 13,
+      "totalAmount": 2340,
+      "minimum": 180,
+      "maximum": 180
+    },
+    "644": {
+      "occurrences": 167,
+      "totalAmount": 83.5,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "645": {
+      "occurrences": 23,
+      "totalAmount": 46,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "646": {
+      "occurrences": 285,
+      "totalAmount": 4845,
+      "minimum": 15,
+      "maximum": 20
+    },
+    "647": {
+      "occurrences": 171,
+      "totalAmount": 42.75,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "648": {
+      "occurrences": 58,
+      "totalAmount": 58,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "649": {
+      "occurrences": 58,
+      "totalAmount": 58,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "650": {
+      "occurrences": 58,
+      "totalAmount": 58,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "651": {
+      "occurrences": 58,
+      "totalAmount": 174,
+      "minimum": 3,
+      "maximum": 3
+    },
+    "652": {
+      "occurrences": 23,
+      "totalAmount": 34.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "653": {
+      "occurrences": 23,
+      "totalAmount": 23,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "654": {
+      "occurrences": 8,
+      "totalAmount": 1440,
+      "minimum": 180,
+      "maximum": 180
+    },
+    "655": {
+      "occurrences": 22,
+      "totalAmount": 22,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "656": {
+      "occurrences": 56,
+      "totalAmount": 56,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "657": {
+      "occurrences": 84,
+      "totalAmount": 1260,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "658": {
+      "occurrences": 4,
+      "totalAmount": 1280,
+      "minimum": 320,
+      "maximum": 320
+    },
+    "659": {
+      "occurrences": 56,
+      "totalAmount": 70,
+      "minimum": 1,
+      "maximum": 1.5
+    },
+    "660": {
+      "occurrences": 268,
+      "totalAmount": 317,
+      "minimum": 1,
+      "maximum": 3
+    },
+    "661": {
+      "occurrences": 28,
+      "totalAmount": 56,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "662": {
+      "occurrences": 28,
+      "totalAmount": 14,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "663": {
+      "occurrences": 143,
+      "totalAmount": 143,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "664": {
+      "occurrences": 29,
+      "totalAmount": 58,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "665": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "666": {
+      "occurrences": 29,
+      "totalAmount": 435,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "667": {
+      "occurrences": 29,
+      "totalAmount": 58,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "668": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "669": {
+      "occurrences": 29,
+      "totalAmount": 290,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "670": {
+      "occurrences": 255,
+      "totalAmount": 203.25,
+      "minimum": 0.25,
+      "maximum": 1.5
+    },
+    "671": {
+      "occurrences": 366,
+      "totalAmount": 584,
+      "minimum": 0.5,
+      "maximum": 2.5
+    },
+    "672": {
+      "occurrences": 255,
+      "totalAmount": 163,
+      "minimum": 0.5,
+      "maximum": 1
+    },
+    "673": {
+      "occurrences": 28,
+      "totalAmount": 14,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "674": {
+      "occurrences": 452,
+      "totalAmount": 113,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "675": {
+      "occurrences": 67,
+      "totalAmount": 101,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "676": {
+      "occurrences": 90,
+      "totalAmount": 112,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "677": {
+      "occurrences": 225,
+      "totalAmount": 3095,
+      "minimum": 10,
+      "maximum": 20
+    },
+    "678": {
+      "occurrences": 22,
+      "totalAmount": 28,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "679": {
+      "occurrences": 142,
+      "totalAmount": 199,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "680": {
+      "occurrences": 143,
+      "totalAmount": 344,
+      "minimum": 2,
+      "maximum": 3
+    },
+    "681": {
+      "occurrences": 28,
+      "totalAmount": 28,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "682": {
+      "occurrences": 90,
+      "totalAmount": 90,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "683": {
+      "occurrences": 29,
+      "totalAmount": 2320,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "684": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "685": {
+      "occurrences": 58,
+      "totalAmount": 58,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "686": {
+      "occurrences": 45,
+      "totalAmount": 45,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "687": {
+      "occurrences": 22,
+      "totalAmount": 16.5,
+      "minimum": 0.75,
+      "maximum": 0.75
+    },
+    "688": {
+      "occurrences": 28,
+      "totalAmount": 28,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "689": {
+      "occurrences": 24,
+      "totalAmount": 24,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "690": {
+      "occurrences": 85,
+      "totalAmount": 85,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "691": {
+      "occurrences": 84,
+      "totalAmount": 1120,
+      "minimum": 10,
+      "maximum": 15
+    },
+    "692": {
+      "occurrences": 140,
+      "totalAmount": 140,
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "693": {
+      "occurrences": 84,
+      "totalAmount": 84,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "694": {
+      "occurrences": 28,
+      "totalAmount": 14,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "695": {
+      "occurrences": 112,
+      "totalAmount": 112,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "696": {
+      "occurrences": 28,
+      "totalAmount": 28,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "697": {
+      "occurrences": 23,
+      "totalAmount": 1840,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "698": {
+      "occurrences": 29,
+      "totalAmount": 435,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "699": {
+      "occurrences": 23,
+      "totalAmount": 23,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "700": {
+      "occurrences": 29,
+      "totalAmount": 43.5,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "701": {
+      "occurrences": 57,
+      "totalAmount": 43,
+      "minimum": 0.5,
+      "maximum": 1
+    },
+    "702": {
+      "occurrences": 29,
+      "totalAmount": 7.25,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "703": {
+      "occurrences": 84,
+      "totalAmount": 98,
+      "minimum": 1,
+      "maximum": 1.5
+    },
+    "704": {
+      "occurrences": 28,
+      "totalAmount": 7,
+      "minimum": 0.25,
+      "maximum": 0.25
+    },
+    "705": {
+      "occurrences": 28,
+      "totalAmount": 280,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "706": {
+      "occurrences": 84,
+      "totalAmount": 84,
+      "minimum": 0.5,
+      "maximum": 1.5
+    },
+    "707": {
+      "occurrences": 28,
+      "totalAmount": 2240,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "708": {
+      "occurrences": 28,
+      "totalAmount": 14,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "709": {
+      "occurrences": 56,
+      "totalAmount": 56,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "710": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "711": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "712": {
+      "occurrences": 29,
+      "totalAmount": 29,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "713": {
+      "occurrences": 57,
+      "totalAmount": 855,
+      "minimum": 15,
+      "maximum": 15
+    },
+    "714": {
+      "occurrences": 9,
+      "totalAmount": 4500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "715": {
+      "occurrences": 13,
+      "totalAmount": 104,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "716": {
+      "occurrences": 187,
+      "totalAmount": 45700,
+      "minimum": 200,
+      "maximum": 250
+    },
+    "717": {
+      "occurrences": 139,
+      "totalAmount": 39600,
+      "minimum": 200,
+      "maximum": 300
+    },
+    "718": {
+      "occurrences": 21,
+      "totalAmount": 21,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "719": {
+      "occurrences": 4,
+      "totalAmount": 32,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "720": {
+      "occurrences": 12,
+      "totalAmount": 6000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "721": {
+      "occurrences": 4,
+      "totalAmount": 32,
+      "minimum": 8,
+      "maximum": 8
+    },
+    "722": {
+      "occurrences": 6,
+      "totalAmount": 6,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "723": {
+      "occurrences": 28,
+      "totalAmount": 56,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "724": {
+      "occurrences": 28,
+      "totalAmount": 56,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "725": {
+      "occurrences": 17,
+      "totalAmount": 25,
+      "minimum": 1,
+      "maximum": 2
+    },
+    "726": {
+      "occurrences": 23,
+      "totalAmount": 46,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "727": {
+      "occurrences": 6,
+      "totalAmount": 4.5,
+      "minimum": 0.75,
+      "maximum": 0.75
+    },
+    "728": {
+      "occurrences": 12,
+      "totalAmount": 12,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "729": {
+      "occurrences": 28,
+      "totalAmount": 280,
+      "minimum": 10,
+      "maximum": 10
+    },
+    "730": {
+      "occurrences": 23,
+      "totalAmount": 46,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "731": {
+      "occurrences": 23,
+      "totalAmount": 23,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "732": {
+      "occurrences": 21,
+      "totalAmount": 6720,
+      "minimum": 320,
+      "maximum": 320
+    },
+    "733": {
+      "occurrences": 34,
+      "totalAmount": 22950,
+      "minimum": 150,
+      "maximum": 1200
+    },
+    "734": {
+      "occurrences": 8,
+      "totalAmount": 5400,
+      "minimum": 150,
+      "maximum": 1200
+    },
+    "735": {
+      "occurrences": 6,
+      "totalAmount": 9,
+      "minimum": 1.5,
+      "maximum": 1.5
+    },
+    "736": {
+      "occurrences": 6,
+      "totalAmount": 6,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "737": {
+      "occurrences": 25,
+      "totalAmount": 15000,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "738": {
+      "occurrences": 5,
+      "totalAmount": 20,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "739": {
+      "occurrences": 21,
+      "totalAmount": 1680,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "740": {
+      "occurrences": 21,
+      "totalAmount": 42,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "741": {
+      "occurrences": 26,
+      "totalAmount": 3510,
+      "minimum": 120,
+      "maximum": 150
+    },
+    "742": {
+      "occurrences": 6,
+      "totalAmount": 12,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "743": {
+      "occurrences": 12,
+      "totalAmount": 48,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "744": {
+      "occurrences": 16,
+      "totalAmount": 2160,
+      "minimum": 120,
+      "maximum": 150
+    },
+    "745": {
+      "occurrences": 8,
+      "totalAmount": 4800,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "746": {
+      "occurrences": 8,
+      "totalAmount": 480,
+      "minimum": 60,
+      "maximum": 60
+    },
+    "747": {
+      "occurrences": 8,
+      "totalAmount": 16,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "748": {
+      "occurrences": 4,
+      "totalAmount": 16,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "749": {
+      "occurrences": 6,
+      "totalAmount": 480,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "750": {
+      "occurrences": 6,
+      "totalAmount": 6,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "751": {
+      "occurrences": 13,
+      "totalAmount": 13000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "752": {
+      "occurrences": 21,
+      "totalAmount": 14700,
+      "minimum": 700,
+      "maximum": 700
+    },
+    "753": {
+      "occurrences": 21,
+      "totalAmount": 8400,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "754": {
+      "occurrences": 21,
+      "totalAmount": 42,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "755": {
+      "occurrences": 29,
+      "totalAmount": 15300,
+      "minimum": 500,
+      "maximum": 600
+    },
+    "756": {
+      "occurrences": 5,
+      "totalAmount": 10,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "757": {
+      "occurrences": 5,
+      "totalAmount": 10,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "758": {
+      "occurrences": 5,
+      "totalAmount": 5,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "759": {
+      "occurrences": 20,
+      "totalAmount": 6000,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "760": {
+      "occurrences": 16,
+      "totalAmount": 64,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "761": {
+      "occurrences": 41,
+      "totalAmount": 82,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "762": {
+      "occurrences": 41,
+      "totalAmount": 6150,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "763": {
+      "occurrences": 4,
+      "totalAmount": 1200,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "764": {
+      "occurrences": 17,
+      "totalAmount": 68,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "765": {
+      "occurrences": 21,
+      "totalAmount": 42,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "766": {
+      "occurrences": 21,
+      "totalAmount": 21,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "767": {
+      "occurrences": 84,
+      "totalAmount": 19950,
+      "minimum": 200,
+      "maximum": 250
+    },
+    "768": {
+      "occurrences": 4,
+      "totalAmount": 16,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "769": {
+      "occurrences": 9,
+      "totalAmount": 5400,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "770": {
+      "occurrences": 21,
+      "totalAmount": 18900,
+      "minimum": 900,
+      "maximum": 900
+    },
+    "771": {
+      "occurrences": 21,
+      "totalAmount": 5250,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "772": {
+      "occurrences": 25,
+      "totalAmount": 4110,
+      "minimum": 150,
+      "maximum": 180
+    },
+    "773": {
+      "occurrences": 8,
+      "totalAmount": 1200,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "774": {
+      "occurrences": 9,
+      "totalAmount": 4500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "775": {
+      "occurrences": 67,
+      "totalAmount": 35800,
+      "minimum": 400,
+      "maximum": 700
+    },
+    "776": {
+      "occurrences": 117,
+      "totalAmount": 468,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "777": {
+      "occurrences": 166,
+      "totalAmount": 33200,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "778": {
+      "occurrences": 347,
+      "totalAmount": 347,
+      "minimum": 1,
+      "maximum": 1
+    },
+    "779": {
+      "occurrences": 542,
+      "totalAmount": 1626,
+      "minimum": 3,
+      "maximum": 3
+    },
+    "780": {
+      "occurrences": 347,
+      "totalAmount": 173.5,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "781": {
+      "occurrences": 542,
+      "totalAmount": 271,
+      "minimum": 0.5,
+      "maximum": 0.5
+    },
+    "782": {
+      "occurrences": 433,
+      "totalAmount": 51960,
+      "minimum": 120,
+      "maximum": 120
+    },
+    "783": {
+      "occurrences": 12,
+      "totalAmount": 14400,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "784": {
+      "occurrences": 28,
+      "totalAmount": 112,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "785": {
+      "occurrences": 109,
+      "totalAmount": 13080,
+      "minimum": 120,
+      "maximum": 120
+    },
+    "786": {
+      "occurrences": 13,
+      "totalAmount": 9100,
+      "minimum": 700,
+      "maximum": 700
+    },
+    "787": {
+      "occurrences": 175,
+      "totalAmount": 122500,
+      "minimum": 700,
+      "maximum": 700
+    },
+    "788": {
+      "occurrences": 175,
+      "totalAmount": 61250,
+      "minimum": 350,
+      "maximum": 350
+    },
+    "789": {
+      "occurrences": 56,
+      "totalAmount": 35600,
+      "minimum": 600,
+      "maximum": 750
+    },
+    "790": {
+      "occurrences": 13,
+      "totalAmount": 5200,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "791": {
+      "occurrences": 21,
+      "totalAmount": 3150,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "792": {
+      "occurrences": 66,
+      "totalAmount": 264,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "793": {
+      "occurrences": 181,
+      "totalAmount": 45250,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "794": {
+      "occurrences": 4,
+      "totalAmount": 1400,
+      "minimum": 350,
+      "maximum": 350
+    },
+    "795": {
+      "occurrences": 4,
+      "totalAmount": 2000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "796": {
+      "occurrences": 17,
+      "totalAmount": 68,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "797": {
+      "occurrences": 12,
+      "totalAmount": 14400,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "798": {
+      "occurrences": 8,
+      "totalAmount": 4800,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "799": {
+      "occurrences": 97,
+      "totalAmount": 47100,
+      "minimum": 400,
+      "maximum": 650
+    },
+    "800": {
+      "occurrences": 8,
+      "totalAmount": 1200,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "801": {
+      "occurrences": 13,
+      "totalAmount": 8450,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "802": {
+      "occurrences": 21,
+      "totalAmount": 5250,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "803": {
+      "occurrences": 21,
+      "totalAmount": 3150,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "804": {
+      "occurrences": 37,
+      "totalAmount": 10360,
+      "minimum": 280,
+      "maximum": 280
+    },
+    "805": {
+      "occurrences": 9,
+      "totalAmount": 5400,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "806": {
+      "occurrences": 21,
+      "totalAmount": 4200,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "807": {
+      "occurrences": 4,
+      "totalAmount": 2600,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "808": {
+      "occurrences": 4,
+      "totalAmount": 2600,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "809": {
+      "occurrences": 4,
+      "totalAmount": 2600,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "810": {
+      "occurrences": 9,
+      "totalAmount": 9000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "811": {
+      "occurrences": 3,
+      "totalAmount": 600,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "812": {
+      "occurrences": 12,
+      "totalAmount": 9600,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "813": {
+      "occurrences": 6,
+      "totalAmount": 24,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "814": {
+      "occurrences": 6,
+      "totalAmount": 2400,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "815": {
+      "occurrences": 3,
+      "totalAmount": 480,
+      "minimum": 160,
+      "maximum": 160
+    },
+    "816": {
+      "occurrences": 5,
+      "totalAmount": 20,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "817": {
+      "occurrences": 2,
+      "totalAmount": 320,
+      "minimum": 160,
+      "maximum": 160
+    },
+    "818": {
+      "occurrences": 2,
+      "totalAmount": 8,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "819": {
+      "occurrences": 12,
+      "totalAmount": 7200,
+      "minimum": 600,
+      "maximum": 600
+    },
+    "820": {
+      "occurrences": 3,
+      "totalAmount": 600,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "821": {
+      "occurrences": 3,
+      "totalAmount": 600,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "822": {
+      "occurrences": 3,
+      "totalAmount": 12,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "823": {
+      "occurrences": 4,
+      "totalAmount": 16,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "824": {
+      "occurrences": 13,
+      "totalAmount": 5850,
+      "minimum": 450,
+      "maximum": 450
+    },
+    "825": {
+      "occurrences": 29,
+      "totalAmount": 14500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "826": {
+      "occurrences": 21,
+      "totalAmount": 8400,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "827": {
+      "occurrences": 21,
+      "totalAmount": 5250,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "828": {
+      "occurrences": 13,
+      "totalAmount": 18200,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "829": {
+      "occurrences": 24,
+      "totalAmount": 9600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "830": {
+      "occurrences": 12,
+      "totalAmount": 3000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "831": {
+      "occurrences": 12,
+      "totalAmount": 1800,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "832": {
+      "occurrences": 21,
+      "totalAmount": 414,
+      "minimum": 12,
+      "maximum": 30
+    },
+    "833": {
+      "occurrences": 20,
+      "totalAmount": 4000,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "834": {
+      "occurrences": 20,
+      "totalAmount": 5000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "835": {
+      "occurrences": 20,
+      "totalAmount": 5000,
+      "minimum": 250,
+      "maximum": 250
+    },
+    "836": {
+      "occurrences": 8,
+      "totalAmount": 200,
+      "minimum": 25,
+      "maximum": 25
+    },
+    "837": {
+      "occurrences": 8,
+      "totalAmount": 960,
+      "minimum": 120,
+      "maximum": 120
+    },
+    "838": {
+      "occurrences": 13,
+      "totalAmount": 18200,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "839": {
+      "occurrences": 8,
+      "totalAmount": 9600,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "840": {
+      "occurrences": 1,
+      "totalAmount": 200,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "841": {
+      "occurrences": 2,
+      "totalAmount": 400,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "842": {
+      "occurrences": 1,
+      "totalAmount": 200,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "843": {
+      "occurrences": 1,
+      "totalAmount": 150,
+      "minimum": 150,
+      "maximum": 150
+    },
+    "844": {
+      "occurrences": 1,
+      "totalAmount": 200,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "845": {
+      "occurrences": 1,
+      "totalAmount": 400,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "846": {
+      "occurrences": 2,
+      "totalAmount": 400,
+      "minimum": 200,
+      "maximum": 200
+    },
+    "847": {
+      "occurrences": 2,
+      "totalAmount": 8,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "848": {
+      "occurrences": 21,
+      "totalAmount": 6300,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "849": {
+      "occurrences": 4,
+      "totalAmount": 1600,
+      "minimum": 400,
+      "maximum": 400
+    },
+    "850": {
+      "occurrences": 9,
+      "totalAmount": 6300,
+      "minimum": 700,
+      "maximum": 700
+    },
+    "851": {
+      "occurrences": 9,
+      "totalAmount": 4500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "852": {
+      "occurrences": 9,
+      "totalAmount": 270,
+      "minimum": 30,
+      "maximum": 30
+    },
+    "853": {
+      "occurrences": 12,
+      "totalAmount": 14400,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "854": {
+      "occurrences": 13,
+      "totalAmount": 13000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "855": {
+      "occurrences": 13,
+      "totalAmount": 20800,
+      "minimum": 1600,
+      "maximum": 1600
+    },
+    "856": {
+      "occurrences": 8,
+      "totalAmount": 4000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "857": {
+      "occurrences": 12,
+      "totalAmount": 12000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "858": {
+      "occurrences": 13,
+      "totalAmount": 8450,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "859": {
+      "occurrences": 21,
+      "totalAmount": 6300,
+      "minimum": 300,
+      "maximum": 300
+    },
+    "860": {
+      "occurrences": 9,
+      "totalAmount": 5850,
+      "minimum": 650,
+      "maximum": 650
+    },
+    "861": {
+      "occurrences": 12,
+      "totalAmount": 8400,
+      "minimum": 700,
+      "maximum": 700
+    },
+    "862": {
+      "occurrences": 9,
+      "totalAmount": 7200,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "863": {
+      "occurrences": 12,
+      "totalAmount": 9600,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "864": {
+      "occurrences": 13,
+      "totalAmount": 13000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "865": {
+      "occurrences": 17,
+      "totalAmount": 340,
+      "minimum": 20,
+      "maximum": 20
+    },
+    "866": {
+      "occurrences": 5,
+      "totalAmount": 2500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "867": {
+      "occurrences": 42,
+      "totalAmount": 5670,
+      "minimum": 120,
+      "maximum": 150
+    },
+    "868": {
+      "occurrences": 4,
+      "totalAmount": 2000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "869": {
+      "occurrences": 4,
+      "totalAmount": 80,
+      "minimum": 20,
+      "maximum": 20
+    },
+    "870": {
+      "occurrences": 4,
+      "totalAmount": 2000,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "871": {
+      "occurrences": 25,
+      "totalAmount": 35000,
+      "minimum": 1400,
+      "maximum": 1400
+    },
+    "872": {
+      "occurrences": 9,
+      "totalAmount": 4050,
+      "minimum": 450,
+      "maximum": 450
+    },
+    "873": {
+      "occurrences": 12,
+      "totalAmount": 14400,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "874": {
+      "occurrences": 9,
+      "totalAmount": 4500,
+      "minimum": 500,
+      "maximum": 500
+    },
+    "875": {
+      "occurrences": 12,
+      "totalAmount": 9600,
+      "minimum": 800,
+      "maximum": 800
+    },
+    "876": {
+      "occurrences": 4,
+      "totalAmount": 320,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "877": {
+      "occurrences": 12,
+      "totalAmount": 24,
+      "minimum": 2,
+      "maximum": 2
+    },
+    "878": {
+      "occurrences": 4,
+      "totalAmount": 320,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "879": {
+      "occurrences": 4,
+      "totalAmount": 320,
+      "minimum": 80,
+      "maximum": 80
+    },
+    "880": {
+      "occurrences": 13,
+      "totalAmount": 13000,
+      "minimum": 1000,
+      "maximum": 1000
+    },
+    "881": {
+      "occurrences": 8,
+      "totalAmount": 9600,
+      "minimum": 1200,
+      "maximum": 1200
+    },
+    "882": {
+      "occurrences": 1,
+      "totalAmount": 4,
+      "minimum": 4,
+      "maximum": 4
+    },
+    "883": {
+      "occurrences": 1,
+      "totalAmount": 200,
+      "minimum": 200,
+      "maximum": 200
+    }
+  },
+  "coverage": {
+    "meals": 3401760,
+    "classics": 709,
+    "diets": {
+      "balanced": 1034122,
+      "vegetarian": 168862,
+      "vegan": 147202,
+      "gluten-free": 1034122,
+      "dairy-free": 1018161
+    },
+    "regions": {
+      "japanese": 44789,
+      "korean": 44789,
+      "thai": 44788,
+      "mexican": 44788,
+      "indian": 44788,
+      "levantine": 44788,
+      "italian": 44789,
+      "moroccan": 44789,
+      "greek": 44760,
+      "spanish": 44760,
+      "french": 44760,
+      "vietnamese": 44760,
+      "chinese": 44760,
+      "indonesian": 44760,
+      "malaysian": 44760,
+      "caribbean": 44760,
+      "peruvian": 44760,
+      "ethiopian": 44760,
+      "turkish": 44760,
+      "brazilian": 44760,
+      "thai-green": 44760,
+      "thai-massaman": 44760,
+      "thai-panang": 44760,
+      "thai-yellow": 44760,
+      "isaan": 44760,
+      "indian-madras": 44760,
+      "indian-vindaloo": 44760,
+      "indian-korma": 44760,
+      "south-indian": 44760,
+      "goan": 44760,
+      "bengali": 44760,
+      "chettinad": 44760,
+      "hyderabadi": 44760,
+      "kashmiri": 44760,
+      "sri-lankan": 44760,
+      "sichuan": 44760,
+      "hunan": 44760,
+      "cantonese": 44760,
+      "taiwanese": 44760,
+      "xinjiang": 44760,
+      "lao": 44760,
+      "cambodian": 44760,
+      "filipino": 44760,
+      "peranakan": 44760,
+      "burmese": 44760,
+      "balinese": 44760,
+      "maluku": 44760,
+      "persian": 44760,
+      "georgian": 44760,
+      "yemeni": 44760,
+      "nepali": 44760,
+      "tunisian": 44760,
+      "west-african": 44760,
+      "jamaican": 44760,
+      "somali": 44760,
+      "cajun": 44760,
+      "argentine": 44760,
+      "chilean": 44760,
+      "portuguese": 44760,
+      "hungarian": 44760,
+      "australian": 44760,
+      "oaxacan": 44760,
+      "cuban": 44760,
+      "home-kitchen": 44760,
+      "syrian": 44760,
+      "afghan": 44760,
+      "pakistani": 44760,
+      "gujarati": 44760,
+      "shanghainese": 44760,
+      "yunnan": 44760,
+      "japanese-curry": 44760,
+      "creole": 44760,
+      "mozambican": 44760,
+      "yucatecan": 44760,
+      "puerto-rican": 44760,
+      "nordic": 44760,
+      "texas-bbq": 28,
+      "carolina-bbq": 28,
+      "kansas-city-bbq": 28,
+      "korean-bbq": 29,
+      "japanese-yakitori": 29,
+      "cantonese-char-siu": 28,
+      "vietnamese-grill": 28,
+      "turkish-mangal": 28,
+      "spanish-plancha": 29,
+      "jamaican-jerk": 29,
+      "indian-tandoor": 28,
+      "mexican-al-pastor": 28,
+      "moroccan-mechoui": 28,
+      "home-style": 29,
+      "argentine-asado": 28,
+      "greek-souvlaki": 28,
+      "south-african-braai": 28
+    },
+    "sides": {
+      "rice-greens": 226784,
+      "garden-salad": 226784,
+      "coconut-rice": 226784,
+      "polenta-greens": 226784,
+      "tortilla-salsa": 226784,
+      "orzo-salad": 226784,
+      "soba-greens": 226784,
+      "gai-lan-rice": 226784,
+      "idli-veg": 226784,
+      "freekeh-salad": 226784,
+      "ratatouille-side": 226784,
+      "beetroot-salad": 226784,
+      "congri-rice": 226784,
+      "jollof-style-rice": 226784,
+      "sorghum-salad": 226784
+    },
+    "cutSelection": {
+      "default": 1209540,
+      "chosen": 2192220
+    }
+  },
+  "quality": {
+    "scored": 3402469,
+    "scoreTotal": 340246900,
+    "minimum": 100,
+    "maximum": 100
+  },
+  "memory": {
+    "heapPeak": 39059056,
+    "rssPeak": 142790656
+  },
+  "elapsedSeconds": 1195.8,
+  "sourceEnd": {
+    "sha256": "a0cd84856437962059e73cd555c8c20ec30ced66bcb06d9010589732294c239e",
+    "files": 69,
+    "scope": "lib/**/*.ts and both catalogue auditors"
+  }
+}

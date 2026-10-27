@@ -1,0 +1,1106 @@
+{
+  "releaseId": "20261026-075845",
+  "baseCommit": "2d0cee19080190039d98b56a45f586e117d5820e",
+  "files": [
+    {
+      "path": ".dev.vars.example",
+      "sha256": "5f88592cf650a1d00ea895df4eca8c15cd5037307ec2fdc8203c539f61aef35c"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "915332f39ccee980144c403d5837119c1b8dc746a7c21f89248f59c1eaa6e9e8"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "65631d6bf86e4ceffa07a18e9830d178e5d34b5ce34c7e29ad827dfa0da03d9e"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "8dc77db9506802ae0429386d1ada94b4be0df92c0b5932bd4b9c308f06eacad7"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "4cb5b347f70ca5a06d647809afa7e73df62da71abcfbd618e7bd6466c5e0e02e"
+    },
+    {
+      "path": ".npmrc",
+      "sha256": "7cd80af2e968119afd7b1803b6ac51b51ea010b8da57c3606ea1ef8071a86068"
+    },
+    {
+      "path": ".openai/hosting.json",
+      "sha256": "f9384bf2951e737e3f272deb56eca994e751e423b64d70f1eff38c849e5547cd"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a65866cec6f617dbfe630aa832ab7917295a2517b7dce30457b962ad522fb33b"
+    },
+    {
+      "path": "app/api/community/route.ts",
+      "sha256": "68ddf8541ff60129a691532fa7b9b08266a483759421690914055ed1c7021a50"
+    },
+    {
+      "path": "app/api/locations/route.ts",
+      "sha256": "d6f210bab5c4c2e0d70c79653f81e4c7c73c438b03b3dfcf6c300cfacf66c0e1"
+    },
+    {
+      "path": "app/api/plate/route.ts",
+      "sha256": "5721c43841048466445b229ba8155c8597271061d32b87d67c61d0fb9f6ac310"
+    },
+    {
+      "path": "app/api/price-memory/route.ts",
+      "sha256": "f563cd7a2f14f84305e78707c6677910503f30fdc0dfffcdbf2b64a216e0205c"
+    },
+    {
+      "path": "app/api/prices/route.ts",
+      "sha256": "5d68f543a5b3d0a4530fbb04acbaa79edd22245158318aca087ab922757fd3a9"
+    },
+    {
+      "path": "app/api/recipe-pdf/route.ts",
+      "sha256": "5a6133d82695036cffabf0d1edd1d282b629346a2345d8273a873655c224dff0"
+    },
+    {
+      "path": "app/api/shops/route.ts",
+      "sha256": "262574bb303c89484c44ea8dfd4d226723aa006bf8fa303c4bf61c9575cc2133"
+    },
+    {
+      "path": "app/chatgpt-auth.ts",
+      "sha256": "e19651c2d1db12696883ae3eb79d4f09dce249f7afa1144a62d544e2e18299ca"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "d97af61f225167761f77d4447250dbd911724beda87a1d849caeb9fa3aa62260"
+    },
+    {
+      "path": "app/layout.tsx",
+      "sha256": "630a86c49e414b435ba5650079e2c4c4126fd9fdc16d324c50e80463492bff7b"
+    },
+    {
+      "path": "app/page.tsx",
+      "sha256": "b5999f37f8eb213f256ba4eb2ff6f691445288e4d69e560a45152f6bf5129f92"
+    },
+    {
+      "path": "app/r/[token]/page.tsx",
+      "sha256": "499d1cc52f2b60dc09c64867cb69ac25b72d45419b9e54f3352bb90ef46ced7e"
+    },
+    {
+      "path": "cloudflare-env.d.ts",
+      "sha256": "2ac980b29c91b8324a0d7864ec329c41e513fe81165aaffbc1220b8e85812759"
+    },
+    {
+      "path": "components.json",
+      "sha256": "820e913f34219d16b5e7ec5865df9c444bb5b8acf230db4e589d660e4a21743e"
+    },
+    {
+      "path": "components/community-panel.tsx",
+      "sha256": "88a7462e1b0d97405815b09881596c1bd4552637fd28c7cadfdf7e4e54eed452"
+    },
+    {
+      "path": "components/connector-error.tsx",
+      "sha256": "d5bdb3c9efc008a75c8563d546c802dff6c18c4dfdf2b98c3b8477969a943ec0"
+    },
+    {
+      "path": "components/kitchen-desk.tsx",
+      "sha256": "2cca0842ec059db71bf15cff6be9ce350c3af050586ff1a28edf24ff35febd84"
+    },
+    {
+      "path": "components/meal-builder.tsx",
+      "sha256": "65d4831a97355cf0d0276d736f813a5c61eeb4a5c8c6b2102ef20f0658897038"
+    },
+    {
+      "path": "components/price-check.tsx",
+      "sha256": "867ae6e9d96688b678167409e91d70238cf90813ee9703f4eca5e695278da059"
+    },
+    {
+      "path": "components/shop-prices.tsx",
+      "sha256": "e8cddea0feff543893d8f79acea8a44e5af8eea24c712bb3118a022f5af79b9c"
+    },
+    {
+      "path": "components/trends-page.tsx",
+      "sha256": "b19cbefccf86efc386ae4fc4242d4f9d717a6617fa42e577aa0994b78880853c"
+    },
+    {
+      "path": "components/ui/accordion.tsx",
+      "sha256": "810fded6b5f4f1d92370c8fa84b130cd9f26f1f37e30b1efcb48330338d91a70"
+    },
+    {
+      "path": "components/ui/alert-dialog.tsx",
+      "sha256": "1ca7530a1f4727642aa96c619a320bc21488eb3bd6cf00666ef6fa3b1e346de0"
+    },
+    {
+      "path": "components/ui/alert.tsx",
+      "sha256": "a36704ebac55c71e83302b1557d6bf188bb59552a46ea4e564acb4c913976926"
+    },
+    {
+      "path": "components/ui/aspect-ratio.tsx",
+      "sha256": "cdcb1701d142b15ad09bd3982493b82c5eb17e6512b8d0719325e6e723850bbd"
+    },
+    {
+      "path": "components/ui/attachment.tsx",
+      "sha256": "c79fd808704543da1df455bbbdbcac7031979e126bafeadd2d5c97513b426159"
+    },
+    {
+      "path": "components/ui/avatar.tsx",
+      "sha256": "d37287410ad1f496bcbd788f94245542984e3a124008d9dc72f92afa0f96de27"
+    },
+    {
+      "path": "components/ui/badge.tsx",
+      "sha256": "9f25d280c75ac367fb5bbeea5f2f0f0fe10be226e364678b065069ec62dfaa06"
+    },
+    {
+      "path": "components/ui/breadcrumb.tsx",
+      "sha256": "1d179a7717f52c7aaceed5a305a4be38f3fc08c3aaf0f593de718ecb59b25ca1"
+    },
+    {
+      "path": "components/ui/bubble.tsx",
+      "sha256": "df3ead10c41081e73ef64e60cbff3f4ad7740af9fd2c21784294dee1504cbbc1"
+    },
+    {
+      "path": "components/ui/button-group.tsx",
+      "sha256": "90f87a3b4398540a58d8fb05559df0939d8073a7550a8af646d86c97145dd00e"
+    },
+    {
+      "path": "components/ui/button.tsx",
+      "sha256": "38447e736fdb7524f96f4adb6eada4ff9e4e68cf9eeb2415c357544ff347e8a3"
+    },
+    {
+      "path": "components/ui/calendar.tsx",
+      "sha256": "0349754fe228253ae94ba9f641d903fdb5917b502bef2087f8f5c6b0a93326ba"
+    },
+    {
+      "path": "components/ui/card.tsx",
+      "sha256": "d213fee777a9c38c3276b0e6b14707987302b83308baf4656dc1d5ae0610053f"
+    },
+    {
+      "path": "components/ui/carousel.tsx",
+      "sha256": "45c8d7786dcbc4e08ed3506fb8946f1c8abf1fa720b228792fe8430a56f3da6a"
+    },
+    {
+      "path": "components/ui/chart.tsx",
+      "sha256": "f60244582b56d42fb6631f9ac7026f3ea421d8cc31bfdda0e7727cae2a064687"
+    },
+    {
+      "path": "components/ui/checkbox.tsx",
+      "sha256": "afcdd47885bdfa92997ef8da0fe231ae19b728594f7448eb437f7d7e94fc5b4f"
+    },
+    {
+      "path": "components/ui/collapsible.tsx",
+      "sha256": "c3649a69d53668fcceba2d83c97a3146fc2930a00c30fe281875238384e7bff2"
+    },
+    {
+      "path": "components/ui/combobox.tsx",
+      "sha256": "63f37425ab8eac82374dcb9d7ac4fec1406ffabd1c64006c59800f295fd43f6c"
+    },
+    {
+      "path": "components/ui/command.tsx",
+      "sha256": "67bc4de1f69b46c405ea1209a40a9b08a2e301aa8d36d3c54ce1b05c3039eb6e"
+    },
+    {
+      "path": "components/ui/context-menu.tsx",
+      "sha256": "0e0f98b6cf175912c541330f3b492476f8fa2712f13f265e8779ad0b93437d16"
+    },
+    {
+      "path": "components/ui/dialog.tsx",
+      "sha256": "7ba15f4c9dd993977d4d3dc70aef92d3e95548a32e5edc6f268c44921bbc15e8"
+    },
+    {
+      "path": "components/ui/direction.tsx",
+      "sha256": "cd2c00d9757eea6dcf3242d71de8f397d29291a67fba5c39fb03c4c60746f36c"
+    },
+    {
+      "path": "components/ui/drawer.tsx",
+      "sha256": "9c21e1c99e256689192ab009f461568ea9ea99137b3b0e3010f56b7ee2bbd444"
+    },
+    {
+      "path": "components/ui/dropdown-menu.tsx",
+      "sha256": "fe670b2a67ac46915410a17cd5e4d529be2424c1b0fd8b8f41c178ac53ff6c3b"
+    },
+    {
+      "path": "components/ui/empty.tsx",
+      "sha256": "1523589e7664f743fc6cddf7daa7b7c030fbac6c5613a80f79478562277eda56"
+    },
+    {
+      "path": "components/ui/field.tsx",
+      "sha256": "ae5a1b6af5009609b3855acea85cf6cee9dd2698304d61995df458145319be53"
+    },
+    {
+      "path": "components/ui/form.tsx",
+      "sha256": "27d0cc0e59d9102f5287e857a5bf489e9cdd66f4d53cbfac8d0d967c7f2835b7"
+    },
+    {
+      "path": "components/ui/hover-card.tsx",
+      "sha256": "ce70a075f5422d9055eff971f1214b820806637d9fbce235df83206d1448cdb3"
+    },
+    {
+      "path": "components/ui/input-group.tsx",
+      "sha256": "dd5a0fc5dd10d7a829041ca19a3b8f040758761f657783dbae632c851ad10044"
+    },
+    {
+      "path": "components/ui/input-otp.tsx",
+      "sha256": "aa8d62769d9e9a0bf40aec5aa427a3a34be5852a6f61b390aa7aa5fa50ab3b46"
+    },
+    {
+      "path": "components/ui/input.tsx",
+      "sha256": "44714284bdbafbf7634a4807eff5d6b493b5b5fc1a562a269a874de1eb50ea7c"
+    },
+    {
+      "path": "components/ui/item.tsx",
+      "sha256": "9ff8e5411d0684cb97a717c8c3498e6c11d56c21ce84dbcd6ba15f5167b1038b"
+    },
+    {
+      "path": "components/ui/kbd.tsx",
+      "sha256": "087e34753566167ad99b8c69c6c0a3cfeaabf0d2a579e739ec1dd8d66910da1f"
+    },
+    {
+      "path": "components/ui/label.tsx",
+      "sha256": "43e7cadacf1e0d71c1668dc388271656d2db8c4d45f2144d52d594f9aca31ca5"
+    },
+    {
+      "path": "components/ui/marker.tsx",
+      "sha256": "d94da269dd74ff4410393c57bd57bf965808314ce7cd5710e795a33f8b62240e"
+    },
+    {
+      "path": "components/ui/menubar.tsx",
+      "sha256": "1625b156556efa470d6a767596eb3237ece71fb5a799040f6921a367b1e26bc7"
+    },
+    {
+      "path": "components/ui/message-scroller.tsx",
+      "sha256": "abb2e962ef1d6952bb1caee7a135b079fedbd3833a1b871cd9079c880bbc0ffa"
+    },
+    {
+      "path": "components/ui/message.tsx",
+      "sha256": "a4a7f8a104559536a531e198d1a7a239cdd55748da74a0a3e2088f275e153287"
+    },
+    {
+      "path": "components/ui/native-select.tsx",
+      "sha256": "d62b4479c6419a37ee748b1a6536c51d6676a3a04afdea27619e6481b6cdb442"
+    },
+    {
+      "path": "components/ui/navigation-menu.tsx",
+      "sha256": "a42f6e39ce4b18d0cadfe91265b9419ddd8b157a9778a5ed754f45e72a902252"
+    },
+    {
+      "path": "components/ui/pagination.tsx",
+      "sha256": "9d9ba519da639b1993b7df95e8b0d394e8dc2c61fda7320c05ec1c5332ae56fb"
+    },
+    {
+      "path": "components/ui/popover.tsx",
+      "sha256": "2520e46424ba0ce4407c83c47cb717e1a5e7e51c26449b1eabeaeab779c05e76"
+    },
+    {
+      "path": "components/ui/progress.tsx",
+      "sha256": "c6f42ff7f284ce9e965b1bad059dd401a951d6254e5070877b129ff8195c7707"
+    },
+    {
+      "path": "components/ui/radio-group.tsx",
+      "sha256": "45af968f5e426f9268a6623ccc55d67f1a0973742dd01f12917f981690d13a68"
+    },
+    {
+      "path": "components/ui/resizable.tsx",
+      "sha256": "bfb26b64a3c1d6e0a71bebe06738f209724588deb8ff3048a10f130ca920828a"
+    },
+    {
+      "path": "components/ui/scroll-area.tsx",
+      "sha256": "509e700a8f6a26386a0e61dcacc3f6b4fe42fa31c5444a2b27d9952e772b80fd"
+    },
+    {
+      "path": "components/ui/select.tsx",
+      "sha256": "f4434ef49e240b581e951cee362cb57e11e8a9bbbe4238395a034ba599ce298c"
+    },
+    {
+      "path": "components/ui/separator.tsx",
+      "sha256": "8cdd3c705eb6b04bbe8fbe87cc5f193de72b17d85f02020f7e4e9bd206c50f59"
+    },
+    {
+      "path": "components/ui/sheet.tsx",
+      "sha256": "57d5e84b5b1ac6d1769dc53632b52236096140df8f3a4a10e8343bd73d186290"
+    },
+    {
+      "path": "components/ui/sidebar.tsx",
+      "sha256": "74ecebd633481b76e425e8b40c9cdad7e43c2872cd699d8a56690e889da9620b"
+    },
+    {
+      "path": "components/ui/skeleton.tsx",
+      "sha256": "85957151311e53eb49bdb54f5e2e6d8ff4461b14d887d8073e0cde846d539691"
+    },
+    {
+      "path": "components/ui/slider.tsx",
+      "sha256": "deb4c937a6036d33236c8defcb6df42ba5886fef32dc1d67763eecfebcff5b69"
+    },
+    {
+      "path": "components/ui/sonner.tsx",
+      "sha256": "f4d2c855754828ceed89ad6455aa8082f80566d82c3ab79b8db5271c5102b632"
+    },
+    {
+      "path": "components/ui/spinner.tsx",
+      "sha256": "cbf9073613aed22ffd4ba21219adc1d1b8dce311d4280800f772b5eae587eeff"
+    },
+    {
+      "path": "components/ui/switch.tsx",
+      "sha256": "21126011e315385b26ba57c494fa18553ac81f85f5814c3c9a79ff864ae66ee5"
+    },
+    {
+      "path": "components/ui/table.tsx",
+      "sha256": "02d16a0d04c4fd2990ef41d9c5963335aa0eec93d41518e18476656113894626"
+    },
+    {
+      "path": "components/ui/tabs.tsx",
+      "sha256": "3a200c6fa6d683681f066f1e9b3868ef22d3cf9d3d925d7364edae9900484aa3"
+    },
+    {
+      "path": "components/ui/textarea.tsx",
+      "sha256": "d5084a2bc607d9e2322e440d36643610478982bc4ecd4ddf5ee2b805418e1198"
+    },
+    {
+      "path": "components/ui/toggle-group.tsx",
+      "sha256": "cf2efaaad5b80f1df4636a3e730fe0bfc25e55674fa37414c2f8f1ba02c20708"
+    },
+    {
+      "path": "components/ui/toggle.tsx",
+      "sha256": "961640a6cfdfd1cdfbc2196f6d4b8bc7a0606347769bc0d0d929bd50b6d86140"
+    },
+    {
+      "path": "components/ui/tooltip.tsx",
+      "sha256": "2ed212576e61f83f86a4ea00d40751181e5889b2bf8d660eede5d0adee46cb76"
+    },
+    {
+      "path": "components/week-day-plate.tsx",
+      "sha256": "f1a2a6bfac70b6bccab4692b5ef76aec2fd9fb811bbeb21e971d6091420aa2fd"
+    },
+    {
+      "path": "db/index.ts",
+      "sha256": "effa59e46bcbb42dfb7b46911e809a1de0f2c37df1fd935e3dca89023eaf97e4"
+    },
+    {
+      "path": "db/schema.ts",
+      "sha256": "48b4f7fafee1f2720b8977ba31bc0cf03dedb7ea8826c4bcbc8dfd74f2d8744f"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "82609d94c45f27a0d1c4f10a9b06e0c4dcd5d7734e1337820c8da342bec625c2"
+    },
+    {
+      "path": "docs/DEV_ENVIRONMENT.txt",
+      "sha256": "849913327478c427bf5779196a42ca072b5c02d205dc62333c227e83ddce88c5"
+    },
+    {
+      "path": "docs/LOCATION_DATA.md",
+      "sha256": "f94bcad451f1079e91d99f0b22814e48b5567866bca471021cfed423fff1f979"
+    },
+    {
+      "path": "docs/QUALITY_PASS_2026-10-26.txt",
+      "sha256": "b9f9459eb12e2444857f88ffabc5ea49301a4b08b817634ad4212672f94bab03"
+    },
+    {
+      "path": "docs/SELF_HOSTING.md",
+      "sha256": "c02b01451b861e91e557ddfbf9939d6ed1cd3fa25148e5dbd592191408d02c5a"
+    },
+    {
+      "path": "docs/cut-method-affinity-report.md",
+      "sha256": "1c83388ed43c0e106202a30d7cd7701380fc2b531898ee0d56bd09ded645f2b8"
+    },
+    {
+      "path": "docs/fusion-overhaul-handoff.md",
+      "sha256": "185d256c5c4c4d48f013a211ec385260d5a0495d776f4fc84ec0f4751fcbfdaa"
+    },
+    {
+      "path": "docs/images/fusion-table-preview-1792653198544.jpg",
+      "sha256": "423eb7a98754be71a2f5de08519c3e2b3145647b5c860cf042dd1f165d2f5fbf"
+    },
+    {
+      "path": "docs/live-site-audit-2026-10-26.txt",
+      "sha256": "2b163205c5dd6cb71015c5af9f46dd911c61ccf86d47dc11f6b94d93afeb3a14"
+    },
+    {
+      "path": "docs/releases/v0.2.0.md",
+      "sha256": "8b95bb2d501670e70465ba26c12974947494d69de08136a891a94672d0aeca45"
+    },
+    {
+      "path": "docs/releases/v0.2.1.md",
+      "sha256": "23ed07d7a2d840c17b762f137ca0b681fd7fc4b162cb524932dba54c4b6c96c7"
+    },
+    {
+      "path": "docs/releases/v0.2.2.md",
+      "sha256": "2811f9d61d5ccb52ce2016f643524905cdd7acc2b2d8965c9e472f11e7701f5f"
+    },
+    {
+      "path": "docs/releases/v0.2.3.md",
+      "sha256": "374b7e05844f7ea9bf56b61f929ea57c43e7850c5224f730aa4acf3312841611"
+    },
+    {
+      "path": "docs/releases/v0.2.4.md",
+      "sha256": "0246feb3ead870288dd959446df0d04b2be3610e86fa50fb1355cdeaa61c6a9d"
+    },
+    {
+      "path": "docs/releases/v0.2.5.md",
+      "sha256": "66a157b6710eae287b39b3f91bef33d0e9c22775e1c3cc3778435ac9fa1f5f7d"
+    },
+    {
+      "path": "docs/releases/v0.2.6.md",
+      "sha256": "96751fe360613035ce4937096d62c76e728057ee13b8bb63ed421dafc604ed40"
+    },
+    {
+      "path": "docs/smoke-method-affinity-report.md",
+      "sha256": "67c60a0793b8b358b2079f069278ccf21ff7e7d21e114d071a57e6981ca3906f"
+    },
+    {
+      "path": "docs/usability-feasibility-audit-2026-10-26.txt",
+      "sha256": "8a8faced24ab4c9cda3e94fa4a89772c12bd1832e6534c3250bf400fe2f7c3c4"
+    },
+    {
+      "path": "drizzle.config.ts",
+      "sha256": "73d0807c58e541dc3eaf175909fb5acc966faed61f74ff659d9d55027bf3e25b"
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "sha256": "5a5f57f8f48fcf1d065725c0f3dab19e590e96e7e1e5bf8ddff17339a0de8d9a"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256": "cfd4f766def9c57f7ee2304160db837d28c5e68ba7f0b3d5ef46e4145f34ca5a"
+    },
+    {
+      "path": "examples/d1/app/api/notes/route.ts",
+      "sha256": "b0b134b9b0b4a9f5947abbd13fd4425b88b59c64f91db1aacb0cecbc16c38f45"
+    },
+    {
+      "path": "examples/d1/db/schema.ts",
+      "sha256": "1acd70317bcaf22cb140436fb47754c2144e7c2adfc59a3f427ecb1d816fa0f3"
+    },
+    {
+      "path": "hooks/use-mobile.ts",
+      "sha256": "d2377fbad5ad2bdf7fa896a68c36ac8bf4aa74a974b2061f77b41ae58d623001"
+    },
+    {
+      "path": "lib/bbq-classics.ts",
+      "sha256": "dc5f63422400fbde1c50585e45fd857a06c144b54c905ccae001d212825fe6e3"
+    },
+    {
+      "path": "lib/bbq-regions.ts",
+      "sha256": "ea0c790f9c540da90612cf1623013bddc8490ab55c6bdded6aaaf53e63738cf4"
+    },
+    {
+      "path": "lib/catalogue.ts",
+      "sha256": "8d155221cb35d4dfbe5e04ad3da4947eaf56c537ec2611f15f0352592b07d5d3"
+    },
+    {
+      "path": "lib/classic-inspirations.ts",
+      "sha256": "a152b29a1e3ed0ae0ba5e9a8c715cfd7a9b2edea5d4ea9c78959d3b3caee2ad9"
+    },
+    {
+      "path": "lib/clean-prefs.ts",
+      "sha256": "6c24289d69c614f13db986d542db3323c237d53d11cb5982889fff0865c65573"
+    },
+    {
+      "path": "lib/community.ts",
+      "sha256": "396e20d54d56484206d76ca055e820f36d603afd0713c9a60c693a7840eeaa4c"
+    },
+    {
+      "path": "lib/connector-context.ts",
+      "sha256": "b6ed4b64aa9cc167c32ac4e6b43d6a35a40f5c4bd0a0cda2376edad09a794346"
+    },
+    {
+      "path": "lib/connector-contract.mts",
+      "sha256": "b8324851866ee9b24c2859bde2d1668a1181d02f77638f41c11f69886c87686a"
+    },
+    {
+      "path": "lib/connector-errors.mts",
+      "sha256": "d0f81b7de346e8662b1c64489b16007395db98ee69733c08b2ffa11068967ee6"
+    },
+    {
+      "path": "lib/connector-preview.d.ts",
+      "sha256": "3c8745ae3593f71b02f2d4ade7b445b3c0fcbcd27934cbe4cc820afa24fa2f67"
+    },
+    {
+      "path": "lib/connectors.ts",
+      "sha256": "0e52938a99ec674a94f3d855072fcf4f42563d0a974660ed6adc5c114ee44609"
+    },
+    {
+      "path": "lib/cook-pace.ts",
+      "sha256": "b2e6cc8f4f278d8273309c4ea067debb8257f71051a6061f12fc32f4f40a772c"
+    },
+    {
+      "path": "lib/cut-method.ts",
+      "sha256": "741c91c3809c8ef240865c566e6fa57a7aebc0796fa9561be5230f42c9f4115a"
+    },
+    {
+      "path": "lib/cuts.ts",
+      "sha256": "2da72b7c2c7393c728f71395fdbde5681575fd942ba79fbb4fb7a4f3df3355df"
+    },
+    {
+      "path": "lib/featured-recipes.ts",
+      "sha256": "c97df12f5f9fd7b9a11f599ec30843480d77202e05dcd7afb14bed6e1365a759"
+    },
+    {
+      "path": "lib/food-words.ts",
+      "sha256": "0976e3e031114580444c784a1c5535cacde4e872d24f9b4b99c6b8c940db67e1"
+    },
+    {
+      "path": "lib/fusion-sat.ts",
+      "sha256": "b2ee6be149659c07f884176ddcc027b279bf17342f8d8461e7a7afa0f565210b"
+    },
+    {
+      "path": "lib/home-suggestions.ts",
+      "sha256": "12b56c69af3a5460bf7e6d332e98636893417ec275a96814fca049160c2aab3a"
+    },
+    {
+      "path": "lib/kitchen-state.ts",
+      "sha256": "b1824ec83f2eb8f7779661a1b8b24e0368d3a751c1a4df7eb01aa521e5970805"
+    },
+    {
+      "path": "lib/ledger.ts",
+      "sha256": "4fd5319a837ec995e0ad13dab5ba9665ca90a4b961fd2a63ce3f705ee5b3c764"
+    },
+    {
+      "path": "lib/location-client.ts",
+      "sha256": "d37e422193d8ab922e064eb520cd6cae457f4a34e1a202099b7a6e7562cd6bb9"
+    },
+    {
+      "path": "lib/location-providers.ts",
+      "sha256": "2be502fff1b5542d36952ff344104ab41f27b1330e79f661f477b151ad5a276e"
+    },
+    {
+      "path": "lib/locations.ts",
+      "sha256": "d43fa29988182ba155bd36685381b2a279cb130e014cdada5eeb72e445945650"
+    },
+    {
+      "path": "lib/meal-catalog.ts",
+      "sha256": "d51e5c51bda50922eb65a772ea6d59a782ef32bc30f2a84db811c6a8a2e56c9c"
+    },
+    {
+      "path": "lib/meal-name.ts",
+      "sha256": "6499e33ee9f7073c2e99d1af17ac32dfd1297f3837580528cc6401453cf053cb"
+    },
+    {
+      "path": "lib/meal-of-week.ts",
+      "sha256": "6570667ba77c1b0f851c2817d1d23a9979f9e81759e78e3a7d20711a91562f9b"
+    },
+    {
+      "path": "lib/meal-types.ts",
+      "sha256": "646002059a6fcb10c6c92f1a8784b16916082b472d05bf520248472d0ef469af"
+    },
+    {
+      "path": "lib/meals.ts",
+      "sha256": "edbcb296950df992e4ca9136bcb3f58e223c02546e1e8a69ec39f99abbf08df6"
+    },
+    {
+      "path": "lib/pack-math.ts",
+      "sha256": "785f18315b4f03055daa3663fa9c4053f33da4131605f5e389bed9b1ddcf019a"
+    },
+    {
+      "path": "lib/pantry.ts",
+      "sha256": "96595ab46fa1298eaa41b691a1942ae516e63f084c9bd1ca786b1eb2765949d4"
+    },
+    {
+      "path": "lib/planner.ts",
+      "sha256": "71070f596336bf8062c772263295a6405fe55e88ec1cf82373a886ef95c729b1"
+    },
+    {
+      "path": "lib/plate-cache.ts",
+      "sha256": "63c40d6dd2aed70c74684ae56e7f68a43ca74800a9e92f2b159eb73245f01038"
+    },
+    {
+      "path": "lib/plate-picture.ts",
+      "sha256": "609df7e530a653bf390494a90d816f3525be1abc54b111fe526b20d49687e8b0"
+    },
+    {
+      "path": "lib/plate-version.ts",
+      "sha256": "ae151ad6da8ec302aa9dba3cad40125a88dabcf30b57e07ee49f647d5f63e1b5"
+    },
+    {
+      "path": "lib/plates.ts",
+      "sha256": "a533996b9e32d3542d615e80baf6b7bc90a89c41f723defe6a81849f478844a6"
+    },
+    {
+      "path": "lib/price-memory.ts",
+      "sha256": "82637f0306b7f3104bcdc7861afdb1aa6b1d33bbabd98d9b25875216cfac5e34"
+    },
+    {
+      "path": "lib/price-page.ts",
+      "sha256": "89afeb684bcdb23d7fd3b12481c2aa7c6e2bcd9f1e37c25aa1a357b2c2af8e4e"
+    },
+    {
+      "path": "lib/product-match.ts",
+      "sha256": "5c9079809f9c30b510cba51803340e65be0eadac7f14b855193c0eff8d4431cb"
+    },
+    {
+      "path": "lib/public-path.ts",
+      "sha256": "4cd3e594557a9e25706e09c842b025c7a207ae60d4cc14fc44c733e59dd72432"
+    },
+    {
+      "path": "lib/published-file.ts",
+      "sha256": "60060d84a8a1d55ffe40f8a7b92daf3527a2d400479f7d81573d913f0596f0f5"
+    },
+    {
+      "path": "lib/recipe-filters.ts",
+      "sha256": "4736d9a9cd8f7791d0a25eb52112514294919cf618533e485d6704e3dfc33489"
+    },
+    {
+      "path": "lib/recipe-identity.ts",
+      "sha256": "8d154fd844f3982fafb7a3a8368b1fd0839c04fb5c3afc7882976c22579dee89"
+    },
+    {
+      "path": "lib/recipe-input.ts",
+      "sha256": "63772a609b8199e03282cf7cd1cb9e42156c12e2bdefc616b7a01c706f31f05a"
+    },
+    {
+      "path": "lib/recipe-pdf.ts",
+      "sha256": "38e3c04c36c7434d2bde753e25b0cf0472aa2b52eb081b9409c8029de9cea95a"
+    },
+    {
+      "path": "lib/recipe-types.ts",
+      "sha256": "a25c1d521bc378b8a4cbfe27349873401f0b47a48149f74e35902b2e34937616"
+    },
+    {
+      "path": "lib/recipes.ts",
+      "sha256": "9c4a0b0b9d5668759088c4a0c7a18b3870e71e9e1c146c280d435e05d4aa79d0"
+    },
+    {
+      "path": "lib/region-affinity.ts",
+      "sha256": "aaba4a2eabfc41c0ef9e70404ea0e593f3c7810b55cdfca11bf445d83c7254b9"
+    },
+    {
+      "path": "lib/region-diversity.ts",
+      "sha256": "ba39d2025941fe5fc7df37e61a826d3214323aa137bd1f57685f611578fba40b"
+    },
+    {
+      "path": "lib/region-pantry.ts",
+      "sha256": "7b9f1a0cdde8c019c3b2c0751583b6ef3ad1cb3e64f981ba31a783ebf8cffbba"
+    },
+    {
+      "path": "lib/sat.ts",
+      "sha256": "5a759f984e576983fc3a52a05715c86aeca58d819ef044a7c98178db95e69de5"
+    },
+    {
+      "path": "lib/share-recipe.ts",
+      "sha256": "f4f0db76b6a07008dd3e53b5668578599db9bdafa172cb6f85d8693e118e941c"
+    },
+    {
+      "path": "lib/shopping.ts",
+      "sha256": "71c83cdd52b39055f1550735261fadc2dfd771e7dc96d77a262fd3a5f81717c3"
+    },
+    {
+      "path": "lib/side-plans.ts",
+      "sha256": "966ce9658cf2445068c311c90610d974a6e83d8d76d2df86ee2a7d0f1faf2546"
+    },
+    {
+      "path": "lib/smoke-method.ts",
+      "sha256": "f28f29a63c7ae7d132855634164eb1a170edaec0ba1af1b10cea531b34489e00"
+    },
+    {
+      "path": "lib/staples.ts",
+      "sha256": "e3d64760e2aeb07ac1471cdeaa59ce91a52c897316bb90b52e0032d3e4eb53e8"
+    },
+    {
+      "path": "lib/template-types.ts",
+      "sha256": "d8276e60319277da1e9689b6af09b43f6aee7e139ce52ef8f60c370cff442113"
+    },
+    {
+      "path": "lib/utils.ts",
+      "sha256": "c2aa0cde88a8b5b5db7718003da1a345bdcce5f31085800b66ff0dddedfb0254"
+    },
+    {
+      "path": "next.config.ts",
+      "sha256": "7cbea6d49af99d4e72e89a5ace10c22956621f24d942cd7bfb2054cc0874a070"
+    },
+    {
+      "path": "package.json",
+      "sha256": "bd4f2c0835e4b968d2c663c0e1943222fc5271d585870e601bbeedf24a4cae2a"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "45518ba3d164885ac4533202689a9e01d7aa4a24dd24bcf66774069ed84d62c5"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256": "4a48cdfc4e855c8d3342dafa5f4da5be97dfd7c314b91a383fdc74a94496f4ce"
+    },
+    {
+      "path": "postcss.config.mjs",
+      "sha256": "7b299d3d3b16699ddda397c0b2373b3af4f25f8fc9ccc9b3d9e64ef083bc1c21"
+    },
+    {
+      "path": "public/favicon.svg",
+      "sha256": "cdff3856d257d8cf2eb7e08346c3800f38d9d282756a95fe67132db35794adcb"
+    },
+    {
+      "path": "public/images/fusion-table-hero-480.webp",
+      "sha256": "0c2de7513aee305e65b46dd8e8c65dc85122cbbc7f575007cfeefefce47d7f35"
+    },
+    {
+      "path": "public/images/fusion-table-hero-960.webp",
+      "sha256": "9b75f3179d8a4fa988a112f4a2653cd9c85b3ce798b21692434db80e51eccd99"
+    },
+    {
+      "path": "public/images/fusion-table-hero.png",
+      "sha256": "ccfa0745567bf9fa3517bf0611549aa6a20a93332d9afd2cbddb24367387b80a"
+    },
+    {
+      "path": "public/images/korean-tacos-480.webp",
+      "sha256": "a11a3a9a2f0d7a3f338ffb0f89a6de371e051d3139e23050a9ca6c720cfe5e7b"
+    },
+    {
+      "path": "public/images/korean-tacos-960.webp",
+      "sha256": "c9c4c0b82a8e49ffd68a9316446a08a5f51d243c7e9d9eb5491f8e431aff3f6e"
+    },
+    {
+      "path": "public/images/korean-tacos.png",
+      "sha256": "a8569613f9eab5060fcbb3cf870389712e464213be2d79126969e94c27d773e3"
+    },
+    {
+      "path": "public/images/meals/ethiopian-lentil-braise.jpg",
+      "sha256": "f5f16e35625111dbf64a8b4ccadd05212fa67c6c17721181dd4738a366c0a0dd"
+    },
+    {
+      "path": "public/images/meals/indian-chickpea-curry.jpg",
+      "sha256": "266a852f4bf2836691429e22feb5414cca06b92de4ba5ccc6dfcee810e05dde3"
+    },
+    {
+      "path": "public/images/meals/japanese-salmon-grilled.jpg",
+      "sha256": "9072f38352e28dc9ddb4732b17bce7a320926452ee1911a3e23c7e4a9ddc6b82"
+    },
+    {
+      "path": "public/images/meals/korean-beef-stirfry.jpg",
+      "sha256": "1451f2ce563dbd024d36aac086e60e157b39ee794c1628840e75f98f928bc7b2"
+    },
+    {
+      "path": "public/images/meals/levantine-chicken-grilled.jpg",
+      "sha256": "1059875bbcf99d35dac1545cb17374475932ded9a1b7f1d8facbbbf9c90feba7"
+    },
+    {
+      "path": "public/images/meals/mexican-chicken-grilled.jpg",
+      "sha256": "74529ca1ab8b16a3487c1e309ba7966ce5e8c484040648b00f9fc1560d9702a5"
+    },
+    {
+      "path": "public/images/meals/thai-chicken-curry.jpg",
+      "sha256": "b3d5943e243c9e37af7fa5474dcfea9d349da4f9f2c3aa69f3592a749b12de85"
+    },
+    {
+      "path": "public/images/meals/vietnamese-chicken-grilled.jpg",
+      "sha256": "6c1148fab0fbaab8f24e8795371ee985394e3fb4d832a20cfe99d3dfaee48dc2"
+    },
+    {
+      "path": "public/images/moroccan-traybake-480.webp",
+      "sha256": "df7c80ea7fbb1b88c19cd9b678a5f9c5b7bcd68cf81fbe5274ea779505d9d264"
+    },
+    {
+      "path": "public/images/moroccan-traybake-960.webp",
+      "sha256": "8dc050dfc4b7b262fe611ceb09224500078fe646d36eb9efe7eb7607b36da3af"
+    },
+    {
+      "path": "public/images/moroccan-traybake.png",
+      "sha256": "797c8bfcc6e1cff3ba119eaa47428afe3a5b2099399c6262baf2e79fbfac7ad6"
+    },
+    {
+      "path": "scripts/Start-Fusion.ps1",
+      "sha256": "d87f762768f81fcfd15b4953afbf30e5cf1b66824c66cac2d262f2df02a0db2c"
+    },
+    {
+      "path": "scripts/build-verified.sh",
+      "sha256": "61024a70b28a732585428398f58ca96331b6850642683bf4a35297974a0125f4"
+    },
+    {
+      "path": "scripts/connector-preview/connector-preview-session.mjs",
+      "sha256": "88a25f0ef4397e7e765b6cb6c193544b86f6593cb2c64b6fa1efefa386e59616"
+    },
+    {
+      "path": "scripts/connector-preview/host-binding.mjs",
+      "sha256": "9e6d5f28983cf09c3e34fb7fe81dd210ae9c792203e045cf73d1a0429586fed2"
+    },
+    {
+      "path": "scripts/connector-preview/protocol.mjs",
+      "sha256": "d26ce24ce374d1917941cd85943f9b3c709e0eaadd1bd9f30b030963634dae0a"
+    },
+    {
+      "path": "scripts/connector-preview/worker.mjs",
+      "sha256": "3464bfee3902063891398380e963fcd90928b222f6e2dcdb17f226d93e5595cc"
+    },
+    {
+      "path": "scripts/deploy-cloudflare.mjs",
+      "sha256": "3dde6f72374e02c9dfef1bbb1846c087ca5a6b9e733b04bc2dd5d130aca68771"
+    },
+    {
+      "path": "scripts/execution-profile.mjs",
+      "sha256": "2581f6f47a0903d0d6cb3b26def05fae88026a7ae8c88f5d7dabe5dbcbd6ee32"
+    },
+    {
+      "path": "scripts/export-mealplanner-catalog.ts",
+      "sha256": "6553afb0d88a1e8140fec5c365ec4cce33a20b91e3fa6dae966e6262e8a23f5e"
+    },
+    {
+      "path": "scripts/ingredient-diversity-audit.mjs",
+      "sha256": "e4d7efa29057d7bb8ef28f7a2528b71442cb076f754932da58238fa7ce4d579a"
+    },
+    {
+      "path": "scripts/install-ci.mjs",
+      "sha256": "de69b36bab9fcfd33716dcc23288e100887c2d4f27a6c6fbe0c6bea6d51dd09f"
+    },
+    {
+      "path": "scripts/install-ci.sh",
+      "sha256": "6d2252b4b08013828a2a44ba70ebcad0c3037b06cead346418eb1a5742b2fbf4"
+    },
+    {
+      "path": "scripts/install-pnpm.sh",
+      "sha256": "f918db24f6809b8b4fba5f9c4aace90d515a5b78154f23108dcab2c773d08cdb"
+    },
+    {
+      "path": "scripts/local-image-env.mjs",
+      "sha256": "f5f89209f9ff0b07f27f445877785460673ec60fc124118176c4cd79d89040bf"
+    },
+    {
+      "path": "scripts/mirror-public.mjs",
+      "sha256": "fbbe334c7ef166510acba1715dff09d202a67dce2e8819a50c84d5e21dd24c29"
+    },
+    {
+      "path": "scripts/node-worker-env.mjs",
+      "sha256": "d8240e8fce1c15c1712f74f4c87a8477611e88746d040dd9ab32214e68725ea8"
+    },
+    {
+      "path": "scripts/npm-install.mjs",
+      "sha256": "8892e92c00a9e27f448577a19dfbd1663605b6752235feb032bcc1405923bd4e"
+    },
+    {
+      "path": "scripts/optimize-images.mjs",
+      "sha256": "e7338b8f0d4a58df9523553a99598b353a6d3099e1f72bf3048fb51880940ae3"
+    },
+    {
+      "path": "scripts/package-source.mjs",
+      "sha256": "0630440d99a0cd7bb8aed4835651ea59c85095706f5be9576e252f7029aec6c1"
+    },
+    {
+      "path": "scripts/package-worker.mjs",
+      "sha256": "9293a770e3f557f708b39212fed941641a06410dd6d58911ecd976c6cc1216b3"
+    },
+    {
+      "path": "scripts/plate-model-server.mjs",
+      "sha256": "c3191b047a44dd202c8fb94b39211b9650216a03f74a8536c967ba6846df4e0b"
+    },
+    {
+      "path": "scripts/pnpm-install.mjs",
+      "sha256": "c1d3c7d09c38e002669acbb53d9a68aa121f1d82f0fdc08ccde6d2331139437b"
+    },
+    {
+      "path": "scripts/region-affinity-after.json",
+      "sha256": "9af7b3cb5086b4a6990e1312a7adb51296881a8fe067467c444ca6a66a6c5ee3"
+    },
+    {
+      "path": "scripts/region-affinity-audit.mjs",
+      "sha256": "270d1e5f5c1cf6e32bc050bb5aabcda66f22eef9dd4d68ab90b541547ffb55b2"
+    },
+    {
+      "path": "scripts/region-affinity-before.json",
+      "sha256": "aa37fc63bf79f0aff5eee3011455874691f21292f4c635a8914c5a76666b4ff9"
+    },
+    {
+      "path": "scripts/run-framework.mjs",
+      "sha256": "a2260fed86095ed7f15767fb07f0f092710736e55e70b49396b00b076db73426"
+    },
+    {
+      "path": "scripts/runtime-profile.mjs",
+      "sha256": "4672976353b241a3fd210f172b0ac46cb085651f85526993ca6edd498107887a"
+    },
+    {
+      "path": "scripts/sites-env.mjs",
+      "sha256": "34b78a86e1458c766e6e1a8ded45b75a613104cbc9b91909353b755fc8c553ac"
+    },
+    {
+      "path": "scripts/sites-env.sh",
+      "sha256": "cae036c0ccdee67accb7775f8e44fb8fa23aafda4f7403c5e8e9059662bdabf9"
+    },
+    {
+      "path": "scripts/test.mjs",
+      "sha256": "8daf1de04d594fc69471bd63d2c35ddcc617ac3a86f592bab302993f9751bf00"
+    },
+    {
+      "path": "scripts/tool-environment.mjs",
+      "sha256": "16f1df8f9f76ce7c84a3fc2b6cbed57581514020052671426a8036d6db947d32"
+    },
+    {
+      "path": "scripts/validate-sides.mjs",
+      "sha256": "975bba300bf88a8ceca7bbe4301c14f119582cd15d8d20aad978cd446c8d1f9d"
+    },
+    {
+      "path": "scripts/vite/connector-preview-plugin.mjs",
+      "sha256": "c85dddfed97753d80de89050b5a1316b2b490cdfab2faa119a3417cb6e6c315c"
+    },
+    {
+      "path": "scripts/vite/sites-vite-plugin.LICENSE",
+      "sha256": "3dd119f149df88296e82981a51e5131b1018ba2e2f2f6f4bbec2b83d58a43a45"
+    },
+    {
+      "path": "scripts/vite/sites-vite-plugin.ts",
+      "sha256": "5b2d671313fe4ac10a1709e112d570da1267cb916f68655996a3ac3ea1dd80a9"
+    },
+    {
+      "path": "tests/bbq-recipes.test.ts",
+      "sha256": "9336096f20502fedd3b0decc4899755ce1f983f30f91fd9c58327c4e51acab64"
+    },
+    {
+      "path": "tests/catalogue.test.ts",
+      "sha256": "e892070f16300b47930b1ac0fffd74286318d58d9ee9fdc60c735cd1957665b9"
+    },
+    {
+      "path": "tests/classic-finish.test.ts",
+      "sha256": "7d4f818e96a1bb7da8054e2837b1346d9b1d2966610be3268e1a952630fb4a98"
+    },
+    {
+      "path": "tests/classic-inspirations.test.ts",
+      "sha256": "67244e4e3e427e0e97322ece31bb5e28ca33bb7d95c53bb5c889bf61a3f9a190"
+    },
+    {
+      "path": "tests/cleaner-meals.test.ts",
+      "sha256": "d5e8964e1c5095a14ae879e4bb114bf372821e9f9c7ac44608e261e671666f52"
+    },
+    {
+      "path": "tests/community-learning.test.ts",
+      "sha256": "2bcaef037c50bb9384c8577648991eb128c425f8eef45334767a7f452f7d12b2"
+    },
+    {
+      "path": "tests/cut-method.test.ts",
+      "sha256": "d4530ef786a33de9cf6935513e948e2fea026c12f4dbf177e9200248fe8028e6"
+    },
+    {
+      "path": "tests/featured-recipes.test.ts",
+      "sha256": "1dd8948c3c0770f0a3a85e68e42a1010d8ea1618070bf384f142348186a2d0c1"
+    },
+    {
+      "path": "tests/fusion-overhaul.test.ts",
+      "sha256": "739624f81215410bd9d3f164a0296b8e98d600691e7644510f7a8b0c6c9e90f0"
+    },
+    {
+      "path": "tests/fusion-random.test.ts",
+      "sha256": "b55229ede8a275b46b4d7c399a026d36129f5945706bf38ad2753d1d4e1a623a"
+    },
+    {
+      "path": "tests/ingredient-diversity.test.ts",
+      "sha256": "4244d27f03d1cabd7e2a0c156da4610cec628e7a57db5123f0a867d2366a6525"
+    },
+    {
+      "path": "tests/kitchen-state.test.ts",
+      "sha256": "249e7210ff06c732d2091de0692a18d978f95a6c430d8f45007aee3fa738288b"
+    },
+    {
+      "path": "tests/ledger.test.ts",
+      "sha256": "1d2a6acb5a4098eea6a1d352d6bd7557154ae2a2f84be67262246b7aa4385f7e"
+    },
+    {
+      "path": "tests/location-client.test.ts",
+      "sha256": "b437ca91cbe7d0a66d370943cb31ba301963256e13e52409c01fa2d28f825b6c"
+    },
+    {
+      "path": "tests/location-providers.test.ts",
+      "sha256": "5e7477affcd4b2e880fde5f4bda66e4ecc9d28c0f6101bc5c6e99bccab1d461b"
+    },
+    {
+      "path": "tests/locations.test.ts",
+      "sha256": "dab394076abdea3cbeaebad4dea3ceec0b30dcfba80abf8f7e396ae23818035f"
+    },
+    {
+      "path": "tests/meal-integrity.test.ts",
+      "sha256": "d0f83603ba0cf0e570d549cb7358d1bd7be8a142d99dc642bf3ce618c95ff14c"
+    },
+    {
+      "path": "tests/meals.test.ts",
+      "sha256": "1920eac7595537c82a71429d3f4585afffa0482ab5e6637c3409e00c85264e23"
+    },
+    {
+      "path": "tests/mirror-public.test.ts",
+      "sha256": "ac10765ea1b957af71ddd1d6e54a025b86753d3ebb012a8bc793b701720c27e1"
+    },
+    {
+      "path": "tests/pack-math.test.ts",
+      "sha256": "d67a6898b7673ecc704846d35c48a87fc1a245a6cad9ff38d3fda44fb91a978c"
+    },
+    {
+      "path": "tests/pantry.test.ts",
+      "sha256": "de208ade5a1fe955a800b2dcfb2bb5cfe1269fbbc6de340c13ae55f00bf10444"
+    },
+    {
+      "path": "tests/planner-allergens.test.ts",
+      "sha256": "a806a8ad3f68e974c2223aea0621c8286759344249d83922fd5ae69680b3bd31"
+    },
+    {
+      "path": "tests/planner.test.ts",
+      "sha256": "267cc031f021f5d613999c43e2cfdee75b9eb8ce0f8564f16f41df5cc10b8b1c"
+    },
+    {
+      "path": "tests/plate-cache.test.ts",
+      "sha256": "603a034f2faf75f1aa3e2ffa5dedf3f4274f25f16df28c6f18c6f882591858f8"
+    },
+    {
+      "path": "tests/plate-placeholder.test.ts",
+      "sha256": "358f09efe96c2965097362fea0bdce590c3f92e32a4b33666af901d12f54c9ba"
+    },
+    {
+      "path": "tests/recipe-identity.test.ts",
+      "sha256": "c76efe92e9dcf3cc49e0e0e649d2530d915bcab21105746e7e98376530c5ec60"
+    },
+    {
+      "path": "tests/recipe-key.test.ts",
+      "sha256": "b20c8b70b9d3cf716d6fd599bcb9324252f0d486c6c9289bd0aaecf20b2b0188"
+    },
+    {
+      "path": "tests/recipe-pdf.test.ts",
+      "sha256": "4f0b0f1f97fdf32e1c408718348ccf9cc45052b7be4604808322de1f8720c254"
+    },
+    {
+      "path": "tests/recipes.test.ts",
+      "sha256": "37dcf670fae473e6f27b3dc7c59add10d7289014a537bb532422f539bd5b99b5"
+    },
+    {
+      "path": "tests/region-affinity.test.ts",
+      "sha256": "ace1dea609222e8e4ad254a755a8784f73681c856a530cb5b3e2e98e74505896"
+    },
+    {
+      "path": "tests/region-pantry.test.ts",
+      "sha256": "91afab72c6f6166caa2a1246fd13bd6a5cc5524ab247e8cad6b68de8154f1a16"
+    },
+    {
+      "path": "tests/runtime-profile.test.mjs",
+      "sha256": "5d060e900f370d1d9bf509434a63584d9c9b0e8b3c2ff05cbb134f13a2082c03"
+    },
+    {
+      "path": "tests/sat.test.ts",
+      "sha256": "347055e6a1a5be4ab3a93289297e566820831b9da140ebb7747a75fe808bbe28"
+    },
+    {
+      "path": "tests/share-plate.test.ts",
+      "sha256": "183cd131c9bbcab4116a0ce77c5f189e6c25c67f1ce231c883a1112847a683ac"
+    },
+    {
+      "path": "tests/shopping.test.ts",
+      "sha256": "d5f582d80fa9c427da6bed7074cf22e6c27950ed0a8c840bcc104dce9a2f3950"
+    },
+    {
+      "path": "tests/side-plans.test.ts",
+      "sha256": "e4abf63b2c44f01992e971abe7e57081c6565b66faf3320b31ed3c3c7699ede4"
+    },
+    {
+      "path": "tests/smoke-method.test.ts",
+      "sha256": "1a2f9bd5a33fba03f797efd7ef7def270f70bc01cfd3b02af498e748559e00c9"
+    },
+    {
+      "path": "tests/staples.test.ts",
+      "sha256": "1a0cbd873066fc8c487a064ec8cdab61c957690b8f11b59af2d524a2415b4a0a"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "121b113873fe2aaa329b8a4b00147ceb56d4769d79dc81303e75fb2fddcb5754"
+    },
+    {
+      "path": "vendor/shadcn-tailwind-4.13.0.LICENSE.md",
+      "sha256": "a14c2d6fb5ba9925cba04633226a3b93e6c5566ca6b550dbfaead7ab3fa93b24"
+    },
+    {
+      "path": "vendor/shadcn-tailwind-4.13.0.css",
+      "sha256": "f221d959e80b4738fba93b4b4f01472b11cccaf6043ba7f6f9376f6768dad28e"
+    },
+    {
+      "path": "vite.config.ts",
+      "sha256": "0ac5a298ac2624cf3f135eab298db53261ee038babecc706e1b8a203804156e7"
+    },
+    {
+      "path": "worker/index.ts",
+      "sha256": "5a0e7fabef89c166bf1978892897982da304186554dfcc011f436dbfdf908e29"
+    }
+  ]
+}

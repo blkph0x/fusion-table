@@ -1,0 +1,12 @@
+{
+  "versionName": "1.5.4",
+  "versionCode": 11,
+  "applicationId": "au.mealplanner",
+  "bytes": 13897077,
+  "sha256": "ac089cfee0ab258fd5772af1d8b3868155d01b037f702cbaced904209d94af54",
+  "certificateSha256": "62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6",
+  "sameSignerAsPrevious": true,
+  "catalogueSha256": "af72fdf6e4ee2eba32adc9cc7d30520b66e078a1937f1ca4bd948fa05f33a1e8",
+  "sourceSha256": "ec1c062ef06b371fd46e8658ac7e0f82ccb8f7ec4411d3c49e5f67cd28037782",
+  "zipVerified": true
+}

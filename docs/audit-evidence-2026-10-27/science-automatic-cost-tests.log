@@ -1,0 +1,66 @@
+(node:49340) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:41860) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: plain brand ties become transparent suggestions while changed food forms stay excluded
+ok 1 - plain brand ties become transparent suggestions while changed food forms stay excluded
+  ---
+  duration_ms: 2.9492
+  ...
+# Subtest: a weight increment cannot masquerade as the selling price basis for loose produce
+ok 2 - a weight increment cannot masquerade as the selling price basis for loose produce
+  ---
+  duration_ms: 2.4813
+  ...
+# Subtest: volume spoons convert only to volume, never to a guessed food density
+ok 3 - volume spoons convert only to volume, never to a guessed food density
+  ---
+  duration_ms: 1.5438
+  ...
+# Subtest: stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+ok 4 - stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+  ---
+  duration_ms: 0.5938
+  ...
+# (node:65916) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+ok 5 - automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+  ---
+  duration_ms: 39.5994
+  ...
+# Subtest: one failed batch preserves other prices and never silently turns the failure into zero
+ok 6 - one failed batch preserves other prices and never silently turns the failure into zero
+  ---
+  duration_ms: 1.0949
+  ...
+# Subtest: stale or foreign response quantities cannot enter a new recipe estimate
+ok 7 - stale or foreign response quantities cannot enter a new recipe estimate
+  ---
+  duration_ms: 0.7741
+  ...
+# Subtest: shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+ok 8 - shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+  ---
+  duration_ms: 0.2627
+  ...
+# Subtest: identical mounted views share one request and detached views cannot get late updates
+ok 9 - identical mounted views share one request and detached views cannot get late updates
+  ---
+  duration_ms: 2.6206
+  ...
+# Subtest: homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+ok 10 - homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+  ---
+  duration_ms: 7.8764
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 446.5412

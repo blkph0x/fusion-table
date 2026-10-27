@@ -1,0 +1,70 @@
+{
+  "base": "https://gearsqueens.online/fusion",
+  "releaseId": "20261027-052531",
+  "checks": [
+    {
+      "name": "Expected deployed release",
+      "passed": true
+    },
+    {
+      "name": "liver recipe response",
+      "passed": true
+    },
+    {
+      "name": "liver rendered methods",
+      "passed": true
+    },
+    {
+      "name": "maryland recipe response",
+      "passed": true
+    },
+    {
+      "name": "maryland rendered methods",
+      "passed": true
+    },
+    {
+      "name": "one-oven recipe response",
+      "passed": true
+    },
+    {
+      "name": "one-oven rendered methods",
+      "passed": true
+    },
+    {
+      "name": "stir-fry recipe response",
+      "passed": true
+    },
+    {
+      "name": "stir-fry rendered methods",
+      "passed": true
+    },
+    {
+      "name": "sorghum recipe response",
+      "passed": true
+    },
+    {
+      "name": "sorghum rendered methods",
+      "passed": true
+    },
+    {
+      "name": "shells recipe response",
+      "passed": true
+    },
+    {
+      "name": "shells rendered methods",
+      "passed": true
+    },
+    {
+      "name": "Stuffed-shell PDF export",
+      "passed": true
+    },
+    {
+      "name": "burnt-ends recipe response",
+      "passed": true
+    },
+    {
+      "name": "burnt-ends rendered methods",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+(node:65544) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"mode":"smoke","catalogue":{"regions":76,"sides":90,"defaultMainMethods":266,"supportedCutMethods":648,"diets":5,"classics":34,"classicRegions":25},"planned":{"authored":1819440,"variants":101080,"cuts":49248,"diets":34200,"classics":8500},"plannedTotal":2012468}
+{"phase":"authored","checked":48,"planned":1819440,"failedCases":0}
+{"phase":"variants","checked":48,"planned":101080,"failedCases":0}
+{"phase":"cuts","checked":48,"planned":49248,"failedCases":0}
+{"phase":"diets","checked":48,"planned":34200,"failedCases":0}
+{"phase":"classics","checked":48,"planned":8500,"failedCases":0}
+{"status":"smoke-passed","checked":240,"failedCases":0,"violations":0,"elapsedSeconds":0.5,"report":"D:/fusion-table/docs/audit-evidence-2026-10-27/wide-smoke.json"}

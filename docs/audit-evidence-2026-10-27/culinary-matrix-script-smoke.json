@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "mode": "smoke",
+  "status": "failed",
+  "startedAt": "2026-10-27T03:42:18.592Z",
+  "finishedAt": "2026-10-27T03:42:18.731Z",
+  "node": "v22.13.0",
+  "catalogue": {
+    "regions": 76,
+    "sides": 90,
+    "defaultMainMethods": 266,
+    "supportedCutMethods": 654,
+    "diets": 5
+  },
+  "source": {
+    "sha256": "ef5749c4467060f0d263e58fe9e97b2da6dcbe1c9a54a4ad9c8874b0e5583ff3",
+    "files": 64
+  },
+  "planned": {
+    "authored": 1819440,
+    "variants": 101080,
+    "cuts": 49704,
+    "diets": 34200
+  },
+  "plannedTotal": 2004424,
+  "checked": 48,
+  "failedCases": 8,
+  "violations": 11,
+  "elapsedSeconds": 0.1,
+  "phases": [
+    {
+      "id": "authored",
+      "planned": 1819440,
+      "scheduled": 12,
+      "checked": 12,
+      "failedCases": 1,
+      "coverage": "Every region × supported default main/method × explicitly selected side; balanced, authored, four servings."
+    },
+    {
+      "id": "variants",
+      "planned": 101080,
+      "scheduled": 12,
+      "checked": 12,
+      "failedCases": 3,
+      "coverage": "Every region/main-method receives five seeded cases, all five heats and servings 1/2/4/6/12; cleaner knobs and all sides rotate."
+    },
+    {
+      "id": "cuts",
+      "planned": 49704,
+      "scheduled": 12,
+      "checked": 12,
+      "failedCases": 3,
+      "coverage": "Every supported chosen-cut/method × every region; sides, heat, servings and authored/seeded cases rotate."
+    },
+    {
+      "id": "diets",
+      "planned": 34200,
+      "scheduled": 12,
+      "checked": 12,
+      "failedCases": 1,
+      "coverage": "Every diet × every region × every side; compatible main/methods rotate. This is not every dietary main/method Cartesian product."
+    }
+  ],
+  "checks": [
+    "selected identity/settings",
+    "positive finite quantities and total time",
+    "unique ingredient IDs",
+    "ingredient name or ID occurs in method",
+    "exact allergen-tag union and diet exclusions",
+    "one regional finish after main",
+    "animal endpoint/source/thermometer",
+    "usable method notes/equipment",
+    "chosen cut retained"
+  ],
+  "issueCounts": {
+    "UNUSED_INGREDIENT": 8,
+    "REGIONAL_FINISH_COUNT": 2,
+    "MAIN_COOKING_STEP_MISSING": 1
+  },
+  "examples": [
+    {
+      "phase": "authored",
+      "ordinal": 330807,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "side-harissa: Vegan mild harissa paste for the side",
+      "input": {
+        "mainId": "kangaroo",
+        "methodId": "schnitzel",
+        "regionId": "indonesian",
+        "sideId": "harissa-carrots-couscous",
+        "servings": 4,
+        "diet": "balanced"
+      }
+    },
+    {
+      "phase": "variants",
+      "ordinal": 36756,
+      "code": "REGIONAL_FINISH_COUNT",
+      "detail": "Expected one final regional sauce finish, got 0.",
+      "input": {
+        "mainId": "pumpkin",
+        "methodId": "pan-fried",
+        "regionId": "indian-korma",
+        "sideId": "soba-greens",
+        "servings": 2,
+        "diet": "balanced",
+        "seed": 635461664,
+        "spiceHeat": "mild",
+        "clean": {
+          "fewerBottles": true
+        }
+      }
+    },
+    {
+      "phase": "variants",
+      "ordinal": 36756,
+      "code": "MAIN_COOKING_STEP_MISSING",
+      "detail": "pan-fried: expected Pan-fry the main",
+      "input": {
+        "mainId": "pumpkin",
+        "methodId": "pan-fried",
+        "regionId": "indian-korma",
+        "sideId": "soba-greens",
+        "servings": 2,
+        "diet": "balanced",
+        "seed": 635461664,
+        "spiceHeat": "mild",
+        "clean": {
+          "fewerBottles": true
+        }
+      }
+    },
+    {
+      "phase": "variants",
+      "ordinal": 64323,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "side-passata: Tomato passata for the side sauce",
+      "input": {
+        "mainId": "tempeh",
+        "methodId": "schnitzel",
+        "regionId": "georgian",
+        "sideId": "patatas-bravas-side",
+        "servings": 6,
+        "diet": "balanced",
+        "seed": 4228072706,
+        "spiceHeat": "hot",
+        "clean": {
+          "cleanMode": true,
+          "pantryFirstClean": true
+        }
+      }
+    },
+    {
+      "phase": "variants",
+      "ordinal": 64323,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "side-smoked-paprika: Sweet smoked paprika for the side",
+      "input": {
+        "mainId": "tempeh",
+        "methodId": "schnitzel",
+        "regionId": "georgian",
+        "sideId": "patatas-bravas-side",
+        "servings": 6,
+        "diet": "balanced",
+        "seed": 4228072706,
+        "spiceHeat": "hot",
+        "clean": {
+          "cleanMode": true,
+          "pantryFirstClean": true
+        }
+      }
+    },
+    {
+      "phase": "variants",
+      "ordinal": 82701,
+      "code": "REGIONAL_FINISH_COUNT",
+      "detail": "Expected one final regional sauce finish, got 0.",
+      "input": {
+        "mainId": "pork",
+        "methodId": "air-fried",
+        "regionId": "cuban",
+        "sideId": "gomen-style-greens",
+        "servings": 2,
+        "diet": "balanced",
+        "seed": 3370282546,
+        "spiceHeat": "mild",
+        "clean": {
+          "fewerBottles": true
+        }
+      }
+    },
+    {
+      "phase": "cuts",
+      "ordinal": 31629,
+      "code": "UNUSED_INGREDIENT",
+      "detail": "side-banana-leaf: Food-grade banana leaf for the rice",
+      "input": {
+        "mainId": "beef",
+        "methodId": "air-fried",
+        "regionId": "georgian",
+        "sideId": "banana-leaf-rice",
+        "servings": 1,
+        "diet": "balanced",
+        "cutId": "beef-bolar",
+        "spiceHeat": "gentle",
+        "seed": 186310270
+      }
+    }
+  ],
+  "limits": [
+    "This checks authored content and recorded ingredient tags, not actual cooking, taste, packet contents or cross-contact.",
+    "All authored balanced combinations are exhaustive only after a completed full authored phase.",
+    "Seed/heat/serving/clean and cut/diet variants use the stated rotating cases, not every possible input Cartesian product.",
+    "Source hash covers local lib/*.ts at start and end; changing source invalidates the run."
+  ]
+}

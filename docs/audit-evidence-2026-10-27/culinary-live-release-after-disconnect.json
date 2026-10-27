@@ -1,0 +1,7 @@
+{
+  "releaseId": "20261027-022643",
+  "sourceManifestSha256": "e66a433df5e553b7161c5243cf0f984678919426d3675ef2de5af99e1a8846bd",
+  "runtime": "node",
+  "basePath": "/fusion",
+  "feature": "culinary-methods"
+}

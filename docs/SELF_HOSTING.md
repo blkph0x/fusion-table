@@ -1,5 +1,7 @@
 # Self-hosting Fusion Table and building your own app
 
+For the current shared cook reports and recorded prices, use the explicit **Node** profile with a persistent filesystem. On Windows, `scripts/Start-Fusion.ps1` defaults to Node: run `-Task build`, then `-Task start`. On Linux, build with `FUSION_RUNTIME=node NEXT_PUBLIC_BASE_PATH=/fusion pnpm build`, then start with `FUSION_RUNTIME=node NEXT_PUBLIC_BASE_PATH=/fusion FUSION_DATA_DIR=/persistent/fusion-data node scripts/run-framework.mjs start --port 8792`. Use one supervised Node writer and back up that directory. See [the verified environment guide](DEV_ENVIRONMENT.txt). The Worker profile remains available for Sites/Cloudflare; it needs a separate durable storage adapter for shared records. Build and start the same profile; both currently use `dist/`.
+
 Fusion Table v0.2.3 includes the complete source for a deterministic recipe website, an expanded barbecue/classic catalog, an ingredient-led meal builder and live local shop discovery. The default deployment is a React/Vinext website backed by a Cloudflare Worker. Both recipe engines are pure TypeScript and can be reused independently.
 
 ## 1. Get the source

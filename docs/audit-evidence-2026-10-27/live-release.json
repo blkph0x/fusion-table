@@ -1,0 +1,7 @@
+{
+  "releaseId": "20261027-014236",
+  "sourceManifestSha256": "5192acae4d4f0c2265d50604f70b7bd4d80cba43182627c4a8faff32a0d306cb",
+  "runtime": "node",
+  "basePath": "/fusion",
+  "feature": "regional-quality"
+}

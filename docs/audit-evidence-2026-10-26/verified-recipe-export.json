@@ -1,0 +1,267 @@
+{
+  "id": "meal-tofu-grilled-thai-rice-greens-vegan-gentle-3-clean-sat-3336188269",
+  "classicId": "meal:tofu:grilled:rice-greens",
+  "kind": "meal",
+  "mainId": "tofu",
+  "methodId": "grilled",
+  "sideId": "rice-greens",
+  "regionId": "thai",
+  "generationInput": {
+    "v": 1,
+    "seed": 3336188269,
+    "clean": {
+      "cleanMode": true,
+      "fewerBottles": true
+    }
+  },
+  "title": "Thai grilled firm tofu with rice & greens — hot toss with Rice vinegar and Red capsicum",
+  "description": "Thai grilled firm tofu with rice & greens. Firm tofu · grilled with fluffy Jasmine rice, steamed green beans and ground turmeric, calamansi juice & thai basil sauce. A complete meal built around your chosen main and cooking method. Seeded plate: hot toss with Rice vinegar and Red capsicum.",
+  "fusionNote": "This original fusion combination pairs the grilled technique with red curry paste, bird's eye chilli, coconut, lime and coriander. It is inspired by regional flavours, not presented as a traditional recipe. Aromatics, spices and herbs were sampled from this region's pantry for this seed; the signature heat stays put. Cleaner-meal soft prefs trimmed bottles and clutter where they could; hard filters stay. The extras on this plate were chosen by a seeded SAT search (seed 3336188269, 22 variables, 44 clauses, 4 decisions, 0 conflicts). Hard diet, allergen and dislike filters are clauses. The same seed repeats this plate. Another click uses a new seed. This is not a live model, not kitchen-tested, and not guaranteed allergy-safe. It is not a proof about P versus NP. Check the packet.",
+  "components": {
+    "main": "Firm tofu · grilled",
+    "side": "fluffy Jasmine rice",
+    "vegetables": "steamed green beans",
+    "sauce": "ground turmeric, calamansi juice & thai basil sauce"
+  },
+  "prepMinutes": 15,
+  "cookMinutes": 30,
+  "totalMinutes": 45,
+  "servings": 3,
+  "diet": "vegan",
+  "spiceHeat": "gentle",
+  "ingredients": [
+    {
+      "id": "tofu",
+      "name": "Plain firm tofu",
+      "amount": 450,
+      "unit": "g",
+      "category": "grocery",
+      "allergens": [
+        "soy"
+      ],
+      "notes": "Drain and press the tofu in a clean towel for 10 minutes. Cut into 1.5 cm slabs.",
+      "aliases": [
+        "tofu",
+        "firm tofu",
+        "extra firm tofu"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "jasmine-rice",
+      "name": "Jasmine rice",
+      "amount": 225,
+      "unit": "g",
+      "category": "grocery",
+      "allergens": [],
+      "notes": "Dry weight. Rinse, then simmer as the packet directs.",
+      "aliases": [
+        "jasmine rice",
+        "thai fragrant rice",
+        "rice",
+        "long grain rice",
+        "long-grain rice"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "green-beans",
+      "name": "Green beans",
+      "amount": 300,
+      "unit": "g",
+      "category": "produce",
+      "allergens": [],
+      "notes": "Trimmed.",
+      "aliases": [
+        "green beans"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "lemongrass",
+      "name": "Lemongrass",
+      "amount": 15,
+      "unit": "g",
+      "category": "produce",
+      "allergens": [],
+      "notes": "Tender inner part only, very finely minced.",
+      "aliases": [
+        "lemongrass"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "turmeric",
+      "name": "Ground turmeric",
+      "amount": 0.375,
+      "unit": "tsp",
+      "category": "grocery",
+      "allergens": [],
+      "aliases": [
+        "turmeric",
+        "ground turmeric"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "calamansi",
+      "name": "Calamansi juice",
+      "amount": 22.5,
+      "unit": "ml",
+      "category": "produce",
+      "allergens": [],
+      "notes": "Fresh or bottled calamansi juice. Use the same volume of lime juice only if calamansi is not in the shop.",
+      "aliases": [
+        "calamansi",
+        "calamansi juice"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "thai-basil",
+      "name": "Thai basil",
+      "amount": 11.25,
+      "unit": "g",
+      "category": "produce",
+      "allergens": [],
+      "notes": "Not sweet basil. Ordinary basil is a different flavour.",
+      "aliases": [
+        "thai basil",
+        "horapa"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "neutral-oil",
+      "name": "Neutral cooking oil",
+      "amount": 1.125,
+      "unit": "tbsp",
+      "category": "grocery",
+      "allergens": [],
+      "notes": "For example, rapeseed or sunflower oil.",
+      "aliases": [
+        "neutral cooking oil",
+        "rapeseed oil",
+        "sunflower oil"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "vegetable-stock",
+      "name": "Vegetable stock",
+      "amount": 30,
+      "unit": "ml",
+      "category": "grocery",
+      "allergens": [
+        "celery"
+      ],
+      "notes": "Prepared liquid stock; use a vegan product and check its label for allergens.",
+      "aliases": [
+        "vegetable stock"
+      ],
+      "inPantry": false
+    },
+    {
+      "id": "sat-vinegar",
+      "name": "Rice vinegar",
+      "amount": 22.5,
+      "unit": "ml",
+      "category": "grocery",
+      "allergens": [],
+      "inPantry": false,
+      "notes": "Unseasoned rice vinegar. Check the packet."
+    },
+    {
+      "id": "sat-capsicum",
+      "name": "Red capsicum",
+      "amount": 150,
+      "unit": "g",
+      "category": "produce",
+      "allergens": [],
+      "inPantry": false,
+      "notes": "Sliced. Also called bell pepper."
+    }
+  ],
+  "steps": [
+    {
+      "title": "Prepare your main",
+      "detail": "For 3 people, prepare 450 g plain firm tofu. Drain and press the tofu in a clean towel for 10 minutes. Cut into 1.5 cm slabs. Wash and prepare the side vegetables; measure the separate portions listed in the steps. Keep raw animal ingredients and their utensils separate from the salad and cooked food.",
+      "minutes": 15
+    },
+    {
+      "title": "Start the rice",
+      "detail": "Cook this side alongside the main so both finish together. Rinse 225 g Jasmine rice. Add to a saucepan with the water amount directed on the rice packet, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+      "minutes": 20
+    },
+    {
+      "title": "Make the regional sauce",
+      "detail": "Heat 0.375 tbsp neutral cooking oil in a small saucepan over low-medium heat. Add 15 g lemongrass and soften for 2 minutes without burning. Add 0.375 tsp ground turmeric, 30 ml vegetable stock. Simmer gently for 4–5 minutes, stirring, until lightly reduced. Remove from the heat and stir in 22.5 ml calamansi juice, 11.25 g thai basil. Keep warm and serve separately so any crisp coating stays crisp.",
+      "minutes": 8
+    },
+    {
+      "title": "Grill the main",
+      "detail": "Heat a grill pan or barbecue to medium-high. Brush the prepared firm tofu with 0.75 tbsp neutral cooking oil. Cook for about 9–15 minutes total, turning carefully halfway and adjusting the heat if it scorches. Cook until hot throughout and browned where appropriate. Follow any longer cooking requirement on the packet. Add the regional sauce after grilling so the seasoning does not burn.",
+      "minutes": 12
+    },
+    {
+      "title": "Steam the green beans",
+      "detail": "Trim 300 g green beans. Steam for 5–7 minutes until tender with a little bite; keep warm briefly while finishing the main.",
+      "minutes": 7
+    },
+    {
+      "title": "Bring the meal together",
+      "detail": "Keep the fully cooked main with any integrated sauce, plus the fluffy Jasmine rice and steamed green beans, ready for the final hot toss assembly. The sauce for this meal is ground turmeric, calamansi juice & thai basil sauce. Follow the final step below before serving.",
+      "minutes": 3
+    },
+    {
+      "title": "Toss it hot",
+      "detail": "Cook the main to the endpoint already in this recipe, then toss it hot with the added ingredients for about a minute. Fold in Rice vinegar, Red capsicum. Check the packet on every bottled sauce. A sauce can contain fish, soy, or wheat even when this plate does not list them. This plate is one satisfying assignment from a seeded SAT search on this device. The same seed repeats it. It is template-generated and not kitchen-tested. It is not a proof of taste, safety, or P versus NP.",
+      "minutes": 8
+    }
+  ],
+  "equipment": [
+    "Chopping board and knife",
+    "Saucepan with lid",
+    "Steamer or colander over a saucepan",
+    "Small saucepan",
+    "Grill pan or barbecue",
+    "Wide frying pan"
+  ],
+  "tags": [
+    "Firm tofu",
+    "Grilled",
+    "Thai-inspired",
+    "Complete meal",
+    "vegan",
+    "gentle",
+    "Cleaner plate",
+    "Seeded plate",
+    "hot toss"
+  ],
+  "allergens": [
+    "celery",
+    "soy"
+  ],
+  "dietaryNotes": [
+    "Ingredient and allergen information is based on the specified products. Check every packet and prevent cross-contact when cooking for an allergy.",
+    "The selected rice is named for this region: Jasmine rice. Follow its packet's water ratio and cooking time. No additional staple was added. Check the packet.",
+    "The selected main is retained. Pastes, stock, noodles and bread are specified without animal additions; halloumi, when selected, must use vegetarian rennet.",
+    "Gentle uses less chilli than mild. It does not guarantee a chilli-free meal. Paste and spice-blend strengths vary by brand.",
+    "Times are estimates for the specified cut and thickness. Cook sides alongside the main where equipment allows; additional batches take longer.",
+    "Quantities scale to the requested servings. Water for cooking, soaking and batter is specified in the steps rather than the shopping list.",
+    "The extra ingredients were added by a seeded search. They do not make the template kitchen-tested or allergy-safe. Check every packet.",
+    "Clean plate used 3 bottles · 11 ingredients · 7 steps · 3 bottles · 5 produce items. Soft preference only; hard filters stay.",
+    "Rough plate split by weight (template only, not nutrition advice): ~65% protein-side, ~15% vegetables, ~20% grain/starch."
+  ],
+  "sourceLabel": "Template-generated · not kitchen-tested",
+  "generation": "authored",
+  "cleanSummary": "Clean plate used 3 bottles · 11 ingredients · 7 steps · 3 bottles · 5 produce items. Soft preference only; hard filters stay.",
+  "cleanStats": {
+    "ingredientCount": 11,
+    "bottleCount": 3,
+    "stepCount": 7,
+    "produceCount": 5,
+    "equipmentCount": 6,
+    "score": 29.75
+  }
+}

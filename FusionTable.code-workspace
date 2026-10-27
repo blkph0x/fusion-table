@@ -1,0 +1,18 @@
+{
+  "folders": [
+    { "name": "Fusion Table website", "path": "." },
+    { "name": "MealPlanner AU Android", "path": "../MealPlannerAU" }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Website: preview deployed /fusion path",
+        "type": "shell",
+        "command": "powershell",
+        "args": ["-NoProfile", "-File", "${workspaceFolder:Fusion Table website}/scripts/Start-Fusion.ps1", "-Task", "dev"],
+        "problemMatcher": []
+      }
+    ]
+  }
+}

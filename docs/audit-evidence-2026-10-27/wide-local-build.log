@@ -1,0 +1,72 @@
+Website: D:\fusion-table
+Android: D:\MealPlannerAU
+Public site: https://gearsqueens.online/fusion/
+Node: C:\Users\Blkph0x\AppData\Roaming\nvm\v22.13.0\node.exe
+Runtime profile: node
+Preview path: /fusion
+
+  vinext build  (Vite 8.0.13)
+
+(node:65632) ExperimentalWarning: glob is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[1/5] analyze client references...
+[2K
+transforming...✓ 270 modules transformed.
+rendering chunks...
+[PLUGIN_TIMINGS] Your build spent significant time in plugins. Here is a breakdown:
+  - vinext:og-inline-fetch-assets (27%)
+  - rsc:use-client (14%)
+  - rsc:virtual-client-package (12%)
+  - vinext:rsc-client-reference-loaders (9%)
+  - vinext:optimize-imports (8%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 7.29s
+[2/5] analyze server references...
+[2K
+transforming...✓ 173 modules transformed.
+rendering chunks...
+✓ built in 626ms
+[3/5] build rsc environment...
+[2K
+transforming...✓ 267 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 1.27s
+[4/5] build client environment...
+[2K
+transforming...✓ 1958 modules transformed.
+rendering chunks...
+computing gzip size...
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.68s
+[5/5] build ssr environment...
+[2K
+transforming...✓ 174 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 536ms
+[0m
+  Route (app)
+  ┌ ? /                   
+  ├ λ /api/community      
+  ├ λ /api/locations      
+  ├ λ /api/plate          
+  ├ λ /api/price-memory   
+  ├ λ /api/prices         
+  ├ λ /api/recipe-pdf     
+  ├ λ /api/shopping-prices
+  ├ λ /api/shops          
+  └ ƒ /r/:token           
+
+  λ API  ƒ Dynamic  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+  Build complete. Run `vinext start` to start the production server.
+

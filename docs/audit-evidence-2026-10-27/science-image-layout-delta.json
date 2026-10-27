@@ -1,0 +1,11 @@
+{
+  "previousRelease": "20261027-072707",
+  "release": "20261027-075114",
+  "changedFiles": [
+    "app/globals.css"
+  ],
+  "previousFullTests": 527,
+  "previousLiveChecks": 15,
+  "culinarySourceUnchanged": true,
+  "reason": "Display the complete square recipe image without cropping and restore shared-recipe heading hierarchy."
+}

@@ -1,0 +1,26 @@
+{
+  "apks": [
+    {
+      "path": "D:\\MealPlannerAU\\dist\\MealPlannerAU.apk",
+      "bytes": 13982261,
+      "sha256": "1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef"
+    },
+    {
+      "path": "D:\\MealPlannerAU\\dist\\MealPlannerAU-1.5.7-code14.apk",
+      "bytes": 13982261,
+      "sha256": "1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef"
+    },
+    {
+      "path": "D:\\MealPlannerAU\\app\\build\\outputs\\apk\\release\\app-release.apk",
+      "bytes": 13982261,
+      "sha256": "1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef"
+    }
+  ],
+  "assets": [
+    {
+      "path": "assets/fusion-table-recipes.json",
+      "bytes": 77475274,
+      "sha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab"
+    }
+  ]
+}

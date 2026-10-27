@@ -1,0 +1,33 @@
+(node:66072) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"mode":"full","catalogue":{"regions":76,"sides":90,"defaultMainMethods":266,"supportedCutMethods":648,"diets":5,"classics":34,"classicRegions":25},"planned":{"authored":1819440,"variants":101080,"cuts":49248,"diets":34200,"classics":8500},"plannedTotal":2012468}
+{"phase":"authored","checked":45500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":10.1}
+{"phase":"authored","checked":99000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":20.1}
+{"phase":"authored","checked":150000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":30.1}
+{"phase":"authored","checked":180500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":40.2}
+{"phase":"authored","checked":230000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":50.2}
+{"phase":"authored","checked":280000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":60.3}
+{"phase":"authored","checked":328000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":70.4}
+{"phase":"authored","checked":380500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":80.5}
+{"phase":"authored","checked":439000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":90.5}
+{"phase":"authored","checked":493500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":100.6}
+{"phase":"authored","checked":547000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":110.6}
+{"phase":"authored","checked":605000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":120.7}
+{"phase":"authored","checked":657500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":130.7}
+{"phase":"authored","checked":704500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":140.8}
+{"phase":"authored","checked":757500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":150.8}
+{"phase":"authored","checked":813000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":160.9}
+{"phase":"authored","checked":864500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":170.9}
+{"phase":"authored","checked":923500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":181}
+{"phase":"authored","checked":983500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":191}
+{"phase":"authored","checked":1041000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":201.1}
+{"phase":"authored","checked":1097500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":211.1}
+{"phase":"authored","checked":1154500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":221.1}
+{"phase":"authored","checked":1214000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":231.2}
+{"phase":"authored","checked":1268500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":241.2}
+{"phase":"authored","checked":1328500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":251.3}
+{"phase":"authored","checked":1392000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":261.3}
+{"phase":"authored","checked":1456000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":271.3}
+{"phase":"authored","checked":1504500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":281.4}
+{"phase":"authored","checked":1559500,"scheduled":2012468,"failedCases":0,"elapsedSeconds":291.4}
+{"phase":"authored","checked":1608000,"scheduled":2012468,"failedCases":0,"elapsedSeconds":301.5}

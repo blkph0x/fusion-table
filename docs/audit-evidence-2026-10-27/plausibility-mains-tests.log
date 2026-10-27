@@ -1,0 +1,191 @@
+(node:20996) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:66332) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cut × method allowlists
+    # Subtest: forbids stew cuts with steak-style quick methods
+    ok 1 - forbids stew cuts with steak-style quick methods
+      ---
+      duration_ms: 3.2254
+      ...
+    # Subtest: forbids whole birds with schnitzel, patties and stir-fry
+    ok 2 - forbids whole birds with schnitzel, patties and stir-fry
+      ---
+      duration_ms: 4.7257
+      ...
+    # Subtest: forbids mince as schnitzel steaks
+    ok 3 - forbids mince as schnitzel steaks
+      ---
+      duration_ms: 0.5899
+      ...
+    # Subtest: lists only affinity cuts in the builder helper
+    ok 4 - lists only affinity cuts in the builder helper
+      ---
+      duration_ms: 0.6465
+      ...
+    1..4
+ok 1 - cut × method allowlists
+  ---
+  duration_ms: 10.6481
+  type: 'suite'
+  ...
+# Subtest: cut-aware prep wording
+    # Subtest: grinds brisket for patties and never says cut steaks 2 cm thick
+    ok 1 - grinds brisket for patties and never says cut steaks 2 cm thick
+      ---
+      duration_ms: 13.2423
+      ...
+    # Subtest: pulls or shreds brisket when braised
+    ok 2 - pulls or shreds brisket when braised
+      ---
+      duration_ms: 3.0108
+      ...
+    # Subtest: cubes chuck for braise without steak language
+    ok 3 - cubes chuck for braise without steak language
+      ---
+      duration_ms: 2.105
+      ...
+    # Subtest: keeps steak cuts on the grill at measured thickness
+    ok 4 - keeps steak cuts on the grill at measured thickness
+      ---
+      duration_ms: 1.2468
+      ...
+    # Subtest: shapes mince for grill as patties or crumble, not steaks
+    ok 5 - shapes mince for grill as patties or crumble, not steaks
+      ---
+      duration_ms: 2.8595
+      ...
+    # Subtest: cooks sausages as links
+    ok 6 - cooks sausages as links
+      ---
+      duration_ms: 0.5081
+      ...
+    # Subtest: leaves short ribs whole on the bone for braise
+    ok 7 - leaves short ribs whole on the bone for braise
+      ---
+      duration_ms: 0.3334
+      ...
+    # Subtest: flattens only true steak/fillet forms for schnitzel
+    ok 8 - flattens only true steak/fillet forms for schnitzel
+      ---
+      duration_ms: 0.1934
+      ...
+    1..8
+ok 2 - cut-aware prep wording
+  ---
+  duration_ms: 24.2151
+  type: 'suite'
+  ...
+# Subtest: matrix coverage of every cut form
+    # Subtest: every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+    ok 1 - every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+      ---
+      duration_ms: 6.7145
+      ...
+    1..1
+ok 3 - matrix coverage of every cut form
+  ---
+  duration_ms: 6.8511
+  type: 'suite'
+  ...
+# (node:60548) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: liver finishes briefly in cooked sauce instead of inheriting a joint braise
+ok 4 - liver finishes briefly in cooked sauce instead of inheriting a joint braise
+  ---
+  duration_ms: 461.0581
+  ...
+# Subtest: bone-in shopping portions account for bones at household serving scales
+ok 5 - bone-in shopping portions account for bones at household serving scales
+  ---
+  duration_ms: 8.7788
+  ...
+# Subtest: a home mincer never receives bone-in slow joints
+ok 6 - a home mincer never receives bone-in slow joints
+  ---
+  duration_ms: 0.2668
+  ...
+# Subtest: paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+ok 7 - paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+  ---
+  duration_ms: 0.8607
+  ...
+# Subtest: thin stir-fry strips have short batch cooks and larger households include all batches once
+ok 8 - thin stir-fry strips have short batch cooks and larger households include all batches once
+  ---
+  duration_ms: 1.496
+  ...
+# Subtest: one oven is never assumed to run conflicting main and side temperatures simultaneously
+ok 9 - one oven is never assumed to run conflicting main and side temperatures simultaneously
+  ---
+  duration_ms: 1.0377
+  ...
+# (node:61480) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 10 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 45.0101
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 11 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 4.8807
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 12 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 20.6815
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 13 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 363.3832
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 14 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 2.1434
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 15 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 2.7769
+  ...
+# (node:57376) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: substantive secondary side cooking starts with the accompaniment, before a quick main
+ok 16 - substantive secondary side cooking starts with the accompaniment, before a quick main
+  ---
+  duration_ms: 31.8057
+  ...
+# Subtest: simpler methods retain main cooking and the delicate finishing boundary
+ok 17 - simpler methods retain main cooking and the delicate finishing boundary
+  ---
+  duration_ms: 26.1731
+  ...
+# Subtest: long preparation and special side handling remain visible in full recipes
+ok 18 - long preparation and special side handling remain visible in full recipes
+  ---
+  duration_ms: 2.2473
+  ...
+# Subtest: regional rice names never rewrite rice miso or its measured glaze water
+ok 19 - regional rice names never rewrite rice miso or its measured glaze water
+  ---
+  duration_ms: 99.2251
+  ...
+# Subtest: regional coconut rice counts its listed milk toward packet cooking liquid
+ok 20 - regional coconut rice counts its listed milk toward packet cooking liquid
+  ---
+  duration_ms: 3.7513
+  ...
+1..20
+# tests 30
+# suites 3
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1019.5404

@@ -1,0 +1,62 @@
+{
+  "createdAt": "2026-10-27T07:26:12.103Z",
+  "status": "passed",
+  "scope": "Automatic price form matching and visit-cache review; no retailer traffic or lib changes.",
+  "fixes": [
+    {
+      "issue": "A pre-selected catalogue candidate retained eligibility even when the stricter plain-product rule rejected it.",
+      "examples": [
+        "Lite Cooking Cream for Cooking cream",
+        "Olive Oil Spray for Olive oil",
+        "Toasted Sesame Oil Blend for Toasted sesame oil"
+      ],
+      "change": "Demote wrong food forms within the scoped plain rules, while retaining explicit manual food-alternative review."
+    },
+    {
+      "issue": "An adversarial Mushroom Compost/Garden/25kg catalogue fixture was treated as Mushrooms.",
+      "change": "Obvious non-food products are ineligible and not reviewable."
+    },
+    {
+      "issue": "An earlier automatic lookup could overwrite a later reviewed product choice or explicit exclusion.",
+      "change": "Bounded per-context revision guard; automatic cache writes require unchanged revision, independent of timestamp ties."
+    },
+    {
+      "issue": "Malformed stored country could throw during cache-key construction.",
+      "change": "Invalid country is an isolated unknown key; stored-location normalization is handled separately by root."
+    }
+  ],
+  "checks": {
+    "pricingTestsPassed": 15,
+    "targetedLint": "passed",
+    "typecheck": "passed",
+    "volumeBoundary": "1Australian tbsp=20ml and1tsp=5ml; two15ml packs vs one, no mass-density assumptions",
+    "matchingTestPath": "matchProducts -> buildShoppingOffers -> suggestAutomaticPrices",
+    "cacheScope": "Exact area,country,localRecords,shopIDs/names and ingredientIDs/names/amounts/units/categories/allergenmetadata"
+  },
+  "review": {
+    "automaticEffects": "No new render-loop defect found in keyed/debounced effects; obsolete contexts are revision/abort isolated.",
+    "privacy": "Only shopping needs and area context go to same-site price API; retailer queries contain ingredient names; no new personal data persistence introduced.",
+    "limitations": [
+      "Mock catalogue fixtures establish deterministic matching behavior, not actual retailer stock/prices.",
+      "Packet dietary labels and shelf availability remain unverified and must retain existing UI labels."
+    ]
+  },
+  "files": [
+    {
+      "file": "app/api/shopping-prices/automatic-offers.ts",
+      "sha256": "49c0889a22d2640d5b69daf2668bc2a13f7ee8a3ff7d8029a7bc285e1c3eb4c1"
+    },
+    {
+      "file": "components/recipe-price-client.ts",
+      "sha256": "5261914056715a559a115a946973ab6fc2ee796bbe02faf5110a1ec16337243d"
+    },
+    {
+      "file": "tests/automatic-offers.test.ts",
+      "sha256": "741bd9fa365193d521e75a3bad38d4de9548c0e72d7daef000c1f8f0896b1d87"
+    },
+    {
+      "file": "tests/recipe-auto-prices.test.ts",
+      "sha256": "5105568a7fe3a578dd9131eb5e2696275dd1887d1d6771c25cc0918fdae152f4"
+    }
+  ]
+}

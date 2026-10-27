@@ -113,6 +113,8 @@ export function PriceCheck({ lines, shops }: { lines: Line[]; shops: ShopRef[] }
   }
 
   return <section className="price-check" aria-label="Price check">
+    <details>
+    <summary>Check Woolworths catalogue prices</summary>
     <h3>Check prices</h3>
     <p>{CATALOGUE_LABEL} The check also tries the other names a shop may use. Coles blocks an automatic check. ALDI, butchers and fruit shops do not publish a board here. Record the price you actually see at that shop. A missing price stays blank, never $0.</p>
     {!lines.length ? <p>Add a recipe or a week first. The list is what gets checked.</p> : <button type="button" className="button secondary" onClick={() => void check()} disabled={busy}>{busy ? "Checking the catalogue…" : "Check these items"}</button>}
@@ -146,5 +148,6 @@ export function PriceCheck({ lines, shops }: { lines: Line[]; shops: ShopRef[] }
       })}
     </ul>
     {asks.length > 0 && <ul className="shop-ask">{asks.map((shop) => <li key={shop.id}><strong>{shop.name}</strong> — {shop.note}</li>)}</ul>}
+    </details>
   </section>;
 }

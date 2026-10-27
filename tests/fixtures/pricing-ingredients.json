@@ -1,0 +1,3414 @@
+{
+  "scope": "568 distinct authored name/unit combinations from all six completed canonical catalogue dictionaries, generated at four servings and medium heat. Notes-only descriptor variants share these same pricing inputs.",
+  "catalogueCompletionSha256": "0f0747885d521b9d964c3ffd7653dea4237f0ace5fa8dfb1324dff12ec14e22d",
+  "ingredients": [
+    {
+      "id": "chicken",
+      "name": "Chicken breast fillets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "short-grain-rice",
+      "name": "Japanese short-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "green-beans",
+      "name": "Green beans",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "garlic",
+      "name": "Garlic",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "fresh-ginger",
+      "name": "Fresh ginger",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "miso",
+      "name": "White miso",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "soy-sauce",
+      "name": "Soy sauce",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "shichimi",
+      "name": "Shichimi togarashi",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "sansho",
+      "name": "Sansho pepper",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "yuzu-kosho",
+      "name": "Yuzu kosho",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "rice-vinegar",
+      "name": "Rice vinegar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "spring-onion",
+      "name": "Spring onion",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "sesame-seeds",
+      "name": "Toasted sesame seeds",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sesame-oil",
+      "name": "Toasted sesame oil",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "neutral-oil",
+      "name": "Neutral cooking oil",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-vegetable-stock",
+      "name": "Vegetable stock",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "coating-flour",
+      "name": "Plain flour",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "breadcrumbs",
+      "name": "Vegan breadcrumbs",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "lettuce",
+      "name": "Cos or iceberg lettuce",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "tomatoes",
+      "name": "Tomatoes",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "cucumber",
+      "name": "Cucumber",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "olive-oil",
+      "name": "Olive oil",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "lemon-juice",
+      "name": "Lemon juice",
+      "unit": "ml",
+      "category": "produce"
+    },
+    {
+      "id": "jasmine-rice",
+      "name": "Jasmine rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "coconut-milk",
+      "name": "Coconut milk",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "bok-choy",
+      "name": "Bok choy",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "polenta",
+      "name": "Instant polenta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "silverbeet",
+      "name": "Silverbeet or chard",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "butter",
+      "name": "Butter",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "tortillas",
+      "name": "Soft tortillas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-onion",
+      "name": "Onion for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-coriander",
+      "name": "Coriander leaves for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "lime-juice",
+      "name": "Lime juice",
+      "unit": "ml",
+      "category": "produce"
+    },
+    {
+      "id": "orzo",
+      "name": "Orzo pasta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "cherry-tomatoes",
+      "name": "Cherry tomatoes",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-parsley",
+      "name": "Parsley for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "soba",
+      "name": "Soba noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "spinach",
+      "name": "Baby spinach",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "gai-lan",
+      "name": "Gai lan",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "idli",
+      "name": "Ready idli",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "freekeh",
+      "name": "Cracked freekeh",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-courgette",
+      "name": "Courgette for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-aubergine",
+      "name": "Aubergine for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "beetroot",
+      "name": "Beetroot",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "lettuce",
+      "name": "Mixed salad leaves",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "black-beans",
+      "name": "Canned black beans, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "tomato",
+      "name": "Passata or crushed tomatoes",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "sorghum",
+      "name": "Sorghum grain",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "short-grain-rice",
+      "name": "Korean short-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "gochujang",
+      "name": "Vegan gochujang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "gochugaru",
+      "name": "Gochugaru",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "galangal",
+      "name": "Galangal",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "lemongrass",
+      "name": "Lemongrass",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "kaffir-lime-leaves",
+      "name": "Kaffir lime leaves",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "red-curry-paste",
+      "name": "Vegan red curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "birds-eye-chilli",
+      "name": "Bird's eye chillies",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "coriander",
+      "name": "Fresh coriander",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "mexican-rice",
+      "name": "Mexican-style long-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "cumin",
+      "name": "Ground cumin",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "smoked-paprika",
+      "name": "Smoked paprika",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "mexican-oregano",
+      "name": "Mexican oregano",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "chipotle-paste",
+      "name": "Chipotle chilli paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "epazote",
+      "name": "Epazote",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "passata",
+      "name": "Tomato passata",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "basmati-rice",
+      "name": "Basmati rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "garam-masala",
+      "name": "Garam masala",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "turmeric",
+      "name": "Ground turmeric",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "ground-coriander",
+      "name": "Ground coriander",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "kashmiri-chilli",
+      "name": "Kashmiri chilli powder",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "long-grain-rice",
+      "name": "Long-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "sumac",
+      "name": "Ground sumac",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "allspice",
+      "name": "Ground allspice",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "shatta",
+      "name": "Shatta",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "parsley",
+      "name": "Flat-leaf parsley",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "zaatar",
+      "name": "Za'atar",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "dried-oregano",
+      "name": "Dried oregano",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "fennel-seeds",
+      "name": "Fennel seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "calabrian-chilli-paste",
+      "name": "Calabrian chilli paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "basil",
+      "name": "Fresh basil",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "cinnamon",
+      "name": "Ground cinnamon",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "ras-el-hanout",
+      "name": "Ras el hanout",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "harissa",
+      "name": "Harissa paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "boukovo",
+      "name": "Boukovo",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dill",
+      "name": "Fresh dill",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "saffron",
+      "name": "Saffron threads",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "pimenton-picante",
+      "name": "Hot smoked paprika (pimentón picante)",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "sherry-vinegar",
+      "name": "Sherry vinegar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dijon-mustard",
+      "name": "Dijon mustard",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dried-thyme",
+      "name": "Dried thyme",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "espelette-pepper",
+      "name": "Piment d'Espelette",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "tarragon",
+      "name": "Fresh tarragon",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "mint",
+      "name": "Fresh mint",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "perilla",
+      "name": "Perilla leaves",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "five-spice",
+      "name": "Chinese five-spice",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dried-red-chilli",
+      "name": "Dried red chillies",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "kecap-manis",
+      "name": "Kecap manis",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sambal-oelek",
+      "name": "Sambal oelek",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "tamarind",
+      "name": "Tamarind paste",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "scotch-bonnet",
+      "name": "Scotch bonnet chillies",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "culantro",
+      "name": "Culantro",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "long-grain-rice",
+      "name": "Long-grain white rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "aji-amarillo",
+      "name": "Ají amarillo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "aji-limo",
+      "name": "Ají limo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "huacatay",
+      "name": "Huacatay",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "fenugreek",
+      "name": "Fenugreek seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "cardamom",
+      "name": "Ground cardamom",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "berbere",
+      "name": "Berbere spice blend",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "medium-grain-rice",
+      "name": "Medium-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "sweet-paprika",
+      "name": "Sweet paprika",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "biber-salcasi",
+      "name": "Biber salçası",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "pul-biber",
+      "name": "Pul biber",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dried-mint",
+      "name": "Dried mint",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "brazilian-rice",
+      "name": "Brazilian long-grain white rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "annatto",
+      "name": "Annatto seeds",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "malagueta-chilli",
+      "name": "Malagueta chillies",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "green-curry-paste",
+      "name": "Vegan green curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "thai-basil",
+      "name": "Thai basil",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "bay-leaves",
+      "name": "Bay leaves",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "massaman-curry-paste",
+      "name": "Vegan massaman curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "panang-curry-paste",
+      "name": "Vegan panang curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "curry-powder",
+      "name": "Mild curry powder",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "yellow-curry-paste",
+      "name": "Vegan yellow curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "sticky-rice",
+      "name": "Thai sticky rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "palm-sugar",
+      "name": "Palm sugar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "madras-curry-paste",
+      "name": "Vegan Madras curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "vindaloo-paste",
+      "name": "Vegan vindaloo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "vinegar",
+      "name": "White vinegar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "korma-paste",
+      "name": "Vegan korma paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "mustard-seeds",
+      "name": "Brown mustard seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "curry-leaves",
+      "name": "Fresh curry leaves",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "panch-phoron",
+      "name": "Panch phoron",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "black-pepper",
+      "name": "Freshly ground black pepper",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "star-anise",
+      "name": "Star anise",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "kasuri-methi",
+      "name": "Dried fenugreek leaves",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dried-ginger",
+      "name": "Dried ginger",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "samba-rice",
+      "name": "Sri Lankan samba rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pandan",
+      "name": "Pandan leaf",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "ceylon-cinnamon",
+      "name": "Ceylon cinnamon",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "ceylon-chilli",
+      "name": "Ceylon chilli flakes",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sichuan-pepper",
+      "name": "Sichuan pepper",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "doubanjiang",
+      "name": "Vegan doubanjiang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "facing-heaven-chilli",
+      "name": "Facing-heaven chillies",
+      "unit": "",
+      "category": "specialty"
+    },
+    {
+      "id": "shallot",
+      "name": "Shallots",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "fermented-black-beans",
+      "name": "Fermented black beans",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "duo-jiao",
+      "name": "Pickled chopped red chillies",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "white-pepper",
+      "name": "Ground white pepper",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "kroeung",
+      "name": "Vegan kroeung paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "calamansi",
+      "name": "Calamansi juice",
+      "unit": "ml",
+      "category": "produce"
+    },
+    {
+      "id": "laksa-paste",
+      "name": "Vegan laksa paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "laksa-leaf",
+      "name": "Laksa leaf",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "base-genep",
+      "name": "Vegan base genep",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "nutmeg",
+      "name": "Ground nutmeg",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "cloves",
+      "name": "Ground cloves",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "dried-lime",
+      "name": "Dried limes",
+      "unit": "",
+      "category": "specialty"
+    },
+    {
+      "id": "advieh",
+      "name": "Advieh",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "khmeli-suneli",
+      "name": "Khmeli suneli",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "ajika",
+      "name": "Ajika paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "hawaij",
+      "name": "Hawaij",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "zhug",
+      "name": "Zhug (sahawiq)",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "timur",
+      "name": "Timur",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "tabil",
+      "name": "Tabil",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "caraway",
+      "name": "Caraway seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "grains-of-paradise",
+      "name": "Grains of paradise",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "peanuts",
+      "name": "Unsalted roasted peanuts",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "xawaash",
+      "name": "Xawaash",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "green-chilli",
+      "name": "Fresh green chillies",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "onion-powder",
+      "name": "Onion powder",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "celery-seed",
+      "name": "Celery seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "cayenne",
+      "name": "Cayenne pepper",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "aji-molido",
+      "name": "Ají molido",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "red-wine-vinegar",
+      "name": "Red wine vinegar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "merken",
+      "name": "Merkén",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "piri-piri",
+      "name": "Piri-piri chillies",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "hot-paprika",
+      "name": "Hot paprika",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "lemon-myrtle",
+      "name": "Ground lemon myrtle",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "pepperberry",
+      "name": "Ground Tasmanian pepperberry",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "cocoa",
+      "name": "Unsweetened cocoa powder",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "ancho-chilli",
+      "name": "Dried ancho chillies",
+      "unit": "",
+      "category": "specialty"
+    },
+    {
+      "id": "orange-juice",
+      "name": "Orange juice",
+      "unit": "ml",
+      "category": "produce"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken thigh fillets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken tenderloins",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken thigh cutlets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken drumsticks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken-wings",
+      "name": "Chicken wings",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken wingettes",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken stir-fry strips",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken marylands",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Whole chicken",
+      "unit": "",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Spatchcock chicken",
+      "unit": "",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken livers",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken hearts",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken gizzards",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "cornflour",
+      "name": "Cornflour (corn starch)",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "chicken",
+      "name": "Chicken boneless skinless thigh",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "brown-onion",
+      "name": "Brown onion",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "turkey",
+      "name": "Turkey breast fillets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "turkey",
+      "name": "Turkey thigh fillets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "turkey",
+      "name": "Turkey mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "turkey",
+      "name": "Whole turkey",
+      "unit": "",
+      "category": "butcher"
+    },
+    {
+      "id": "turkey",
+      "name": "Turkey boneless skinless thigh",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef rump steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef scotch fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef sirloin steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef eye fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef oyster blade",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef bolar blade",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef topside",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef T-bone",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef rump steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef scotch fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef eye fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef oyster blade",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef sirloin steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef rump steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef scotch fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef eye fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef oyster blade",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef skirt steak",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "flank-steak",
+      "name": "Beef flank steak",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef hanger steak",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef tri-tip",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef-mince",
+      "name": "Beef mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef stir-fry strips",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef tongue",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef liver",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef brisket",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Boneless beef chuck",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Angus beef brisket",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Wagyu beef brisket",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef short ribs",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Gravy beef",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef silverside",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Diced beef",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef cheek",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Beef osso buco",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "beef",
+      "name": "Oxtail",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb leg steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb cutlets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb backstrap",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb-chops",
+      "name": "Lamb loin chops",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb rump",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb rack",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb liver",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Boneless lamb shoulder",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb shanks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb breast",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Diced lamb",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "lamb",
+      "name": "Lamb neck",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Boneless pork loin steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork scotch fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork fillet",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork shoulder",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork belly",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Diced pork",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork cutlets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork hock",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork cheek",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork-ribs",
+      "name": "Pork spare ribs",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork neck",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork leg roast",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Pork trotters",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "pork",
+      "name": "Boneless pork shoulder",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "salmon",
+      "name": "Boneless skinless salmon fillets",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "salmon",
+      "name": "Boneless skin-on salmon fillets",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "white-fish",
+      "name": "Firm boneless skinless white fish fillets",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "raw-prawns",
+      "name": "Raw peeled, deveined prawns",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "firm-tofu",
+      "name": "Plain firm tofu",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "tempeh",
+      "name": "Plain soy tempeh",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "halloumi",
+      "name": "Vegetarian-rennet halloumi",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "egg",
+      "name": "Eggs",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "chickpeas",
+      "name": "Canned chickpeas, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "lentils",
+      "name": "Canned green or brown lentils, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "butter-beans",
+      "name": "Canned butter beans, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "mushrooms",
+      "name": "Portobello mushrooms",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "mushrooms",
+      "name": "Mushrooms",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "aubergine",
+      "name": "Aubergine (eggplant)",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "whole-cauliflower",
+      "name": "Cauliflower",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "pumpkin",
+      "name": "Peeled pumpkin",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "sweet-potato",
+      "name": "Peeled sweet potato",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "courgette",
+      "name": "Courgette (zucchini)",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "broccoli",
+      "name": "Broccoli",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "duck",
+      "name": "Duck breast fillets",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "duck",
+      "name": "Duck marylands",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "duck",
+      "name": "Duck boneless skinless thigh",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "duck",
+      "name": "Duck mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "kangaroo",
+      "name": "Kangaroo steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "kangaroo",
+      "name": "Kangaroo mince",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "tuna",
+      "name": "Boneless skinless tuna steaks",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "sardines",
+      "name": "Fresh sardines, gutted and scaled",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "kidney-beans",
+      "name": "Canned red kidney beans, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "jackfruit",
+      "name": "Young green jackfruit in brine, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "paneer",
+      "name": "Paneer",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "tortillas",
+      "name": "Vegan dairy-free soft tortillas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "soba",
+      "name": "Vegan dairy-free soba noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "idli",
+      "name": "Vegan dairy-free ready idli",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "miso",
+      "name": "Gluten-free white miso",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "soy-sauce",
+      "name": "Gluten-free tamari",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "yuzu-kosho",
+      "name": "Gluten-free yuzu kosho",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "bbq-vegetable-stock",
+      "name": "Gluten-free vegetable stock",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "coating-flour",
+      "name": "Rice flour",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "breadcrumbs",
+      "name": "Gluten-free vegan breadcrumbs",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "corn-tortillas",
+      "name": "Corn tortillas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-pasta",
+      "name": "Gluten-free short pasta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "rice-noodles",
+      "name": "Rice noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "quinoa",
+      "name": "Quinoa",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "gochujang",
+      "name": "Gluten-free vegan gochujang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "red-curry-paste",
+      "name": "Gluten-free vegan red curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "chipotle-paste",
+      "name": "Gluten-free chipotle chilli paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "shatta",
+      "name": "Gluten-free shatta",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "calabrian-chilli-paste",
+      "name": "Gluten-free calabrian chilli paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "harissa",
+      "name": "Gluten-free harissa paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "kecap-manis",
+      "name": "Gluten-free kecap manis",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sambal-oelek",
+      "name": "Gluten-free sambal oelek",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "aji-amarillo",
+      "name": "Gluten-free ají amarillo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "aji-limo",
+      "name": "Gluten-free ají limo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "biber-salcasi",
+      "name": "Gluten-free biber salçası",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "green-curry-paste",
+      "name": "Gluten-free vegan green curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "massaman-curry-paste",
+      "name": "Gluten-free vegan massaman curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "panang-curry-paste",
+      "name": "Gluten-free vegan panang curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "yellow-curry-paste",
+      "name": "Gluten-free vegan yellow curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "madras-curry-paste",
+      "name": "Gluten-free vegan Madras curry paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "vindaloo-paste",
+      "name": "Gluten-free vegan vindaloo paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "korma-paste",
+      "name": "Gluten-free vegan korma paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "doubanjiang",
+      "name": "Gluten-free vegan doubanjiang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "fermented-black-beans",
+      "name": "Gluten-free fermented black beans",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "duo-jiao",
+      "name": "Gluten-free pickled chopped red chillies",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "kroeung",
+      "name": "Gluten-free vegan kroeung paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "laksa-paste",
+      "name": "Gluten-free vegan laksa paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "base-genep",
+      "name": "Gluten-free vegan base genep",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "ajika",
+      "name": "Gluten-free ajika paste",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "zhug",
+      "name": "Gluten-free zhug (sahawiq)",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "pasta",
+      "name": "Dried egg-free pasta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "brown-onion",
+      "name": "Brown onion",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "bbq-garlic",
+      "name": "Garlic",
+      "unit": "cloves",
+      "category": "produce"
+    },
+    {
+      "id": "cream",
+      "name": "Cooking cream",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-salt",
+      "name": "Salt",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "chilli-flakes",
+      "name": "Chilli flakes",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sesame-oil",
+      "name": "Toasted sesame oil",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "sesame-seeds",
+      "name": "Sesame seeds",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "spring-onion",
+      "name": "Spring onions",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "gochujang",
+      "name": "Gochujang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "lime",
+      "name": "Lime",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "pasta",
+      "name": "Gluten-free pasta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "lemon",
+      "name": "Lemon",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "tomato-paste",
+      "name": "Tomato paste",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "harissa",
+      "name": "Harissa paste",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "black-pepper",
+      "name": "Ground black pepper",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "garlic-powder",
+      "name": "Garlic powder",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-tomato-ketchup",
+      "name": "Vegan tomato ketchup",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "cider-vinegar",
+      "name": "Apple cider vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-cider-vinegar",
+      "name": "Gluten-free apple cider vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "maple-syrup",
+      "name": "Pure maple syrup",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "molasses",
+      "name": "Molasses",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-soy-sauce",
+      "name": "Vegan soy sauce",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-pear",
+      "name": "Pear",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "sesame-seeds",
+      "name": "Sesame seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "rice-vinegar",
+      "name": "Rice vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "lemongrass",
+      "name": "Fresh lemongrass",
+      "unit": "stalk",
+      "category": "produce"
+    },
+    {
+      "id": "sumac",
+      "name": "Sumac",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "roasted-red-peppers",
+      "name": "Vegan roasted red peppers",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "almonds",
+      "name": "Almonds",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "sherry-vinegar",
+      "name": "Sherry vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "pineapple",
+      "name": "Pineapple",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "ground-ginger",
+      "name": "Ground ginger",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-finishing-olive-oil",
+      "name": "Extra virgin olive oil",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "bay-leaf",
+      "name": "Bay leaf",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "firm-tofu",
+      "name": "Firm tofu",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "cabbage",
+      "name": "Cabbage",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "avocado",
+      "name": "Avocado",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "corn-tortillas",
+      "name": "Vegan corn tortillas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "chicken-thigh",
+      "name": "Boneless chicken thighs",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "corn-tortillas",
+      "name": "Gluten-free corn tortillas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "tahini",
+      "name": "Tahini",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-bbq-tomato-ketchup",
+      "name": "Gluten-free vegan tomato ketchup",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "red-wine-vinegar",
+      "name": "Red wine vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-five-spice",
+      "name": "Gluten-free Chinese five-spice",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-rice-vinegar",
+      "name": "Gluten-free rice vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "apricot-jam",
+      "name": "Vegan apricot jam",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "prepared-mustard",
+      "name": "Vegan prepared mustard",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "risotto-rice",
+      "name": "Arborio risotto rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "gochujang",
+      "name": "Gluten-free gochujang",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "burger-buns",
+      "name": "Gluten-free burger buns",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "lettuce",
+      "name": "Lettuce",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "tomatoes",
+      "name": "Tomatoes",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "plain-yogurt",
+      "name": "Plain Greek yogurt",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "miso",
+      "name": "Gluten-free rice miso",
+      "unit": "tbsp",
+      "category": "specialty"
+    },
+    {
+      "id": "burger-buns",
+      "name": "Dairy-free burger buns",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "plain-soy-yogurt",
+      "name": "Plain unsweetened soy yogurt",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "rolled-oats",
+      "name": "Rolled oats",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "cornflour",
+      "name": "Cornflour",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "burger-buns",
+      "name": "Vegan burger buns",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-roasted-red-peppers",
+      "name": "Gluten-free vegan roasted red peppers",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-sherry-vinegar",
+      "name": "Gluten-free sherry vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "chicken-thigh",
+      "name": "Bone-in chicken thighs",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "potatoes",
+      "name": "Potatoes",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "carrots",
+      "name": "Carrots",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "red-onion",
+      "name": "Red onions",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "gf-red-wine-vinegar",
+      "name": "Gluten-free red wine vinegar",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-apricot-jam",
+      "name": "Gluten-free vegan apricot jam",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-prepared-mustard",
+      "name": "Gluten-free vegan prepared mustard",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "jasmine-rice",
+      "name": "Jasmine rice, uncooked",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "carrots",
+      "name": "Carrots",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "peas",
+      "name": "Frozen peas",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "flatbreads",
+      "name": "Vegan flatbreads",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "zucchini",
+      "name": "Zucchini",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "red-onion",
+      "name": "Red onion",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "flatbreads",
+      "name": "Gluten-free flatbreads",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "lentils",
+      "name": "Canned lentils, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "milk",
+      "name": "Milk",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "soy-milk",
+      "name": "Unsweetened soy milk",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "portobello",
+      "name": "Large portobello mushrooms",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "bbq-buns",
+      "name": "Vegan buns",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "carrot",
+      "name": "Carrot",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "apple-cider-vinegar",
+      "name": "Apple cider vinegar",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "beef-brisket",
+      "name": "Beef brisket flat",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "bbq-buns",
+      "name": "Gluten-free vegan buns",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "salmon-fillet",
+      "name": "Boneless salmon fillet",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "cold-smoked-salmon",
+      "name": "Commercial ready-to-eat cold-smoked salmon",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "radishes",
+      "name": "Radishes",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "bbq-flatbread",
+      "name": "Vegan flatbread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "smoked-cheddar",
+      "name": "Pasteurised smoked cheddar block",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "ready-smoked-tofu",
+      "name": "Fully cooked ready-to-eat smoked tofu",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-flatbread",
+      "name": "Gluten-free vegan flatbread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "pork-shoulder",
+      "name": "Boneless unrolled pork shoulder",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "young-jackfruit",
+      "name": "Canned young jackfruit in brine, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "cannellini-beans",
+      "name": "Canned cannellini beans, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "chicken-thigh",
+      "name": "Boneless skinless chicken thighs",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "red-pepper",
+      "name": "Red pepper",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "red-onion",
+      "name": "Red onion",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "plant-sausages",
+      "name": "Plant-based sausages",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "bbq-sausages",
+      "name": "Gluten-free raw pork sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "bbq-sausages",
+      "name": "Dairy-free raw pork sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "bbq-sausages",
+      "name": "Raw pork sausages",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "sirloin-steak",
+      "name": "Thick beef sirloin steaks",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "staple-flatbread",
+      "name": "Pita",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "chickpeas",
+      "name": "Cooked chickpeas",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "burghul",
+      "name": "Fine burghul (bulgur)",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-bread",
+      "name": "Dairy-free crusty white bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "polenta",
+      "name": "Plain polenta",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-bread",
+      "name": "Crusty white bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "maize-meal",
+      "name": "Maize meal (pap)",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-bread",
+      "name": "Plain wheat bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-bread",
+      "name": "Dairy-free plain wheat bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "aubergine",
+      "name": "Aubergine",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "king-oyster",
+      "name": "King oyster mushrooms",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "cheddar",
+      "name": "Vegetarian-rennet cheddar",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "provolone",
+      "name": "Vegetarian-rennet provolone",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "nutritional-yeast",
+      "name": "Nutritional yeast",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "whole-trout",
+      "name": "Whole trout, gutted and scaled",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "couscous",
+      "name": "Couscous",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-noodles",
+      "name": "Plain wheat noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "kidney-beans",
+      "name": "Cooked red kidney beans",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "staple-flatbread",
+      "name": "Chapati",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "tempeh",
+      "name": "Gluten-free plain soy tempeh",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pork-belly",
+      "name": "Skinless boneless pork belly",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "whole-chicken",
+      "name": "Whole chicken, unstuffed",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "turkey-breast",
+      "name": "Boneless unstuffed turkey breast",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "courgette",
+      "name": "Courgette",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "cooked-octopus",
+      "name": "Fully cooked octopus tentacles",
+      "unit": "g",
+      "category": "fishmonger"
+    },
+    {
+      "id": "jumbo-shells",
+      "name": "Jumbo pasta shells",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "sausage-meat",
+      "name": "Dairy-free raw pork sausage meat",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "sausage-meat",
+      "name": "Raw pork sausage meat",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "jumbo-shells",
+      "name": "Gluten-free jumbo pasta shells",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "sausage-meat",
+      "name": "Gluten-free raw pork sausage meat",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "brisket-point",
+      "name": "Beef brisket point",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "meatloaf-crumbs",
+      "name": "Gluten-free breadcrumbs",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "meatloaf-crumbs",
+      "name": "Dairy-free breadcrumbs",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "meatloaf-crumbs",
+      "name": "Breadcrumbs",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pork-loin",
+      "name": "Boneless pork loin roast",
+      "unit": "g",
+      "category": "butcher"
+    },
+    {
+      "id": "staple-flatbread",
+      "name": "Turkish flatbread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "kimchi",
+      "name": "Vegan kimchi",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "plantain",
+      "name": "Ripe plantain",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "red-lentils",
+      "name": "Red lentils",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pita",
+      "name": "Pita bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "lettuce",
+      "name": "Cos lettuce",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "soft-noodles",
+      "name": "Egg-free soft noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "arepa",
+      "name": "Ready arepas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "maize-meal",
+      "name": "Maize meal",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-pumpkin",
+      "name": "Pumpkin for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "rice",
+      "name": "Short-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "rice-noodles",
+      "name": "Vegan dairy-free rice noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pita",
+      "name": "Vegan dairy-free pita bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "soft-noodles",
+      "name": "Vegan dairy-free egg-free soft noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "arepa",
+      "name": "Vegan dairy-free ready arepas",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "kimchi",
+      "name": "Gluten-free vegan kimchi",
+      "unit": "g",
+      "category": "specialty"
+    },
+    {
+      "id": "gf-pita",
+      "name": "Gluten-free pita",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "pinto-beans",
+      "name": "Cooked pinto beans",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "rice-vermicelli",
+      "name": "Rice vermicelli",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-pumpkin",
+      "name": "Pumpkin or butternut for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "yoghurt",
+      "name": "Plain yoghurt",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "corn",
+      "name": "Corn cobs",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "side-mint",
+      "name": "Fresh mint for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "focaccia",
+      "name": "Focaccia",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "rocket",
+      "name": "Rocket",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-pandan",
+      "name": "Pandan leaf for the rice",
+      "unit": "",
+      "category": "specialty"
+    },
+    {
+      "id": "pappadum",
+      "name": "Pappadums",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-pomegranate",
+      "name": "Pomegranate arils for the rice",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "arborio",
+      "name": "Arborio rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-mushrooms",
+      "name": "Mushrooms for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-garlic",
+      "name": "Garlic for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "kale",
+      "name": "Kale",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "rice",
+      "name": "Short-grain or long-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "focaccia",
+      "name": "Vegan dairy-free focaccia",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "pappadum",
+      "name": "Vegan dairy-free pappadums",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-bread",
+      "name": "Gluten-free bread",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "noodles",
+      "name": "Egg-free wheat noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-broccoli",
+      "name": "Broccoli for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "chapati",
+      "name": "Chapati or roti",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-onion",
+      "name": "Red onion for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "pepper",
+      "name": "Capsicum",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "sticky-rice",
+      "name": "Sticky rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-banana-leaf",
+      "name": "Food-grade banana leaf for the rice",
+      "unit": "",
+      "category": "specialty"
+    },
+    {
+      "id": "side-cumin-seeds",
+      "name": "Cumin seeds for the rice",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "side-cardamom",
+      "name": "Green cardamom pods for the rice",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-cinnamon",
+      "name": "Cinnamon stick for the rice",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-harissa",
+      "name": "Vegan mild harissa paste for the side",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "side-passata",
+      "name": "Tomato passata for the side sauce",
+      "unit": "ml",
+      "category": "grocery"
+    },
+    {
+      "id": "side-smoked-paprika",
+      "name": "Sweet smoked paprika for the side",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "side-garlic",
+      "name": "Garlic for the side",
+      "unit": "cloves",
+      "category": "produce"
+    },
+    {
+      "id": "yuca",
+      "name": "Fully cooked peeled yuca (cassava)",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "damper",
+      "name": "Damper-style bread",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "noodles",
+      "name": "Vegan dairy-free egg-free wheat noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "chapati",
+      "name": "Vegan dairy-free chapati or roti",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "damper",
+      "name": "Vegan dairy-free damper-style bread",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "noodles",
+      "name": "Gluten-free rice noodles",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-flatbread",
+      "name": "Gluten-free flatbread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-harissa",
+      "name": "Gluten-free vegan mild harissa paste for the side",
+      "unit": "tsp",
+      "category": "specialty"
+    },
+    {
+      "id": "flatbread",
+      "name": "Vegan wheat flatbread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "garlic-bread",
+      "name": "Vegan garlic bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "bulgur",
+      "name": "Fine bulgur wheat",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-parsley",
+      "name": "Flat-leaf parsley for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "side-sweet-potato",
+      "name": "Sweet potato for the side",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "injera",
+      "name": "100% teff injera",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-cooked-rice",
+      "name": "Cooked long-grain rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "green-papaya",
+      "name": "Green papaya",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "cumin-seeds",
+      "name": "Cumin seeds",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "roti",
+      "name": "Roti",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "baba",
+      "name": "Ready baba ganoush",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "white-beans",
+      "name": "Canned white beans, drained",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "barley",
+      "name": "Pearl barley",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-yoghurt",
+      "name": "Plain yoghurt for the side",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-sweet-paprika",
+      "name": "Sweet paprika for the corn",
+      "unit": "tsp",
+      "category": "grocery"
+    },
+    {
+      "id": "okra",
+      "name": "Okra",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "roti",
+      "name": "Vegan dairy-free roti",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "side-soy-yoghurt",
+      "name": "Plain unsweetened soy yoghurt for the side",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "garlic-bread",
+      "name": "Gluten-free vegan garlic bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "gf-crackers",
+      "name": "Gluten-free crackers",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "brown-rice",
+      "name": "Brown rice",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "hummus",
+      "name": "Ready hummus",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "side-lemongrass",
+      "name": "Lemongrass stalk for the rice",
+      "unit": "",
+      "category": "produce"
+    },
+    {
+      "id": "paratha",
+      "name": "Paratha",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "naan",
+      "name": "Naan bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "walnuts",
+      "name": "Walnuts",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "farro",
+      "name": "Pearled farro",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "plantain",
+      "name": "Green plantain",
+      "unit": "g",
+      "category": "produce"
+    },
+    {
+      "id": "millet",
+      "name": "Millet",
+      "unit": "g",
+      "category": "grocery"
+    },
+    {
+      "id": "paratha",
+      "name": "Vegan dairy-free paratha",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "naan",
+      "name": "Vegan dairy-free naan bread",
+      "unit": "",
+      "category": "grocery"
+    },
+    {
+      "id": "white-miso",
+      "name": "Gluten-free white rice miso",
+      "unit": "tbsp",
+      "category": "grocery"
+    },
+    {
+      "id": "rice-flakes",
+      "name": "Gluten-free rice flakes",
+      "unit": "g",
+      "category": "grocery"
+    }
+  ]
+}

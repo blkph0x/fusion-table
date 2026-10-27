@@ -1,0 +1,13 @@
+{
+  "url": "https://gearsqueens.online/downloads/MealPlannerAU.apk?v=1.5.7-code14",
+  "status": 200,
+  "version": "1.5.7",
+  "versionCode": 14,
+  "bytes": 13982261,
+  "sha256": "1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef",
+  "headers": {
+    "Content-Type": "application/vnd.android.package-archive",
+    "Content-Length": "13982261",
+    "Cache-Control": "no-cache"
+  }
+}

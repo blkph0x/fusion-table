@@ -1,0 +1,137 @@
+{
+  "checkedAt": "2026-10-27T07:31:34.884182+00:00",
+  "version": "1.5.7",
+  "versionCode": 14,
+  "applicationId": "au.mealplanner",
+  "build": {
+    "result": "success",
+    "offline": true,
+    "tasks": [
+      "testDebugUnitTest",
+      "assembleRelease"
+    ],
+    "finalDuration": "5m 10s",
+    "maximumWorkers": 1,
+    "gradleHeapMB": 768,
+    "compiler": "in-process",
+    "gradleCache": "D:/MealPlannerAU/.gradle-user",
+    "tempDirectory": "D:/fusion-table/work/culinary-temp",
+    "logSHA256": "fe5897da9e52f7834c6d8f52f049f7203f6c548678e82e07f73cc9d9a001c44d"
+  },
+  "tests": {
+    "tests": 154,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "classes": 22
+  },
+  "studioGrid": {
+    "mains": 8,
+    "flavours": 12,
+    "heatLevels": 5,
+    "servings": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "casesPerSeed": 9600,
+    "fixedSeeds": [
+      null,
+      7
+    ],
+    "totalGenerated": 19200,
+    "checks": [
+      "exact yield",
+      "scaled main amounts",
+      "finite positive amounts",
+      "no duplicate ingredients",
+      "measured method references",
+      "cooking-role allocation",
+      "equipment",
+      "main endpoints",
+      "batch allocations",
+      "pan timing allowances"
+    ]
+  },
+  "catalogue": {
+    "templates": 9292,
+    "classics": 8500,
+    "curatedPlates": 792,
+    "contentVersion": "20261027-plausibility-quality",
+    "sha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab",
+    "freshWebExportMatches": true,
+    "streamedTemplateAudit": true
+  },
+  "feedback": {
+    "storage": "local Room metadata",
+    "automaticUploads": false,
+    "experiences": [
+      "would-try",
+      "cooked"
+    ],
+    "requiresLocalMethodForCooked": true,
+    "exactRecipeAndTargetServings": true,
+    "negativeReasonRequired": true,
+    "otherReasonRequiresUsefulNote": true,
+    "legacyReadableButNotCookedEvidence": true,
+    "ranking": "current cooked personal preferences after hard filters, locks and variety",
+    "feedbackNeverChangesIngredientsOrSafetyRules": true,
+    "backupIncludesPrivateFeedback": true,
+    "deleteClearsPrivateFeedback": true
+  },
+  "apk": {
+    "path": "D:\\MealPlannerAU\\dist\\MealPlannerAU.apk",
+    "bytes": 13982261,
+    "sha256": "1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef",
+    "archive": "D:/MealPlannerAU/dist/MealPlannerAU-1.5.7-code14.apk",
+    "signatureVerified": true,
+    "signatureScheme": "v2",
+    "sameSignerAsPreviousRelease": true,
+    "certificateSHA256": "62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6",
+    "deployedByThisSubtask": false,
+    "deviceInstalled": false
+  },
+  "limitations": [
+    "No fresh Android device/emulator UI test; Android compilation and six pure form-state flow tests passed.",
+    "Computational checks cannot establish taste or kitchen performance.",
+    "The 9600 Studio grid was enumerated at two fixed seed settings, not every pantry subset or arbitrary user import.",
+    "Legacy ratings are retained without assigning a cooked experience; cooked reviews must be explicitly recorded."
+  ],
+  "sourceSHA256": {
+    "app/build.gradle.kts": "f8958b8a27bf3c19ddaf4072d8cc345ba0aad1143f0987654002bd2064084850",
+    "app/src/main/java/au/mealplanner/domain/model/RecipeNote.kt": "e784254456d31144852ccb6f5e9a5a8ac218860c2c3509108cbab4bd5560213c",
+    "app/src/main/java/au/mealplanner/domain/planner/PersonalFeedback.kt": "ed2d17b58785f08d08ca8c1fb4672f3aad478dbb4a7c46c47a1ffd5c26b581ee",
+    "app/src/main/java/au/mealplanner/domain/planner/MealPlanner.kt": "cb47be0564150b9e7290402bb718c76d9ee1e8d3bb330e85c07f837c969a8721",
+    "app/src/main/java/au/mealplanner/domain/planner/FusionTablePlanner.kt": "d3e406512d9cbcc7e85f07ab1849b681f6803999332716c05891182500d17e14",
+    "app/src/main/java/au/mealplanner/domain/planner/PlateStudio.kt": "3217868c92acff11ca7ae92ade85866d80938a7231b7f5e44cc319e6822fc487",
+    "app/src/main/java/au/mealplanner/domain/planner/NativeCooking.kt": "1f3403d6478850359c18d8c00b6b2ce3aee5446c3e531e7f9d064b3071e042ac",
+    "app/src/main/java/au/mealplanner/domain/planner/FusionComposer.kt": "cb9c2a6a9799cbff8b01574a3bd9eb2be0ddddcfddd9445f4d11b3df8a41d21e",
+    "app/src/main/java/au/mealplanner/data/repo/AppRepository.kt": "ee37a91569b234a0107f21fab86f4e45b3597b4f376680d02a77cc69481f31e2",
+    "app/src/main/java/au/mealplanner/data/repo/BackupCodec.kt": "55f0680c03ae8b9818dd6298fd0af665fdef708285214c1736fa74765d38c149",
+    "app/src/main/java/au/mealplanner/ui/AppViewModel.kt": "1aa60c2d330bf7350d2f88de88b935466f504bb100c6e220d947838d65a7cdf5",
+    "app/src/main/java/au/mealplanner/ui/plan/PlanScreen.kt": "91f44a28ab7e888b8dbda6f4ed8049e28c186d11b19d42d9d99e97fd6ddf099c",
+    "app/src/main/java/au/mealplanner/ui/plan/FeedbackFormState.kt": "aabad542bac0be6dcef31c6a39b4d150dae72c8c219b3ad390116a94fe25c05f",
+    "app/src/main/java/au/mealplanner/ui/preferences/PreferencesScreen.kt": "88f1e17e4cd7317e810cbca60e9400bdd58782c30f691c8860848a0bc8c8539a",
+    "app/src/test/java/au/mealplanner/domain/PersonalFeedbackTest.kt": "a0df2a7c1b3975afd529bd7fa6c88778f0020454935c89e79d11a19c97b4dcc0",
+    "app/src/test/java/au/mealplanner/domain/FeedbackFormStateTest.kt": "bcd5a0d4218c4ac4d821567a4e0b60c5b6ff67c30171559c4eb556e7d82ade84",
+    "app/src/test/java/au/mealplanner/domain/NativeComputationalAuditTest.kt": "31fdf056192ef44af6a3039b816c528d0fcd3844f09a4b4b6cf1a4c5b02be8e3",
+    "app/src/test/java/au/mealplanner/domain/NativeGeneratorCookingTest.kt": "e752e521f0ee1612e12ac9c75692380c0822da327e3ff1a12761a2770d8fdcd4"
+  }
+}

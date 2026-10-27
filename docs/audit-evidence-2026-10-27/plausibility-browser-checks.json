@@ -1,0 +1,20 @@
+{
+  "localClassicChoiceHidesStalePlate": true,
+  "localCreateShowsCurrentIngredientsAndPDF": true,
+  "localShellsForTwo": {
+    "shells": 10,
+    "sausageGrams": 250,
+    "extraBuns": false
+  },
+  "liveSharedShellsForFour": {
+    "shells": 20,
+    "sausageGrams": 500,
+    "coveredMoistCooking": true,
+    "misoOffHeat": true
+  },
+  "screenshots": [
+    "plausibility-local-shells.png",
+    "plausibility-live-method.png"
+  ],
+  "androidDeviceUI": "not tested; SDK system-image mount failed before boot"
+}

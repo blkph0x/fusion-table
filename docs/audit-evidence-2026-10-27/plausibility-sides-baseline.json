@@ -1,0 +1,2415 @@
+{
+  "generatedAt": "2026-10-27T05:03:50.860Z",
+  "scope": "90 authored sides, four-serving balanced baseline; semantic cooking review",
+  "sourceSha256": "0e4da8130b76997c44205765338ca941c722b8357caedc75df6683459afc8efd",
+  "rows": [
+    {
+      "id": "rice-greens",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight.]",
+        "400 g Green beans [Trimmed.]"
+      ],
+      "steps": [
+        {
+          "title": "Start the rice",
+          "detail": "Rinse 300 g long-grain rice. Add to a saucepan with 600 ml water, bring to a boil, then cover and cook on the lowest heat for about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Steam the green beans",
+          "detail": "Trim 400 g green beans. Steam for 5–7 minutes until tender with a little bite; keep warm briefly while finishing the main.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "potato-slaw",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Potatoes [Cut into 1.5 cm cubes.]",
+        "250 g Cabbage [Finely shredded.]",
+        "200 g Carrot [Coarsely grated.]",
+        "3 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the potatoes",
+          "detail": "Cut 800 g potatoes into 1.5 cm cubes. Simmer in water for 8–10 minutes until just tender, then drain and steam-dry. Heat 2 tbsp olive oil in a wide pan and turn the potatoes over medium-high heat for 10–12 minutes until golden. Cook in batches if crowded.",
+          "minutes": 25
+        },
+        {
+          "title": "Dress the slaw",
+          "detail": "Combine 250 g finely shredded cabbage and 200 g grated carrot. Toss with 30 ml lemon juice and the remaining 1 tbsp olive oil allocated to this side.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "couscous-veg",
+      "minutes": 17,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Couscous [Dry weight.]",
+        "300 g Red pepper [Deseeded and cut into 2 cm pieces.]",
+        "300 g Courgette (zucchini) [Cut into 2 cm pieces.]",
+        "1.5 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Fluff the couscous",
+          "detail": "Put 280 g couscous in a heatproof bowl. Pour over 350 ml boiling water, cover for 5 minutes and fluff with a fork. Follow the packet if it requires a different water ratio.",
+          "minutes": 7
+        },
+        {
+          "title": "Pan-roast the vegetables",
+          "detail": "Heat 1.5 tbsp olive oil in a wide frying pan. Add 300 g chopped red pepper and 300 g chopped courgette. Cook over medium-high heat for 10–12 minutes, turning occasionally, until browned at the edges and tender. Use batches if needed.",
+          "minutes": 12
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "noodles-crunch",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Egg-free wheat noodles [Dry weight; check the label for egg and dairy.]",
+        "300 g Cucumber [Cut into thin batons.]",
+        "200 g Carrot [Cut into thin matchsticks.]",
+        "1 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the noodles",
+          "detail": "Cook 280 g egg-free wheat noodles according to the packet; thickness and soaking requirements vary. Drain well, rinse only if the packet advises it, and toss with 1 tbsp olive oil to prevent sticking.",
+          "minutes": 10
+        },
+        {
+          "title": "Add the crunch",
+          "detail": "Cut 300 g cucumber into thin batons and 200 g carrot into matchsticks. Toss with 30 ml lemon juice. Keep this crunchy mixture separate until serving.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "flatbread-salad",
+      "minutes": 11,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Vegan wheat flatbread [Choose a ready-cooked flatbread without milk or egg.]",
+        "350 g Tomatoes [Chopped.]",
+        "300 g Cucumber [Chopped.]",
+        "1 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Make the chopped salad",
+          "detail": "Combine 350 g chopped tomatoes and 300 g chopped cucumber. Dress with 30 ml lemon juice and 1 tbsp olive oil just before serving.",
+          "minutes": 6
+        },
+        {
+          "title": "Warm the flatbread",
+          "detail": "Warm 4 vegan wheat flatbreads in a dry frying pan for about 30–60 seconds per side, or as the packet directs. Keep wrapped in a clean tea towel.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "lentil-salad",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "600 g Canned green or brown lentils, drained [Already cooked; use drained weight.]",
+        "100 g Baby spinach [Washed.]",
+        "250 g Tomatoes [Chopped.]",
+        "250 g Cucumber [Chopped.]",
+        "1 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the lentils",
+          "detail": "Drain and rinse 600 g already-cooked canned lentils (drained weight). Warm in a saucepan with 60 ml water for 4–5 minutes until steaming hot, then drain any excess. Do not use uncooked dried lentils here.",
+          "minutes": 6
+        },
+        {
+          "title": "Toss the lentil salad",
+          "detail": "Fold 100 g washed baby spinach into the warm lentils to wilt lightly. Add 250 g chopped tomatoes and 250 g chopped cucumber, then dress with 30 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "garden-salad",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Cos or iceberg lettuce [Washed and torn.]",
+        "300 g Tomatoes [Chopped.]",
+        "250 g Cucumber [Sliced.]",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Build the garden salad",
+          "detail": "Tear 300 g washed lettuce into a bowl. Add 300 g chopped tomatoes and 250 g sliced cucumber.",
+          "minutes": 5
+        },
+        {
+          "title": "Dress just before serving",
+          "detail": "Toss with 30 ml lemon juice and 2 tbsp olive oil. Season lightly if you like. Do not dress early or the leaves wilt.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "mashed-potato",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "900 g Potatoes [Peeled and cut into even chunks.]",
+        "300 g Frozen peas [Do not thaw before cooking.]",
+        "120 ml Milk [Warm before mashing.]",
+        "40 g Butter"
+      ],
+      "steps": [
+        {
+          "title": "Boil and mash the potatoes",
+          "detail": "Boil 900 g potatoes (peeled and cut into even chunks) in unsalted water until tender, about 15–18 minutes. Drain well. Mash with 120 ml warm milk and 40 g butter until smooth. Check the packet if using a ready mash mix.",
+          "minutes": 20
+        },
+        {
+          "title": "Steam the peas",
+          "detail": "Cook 300 g frozen peas in a little boiling water for 3–4 minutes until hot through. Drain and keep warm.",
+          "minutes": 5
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "roast-pumpkin",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Pumpkin or butternut for the side [Peeled and cut into 2 cm wedges for the side tray.]",
+        "150 g Baby spinach [Washed.]",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the pumpkin",
+          "detail": "Toss 800 g pumpkin or butternut for the side (2 cm wedges) with 2 tbsp olive oil. Spread on a tray and roast at 200°C for 25–30 minutes until browned at the edges and soft through the centre.",
+          "minutes": 30
+        },
+        {
+          "title": "Wilt the spinach",
+          "detail": "In the last 2 minutes, tip 150 g washed baby spinach onto the hot tray or a warm pan until just wilted. Finish with 15 ml lemon juice.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "steamed-broccoli",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Jasmine rice [Dry weight.]",
+        "500 g Broccoli for the side [Cut into even florets for the side.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the jasmine rice",
+          "detail": "Rinse 280 g jasmine rice. Cook with 420 ml water, covered, on the lowest heat for about 12 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Steam the broccoli",
+          "detail": "Steam 500 g broccoli for the side (even florets) for 5–7 minutes until bright green with a little bite. Toss with 1 tbsp olive oil and 20 ml lemon juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "garlic-bread",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Vegan garlic bread [Choose a vegan product without milk or egg; when gluten-free, it must also be labelled gluten-free. Check the packet for sesame.]",
+        "350 g Tomatoes [Chopped.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the garlic bread",
+          "detail": "Warm 4 pieces of wheat garlic bread in a moderate oven or toaster oven as the packet directs, usually 8–10 minutes. Keep warm in a clean tea towel.",
+          "minutes": 10
+        },
+        {
+          "title": "Make the tomato salad",
+          "detail": "Combine 350 g chopped tomatoes with 20 ml lemon juice and 1 tbsp olive oil. Serve beside the bread, not on top of it, so the crust stays crisp.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "jasmine-cucumber",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Jasmine rice [Dry weight.]",
+        "350 g Cucumber [Thinly sliced.]",
+        "1 tbsp Olive oil",
+        "30 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the jasmine rice",
+          "detail": "Rinse 300 g jasmine rice. Cook with 450 ml water, covered, on the lowest heat for about 12 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Dress the cucumber",
+          "detail": "Toss 350 g thinly sliced cucumber with 30 ml lime juice and 1 tbsp olive oil. Keep chilled until serving.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "coconut-rice",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Jasmine rice [Dry weight.]",
+        "200 ml Coconut milk [Unsweetened canned coconut milk.]",
+        "400 g Bok choy [Halved lengthways.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the coconut rice",
+          "detail": "Rinse 280 g jasmine rice. Cook with 200 ml coconut milk and 280 ml water, covered, on the lowest heat until the liquid is absorbed, about 14 minutes. Rest covered for 5 minutes, then fluff. Check the packet if ratios differ.",
+          "minutes": 20
+        },
+        {
+          "title": "Steam the bok choy",
+          "detail": "Steam 400 g bok choy for 3–5 minutes until the stems are tender-crisp. Drain well.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "kimchi-rice",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Short-grain rice [Dry weight.]",
+        "200 g Vegan kimchi [Choose a vegan product without fish, shrimp or sesame; for gluten-free meals it must also be labelled gluten-free. Check the packet.]",
+        "200 g Cucumber [Sliced.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Rinse 300 g short-grain rice. Cook with 390 ml water as the packet directs. Rest covered for 10 minutes, then fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Plate the kimchi",
+          "detail": "Arrange 200 g kimchi and 200 g sliced cucumber beside the rice. Check the kimchi packet for allergens before serving.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "basmati-raita",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Basmati rice [Dry weight.]",
+        "250 g Cucumber [Grated or finely chopped.]",
+        "200 g Plain yoghurt [Unsweetened.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the basmati",
+          "detail": "Rinse 300 g basmati rice. Cook with 450 ml water, covered, until tender, about 12–15 minutes or as the packet directs. Rest covered for 5 minutes, then fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Stir the raita",
+          "detail": "Combine 200 g plain yoghurt with 250 g grated cucumber. Keep cold until serving.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "chapati-salad",
+      "minutes": 11,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Chapati or roti [Wheat flatbread; check for dairy.]",
+        "300 g Tomatoes [Chopped.]",
+        "100 g Red onion for the side [Finely sliced for the side.]",
+        "200 g Cucumber [Chopped.]",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Make the kachumber",
+          "detail": "Combine 300 g chopped tomatoes, 100 g finely sliced red onion for the side and 200 g chopped cucumber. Dress with 30 ml lemon juice.",
+          "minutes": 6
+        },
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 chapatis in a dry pan for 20–40 seconds per side, or as the packet directs.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "bulgur-tabbouleh",
+      "minutes": 17,
+      "prepMinutes": 0,
+      "ingredients": [
+        "220 g Fine bulgur wheat [Dry weight.]",
+        "80 g Flat-leaf parsley for the side [Finely chopped for the side.]",
+        "300 g Tomatoes [Finely diced.]",
+        "150 g Cucumber [Finely diced.]",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Soak the bulgur",
+          "detail": "Cover 220 g fine bulgur with 280 ml boiling water. Cover for 10–12 minutes until tender, then fluff and cool slightly.",
+          "minutes": 12
+        },
+        {
+          "title": "Fold the herbs",
+          "detail": "Fold in 80 g chopped flat-leaf parsley for the side, 300 g diced tomatoes and 150 g diced cucumber. Dress with 30 ml lemon juice and 2 tbsp olive oil.",
+          "minutes": 6
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "hummus-salad",
+      "minutes": 11,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Ready hummus [Check the label for sesame and gluten.]",
+        "4  Pita bread [Warm before serving.]",
+        "250 g Tomatoes [Chopped.]",
+        "200 g Cucumber [Chopped.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Plate the hummus",
+          "detail": "Spoon 300 g ready hummus onto a plate. Check the packet for sesame and other allergens.",
+          "minutes": 2
+        },
+        {
+          "title": "Salad and bread",
+          "detail": "Toss 250 g chopped tomatoes and 200 g chopped cucumber with 20 ml lemon juice and 1 tbsp olive oil. Warm or serve 4 pita breads beside the hummus.",
+          "minutes": 6
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "polenta-greens",
+      "minutes": 18,
+      "prepMinutes": 0,
+      "ingredients": [
+        "250 g Instant polenta [Dry weight; check the packet for wheat cross-contact.]",
+        "400 g Silverbeet or chard [Stems sliced, leaves torn.]",
+        "30 g Butter"
+      ],
+      "steps": [
+        {
+          "title": "Cook the polenta",
+          "detail": "Whisk 250 g instant polenta into boiling water as the packet directs (usually about 1000 ml). Stir until thick, then beat in 30 g butter.",
+          "minutes": 12
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "Sauté 400 g silverbeet in a splash of water until the stems are tender and the leaves wilt, about 5–7 minutes.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "chips-salad",
+      "minutes": 40,
+      "prepMinutes": 0,
+      "ingredients": [
+        "900 g Potatoes [Cut into chip-sized batons.]",
+        "200 g Mixed salad leaves [Washed.]",
+        "3 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Bake the chips",
+          "detail": "Toss 900 g potatoes (cut into chip-sized batons) with 2 tbsp olive oil. Spread on a tray and bake at 220°C for 30–35 minutes, turning once, until golden. Cook in batches if crowded.",
+          "minutes": 35
+        },
+        {
+          "title": "Dress the leaves",
+          "detail": "Toss 200 g mixed salad leaves with 20 ml lemon juice and the remaining 1 tbsp olive oil just before serving.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "coleslaw-corn",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Corn cobs [Husks removed; cut into pieces if large.]",
+        "300 g Cabbage [Finely shredded.]",
+        "200 g Carrot [Grated.]",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the corn",
+          "detail": "Boil or steam 4 corn cobs for 8–10 minutes until tender. Drain and keep warm.",
+          "minutes": 10
+        },
+        {
+          "title": "Make the coleslaw",
+          "detail": "Toss 300 g shredded cabbage and 200 g grated carrot with 30 ml lemon juice and 2 tbsp olive oil.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "roast-veg-tray",
+      "minutes": 45,
+      "prepMinutes": 0,
+      "ingredients": [
+        "500 g Potatoes [Cut into 2 cm chunks.]",
+        "300 g Carrots [Cut into chunks.]",
+        "300 g Capsicum [Deseeded and chunked.]",
+        "3 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the tray",
+          "detail": "Toss 500 g potatoes (cut into 2 cm chunks), 300 g carrot and 300 g capsicum with 3 tbsp olive oil. Roast at 200°C for 35–40 minutes until browned and tender.",
+          "minutes": 40
+        },
+        {
+          "title": "Finish with lemon",
+          "detail": "Squeeze 20 ml lemon juice over the hot vegetables just before serving.",
+          "minutes": 1
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "sweet-potato-mash",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "900 g Sweet potato for the side [Peeled and chunked.]",
+        "350 g Green beans [Trimmed.]",
+        "40 g Butter"
+      ],
+      "steps": [
+        {
+          "title": "Mash the sweet potato",
+          "detail": "Boil 900 g sweet potato for the side (peeled and chunked) until soft, about 15–18 minutes. Drain and mash with 40 g butter.",
+          "minutes": 20
+        },
+        {
+          "title": "Steam the beans",
+          "detail": "Steam 350 g green beans for 5–7 minutes until tender with a little bite.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "black-bean-rice",
+      "minutes": 20,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Long-grain rice [Dry weight.]",
+        "400 g Canned black beans, drained [Already cooked; drained weight.]",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]",
+        "1 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Rinse 280 g long-grain rice. Cook with 560 ml water as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Warm the beans",
+          "detail": "Warm 400 g drained canned black beans with 1 tbsp olive oil and 20 ml lime juice for 3–4 minutes until steaming hot. Do not use dried beans in a short cook.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        1
+      ]
+    },
+    {
+      "id": "tortilla-salsa",
+      "minutes": 11,
+      "prepMinutes": 0,
+      "ingredients": [
+        "8  Soft tortillas [Flour tortillas usually contain wheat; corn tortillas are often wheat-free — check the packet.]",
+        "350 g Tomatoes [Finely diced.]",
+        "80 g Onion for the side [Finely diced for the salsa.]",
+        "20 g Coriander leaves for the side [Chopped for the salsa.]",
+        "30 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Make the salsa",
+          "detail": "Combine 350 g diced tomatoes, 80 g onion for the side and 20 g coriander leaves for the side. Dress with 30 ml lime juice.",
+          "minutes": 6
+        },
+        {
+          "title": "Warm the tortillas",
+          "detail": "Warm 8 soft tortillas in a dry pan or as the packet directs. Keep wrapped.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "quinoa-avocado",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Quinoa [Dry weight.]",
+        "2  Avocado [Ripe; sliced just before serving.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the quinoa",
+          "detail": "Rinse 280 g quinoa. Simmer covered with 560 ml water for about 15 minutes. Rest and fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Add avocado",
+          "detail": "Slice 2 avocados. Dress the quinoa with 20 ml lemon juice and 1 tbsp olive oil, then top with avocado.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "vermicelli-herb",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Rice vermicelli [Dry weight; usually wheat-free — check the packet.]",
+        "250 g Cucumber [Julienned.]",
+        "25 g Fresh mint for the side [Leaves for the side.]",
+        "30 ml Lime juice [Freshly squeezed; measure the juice.]",
+        "1 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Soak the vermicelli",
+          "detail": "Prepare 280 g rice vermicelli as the packet directs (often a hot soak). Drain well and toss with 1 tbsp olive oil.",
+          "minutes": 10
+        },
+        {
+          "title": "Herb salad",
+          "detail": "Toss with 250 g julienned cucumber, 25 g fresh mint for the side and 30 ml lime juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "sesame-spinach",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Short-grain or long-grain rice [Dry weight.]",
+        "300 g Baby spinach [Washed.]",
+        "1 tbsp Toasted sesame oil [Finish only.]",
+        "1 tbsp Toasted sesame seeds"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g rice as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Dress the spinach",
+          "detail": "Wilt 300 g spinach in a hot pan with a splash of water. Drain well, then toss with 1 tbsp toasted sesame oil and 1 tbsp toasted sesame seeds. Sesame is a recorded allergen on this side.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "injera-salad",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  100% teff injera [Many injera mixes include wheat or barley. Choose a packet labelled 100% teff injera.]",
+        "300 g Tomatoes [Chopped.]",
+        "250 g Cucumber [Chopped.]",
+        "25 ml Lemon juice [Freshly squeezed; measure the juice.]",
+        "1 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Make the salad",
+          "detail": "Combine 300 g chopped tomatoes and 250 g chopped cucumber. Dress with 25 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 5
+        },
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 pieces of 100% teff injera briefly as the packet directs. Many injera mixes include wheat or barley; check the packet before serving.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "cauli-rice-greens",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "700 g Cauliflower [Grated or riced.]",
+        "350 g Green beans [Trimmed.]",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Pan-fry cauliflower rice",
+          "detail": "Grate or pulse 700 g cauliflower to rice-sized pieces. Stir-fry in 2 tbsp olive oil over medium-high heat for 6–8 minutes until tender with light colour. Finish with 15 ml lemon juice.",
+          "minutes": 10
+        },
+        {
+          "title": "Steam the beans",
+          "detail": "Steam 350 g green beans for 5–7 minutes until tender with a little bite.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "orzo-salad",
+      "minutes": 17,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Orzo pasta [Dry weight.]",
+        "300 g Cherry tomatoes [Halved.]",
+        "30 g Parsley for the side [Chopped for the side salad.]",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the pasta",
+          "detail": "Cook 280 g orzo in boiling water as the packet directs. Drain and cool slightly.",
+          "minutes": 12
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss with 300 g halved cherry tomatoes, 30 g chopped parsley for the side, 30 ml lemon juice and 2 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "plantain-greens",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Ripe plantain [Peeled and sliced on the diagonal. Firm banana is a last resort if plantain is unavailable.]",
+        "200 g Baby spinach [Washed.]",
+        "2 tbsp Olive oil",
+        "15 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the plantain",
+          "detail": "Toss 800 g sliced plantain with 2 tbsp olive oil. Roast at 200°C for 20–25 minutes until caramelised at the edges.",
+          "minutes": 25
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "Wilt 200 g spinach in a hot pan. Finish with 15 ml lime juice.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "focaccia-salad",
+      "minutes": 13,
+      "prepMinutes": 0,
+      "ingredients": [
+        "400 g Focaccia [Wheat bakery product; check for sesame and dairy.]",
+        "120 g Rocket [Washed.]",
+        "300 g Tomatoes [Sliced.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 400 g focaccia in a moderate oven for 5–8 minutes as the packet directs.",
+          "minutes": 8
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss 120 g rocket and 300 g sliced tomatoes with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "sticky-rice-greens",
+      "minutes": 35,
+      "prepMinutes": 360,
+      "ingredients": [
+        "320 g Sticky rice [Dry weight; soak as the packet directs.]",
+        "400 g Bok choy [Halved lengthwise.]",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Steam the soaked sticky rice",
+          "detail": "Before this cooking window, rinse 320 g dry glutinous sticky rice and soak in plenty of cold water for the packet's stated time; allow about 6 hours for a long-soak product. Drain the soaked rice well. Spread in a cloth-lined steamer above simmering water, keeping the rice out of the water. Steam covered for 20–30 minutes or as the packet directs, turning once if needed, until the grains are translucent and tender without a hard centre.",
+          "minutes": 30
+        },
+        {
+          "title": "Steam the bok choy",
+          "detail": "During the rice's final 5 minutes, steam 400 g bok choy for 3–5 minutes. Dress with 1 tbsp olive oil and 20 ml lime juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "spring-onion-fried-rice",
+      "minutes": 16,
+      "prepMinutes": 0,
+      "ingredients": [
+        "600 g Cooked long-grain rice [Cooked weight, not dry rice. Use a ready-cooked packet as directed, freshly cooked rice straightaway, or leftovers cooled and refrigerated promptly; never rice left on the bench.]",
+        "60 g Spring onion [Sliced.]",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Fry the cooked rice",
+          "detail": "Use 600 g already-cooked long-grain rice (cooked weight); dry rice cannot be substituted into this short step. Heat 2 tbsp olive oil in a wide pan. Stir-fry the rice for 6–8 minutes until steaming hot throughout, breaking up clumps. Use batches if crowded. Follow a ready-cooked packet's reheating directions; do not use rice that has stood at room temperature.",
+          "minutes": 8
+        },
+        {
+          "title": "Add spring onion",
+          "detail": "Toss through 60 g washed, finely sliced spring onion and serve promptly.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "miso-aubergine-rice",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Short-grain rice [Dry weight.]",
+        "500 g Aubergine for the side [Sliced into 1.5 cm rounds.]",
+        "2 tbsp White miso [Choose vegan miso; gluten-free meals require an explicitly labelled gluten-free rice miso. It still contains soy.]",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g short-grain rice using its packet's water ratio and resting time. Start it while the aubergine roasts so both finish together.",
+          "minutes": 20
+        },
+        {
+          "title": "Roast, then glaze the aubergine",
+          "detail": "Toss 500 g aubergine for the side with 2 tbsp olive oil. Roast at 200°C for 20–25 minutes, turning once, until soft through the centre. Mix 2 tbsp white miso with 30 ml water. Brush this measured glaze onto the cooked aubergine and return to the oven for only 3–5 minutes, watching closely; the glaze should set without blackening. Do not roast the miso coating for the full cooking time.",
+          "minutes": 30
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "soba-greens",
+      "minutes": 16,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Soba noodles [Many soba blends contain wheat — check the packet. Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "200 g Baby spinach",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the noodles",
+          "detail": "Cook 280 g soba noodles as the packet directs. Drain well.",
+          "minutes": 10
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "During the noodles' final minutes, put 200 g washed baby spinach in a frying pan with a spoonful of water. Cook over medium heat for 2–3 minutes until wilted, then drain excess liquid. Take off the heat and toss with the drained noodles, 1 tbsp olive oil and 20 ml lime juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "pickle-cucumber-rice",
+      "minutes": 27,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight.]",
+        "300 g Cucumber [Thinly sliced.]",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g dry long-grain rice using its packet's measured water and resting time. While it cooks, prepare the cucumber.",
+          "minutes": 22
+        },
+        {
+          "title": "Quick-pickle the cucumber while rice cooks",
+          "detail": "Toss 300 g thinly sliced cucumber with 20 ml lemon juice and leave chilled for 10–15 minutes while the rice cooks. This marinating window starts early, rather than after the main is ready. This is a fresh lemon-marinated side for immediate service, not a preserved pickle.",
+          "minutes": 15
+        },
+        {
+          "title": "Finish the cucumber",
+          "detail": "Toss the already-marinated cucumber with 1 tbsp olive oil just before serving. Keep it cool and serve beside the hot rice.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        3
+      ]
+    },
+    {
+      "id": "pandan-rice-beans",
+      "minutes": 27,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight.]",
+        "1  Pandan leaf for the rice [Fresh or frozen food-grade leaf; wash, knot and remove after cooking. Not pandan extract.]",
+        "350 g Green beans [Trimmed.]",
+        "1 tbsp Olive oil",
+        "15 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the pandan rice",
+          "detail": "Rinse 300 g dry long-grain rice. Wash and loosely knot the 1 pandan leaf portion for the rice. Add it to the rice pot with the packet's measured water quantity. Cook and rest covered as the packet directs, then lift out and discard the whole pandan leaf before fluffing. Do not eat the leaf.",
+          "minutes": 22
+        },
+        {
+          "title": "Steam the beans",
+          "detail": "During the rice's final 7 minutes, steam 350 g green beans for 5–7 minutes. Finish with 1 tbsp olive oil and 15 ml lime juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "banana-leaf-rice",
+      "minutes": 40,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Jasmine rice [Dry weight.]",
+        "200 ml Coconut milk [Stir before measuring.]",
+        "1  Food-grade banana leaf for the rice [A large fresh or frozen leaf sold for food wrapping. Thaw as directed, rinse and wipe clean; it is a wrapper, not an edible vegetable.]",
+        "300 g Green beans [Trimmed.]",
+        "15 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the coconut rice",
+          "detail": "Rinse 300 g dry jasmine rice. Cook with 200 ml coconut milk and 280 ml water over low heat, covered, until tender and absorbed, or follow the packet's coconut-rice ratio. Rest covered and fluff; do not add a full second water allowance on top of the coconut milk.",
+          "minutes": 22
+        },
+        {
+          "title": "Warm in the banana leaf",
+          "detail": "Prepare the 1 food-grade banana leaf portion as its packet directs, thawing if frozen. Rinse and wipe clean. Line a heatproof bowl with the leaf, spoon in the already-cooked hot coconut rice, fold the leaf over loosely and steam for 5 minutes to warm and scent the rice. Remove all leaf pieces before eating; do not use an ornamental garden leaf or serve the leaf as food.",
+          "minutes": 6
+        },
+        {
+          "title": "Steam the beans",
+          "detail": "Steam 300 g green beans for 5–7 minutes while the rice finishes. Take off the heat and finish with 15 ml lime juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "papaya-salad-side",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "400 g Green papaya [Peeled and shredded. Green mango is a last resort.]",
+        "150 g Tomatoes [Wedge-cut.]",
+        "15 g Coriander leaves for the side [Leaves for the salad.]",
+        "1 tbsp Olive oil",
+        "30 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Build the salad",
+          "detail": "Combine 400 g green papaya, 150 g tomatoes and 15 g coriander leaves for the side.",
+          "minutes": 6
+        },
+        {
+          "title": "Dress",
+          "detail": "Toss with 30 ml lime juice and 1 tbsp olive oil.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "lemongrass-rice",
+      "minutes": 27,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Jasmine rice [Dry weight.]",
+        "1  Lemongrass stalk for the rice [Trim, bruise and keep in large retrievable pieces. Remove before serving.]",
+        "250 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the lemongrass rice",
+          "detail": "Rinse 300 g dry jasmine rice. Trim and bruise the 1 lemongrass stalk portion; leave large pieces that are easy to retrieve. Add to the rice with the packet's measured water quantity, then cook and rest covered as directed. Lift out and discard all woody lemongrass pieces before fluffing.",
+          "minutes": 22
+        },
+        {
+          "title": "Dress the cucumber",
+          "detail": "Toss 250 g thinly sliced cucumber with 20 ml lime juice and 1 tbsp olive oil just before serving.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "gai-lan-rice",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight.]",
+        "400 g Gai lan [Stems sliced, leaves kept whole.]",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g long-grain rice as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Sauté the gai lan",
+          "detail": "Stir-fry 400 g gai lan in 2 tbsp olive oil for 4–6 minutes until stems are tender-crisp.",
+          "minutes": 6
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "asian-slaw-noodles",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Rice noodles [Dry weight; usually wheat-free — check the packet.]",
+        "250 g Cabbage",
+        "150 g Carrot",
+        "2 tbsp Olive oil",
+        "30 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the noodles",
+          "detail": "Prepare 280 g rice noodles as the packet directs. Drain well.",
+          "minutes": 8
+        },
+        {
+          "title": "Make the slaw",
+          "detail": "Toss with 250 g cabbage, 150 g carrot, 2 tbsp olive oil and 30 ml lime juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "shanghainese-greens-rice",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "1 tbsp Soy sauce [Contains wheat unless labelled otherwise.]",
+        "300 g Short-grain or long-grain rice [Dry weight.]",
+        "400 g Bok choy",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g short-grain or long-grain rice as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Glaze the greens",
+          "detail": "Stir-fry 400 g bok choy in 2 tbsp olive oil. Finish with 1 tbsp soy sauce.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "yunnan-potato-salad",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Potatoes [Cut into bite-size chunks.]",
+        "20 g Coriander leaves for the side",
+        "2 tbsp Olive oil",
+        "25 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Boil the potatoes",
+          "detail": "Boil 800 g potatoes until tender, about 15–18 minutes. Drain well.",
+          "minutes": 18
+        },
+        {
+          "title": "Dress",
+          "detail": "Toss with 20 g coriander leaves for the side, 2 tbsp olive oil and 25 ml lemon juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "jeera-rice-raita",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "200 g Plain yoghurt [Unsweetened.]",
+        "300 g Basmati rice [Dry weight.]",
+        "1 tsp Cumin seeds",
+        "250 g Cucumber",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the basmati",
+          "detail": "Rinse 300 g basmati rice. Cook with 1 tsp cumin seeds as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Make the raita",
+          "detail": "Combine 200 g plain yoghurt with 250 g cucumber. Keep cold until serving. Finish with 15 ml lemon juice if you like.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "paratha-salad",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Paratha [Ready paratha; warm as the packet directs.]",
+        "200 g Cucumber",
+        "200 g Tomatoes",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 paratha as the packet directs.",
+          "minutes": 5
+        },
+        {
+          "title": "Make the salad",
+          "detail": "Toss 200 g cucumber and 200 g tomatoes with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "idli-veg",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "8  Ready idli [Steam as the packet directs; check for wheat.]",
+        "200 g Cucumber",
+        "200 g Tomatoes",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the idli",
+          "detail": "Steam or warm 8 ready idli as the packet directs. Check the packet for wheat.",
+          "minutes": 5
+        },
+        {
+          "title": "Make the salad",
+          "detail": "Toss 200 g cucumber and 200 g tomatoes with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "khichdi-greens",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "200 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "100 g Red lentils [Rinsed; dry weight.]",
+        "200 g Baby spinach",
+        "1 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the khichdi",
+          "detail": "Rinse 200 g long-grain rice and 100 g red lentils. Simmer together in plenty of water until soft, about 20–25 minutes. Drain any excess liquid.",
+          "minutes": 25
+        },
+        {
+          "title": "Wilt the spinach",
+          "detail": "Wilt 200 g baby spinach with 1 tbsp olive oil and 15 ml lemon juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "pappadum-salad",
+      "minutes": 9,
+      "prepMinutes": 0,
+      "ingredients": [
+        "8  Pappadums [Microwave or grill as the packet directs; check for wheat.]",
+        "150 g Mixed salad leaves",
+        "150 g Tomatoes",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the pappadums",
+          "detail": "Prepare 8 pappadums as the packet directs. Check the packet for wheat.",
+          "minutes": 4
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss 150 g mixed salad leaves and 150 g tomatoes with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "biryani-style-rice",
+      "minutes": 29,
+      "prepMinutes": 0,
+      "ingredients": [
+        "320 g Basmati rice [Dry weight.]",
+        "0.5 tsp Cumin seeds for the rice [Whole seeds; not chilli.]",
+        "2  Green cardamom pods for the rice [Lightly crack; remove whole pods before serving.]",
+        "1  Cinnamon stick for the rice [One small stick for four servings; remove before serving.]",
+        "250 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the gently spiced basmati",
+          "detail": "Rinse 320 g dry basmati rice. Warm 0.5 tbsp of the olive oil over medium-low heat. Add 0.5 tsp cumin seeds, the 2 lightly cracked cardamom pod portions and 1 small cinnamon stick portion. Stir for 30 seconds until fragrant, then add rice and the packet's measured water quantity. Cook and rest covered as directed. Lift out and discard all cardamom pod shells and the cinnamon stick before fluffing; the cumin seeds stay in the rice. This is a spiced rice side, not a complete biryani.",
+          "minutes": 24
+        },
+        {
+          "title": "Dress the cucumber",
+          "detail": "Toss 250 g thinly sliced cucumber with 20 ml lemon juice and the remaining 0.5 tbsp olive oil.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "roti-salad",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Roti",
+        "250 g Tomatoes",
+        "200 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 roti as the packet directs.",
+          "minutes": 4
+        },
+        {
+          "title": "Make the salad",
+          "detail": "Toss 250 g tomatoes and 200 g cucumber with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "xinjiang-bread-salad",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Naan bread",
+        "300 g Tomatoes",
+        "200 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 naan bread as the packet directs.",
+          "minutes": 5
+        },
+        {
+          "title": "Make the salad",
+          "detail": "Toss 300 g tomatoes and 200 g cucumber with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "freekeh-salad",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Freekeh [Dry weight.]",
+        "250 g Cherry tomatoes",
+        "30 g Parsley for the side",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the grain",
+          "detail": "Cook 280 g freekeh as the packet directs until tender. Drain and cool slightly.",
+          "minutes": 22
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss with 250 g cherry tomatoes, 30 g parsley for the side, 2 tbsp olive oil and 30 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "pita-fattoush",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "3  Pita bread",
+        "200 g Cucumber",
+        "250 g Tomatoes",
+        "150 g Cos lettuce",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Toast the bread",
+          "detail": "Toast or warm 3 pita bread and tear into pieces.",
+          "minutes": 5
+        },
+        {
+          "title": "Build the fattoush",
+          "detail": "Toss with 200 g cucumber, 250 g tomatoes, 150 g cos lettuce, 2 tbsp olive oil and 30 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "jewelled-rice",
+      "minutes": 28,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Basmati rice [Dry weight.]",
+        "100 g Pomegranate arils for the rice [Ready-extracted arils, without peel or pith.]",
+        "40 g Parsley for the side",
+        "20 g Fresh mint for the side",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the basmati",
+          "detail": "Rinse 300 g dry basmati rice and cook using the packet's water ratio. Rest covered and fluff.",
+          "minutes": 22
+        },
+        {
+          "title": "Add the jewels and herbs",
+          "detail": "Just before serving, gently fold 100 g pomegranate arils through the rice. Toss 40 g chopped parsley and 20 g chopped fresh mint with 1 tbsp olive oil and 20 ml lemon juice; spoon the fresh herbs alongside or over the rice without cooking them.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "harissa-carrots-couscous",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Couscous [Dry weight.]",
+        "500 g Carrots [Cut into 1 cm-thick batons.]",
+        "1 tsp Vegan mild harissa paste for the side [Choose a vegan mild paste; chilli strength varies. Gluten-free meals require a labelled gluten-free product.]",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the carrots",
+          "detail": "Toss 500 g prepared carrots with 1.5 tbsp of the olive oil. Roast in a single layer at 200°C for 25–30 minutes, turning once, until tender and browned. Keep the harissa off the tray during this long roast.",
+          "minutes": 30
+        },
+        {
+          "title": "Hydrate the couscous near serving",
+          "detail": "During the carrots' final 10 minutes, put 280 g dry couscous in a heatproof bowl. Add boiling water using the packet's ratio, cover for its stated time, then fluff with a fork.",
+          "minutes": 8
+        },
+        {
+          "title": "Cook the harissa coating and finish",
+          "detail": "During the final 5 minutes of roasting, warm the remaining 0.5 tbsp olive oil in a small pan. Stir in 1 tsp vegan mild harissa paste for 1–2 minutes over low heat, then add 30 ml water and simmer briefly. Toss the cooked carrots through this measured coating, take off the heat and finish with 20 ml lemon juice. Serve over the fluffed grain.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        3
+      ]
+    },
+    {
+      "id": "baba-salad",
+      "minutes": 10,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Vegan flatbread",
+        "300 g Ready baba ganoush [Check the label for sesame and gluten.]",
+        "250 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Plate the baba ganoush",
+          "detail": "Spoon 300 g ready baba ganoush onto a plate. Check the packet for sesame.",
+          "minutes": 2
+        },
+        {
+          "title": "Salad and bread",
+          "detail": "Toss 250 g cucumber with 20 ml lemon juice and 1 tbsp olive oil. Serve with 4 vegan flatbread.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "georgian-walnut-salad",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Vegan flatbread",
+        "80 g Walnuts [Roughly chopped.]",
+        "40 g Parsley for the side",
+        "20 g Coriander leaves for the side",
+        "2 tbsp Olive oil",
+        "25 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Make the herb salad",
+          "detail": "Combine 80 g walnuts, 40 g parsley for the side and 20 g coriander leaves for the side. Dress with 2 tbsp olive oil and 25 ml lemon juice.",
+          "minutes": 6
+        },
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 4 vegan flatbread as the packet directs.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "ratatouille-side",
+      "minutes": 38,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Courgette for the side",
+        "300 g Aubergine for the side",
+        "400 g Tomatoes",
+        "3 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the vegetables",
+          "detail": "Heat 3 tbsp olive oil in a wide pan. Add 300 g courgette for the side and 300 g aubergine for the side. Cook 12–15 minutes until soft.",
+          "minutes": 15
+        },
+        {
+          "title": "Add tomatoes",
+          "detail": "Add 400 g tomatoes and simmer 15–20 minutes until jammy. Cook in batches if crowded.",
+          "minutes": 18
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "egg-free-spaetzle-greens",
+      "minutes": 20,
+      "prepMinutes": 0,
+      "ingredients": [
+        "350 g Egg-free soft noodles [Choose egg-free noodles; check the packet. Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "200 g Baby spinach",
+        "1 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the noodles",
+          "detail": "Cook 350 g dry egg-free soft noodles to its packet timing. Before draining, reserve a little cooking water.",
+          "minutes": 12
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "During the noodles' final minutes, put 200 g washed baby spinach into a frying pan with a spoonful of the hot cooking water. Cook over medium heat for 2–3 minutes until wilted. Drain excess liquid, take off the heat and fold in the drained noodles, 1 tbsp olive oil and 15 ml lemon juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "risotto-style-side",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Arborio rice [Dry weight; stir as the packet directs.]",
+        "150 g Frozen peas [Added in the last minutes.]",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Use 280 g dry arborio rice. Keep a small saucepan of water hot; stock is not required or listed for this side. Add hot water to the rice a ladle at a time, stirring often and adding more as it is absorbed, for about 18–22 minutes or to the packet's guidance, until tender with a little bite. Beat in 2 tbsp olive oil and keep the texture loose, not dry.",
+          "minutes": 24
+        },
+        {
+          "title": "Add peas and lemon",
+          "detail": "During the rice's final 3–5 minutes, stir through 150 g frozen peas and cook until the peas are steaming hot throughout. Take off the heat and finish with 20 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        1
+      ]
+    },
+    {
+      "id": "patatas-bravas-side",
+      "minutes": 45,
+      "prepMinutes": 0,
+      "ingredients": [
+        "900 g Potatoes [Scrub, dry and cut into 2 cm cubes.]",
+        "150 ml Tomato passata for the side sauce [Plain passata, not a prepared chilli sauce.]",
+        "0.5 tsp Sweet smoked paprika for the side [Sweet rather than hot paprika.]",
+        "1 cloves Garlic for the side [Finely minced.]",
+        "3 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the potatoes",
+          "detail": "Toss 900 g dry 2 cm potato cubes with 2.5 tbsp of the olive oil. Spread out on a tray and roast at 220°C for 35–40 minutes, turning once, until tender inside and crisp outside. Use extra trays for a large batch.",
+          "minutes": 40
+        },
+        {
+          "title": "Cook the smoky tomato sauce alongside",
+          "detail": "During the potatoes' final 10 minutes, warm the remaining 0.5 tbsp olive oil in a small saucepan. Soften 1 minced garlic clove portion for 30 seconds. Stir in 0.5 tsp sweet smoked paprika for 15 seconds, then immediately add 150 ml tomato passata. Simmer gently for 5–8 minutes until thick; add a spoonful of water only if needed to stop sticking.",
+          "minutes": 10
+        },
+        {
+          "title": "Keep the potatoes crisp",
+          "detail": "Take the sauce off the heat and add 20 ml lemon juice gradually. Serve this measured sauce alongside the hot potatoes or spoon on at the table; do not soak the crisp cubes while they wait.",
+          "minutes": 1
+        }
+      ],
+      "finish": [
+        3
+      ]
+    },
+    {
+      "id": "beans-tomato-side",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "400 g Canned white beans, drained [Already cooked; drained weight.]",
+        "200 g Passata or crushed tomatoes",
+        "150 g Baby spinach",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Simmer the beans",
+          "detail": "Warm 400 g canned white beans, drained with 200 g passata or crushed tomatoes and 2 tbsp olive oil for 8–10 minutes.",
+          "minutes": 10
+        },
+        {
+          "title": "Wilt the spinach",
+          "detail": "Stir through 150 g baby spinach until wilted. Finish with 15 ml lemon juice.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "kale-farro",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Farro [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "250 g Kale [Stems removed, leaves torn.]",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the grain",
+          "detail": "Cook 280 g farro as the packet directs until tender. Drain.",
+          "minutes": 28
+        },
+        {
+          "title": "Wilt the kale",
+          "detail": "Sauté 250 g kale in 2 tbsp olive oil until tender. Finish with 20 ml lemon juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "beetroot-salad",
+      "minutes": 55,
+      "prepMinutes": 0,
+      "ingredients": [
+        "600 g Beetroot [Scrubbed; wrap and roast until tender.]",
+        "120 g Mixed salad leaves",
+        "2 tbsp Olive oil",
+        "25 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the beetroot",
+          "detail": "Scrub and trim 600 g beetroot, peel if preferred, and cut into even 2 cm pieces. Place in a covered heatproof dish and roast at 200°C for about 35–45 minutes until a knife enters easily. Let cool until just warm before dressing, so it does not wilt the leaves.",
+          "minutes": 45
+        },
+        {
+          "title": "Dress",
+          "detail": "Toss the just-warm beetroot with 120 g washed, dried mixed salad leaves, 2 tbsp olive oil and 25 ml lemon juice immediately before serving.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "zucchini-ribbons",
+      "minutes": 12,
+      "prepMinutes": 0,
+      "ingredients": [
+        "700 g Courgette for the side [Peeled into ribbons or thin slices.]",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Sauté the ribbons",
+          "detail": "Heat 2 tbsp olive oil. Add 700 g courgette for the side and cook 5–7 minutes until just tender. Cook in batches if crowded.",
+          "minutes": 7
+        },
+        {
+          "title": "Finish with lemon",
+          "detail": "Dress with 20 ml lemon juice and serve promptly.",
+          "minutes": 1
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "mushroom-rice-side",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "300 g Mushrooms for the side [Sliced.]",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the mushrooms",
+          "detail": "Use a wide saucepan with a fitted lid for this one-pot side. Sauté 300 g sliced mushrooms for the side in 2 tbsp olive oil over medium-high heat until their liquid evaporates and they brown, about 8 minutes.",
+          "minutes": 8
+        },
+        {
+          "title": "Add the rice",
+          "detail": "Stir 300 g rinsed dry long-grain rice into the same saucepan. Add the packet's measured water quantity, bring to a gentle boil, cover and cook on the lowest heat until tender. Rest covered for 5 minutes, then fluff.",
+          "minutes": 22
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "tzatziki-potatoes",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "200 g Plain yoghurt",
+        "800 g Potatoes [Cut into chunks.]",
+        "150 g Cucumber",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Boil the potatoes",
+          "detail": "Boil 800 g potatoes until tender, about 15–18 minutes. Drain.",
+          "minutes": 18
+        },
+        {
+          "title": "Make the tzatziki",
+          "detail": "Combine 200 g plain yoghurt with 150 g cucumber and 15 ml lemon juice. Serve with the potatoes.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "barley-veg",
+      "minutes": 45,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Pearl barley [Barley contains gluten; dry weight.]",
+        "300 g Carrots",
+        "250 g Capsicum",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the grain",
+          "detail": "Cook 280 g dry pearl barley in water using the packet's ratio and cooking time until tender; allow about 30–40 minutes, or the packet's longer time. Drain any unabsorbed water. Start the vegetable tray while this grain cooks.",
+          "minutes": 40
+        },
+        {
+          "title": "Roast the vegetables alongside",
+          "detail": "Toss 300 g prepared carrot pieces and 250 g capsicum with 2 tbsp olive oil. Roast in a single layer at 200°C for 25–30 minutes, turning once, until tender; this overlaps the grain cooking. Take off the heat and finish with 20 ml lemon juice.",
+          "minutes": 30
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "tostones-side",
+      "minutes": 40,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Green plantain [Peeled and sliced.]",
+        "3 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "First fry the green plantain",
+          "detail": "Peel 800 g green plantain and cut into 2 cm-thick rounds. Pat completely dry. Heat 1.5 tbsp of the olive oil in a non-stick wide pan over medium-low heat. Fry in uncrowded batches for 4–5 minutes per side until the centres soften enough to flatten; they should not be crisp yet. Transfer to a board, keeping the same measured oil for the first-fry batches.",
+          "minutes": 20
+        },
+        {
+          "title": "Flatten and refry",
+          "detail": "Using the flat base of a small pan, gently press each warm round between sheets of baking paper to about 5–8 mm thick. Heat the remaining 1.5 tbsp olive oil over medium-high heat. Refry the flattened pieces in batches for 1–2 minutes per side until crisp and golden, using this same second-fry portion across batches. Drain briefly on paper and keep uncovered. This is a lightly oiled pan-fried adaptation, rather than deep frying.",
+          "minutes": 12
+        },
+        {
+          "title": "Finish with lime",
+          "detail": "Serve the 20 ml lime juice alongside and add at the table; soaking the crisp plantain in juice softens it. Serve promptly.",
+          "minutes": 1
+        }
+      ],
+      "finish": [
+        3
+      ]
+    },
+    {
+      "id": "congri-rice",
+      "minutes": 30,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "300 g Canned black beans, drained [Already cooked.]",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice with the cooked beans",
+          "detail": "Rinse 280 g dry long-grain rice. Cook with the packet's measured water quantity. During its final 5 minutes, gently fold in 300 g drained and rinsed canned black beans; these are already cooked, not dry beans. Cover and heat until the rice is tender and the beans are steaming hot, adding a small splash of water only if needed. Rest covered for the packet's resting time.",
+          "minutes": 25
+        },
+        {
+          "title": "Finish the rice and beans",
+          "detail": "Gently fluff the cooked rice and beans with 1 tbsp olive oil. Take off the heat and add 20 ml lime juice just before serving.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        1
+      ]
+    },
+    {
+      "id": "arepa-salad",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Ready arepas [Warm as the packet directs; check for wheat.]",
+        "2  Avocado",
+        "200 g Tomatoes",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the arepas",
+          "detail": "Warm 4 ready arepas as the packet directs. Check the packet for wheat.",
+          "minutes": 6
+        },
+        {
+          "title": "Make the salad",
+          "detail": "Combine 2 avocado and 200 g tomatoes. Dress with 20 ml lime juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "chimichurri-potatoes",
+      "minutes": 43,
+      "prepMinutes": 0,
+      "ingredients": [
+        "900 g Potatoes [Cut into wedges.]",
+        "40 g Parsley for the side",
+        "10 g Garlic for the side [Finely chopped for the chimichurri.]",
+        "3 tbsp Olive oil",
+        "25 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Roast the potatoes",
+          "detail": "Toss 900 g potatoes with 2 tbsp olive oil. Roast at 200°C for 35–40 minutes until golden.",
+          "minutes": 38
+        },
+        {
+          "title": "Make the chimichurri",
+          "detail": "Combine 40 g parsley for the side, 10 g garlic for the side, the remaining 1 tbsp olive oil and 25 ml lemon juice. Spoon over the potatoes.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "yuca-greens",
+      "minutes": 35,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Fully cooked peeled yuca (cassava) [Use commercially processed, peeled and fully cooked cassava sold ready to reheat, with clear packet instructions. Not raw root, raw frozen cassava, bitter cassava or leaves. Home peeling and a short boil are not a validated detoxification process.]",
+        "200 g Baby spinach",
+        "2 tbsp Olive oil",
+        "15 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Check and reheat the cooked yuca",
+          "detail": "Use 800 g commercially processed, peeled and fully cooked yuca (cassava) sold ready to reheat. Follow that product's reheating instructions until steaming hot throughout; if they require boiling, use fresh water, then drain and discard all the cooking water. Do not reuse it for sauce or soup. Remove any remaining fibrous core. Do not substitute raw or unlabelled roots, raw frozen cassava, bitter cassava or cassava leaves: a 20–25 minute home boil alone does not establish safe processing. If a suitable cooked product is unavailable, choose another side.",
+          "minutes": 20
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "While the yuca reheats, wilt 200 g washed baby spinach in 2 tbsp olive oil over medium heat until hot. Take off the heat and finish with 15 ml lime juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "elote-style-corn",
+      "minutes": 18,
+      "prepMinutes": 0,
+      "ingredients": [
+        "4  Corn cobs [Remove husks and silk.]",
+        "120 g Plain yoghurt for the side [Keep refrigerated.]",
+        "0.5 tsp Sweet paprika for the corn [Use sweet, not hot, paprika.]",
+        "1 tbsp Olive oil",
+        "25 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the corn",
+          "detail": "Brush 4 husked corn cob portions with 1 tbsp olive oil. Grill or pan-char over medium-high heat for 8–12 minutes, turning frequently, until the kernels are tender and speckled rather than black.",
+          "minutes": 12
+        },
+        {
+          "title": "Make the cool lime dressing",
+          "detail": "Mix 120 g plain yoghurt with 25 ml lime juice and 0.5 tsp sweet paprika. Keep chilled, then spoon this measured dressing over the cooked corn at the table. This is a yoghurt-based adaptation, not a mayonnaise-and-cheese coating.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "avocado-tomato-rice",
+      "minutes": 23,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "2  Avocado",
+        "250 g Tomatoes",
+        "1 tbsp Olive oil",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g long-grain rice as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Top with avocado and tomato",
+          "detail": "Top with 2 avocado and 250 g tomatoes. Dress with 1 tbsp olive oil and 20 ml lime juice.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "jollof-style-rice",
+      "minutes": 37,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "250 g Passata or crushed tomatoes",
+        "200 g Baby spinach",
+        "2 tbsp Olive oil"
+      ],
+      "steps": [
+        {
+          "title": "Cook the tomato rice",
+          "detail": "Warm 2 tbsp olive oil in a saucepan. Cook 250 g passata or crushed tomatoes over medium-low heat for 5–8 minutes, stirring, until thicker. Rinse 300 g dry long-grain rice and stir it in, then add 450 ml water. The tomato contributes liquid, so do not add a full second packet-water allowance on top. Cover and simmer on the lowest heat for about 15–20 minutes, checking the rice packet; if it is still firm and drying out, add hot water a spoonful at a time. Rest covered for 5 minutes.",
+          "minutes": 32
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "During the rice's final 3 minutes, fold through 200 g washed baby spinach until wilted and hot throughout. Rest and fluff gently before serving.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "ugali-greens",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Maize meal [Dry weight; stir as the packet directs for ugali or sadza.]",
+        "250 g Baby spinach",
+        "1 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the ugali",
+          "detail": "Whisk 300 g maize meal into boiling water as the packet directs. Stir until thick and firm, about 10–15 minutes.",
+          "minutes": 15
+        },
+        {
+          "title": "Wilt the greens",
+          "detail": "Wilt 250 g baby spinach with 1 tbsp olive oil and 15 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "sukuma-wiki-side",
+      "minutes": 20,
+      "prepMinutes": 0,
+      "ingredients": [
+        "400 g Kale [Or use cabbage if kale is unavailable.]",
+        "200 g Tomatoes",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the greens",
+          "detail": "Sauté 400 g kale in 2 tbsp olive oil for 8–10 minutes until tender.",
+          "minutes": 10
+        },
+        {
+          "title": "Add tomatoes",
+          "detail": "Add 200 g tomatoes and cook 5 minutes more. Finish with 15 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "gomen-style-greens",
+      "minutes": 28,
+      "prepMinutes": 0,
+      "ingredients": [
+        "500 g Kale [Or collard greens if available.]",
+        "80 g Onion for the side",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Soften the onion",
+          "detail": "Cook 80 g prepared onion for the side in 2 tbsp olive oil over medium-low heat for about 5 minutes until soft.",
+          "minutes": 5
+        },
+        {
+          "title": "Cook the kale",
+          "detail": "Add 500 g thinly sliced kale and 60 ml water. Cover loosely and cook over low heat for 15–18 minutes until tender, stirring and adding water a spoonful at a time if needed to prevent scorching. Uncover to evaporate excess water, then take off the heat and finish with 20 ml lemon juice.",
+          "minutes": 18
+        }
+      ],
+      "finish": []
+    },
+    {
+      "id": "mozambican-rice-coconut",
+      "minutes": 24,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "250 ml Coconut milk",
+        "20 ml Lime juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the coconut rice",
+          "detail": "Rinse 300 g long-grain rice. Cook with 250 ml coconut milk and 250 ml water, covered, until absorbed. Rest and fluff.",
+          "minutes": 20
+        },
+        {
+          "title": "Finish with lime",
+          "detail": "Fluff through 20 ml lime juice just before serving.",
+          "minutes": 1
+        }
+      ],
+      "finish": [
+        1
+      ]
+    },
+    {
+      "id": "millet-greens",
+      "minutes": 28,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Millet [Dry weight; rinse well.]",
+        "350 g Broccoli for the side [Florets.]",
+        "1 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the millet",
+          "detail": "Rinse 280 g millet. Simmer covered until tender, about 20 minutes, or as the packet directs. Rest and fluff.",
+          "minutes": 22
+        },
+        {
+          "title": "Steam the broccoli",
+          "detail": "Steam 350 g broccoli for the side for 5–7 minutes. Finish with 1 tbsp olive oil and 15 ml lemon juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "sorghum-salad",
+      "minutes": 45,
+      "prepMinutes": 0,
+      "ingredients": [
+        "280 g Sorghum grain [Dry weight; simmer until chewy-tender.]",
+        "250 g Cherry tomatoes",
+        "25 g Parsley for the side",
+        "2 tbsp Olive oil",
+        "30 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the sorghum",
+          "detail": "Simmer 280 g sorghum grain until chewy-tender, about 40 minutes, or as the packet directs. Drain.",
+          "minutes": 40
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss with 250 g cherry tomatoes, 25 g parsley for the side, 2 tbsp olive oil and 30 ml lemon juice.",
+          "minutes": 5
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "pumpkin-mash-salad",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "800 g Pumpkin for the side [Peeled and chunked.]",
+        "120 g Mixed salad leaves",
+        "2 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Mash the pumpkin",
+          "detail": "Boil 800 g pumpkin for the side until soft, about 15–18 minutes. Drain and mash with 2 tbsp olive oil.",
+          "minutes": 20
+        },
+        {
+          "title": "Dress the leaves",
+          "detail": "Toss 120 g mixed salad leaves with 20 ml lemon juice.",
+          "minutes": 2
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "pea-mash-beans",
+      "minutes": 18,
+      "prepMinutes": 0,
+      "ingredients": [
+        "500 g Frozen peas",
+        "300 g Green beans",
+        "15 g Fresh mint for the side",
+        "1 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Mash the peas",
+          "detail": "Boil 500 g frozen peas for 3–4 minutes. Drain and mash with 1 tbsp olive oil and 15 g fresh mint for the side.",
+          "minutes": 8
+        },
+        {
+          "title": "Steam the beans",
+          "detail": "Steam 300 g green beans for 5–7 minutes. Finish with 15 ml lemon juice.",
+          "minutes": 7
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "damper-salad",
+      "minutes": 15,
+      "prepMinutes": 0,
+      "ingredients": [
+        "400 g Damper-style bread [Warm as the packet directs.]",
+        "150 g Mixed salad leaves",
+        "200 g Tomatoes",
+        "150 g Cucumber",
+        "1 tbsp Olive oil",
+        "20 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Warm the bread",
+          "detail": "Warm 400 g damper-style bread as the packet directs.",
+          "minutes": 8
+        },
+        {
+          "title": "Dress the salad",
+          "detail": "Toss 150 g mixed salad leaves, 200 g tomatoes and 150 g cucumber with 20 ml lemon juice and 1 tbsp olive oil.",
+          "minutes": 4
+        }
+      ],
+      "finish": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "creole-rice-okra",
+      "minutes": 28,
+      "prepMinutes": 0,
+      "ingredients": [
+        "300 g Long-grain rice [Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "300 g Okra [Trimmed; sliced if large.]",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the rice",
+          "detail": "Cook 300 g long-grain rice as the packet directs. Rest and fluff.",
+          "minutes": 18
+        },
+        {
+          "title": "Cook the okra",
+          "detail": "Sauté 300 g okra in 2 tbsp olive oil for 8–10 minutes until tender. Finish with 15 ml lemon juice.",
+          "minutes": 10
+        }
+      ],
+      "finish": [
+        2
+      ]
+    },
+    {
+      "id": "oat-risotto-greens",
+      "minutes": 25,
+      "prepMinutes": 0,
+      "ingredients": [
+        "200 g Rolled oats [The gluten-free version uses labelled gluten-free rice flakes instead of oats. Dry weight; use the packet's liquid ratio, cooking time and resting instructions.]",
+        "200 g Baby spinach",
+        "2 tbsp Olive oil",
+        "15 ml Lemon juice [Freshly squeezed; measure the juice.]"
+      ],
+      "steps": [
+        {
+          "title": "Cook the oats",
+          "detail": "Simmer 200 g rolled oats in water, using the packet's liquid ratio and cooking time, stirring until creamy. Allow about 12–15 minutes. Beat in 2 tbsp olive oil.",
+          "minutes": 15
+        },
+        {
+          "title": "Add greens",
+          "detail": "Stir through 200 g baby spinach until wilted. Finish with 15 ml lemon juice.",
+          "minutes": 3
+        }
+      ],
+      "finish": [
+        2
+      ]
+    }
+  ]
+}

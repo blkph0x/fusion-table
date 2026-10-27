@@ -1,0 +1,235 @@
+(node:21964) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:5028) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: account snapshots include kitchen content but never navigation, passwords or unrecognized storage
+ok 1 - account snapshots include kitchen content but never navigation, passwords or unrecognized storage
+  ---
+  duration_ms: 2.7221
+  ...
+# Subtest: guest storage stays separate while an account is active, including cross-tab logout races
+ok 2 - guest storage stays separate while an account is active, including cross-tab logout races
+  ---
+  duration_ms: 0.4596
+  ...
+# Subtest: a reload removes stale private mirrors before the page can hydrate and preserves the guest backup
+ok 3 - a reload removes stale private mirrors before the page can hydrate and preserves the guest backup
+  ---
+  duration_ms: 0.4489
+  ...
+# Subtest: missing or corrupt guest backup starts an empty guest instead of leaking account data
+ok 4 - missing or corrupt guest backup starts an empty guest instead of leaking account data
+  ---
+  duration_ms: 0.1855
+  ...
+# Subtest: account reads are same-origin, uncacheable and never store a bearer token in browser state
+ok 5 - account reads are same-origin, uncacheable and never store a bearer token in browser state
+  ---
+  duration_ms: 31.4965
+  ...
+# Subtest: sign-in sends explicit long-session choice with the same-origin mutation header
+ok 6 - sign-in sends explicit long-session choice with the same-origin mutation header
+  ---
+  duration_ms: 0.7662
+  ...
+# Subtest: optimistic saves bind account identity and strip unsynced fields before sending
+ok 7 - optimistic saves bind account identity and strip unsynced fields before sending
+  ---
+  duration_ms: 0.5677
+  ...
+# Subtest: a version conflict carries the other saved kitchen without silently replacing either side
+ok 8 - a version conflict carries the other saved kitchen without silently replacing either side
+  ---
+  duration_ms: 1.1944
+  ...
+# Subtest: oversized sync is refused before any request, while guest storage keeps its own browser capacity
+ok 9 - oversized sync is refused before any request, while guest storage keeps its own browser capacity
+  ---
+  duration_ms: 53.9584
+  ...
+# Subtest: unavailable and malformed services become understandable errors without exposing proxy HTML
+ok 10 - unavailable and malformed services become understandable errors without exposing proxy HTML
+  ---
+  duration_ms: 2.9374
+  ...
+# Subtest: logout and password change require acknowledged server responses
+ok 11 - logout and password change require acknowledged server responses
+  ---
+  duration_ms: 2.9854
+  ...
+# Subtest: blocked storage keeps a tab-local guest recovery without preventing SQL accounts
+ok 12 - blocked storage keeps a tab-local guest recovery without preventing SQL accounts
+  ---
+  duration_ms: 0.4275
+  ...
+# Subtest: a full storage quota cannot leave a durable account marker without guest recovery
+ok 13 - a full storage quota cannot leave a durable account marker without guest recovery
+  ---
+  duration_ms: 0.2648
+  ...
+# (node:63228) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sign-in asks which kitchen to use before uploading any browser data
+ok 14 - sign-in asks which kitchen to use before uploading any browser data
+  ---
+  duration_ms: 76.2311
+  ...
+# Subtest: the production signup form validates password length and sends explicit persistent-session choice
+ok 15 - the production signup form validates password length and sends explicit persistent-session choice
+  ---
+  duration_ms: 13.3248
+  ...
+# Subtest: a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+ok 16 - a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+  ---
+  duration_ms: 8.6501
+  ...
+# Subtest: conflicting changes require a choice and never overwrite the other device automatically
+ok 17 - conflicting changes require a choice and never overwrite the other device automatically
+  ---
+  duration_ms: 9.6821
+  ...
+# Subtest: failed automatic saves pause without a request storm and can be retried explicitly
+ok 18 - failed automatic saves pause without a request storm and can be retried explicitly
+  ---
+  duration_ms: 6.226
+  ...
+# Subtest: session expiry restores guest content instead of leaving a private account visible
+ok 19 - session expiry restores guest content instead of leaving a private account visible
+  ---
+  duration_ms: 5.6935
+  ...
+# Subtest: an offline account check leaves the guest kitchen usable without uploading it
+ok 20 - an offline account check leaves the guest kitchen usable without uploading it
+  ---
+  duration_ms: 5.6441
+  ...
+# Subtest: a tab left open checks the session deadline and clears expired private content without a keepalive loop
+ok 21 - a tab left open checks the session deadline and clears expired private content without a keepalive loop
+  ---
+  duration_ms: 5.3642
+  ...
+# Subtest: an authenticated different browser must choose cloud or browser before either side changes
+ok 22 - an authenticated different browser must choose cloud or browser before either side changes
+  ---
+  duration_ms: 5.1767
+  ...
+# Subtest: the explicit conflict choice can keep the current kitchen against the newest version
+ok 23 - the explicit conflict choice can keep the current kitchen against the newest version
+  ---
+  duration_ms: 7.6903
+  ...
+# Subtest: signing out flushes the latest unscheduled edit and clears password form state
+ok 24 - signing out flushes the latest unscheduled edit and clears password form state
+  ---
+  duration_ms: 10.3686
+  ...
+# Subtest: the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+ok 25 - the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+  ---
+  duration_ms: 7.4459
+  ...
+# Subtest: the production password form rotates credentials and clears its password inputs
+ok 26 - the production password form rotates credentials and clears its password inputs
+  ---
+  duration_ms: 5.7936
+  ...
+# (node:32904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: atomic audit replacement tolerates brief Windows sharing locks without deleting prior evidence
+ok 27 - atomic audit replacement tolerates brief Windows sharing locks without deleting prior evidence
+  ---
+  duration_ms: 2.6589
+  ...
+# Subtest: canonical plan derives every dietary default/cut row and all4250 classics without generation
+ok 28 - canonical plan derives every dietary default/cut row and all4250 classics without generation
+  ---
+  duration_ms: 6.5735
+  ...
+# Subtest: zero-based shards partition every index exactly, including uneven and empty workers
+ok 29 - zero-based shards partition every index exactly, including uneven and empty workers
+  ---
+  duration_ms: 1.5896
+  ...
+# Subtest: default CLI is plan-only and never creates its requested output directory
+ok 30 - default CLI is plan-only and never creates its requested output directory
+  ---
+  duration_ms: 522.0104
+  ...
+# Subtest: partial witnesses retain every measured ingredient and resume without duplicates
+ok 31 - partial witnesses retain every measured ingredient and resume without duplicates
+  ---
+  duration_ms: 62.1473
+  ...
+# Subtest: all completed shards are required and their ingredient witnesses form one exact union
+ok 32 - all completed shards are required and their ingredient witnesses form one exact union
+  ---
+  duration_ms: 86.5017
+  ...
+# Subtest: a changed source, changed chunk contract or tampered committed file cannot resume
+ok 33 - a changed source, changed chunk contract or tampered committed file cannot resume
+  ---
+  duration_ms: 29.0063
+  ...
+# Subtest: source changes during a run and complete-dictionary mutations invalidate completion
+ok 34 - source changes during a run and complete-dictionary mutations invalidate completion
+  ---
+  duration_ms: 52.5358
+  ...
+# Subtest: quality and generation failures are witnessed with bounded examples, never silently passed
+ok 35 - quality and generation failures are witnessed with bounded examples, never silently passed
+  ---
+  duration_ms: 29.451
+  ...
+# Subtest: streamed multi-chunk output handles backpressure without retaining all case records
+ok 36 - streamed multi-chunk output handles backpressure without retaining all case records
+  ---
+  duration_ms: 183.6655
+  ...
+# (node:58332) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+ok 37 - all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+  ---
+  duration_ms: 52.1254
+  ...
+# Subtest: food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+ok 38 - food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+  ---
+  duration_ms: 1.437
+  ...
+# Subtest: special foods, counted produce and prepared foods get their own planning forms
+ok 39 - special foods, counted produce and prepared foods get their own planning forms
+  ---
+  duration_ms: 0.3313
+  ...
+# Subtest: saved seeded fresh finishes are recognized by exact food form despite specialty category
+ok 40 - saved seeded fresh finishes are recognized by exact food form despite specialty category
+  ---
+  duration_ms: 0.4102
+  ...
+# Subtest: invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+ok 41 - invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+  ---
+  duration_ms: 0.3302
+  ...
+# Subtest: observed compatible unit costs replace assumptions without making the pack price the food-used price
+ok 42 - observed compatible unit costs replace assumptions without making the pack price the food-used price
+  ---
+  duration_ms: 2.1462
+  ...
+# Subtest: API exposes fallback allowances separately and never counts invented live prices
+ok 43 - API exposes fallback allowances separately and never counts invented live prices
+  ---
+  duration_ms: 0.7245
+  ...
+1..43
+# tests 43
+# suites 0
+# pass 43
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1506.9849

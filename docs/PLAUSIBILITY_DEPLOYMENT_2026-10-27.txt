@@ -1,0 +1,111 @@
+FUSION TABLE - PLAUSIBILITY AUDIT DELIVERY AND VERIFICATION
+27 October 2026
+
+Verdict
+
+The audit found concrete composition, portion, ingredient-form, timing and
+instruction-order defects beyond the earlier structural checks. They were fixed
+in both products. Current automated/source-reviewed checks pass; the catalogue
+remains template-generated and not kitchen-tested. See
+PLAUSIBILITY_AUDIT_2026-10-27.txt for findings, decisions and primary references.
+This does not certify every possible input, authentic regional cooking, taste,
+nutritional completeness, packet contents or actual appliance performance.
+
+Verified website release
+
+URL: https://gearsqueens.online/fusion/
+Server: 10.1.1.111
+Active: /home/blkph0x/fusion-releases/20261027-052531
+Archive: releases/fusion-table-20261027-052531.tar.gz
+Archive SHA-256:
+a645002f1dc72217ab25390f6ce4f38f333a605c484bdf5b2486ca90b9f70669
+Source manifest SHA-256 (316 files):
+a1a900a22fed14d8a04bcffd95d1898bc54c5f2126cb3146fbea1325be478188
+Audited lib fingerprint (65 files):
+4289c6f17398d9fd2de91bffa983e2f202434096a16392bbc9b442e9edde34ff
+
+Full current-source matrix: 2,011,936 cases, zero failures, 619.7 seconds.
+- Every authored balanced 76-region x 266 main/method x 90-side plate: 1,819,440.
+- Rotating seed/heat/servings/clean settings: 101,080.
+- Every supported chosen-cut/method x region: 48,716 (641 cut/method pairs).
+- Dietary grid: 34,200. Classic/diet/region authored-or-seeded grid: 8,500.
+The total is lower than the preceding pass because seven bone-in slow cuts were
+removed from the home-mincer patties option. No main/method/region/side was lost.
+These rotating variants do not claim every possible household/seed combination.
+Source hashes at matrix start/end match. The old wide-* audit remains historical.
+
+Broad website regression: 443 tests, 43 suites, zero failures/skips.
+TypeScript and changed-source lint passed. Final Linux Node production build
+passed, followed by an isolated canary with 177 focused culinary/filter/sharing/
+PDF/shopping tests. Test data used .canary-data, not the real ledger.
+16 actual HTTP recipe-page/PDF checks passed before cutover and at the public
+URL afterward: liver, marylands, one oven, batch stir-fry, sorghum, shells and
+burnt ends. The initial HTTP test's 'whole-grain sorghum' wording was corrected
+to the actual 'whole sorghum grain'; recipe source was unchanged.
+
+Browser checks: a classic choice change hides the stale plate until Create;
+a fresh stuffed-shell recipe has appropriate measured filling, no extra buns,
+moist covered cooking and a valid PDF/share URL. Public shared recipe text and
+method were inspected after deployment. Screenshots:
+plausibility-local-shells.png and plausibility-live-method.png. The current
+image-unavailable fallback is labelled; it does not claim a cooked photograph.
+
+Runtime: fusion-table.service enabled/active, PID 2452406, NRestarts 0 at final
+verification. Loopback port 8792 behind existing Apache /fusion. Ledger remains
+/home/blkph0x/fusion-data. Existing image environment/Apache/TLS/source checkout
+retained. Isolated canary stopped. Public marker/home independently verified
+after SSH disconnection.
+Rollback unit: /home/blkph0x/fusion-deploy-backups/20261027-052531/fusion-table.service.
+Restore to /etc/systemd/system/fusion-table.service, daemon-reload and restart.
+It returns to release 20261027-042809; do not restore an old ledger for code rollback.
+
+Verified Android release
+
+URL: https://gearsqueens.online/downloads/MealPlannerAU.apk
+Version: 1.5.6 / versionCode 13 / au.mealplanner
+Bytes: 13,952,621
+SHA-256: c4ee721139527a7ce902a1770db45c4a0051cf2577c7ca4c0c05b44b66f0f11f
+Signer SHA-256: 62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6
+Same verified certificate as the prior installed/downloaded releases.
+Source/test/build/asset manifest: 77 files, unchanged through final checks:
+87713507f7f7a8cc75bb03800e0d1dfc4aac3e1af303e3a0f146478ae63738f0
+Bundled catalogue: 9,292 templates (8,500 classics + 792 curated ingredient plates),
+contentVersion 20261027-plausibility-quality, 77,475,274 bytes.
+Asset SHA-256: d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab
+
+Final offline Gradle testDebugUnitTest + assembleRelease passed: 135 tests,
+19 suites, zero failures/errors/skips. The full Android repository, ViewModel
+and Compose UI compiled. Unit results ZIP and source manifest are preserved.
+The initial test worker could not allocate memory because Windows commit/pagefile
+space was exhausted. Rerun used one worker, a 768 MB build JVM and in-process
+Kotlin compilation with process-local D: temporary storage; no global settings
+or test assertions were weakened. Final logs are plausibility-android-build.log.
+
+apksigner verified the release, aapt confirmed version/package, ZIP integrity and
+bundled-asset hash match. Local app-release.apk, dist/MealPlannerAU.apk,
+dist/MealPlannerAU-1.5.6-code13.apk and the independently downloaded public APK
+are byte-for-byte identical. Existing no-cache download response retained.
+Original 1.5.5 was hash-checked and preserved locally in dist/archive and on the
+server at fusion-deploy-backups/android-1.5.6-code13/MealPlannerAU-1.5.5-code12.apk;
+publication atomically replaced /var/www/html/downloads/MealPlannerAU.apk.
+Server staged APK: /home/blkph0x/fusion-releases/android-1.5.6-code13/MealPlannerAU.apk.
+A download rollback can restore the preserved file; an installed higher-version
+app does not silently downgrade itself.
+
+No physical Android device was connected. A protected read-only/no-snapshot-save
+emulator boot was attempted; the existing SDK system-image path could not be
+read (a mount/volume error). It did not boot or receive an APK installation.
+No fresh Android screen/installation/upgrade-data test is claimed. Windows SDK
+or emulator files were not repaired or deleted as part of this recipe audit.
+
+Use current recipes
+
+Reload the website and create a new recipe/week. Install Android 1.5.6 and
+create a fresh week or Studio meal. Saved user recipes retain their original
+instructions and quantities. Rewritten built-in examples are loaded explicitly
+with Load example recipes. The native app still has its own 8 Fusion cuisines,
+12 Studio flavours and 74 sides; it is not the arbitrary website builder.
+
+Evidence: docs/audit-evidence-2026-10-27/plausibility-*.
+Final status guides were written after packaging, so they are newer than the
+immutable website source archive. No Git reset, commit, push or PR was performed.

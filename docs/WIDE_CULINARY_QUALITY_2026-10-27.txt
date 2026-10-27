@@ -1,0 +1,139 @@
+FUSION TABLE — WIDE CATALOGUE CULINARY QUALITY
+27 October 2026
+
+The user's Aussie–Thai parma and steak-wrap quality benchmark now extends beyond
+the initial sauce rules to the complete meal catalogue, selected cuts and sides.
+This pass retains the available region/main/method/side choices, measured portions
+and hard dietary exclusions. It does not establish that every combination tastes
+good or that these authored templates have been kitchen-tested.
+
+Ingredient forms and regional methods
+
+All 135 pantry defaults were reviewed with 18,240 regional cooking plans spanning
+76 regions, gluten-free variants, five heat levels, authored/seeded profiles,
+serving scales and oil/no-oil paths. Powdered mustard does not receive a whole-
+seed popping instruction. Powdered or finely processed galangal, makrut leaf and
+dried lime are not mistaken for removable woody pieces. Explicit dried herbs are
+handled as dried ingredients, rather than being washed/chopped as fresh herbs.
+Raw sesame is toasted and reserved during preparation, before delicate finishing;
+ready-toasted sesame retains its existing handling. Allocation references ensure
+a reserved or removed portion is not counted as a second use.
+
+Every side and its dietary variants
+
+All 90 side definitions were inspected. Side plans now identify substantial
+cooking work and short final dressing/steaming/bread actions separately. The meal
+method groups substantive side work together and schedules it alongside the main.
+A second 30-minute vegetable roast no longer appears as work to start only after
+a quick main is already cooked. Main steps tell the cook to read the finishing
+window before starting; quick mains wait until longer sides are nearly ready.
+Raw browning is not followed by an instruction to wait for a side.
+
+Shared preparation specifies produce cuts and prepared-product conditions, with
+equipment. Passive advance preparation is separate from the active cooking
+window. Sticky rice includes soaking, draining and a steamer setup; its advance
+soak estimate is visible in the full recipe and time total. Packet directions
+still control the particular rice product. Cooked rice for fried rice has its
+own ingredient identity, so a regional dry-rice rename cannot change its weight
+basis. Leftover rice handling remains explicit.
+Regional grain renaming is restricted to the measured rice portion in its actual
+cooking step. It cannot rename rice miso or replace measured glaze water with a
+rice-packet allowance. Coconut milk counts toward total cooking liquid when a
+generic rice is regionalised, rather than receiving a second full water amount.
+
+Miso aubergine uses a late glaze, soy tagging and an explicitly gluten-free miso
+where required. Pandan rice, lemongrass rice and the banana-leaf wrapper include
+their named ingredients and appropriate removal. Tostones soften, flatten and
+fry again. Biryani-style rice, jewelled rice, harissa carrots, bravas sauce and
+elote-inspired corn have measured flavour components rather than empty names.
+The limited side seasoning is kept separate from the selected main's regional
+sauce. Split oil portions are explicit and reconcile to the ingredient list.
+
+Cassava is a special case. This short side now requires a commercially processed,
+peeled, fully cooked product sold ready to reheat, with packet directions. It
+does not promise that ordinary boiling for a stated number of minutes will make
+raw/bitter/unidentified cassava safe. The restriction is visible in ingredients,
+steps and technique notes, with a source reference in template notes.
+
+Cuts, portions and primary cooking
+
+Chosen mince and lean boneless cuts no longer inherit a slow joint's long simmer.
+Slow oven cuts receive a covered moist stage and a tenderness check rather than
+a short uncovered steak roast. Estimates still depend on actual piece weight,
+thickness, equipment and the endpoint; a clock is not a tenderness guarantee.
+
+Whole birds are listed as whole shopping units, rounded up for the requested
+household, with a declared size assumption and surplus handling. The method uses
+the actual packet weight, checks both breast and inner thigh to 75°C and includes
+resting. Whole-bird cooking is not shortened because fewer people are eating.
+Whole roast birds have their own oven instructions; wet methods use a suitably
+deep pot. Poultry smoking does not inherit brisket bark/stall/wrap instructions.
+Sausages are cooked as links before slicing into a stir-fry. Quick gizzard dishes
+include a tenderising simmer beforehand, with its preparation time/equipment.
+Tongue is tenderised in water and peeled while warm before its short finishing
+method. Other offal gets appropriate trimming and even slices/pieces. Stock-only
+chicken frames remain available to shopping/product matching but are not offered
+as a meaty main-meal cut. The 30 mains, 266 default main/method combinations and
+90 side choices are unchanged by this feasibility correction.
+
+Simpler-method preferences no longer merge a cooking or delicate finishing step
+into generic preparation merely because its prose mentions washing or prepared
+ingredients. Explicit finishing markers survive. Concurrent main/sauce pans are
+not silently rewritten into a shared pan. Classics requiring an animal-main
+thermometer endpoint now include the thermometer in equipment.
+
+Verification
+
+The reusable opt-in script is scripts/audit-culinary-matrix.mjs. Its default is a
+coverage plan; --full runs the complete authored balanced region/main-method/side
+product, then seed/heat/serving/clean variants, supported cut/method variants,
+dietary variants and classics. It records actual counts and source hashes before
+and after the run. A source change invalidates the completed audit.
+
+The final counts, runtime checks and deployment identity are recorded separately
+in WIDE_CULINARY_DEPLOYMENT_2026-10-27.txt and evidence under
+docs/audit-evidence-2026-10-27/wide-*. The full authored balanced product is
+1,819,440 cases. Other dimensions are the explicitly recorded rotating cases,
+not a claim to cover every random seed and every possible household setting.
+
+References used for specific cooking/safety decisions
+
+FSANZ cassava: ordinary boiling/steaming/baking/frying is not a reliable generic
+detoxification procedure for raw cassava.
+https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/cassava
+
+FSANZ home food safety: poultry, mince and offal endpoints and clean separation.
+https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics
+
+NSW Food Authority: thermometer use and leftover handling.
+https://www.foodauthority.nsw.gov.au/consumer/food-safety-home/cooking-temperatures
+https://www.foodauthority.nsw.gov.au/consumer/food-extra-care/leftovers
+
+Goya's authored tostones method: two frying stages with flattening between them.
+https://www.goya.com/en/recipes/Tostones/?list=1
+
+Emeril's authored Dirty Rice and Food Network Kitchen gizzard guide: tenderising
+gizzards before a quick finishing cook; the time estimate concerns texture and
+does not replace a thermometer endpoint.
+https://www.emerils.com/120376/dirty-rice
+https://www.foodnetwork.com/how-to/packages/food-network-essentials/what-are-chicken-gizzards
+
+Original chef tongue methods: tenderise first, peel while warm, then finish.
+https://honest-food.net/tongue-tacos-recipe/
+https://www.greatbritishchefs.com/how-to-cook/how-to-cook-tongue
+
+Producer/supplier frames description: carcasses with most meat removed, for stock.
+https://premiumpoultry.com.au/product/bulk-frames/
+
+Quast Turkeys: whole-turkey weight matters, gentle oven cooking and final browning.
+This is producer guidance, not a universal clock for every bird/appliance.
+https://www.quastturkeys.com.au/cooking-tips
+
+Publication limits
+
+Automated coverage checks structure, selection fidelity, ingredient references,
+quantities, timings, declared allergens, method boundaries and endpoints. It
+cannot assess taste, tenderness, cultural authenticity, a real product label or
+cross-contact. Recipes remain template-generated and not kitchen-tested. The
+native Android APK is a separate build; its corresponding signed release is
+recorded in ANDROID_CULINARY_DEPLOYMENT_2026-10-27.txt.

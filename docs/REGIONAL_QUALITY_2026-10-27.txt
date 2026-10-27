@@ -1,0 +1,81 @@
+FUSION TABLE — REGIONAL QUALITY FOLLOW-UP
+27 October 2026
+
+The supplied audit identified real usability and composition problems. This pass
+separates a pending builder choice from a completed recipe and constrains the
+seeded finish on an already complete dish.
+
+Verified causes and changes
+
+1. A region button changed the builder's private state while the previous recipe
+   remained visible. Navigating away remounted that previous recipe and lost the
+   pending choice. Pending main/method/region/side/cut choices now survive view
+   changes; the old ingredients are hidden behind a Create prompt until a new
+   recipe is made. Classic controls also synchronize when reopening/restoring a
+   recipe. Household preferences and saved recipe snapshots remain intact.
+
+2. Independent seeded lanes could add tofu/fish/prawns to another complete main
+   or turn a filled/crumbed dish into a cold stir-fry or wrap. Applying a finish
+   now preserves the selected main, method and side, adds at most two new
+   finishing ingredients, excludes a second protein and unnecessary extra sauce
+   lanes, and gives every actual addition a preparation instruction. Broth
+   finishes require measured retained cooking liquid and serve the chosen side
+   alongside. Titles name actual additions instead of an as-plated ingredient
+   string. The flavour explanation also names the actual sauce rather than
+   unselected default seasonings. Explicit standalone solver admission tests
+   retain their API behavior.
+
+3. Seeded regional pools merged other profiles merely because they shared a
+   staple. Japanese recipes could inherit curry-only turmeric from Japanese curry.
+   Pools now contain the selected authored profile plus explicit curated extras;
+   they no longer merge all profiles sharing rice/bread. Unseeded profiles remain
+   on their authored ingredients. Signature heat, exclusions and variation remain.
+
+4. Deferred side timing told even a raw garden salad to stay hot. The schedule
+   now follows that side's own preparation and serving instructions.
+
+5. Nearby shops showed a premature zero before an area/search existed. Phone
+   labels now distinguish choosing an area, finding shops and completed results.
+   The first price action explicitly says Choose area to compare. Price lookups
+   remain deliberate; unavailable prices and branch stock remain unconfirmed.
+
+6. Live retailer checking exposed a rice-form mismatch: Woolworths product
+   528193 has a generic Family Size Jasmine Rice title, but its ingredient and
+   category metadata identify cooked rice. That evidence now travels through
+   catalogue matching and blocks both automatic and manual dry-rice quantity
+   costing for that product. Pack weight alone is not used to guess the form.
+   Actual dry 450 g packs remain eligible. Published pack prices stay visible.
+
+Older saved variations are preserved. Those with the former protein/format
+additions receive a refresh prompt when opened. Create generates a new variation
+with the tighter rules rather than silently rewriting saved cooking content.
+
+Validation
+
+- 339 final regression tests passed, zero failures (41 suites). This rerun excludes
+  the expensive unchanged meals.test.ts Cartesian baseline; the new coherence
+  matrix explicitly covers 1,344 seeded complete dishes, every compatible main/
+  method, all meal regions and every classic/profile pairing.
+- Regional pool tests include 768 Japanese seed/heat cases and 768 other-family
+  cases; Greek-to-Japanese isolation, deterministic seeds, scaling, exclusions,
+  clean preferences, share/PDF identity and saved-state behavior remain checked.
+- TypeScript passed. Touched-file lint returned zero errors and five existing
+  native image advisories. Browser and deployment evidence are recorded under
+  docs/audit-evidence-2026-10-27.
+
+Interpretation of the supplied audit
+
+The regional carry-over appearance and loose finishes were actionable findings.
+Fresh generation itself uses the new regional inputs rather than mutating the
+previous recipe. Japanese halloumi can intentionally remain halloumi when only
+the flavour changes; the user's selected main and side are not silently replaced.
+
+Local Shops is not intrinsically data-empty: published online guide prices can
+be fetched after choosing an area and Compare prices. Retailer coverage varies;
+both Woolworths and Coles returned real priced products during this follow-up.
+local shelf stock is not verified. Empty Trends reflects absent real cook reports,
+not failed navigation. No community reports or prices were fabricated.
+
+These checks establish structural consistency and functional behavior. They do
+not establish that a recipe was cooked, tasted or is a traditional regional dish.
+Recipes retain Template-generated · not kitchen-tested labelling.

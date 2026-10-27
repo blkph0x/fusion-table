@@ -1,0 +1,22 @@
+{
+  "website": {
+    "releaseId": "20261027-042809",
+    "sourceManifestSha256": "ba28abbfe0083205bf5b279f92845f5c0c8d7e412d3e5f007adc45b6c1d59ca0",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "wide-catalogue-quality"
+  },
+  "websiteHome200": true,
+  "android": {
+    "url": "https://gearsqueens.online/downloads/MealPlannerAU.apk",
+    "status": 200,
+    "versionName": "1.5.5",
+    "versionCode": 12,
+    "bytes": 13896349,
+    "sha256": "e36d9e5568ef28f383131698880cd84e9399c9e353ecf33568e0ab4caf8f5fab",
+    "matchesSignedBuild": true,
+    "cacheControl": "no-cache",
+    "verifiedAfterSSHDisconnected": true
+  },
+  "verifiedAfterSSHDisconnected": true
+}

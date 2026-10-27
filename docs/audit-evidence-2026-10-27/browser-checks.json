@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Japanese generated plate replaces Greek flavour and excludes curry-only spices",
+    "passed": true
+  },
+  {
+    "name": "Italian switch hides prior result and uses fresh regional ingredients",
+    "passed": true
+  },
+  {
+    "name": "Classic Thai generation uses new coherent finish",
+    "passed": true
+  },
+  {
+    "name": "Classic draft hides the previous region result",
+    "passed": true
+  },
+  {
+    "name": "Unsearched shops show location setup instead of zero",
+    "passed": true
+  },
+  {
+    "name": "Price comparison directs missing-area users to the location picker",
+    "passed": true
+  },
+  {
+    "name": "Live pending region survives navigation without showing old ingredients",
+    "passed": true
+  },
+  {
+    "name": "Live Japanese plate has fresh regional ingredients and coherent title",
+    "passed": true
+  },
+  {
+    "name": "Live planner generates seven dinners with coherent finishes",
+    "passed": true
+  },
+  {
+    "name": "Both retailer sources return published online prices",
+    "passed": true,
+    "detail": "Availability check; cooked-rice matching was separately corrected before final release."
+  },
+  {
+    "name": "Final live dry-rice estimate excludes the prepared pack using retailer metadata",
+    "passed": true
+  },
+  {
+    "name": "Final live flavour explanation names the actual selected sauce",
+    "passed": true
+  },
+  {
+    "name": "Final recipe page fits a 320px phone viewport",
+    "passed": true,
+    "detail": {
+      "client": 305,
+      "scroll": 305
+    }
+  }
+]

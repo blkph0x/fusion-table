@@ -5,8 +5,10 @@ import { PLATES } from "./plates.ts";
 import { canonAllergen } from "./staples.ts";
 import { applySatFusion } from "./fusion-sat.ts";
 import { foodWordHit } from "./food-words.ts";
+import { normalizeRecipeFilters } from "./recipe-filters.ts";
 import { mix32 } from "./sat.ts";
 import { exploreRegionProfile, dominantFlavourIds } from "./region-diversity.ts";
+import { summarizeRecipeFeedback, type PlateStanding } from "./community.ts";
 import {
   cleanActive,
   cleanlinessScore,
@@ -35,6 +37,8 @@ export interface WeekPlanInput {
   /** Hard dislikes. A match is the ingredient name, an alias, or a whole word. Filters are not relaxed. */
   dislikes?: string[];
   constraints?: RecipeConstraints;
+  /** Live shared reports for this operation only. Exact cooked content can rank comparable choices; never filters. */
+  feedback?: readonly PlateStanding[];
   /** 1-based day locks. An unsafe lock is left empty rather than cooked. */
   locks?: { day: number; classicId: string; regionId: string }[];
   /**
@@ -76,8 +80,6 @@ export interface WeekPlan {
   unfilledDays: number[];
   sourceLabel: "Template-generated · not kitchen-tested";
 }
-
-const AVOID = new Set(["soy", "wheat", "gluten", "milk", "egg", "sesame", "oats", "barley", "rye", "fish", "crustacean", "peanut", "tree-nut"]);
 
 function normalise(value: string): string {
   return value.trim().toLocaleLowerCase("en").replace(/[’']/g, "").replace(/[^a-z0-9\s-]/g, " ").replace(/[–—-]/g, " ").replace(/\s+/g, " ").trim();
@@ -251,9 +253,16 @@ function slotFromRecipe(recipe: Recipe): Slot {
  * Flavour collision is scored later when a seed is set (needs the built plate).
  */
 function rank(eligible: Slot[], usage: Usage, seed: number | undefined, clean?: CleanPrefs): Slot[] {
-  const wantClean = cleanActive(clean);
   return eligible.slice().sort((a, b) =>
-    cmp(usage.pair.get(pairKey(a.classicId, a.regionId)) ?? 0, usage.pair.get(pairKey(b.classicId, b.regionId)) ?? 0)
+    varietyCompare(a, b, usage, clean)
+    || (seed == null ? 0 : cmp(mix(seed, a.classicId, a.regionId), mix(seed, b.classicId, b.regionId)))
+    || (seed == null ? a.regionId.localeCompare(b.regionId) || a.classicId.localeCompare(b.classicId) : 0)
+  );
+}
+
+function varietyCompare(a: Slot, b: Slot, usage: Usage, clean?: CleanPrefs): number {
+  const wantClean = cleanActive(clean);
+  return cmp(usage.pair.get(pairKey(a.classicId, a.regionId)) ?? 0, usage.pair.get(pairKey(b.classicId, b.regionId)) ?? 0)
     || cmp(usage.kind.get(a.kind) ?? 0, usage.kind.get(b.kind) ?? 0)
     || cmp(usage.anchor.get(a.anchor) ?? 0, usage.anchor.get(b.anchor) ?? 0)
     || cmp(usage.region.get(a.regionId) ?? 0, usage.region.get(b.regionId) ?? 0)
@@ -268,10 +277,30 @@ function rank(eligible: Slot[], usage: Usage, seed: number | undefined, clean?: 
         (a.methodId && isHeavyMethod(a.methodId) ? 1 : 0) + (usage.heavyMethods % 2 === 1 && a.methodId && isHeavyMethod(a.methodId) ? 2 : 0),
         (b.methodId && isHeavyMethod(b.methodId) ? 1 : 0) + (usage.heavyMethods % 2 === 1 && b.methodId && isHeavyMethod(b.methodId) ? 2 : 0),
       )
-      : 0)
-    || (seed == null ? 0 : cmp(mix(seed, a.classicId, a.regionId), mix(seed, b.classicId, b.regionId)))
-    || (seed == null ? a.regionId.localeCompare(b.regionId) || a.classicId.localeCompare(b.classicId) : 0)
-  );
+      : 0);
+}
+
+/**
+ * Only the first 16 already-filtered choices are built for feedback ranking.
+ * Compare within the existing variety/cleanliness bands; keep original order on
+ * zero or tied evidence. Candidate returns the final seeded recipe after filters.
+ */
+function rankWithFeedback(ordered: Slot[], usage: Usage, prepared: Prepared): Slot[] {
+  const feedback = prepared.input.feedback;
+  if (!feedback?.some((plate) => (plate.feedbackSummary?.cookedDevices ?? 0) >= 3 &&
+      (plate.feedbackSummary?.rankAdjustment ?? 0) !== 0)) return ordered;
+  const soften = prepared.seed == null ? [] : softenFrom(usage);
+  const window = ordered.slice(0, 16).map((slot, index) => {
+    const recipe = prepared.candidate(slot, soften).recipe;
+    const summary = recipe ? summarizeRecipeFeedback(recipe, feedback) : null;
+    const adjustment = summary && summary.cookedDevices >= 3 && Number.isFinite(summary.rankAdjustment)
+      ? Math.max(-3, Math.min(3, summary.rankAdjustment)) : 0;
+    return { slot, index, adjustment };
+  });
+  if (!window.some((item) => item.adjustment !== 0)) return ordered;
+  window.sort((a, b) => varietyCompare(a.slot, b.slot, usage, prepared.clean) ||
+    cmp(b.adjustment, a.adjustment) || a.index - b.index);
+  return [...window.map((item) => item.slot), ...ordered.slice(16)];
 }
 
 /** Among equally banded options, prefer the plate that reuses fewer already-heavy flavours. */
@@ -319,10 +348,10 @@ function prepare(input: WeekPlanInput): Prepared {
   if (input.seed != null && (!Number.isInteger(input.seed) || input.seed < 0 || input.seed > 0xffffffff)) {
     throw new Error("Choose a whole-number seed.");
   }
-  const avoidList = (input.avoidAllergens ?? []).map(normalise).filter(Boolean);
-  if (avoidList.some((name) => !AVOID.has(name))) throw new Error("Use a supported allergen name.");
+  const filters = normalizeRecipeFilters(input);
+  const avoidList = filters.avoidAllergens;
   const avoid = new Set(avoidList);
-  const dislikes = [...new Set((input.dislikes ?? []).map(normalise).filter(Boolean))].slice(0, 40);
+  const dislikes = [...new Set(filters.dislikes.map(normalise).filter(Boolean))];
   const constraints = constraintsFor(input, avoid);
   const diet = input.diet ?? "balanced";
   const spiceHeat = input.spiceHeat ?? "medium";
@@ -460,8 +489,9 @@ function suggest(prepared: Prepared, planned: PlannedDinner[], day: number): Din
   const current = planned.find((item) => item.day === day)?.recipe;
   const options: DinnerOption[] = [];
   const soften = prepared.seed == null ? [] : softenFrom(usage);
-  for (const slot of rank(prepared.eligible, usage, prepared.seed, prepared.clean)) {
-    if (current && slot.classicId === current.classicId && slot.regionId === current.regionId) continue;
+  const ordered = rank(prepared.eligible, usage, prepared.seed, prepared.clean).filter((slot) =>
+    !current || slot.classicId !== current.classicId || slot.regionId !== current.regionId);
+  for (const slot of rankWithFeedback(ordered, usage, prepared)) {
     const recipe = prepared.candidate(slot, soften).recipe;
     if (!recipe) continue;
     options.push({ classicId: slot.classicId, regionId: slot.regionId, title: recipe.title });
@@ -474,8 +504,7 @@ function withOptions(prepared: Prepared, planned: PlannedDinner[]): PlannedDinne
   return planned.map((day) => ({ ...day, options: day.recipe ? suggest(prepared, planned, day.day) : [] }));
 }
 
-function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
-  const days = withOptions(prepared, planned);
+export function shoppingForDinners(days: readonly PlannedDinner[]): WeekShoppingLine[] {
   const shopping = new Map<string, WeekShoppingLine>();
   for (const day of days) {
     if (!day.recipe) continue;
@@ -493,16 +522,22 @@ function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
       }
     }
   }
+  return [...shopping.values()];
+}
+
+function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
+  const days = withOptions(prepared, planned);
+  const shopping = shoppingForDinners(days);
   const unfilledDays = days.filter((day) => !day.recipe).map((day) => day.day);
   const notes = [WEEK_NOTE];
   if (unfilledDays.length > 0) {
     notes.push(`No plan found with available templates for day ${unfilledDays.join(", ")}. Hard filters stay in place. This is not a proof that no recipe exists.`);
   } else {
-    notes.push("Dinners mix classic remixes and ingredient-led plates, including each region's staple food. This is the best spread of those templates, not a claim that no other meal exists.");
+    notes.push("Dinners mix classic remixes and ingredient-led plates with regional flavours and their chosen sides. This is one spread of authored templates, not a claim that no other meal exists.");
   }
   if (prepared.seed != null) {
-    notes.push("This is one matching spread. Plan again, or randomise one dinner, for a different meal. Hard filters stay in place. The order follows the seed, not an alphabetical list. Each dinner explores that region's pantry, then adds one satisfying assignment of a seeded SAT search. The same seed repeats it. This is not a proof of taste or of P versus NP.");
-    const reused = [...shopping.values()]
+    notes.push("This is one matching spread. Plan again, or randomise one dinner, for a different meal. Hard filters stay in place. Each dinner explores that region's pantry and uses the best-scored finish from a bounded set of SAT-verified models. The score covers declared rules and ingredient fit, not proven taste or an exhaustive search. The same seed and reports repeat it.");
+    const reused = shopping
       .filter((line) => line.days.length >= 3 && !FLAVOUR_IGNORE.has(line.id) && !line.id.startsWith("sat-"))
       .map((line) => line.name);
     if (reused.length) {
@@ -522,7 +557,7 @@ function assemble(prepared: Prepared, planned: PlannedDinner[]): WeekPlan {
   }
   return {
     days,
-    shopping: [...shopping.values()],
+    shopping,
     notes,
     unfilledDays,
     sourceLabel: "Template-generated · not kitchen-tested",
@@ -556,7 +591,7 @@ export function planWeek(input: WeekPlanInput): WeekPlan {
       planned.push({ day, recipe: null, options: [], reason: "No template matches your recorded filters." });
       continue;
     }
-    const ordered = rank(prepared.eligible, usage, prepared.seed, prepared.clean);
+    const ordered = rankWithFeedback(rank(prepared.eligible, usage, prepared.seed, prepared.clean), usage, prepared);
     const picked = pickForDay(ordered, usage, prepared.candidate, prepared.seed, prepared.clean);
     if (!picked) {
       planned.push({ day, recipe: null, options: [], reason: "No template matches your recorded filters." });
@@ -579,8 +614,9 @@ export function swapDinner(input: WeekPlanInput, plan: WeekPlan, day: number): W
     remember(usage, slotFromRecipe(other.recipe), other.recipe);
   }
   const soften = prepared.seed == null ? [] : softenFrom(usage);
-  const next = rank(prepared.eligible, usage, prepared.seed, prepared.clean).find((slot) => {
-    if (current.recipe && slot.classicId === current.recipe.classicId && slot.regionId === current.recipe.regionId) return false;
+  const ordered = rank(prepared.eligible, usage, prepared.seed, prepared.clean).filter((slot) =>
+    !current.recipe || slot.classicId !== current.recipe.classicId || slot.regionId !== current.recipe.regionId);
+  const next = rankWithFeedback(ordered, usage, prepared).find((slot) => {
     const recipe = prepared.candidate(slot, soften).recipe;
     return !!recipe && recipe.id !== current.recipe?.id;
   });

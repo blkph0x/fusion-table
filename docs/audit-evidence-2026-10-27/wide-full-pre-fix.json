@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "mode": "full",
+  "status": "interrupted",
+  "startedAt": "2026-10-27T03:54:03.732Z",
+  "finishedAt": "2026-10-27T03:59:15.2364513Z",
+  "node": "v22.13.0",
+  "catalogue": {
+    "regions": 76,
+    "sides": 90,
+    "defaultMainMethods": 266,
+    "supportedCutMethods": 654,
+    "diets": 5,
+    "classics": 34,
+    "classicRegions": 25
+  },
+  "source": {
+    "sha256": "9e5f97687468003f6ccec5f55865679371269508167260950c3e6ff0202b996a",
+    "files": 64
+  },
+  "planned": {
+    "authored": 1819440,
+    "variants": 101080,
+    "cuts": 49704,
+    "diets": 34200,
+    "classics": 8500
+  },
+  "plannedTotal": 2012924,
+  "checked": 1535000,
+  "failedCases": 0,
+  "violations": 0,
+  "elapsedSeconds": 281.1,
+  "phases": [
+    {
+      "id": "authored",
+      "planned": 1819440,
+      "scheduled": 1819440,
+      "checked": 1535000,
+      "failedCases": 0,
+      "coverage": "Every region × supported default main/method × explicitly selected side; balanced, authored, four servings."
+    },
+    {
+      "id": "variants",
+      "planned": 101080,
+      "scheduled": 101080,
+      "checked": 0,
+      "failedCases": 0,
+      "coverage": "Every region/main-method receives five seeded cases, all five heats and servings 1/2/4/6/12; cleaner knobs and all sides rotate."
+    },
+    {
+      "id": "cuts",
+      "planned": 49704,
+      "scheduled": 49704,
+      "checked": 0,
+      "failedCases": 0,
+      "coverage": "Every supported chosen-cut/method × every region; sides, heat, servings and authored/seeded cases rotate."
+    },
+    {
+      "id": "diets",
+      "planned": 34200,
+      "scheduled": 34200,
+      "checked": 0,
+      "failedCases": 0,
+      "coverage": "Every diet × every region × every side; compatible main/methods rotate. This is not every dietary main/method Cartesian product."
+    },
+    {
+      "id": "classics",
+      "planned": 8500,
+      "scheduled": 8500,
+      "checked": 0,
+      "failedCases": 0,
+      "coverage": "Every classic × classic regional profile × all five diets, authored and seed7; heat and servings rotate."
+    }
+  ],
+  "checks": [
+    "selected identity/settings",
+    "positive finite quantities and total time",
+    "unique ingredient IDs",
+    "ingredient name, ID or authored whole-phrase alias occurs in method",
+    "exact allergen-tag union and diet exclusions",
+    "one explicit regional finish; complete-meal finish after main",
+    "seeded preparation before delicate finish",
+    "animal endpoint/source/thermometer",
+    "usable method notes/equipment",
+    "chosen cut retained"
+  ],
+  "issueCounts": {},
+  "examples": [],
+  "limits": [
+    "This checks authored content and recorded ingredient tags, not actual cooking, taste, packet contents or cross-contact.",
+    "All authored balanced combinations are exhaustive only after a completed full authored phase.",
+    "Seed/heat/serving/clean and cut/diet variants use the stated rotating cases, not every possible input Cartesian product.",
+    "Source hash covers local lib/*.ts at start and end; changing source invalidates the run."
+  ],
+  "interruptionReason": "Stopped by coordinator before recipe-source fixes for beef tongue preparation and stock-only chicken frames. Process terminated; no completed full-audit claim or final source validation."
+}

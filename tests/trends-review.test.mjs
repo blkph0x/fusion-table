@@ -1,0 +1,35 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { test } from "node:test";
+import vm from "node:vm";
+import ts from "typescript";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import * as community from "../lib/community.ts";
+import { generateMeal } from "../lib/meals.ts";
+const require=createRequire(import.meta.url);
+const source=readFileSync(new URL("../components/trends-page.tsx",import.meta.url),"utf8");
+const compiled=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const record={exports:{}};
+new vm.Script(compiled).runInContext(vm.createContext({module:record,exports:record.exports,require(name){return name==="@/lib/community"?community:require(name)}}));
+const render=board=>renderToStaticMarkup(React.createElement(record.exports.TrendsPage,{board,onOpen(){}}));
+const recipe=()=>generateMeal({mainId:"chicken",methodId:"grilled",regionId:"thai",sideId:"rice-greens",servings:4});
+test("one cooking concern is visible immediately before any trending threshold",()=>{
+ const current=recipe();
+ const saved=community.submitVote({votes:[],whys:[],news:[]},{device:"trendstestbrowser01",plate:current,experience:"cooked",stars:3,feedback:{categories:["undercooked"],ingredientId:current.ingredients[0].id}},"2026-10-27T00:00:00.000Z","concern");
+ assert.equal(saved.error,undefined);
+ assert.equal(saved.board.trendingUp.length,0);assert.equal(saved.board.trendingDown.length,0);assert.equal(saved.board.shelved.length,0);
+ const html=render(saved.board);
+ assert.ok(html.includes("Needs a cooking review"));assert.ok(html.includes(current.title.replaceAll("&", "&amp;")));
+ assert.ok(html.includes("Cooking doneness concern: 1 cooked, 0 first impressions"));
+ assert.ok(html.includes("Open current base template"));
+ assert.ok(html.includes("Reports stay attached to their original version"));
+});
+test("empty and historical review states remain visible without inventing reports",()=>{
+ assert.ok(render(community.buildBoard({votes:[],whys:[],news:[]})).includes("No version has a pending cooking concern"));
+ const current=recipe();
+ let saved=community.submitVote({votes:[],whys:[],news:[]},{device:"trendstestbrowser01",plate:current,experience:"cooked",stars:3,feedback:{categories:["allergen-info"]}},"2026-10-27T00:00:00.000Z","concern");
+ saved=community.submitVote(saved.ledger,{device:"trendstestbrowser01",plate:current,experience:"cooked",stars:5,want:"",again:""},"2026-10-27T00:01:00.000Z","changed");
+ assert.ok(render(saved.board).includes("A historical serious concern remains open for review"));
+});

@@ -57,7 +57,7 @@ describe("ingredient-first complete meal engine", () => {
       if (diet === "vegan") assert.ok(!meal.allergens.includes("egg"), meal.id);
       if (diet === "gluten-free") assert.ok(!meal.allergens.some((allergen) => ["wheat", "barley", "rye"].includes(allergen)), meal.id);
       const text = instructions(meal).toLowerCase();
-      for (const item of meal.ingredients) assert.ok(text.includes(item.name.toLowerCase()) || text.includes(item.id.replaceAll("-", " ")), `${meal.id}: unused ingredient ${item.name}`);
+      for (const item of meal.ingredients) assert.ok(text.includes(item.name.toLowerCase()) || text.includes(item.id.replaceAll("-", " ")) || item.aliases?.some(alias => text.includes(alias.toLowerCase())), `${meal.id}: unused ingredient ${item.name}`);
       tested++;
     }
     assert.ok(tested > 400_000);
@@ -120,7 +120,7 @@ describe("ingredient-first complete meal engine", () => {
       const sideIndex = meal.steps.findIndex((step) => step.title.startsWith("Near the end:"));
       assert.ok(braiseIndex > 0 && sideIndex > braiseIndex, side.id);
       assert.match(meal.steps[braiseIndex].detail, /During the final/);
-      assert.match(meal.steps[sideIndex].detail, /Keep it hot and serve promptly/);
+      assert.match(meal.steps[sideIndex].detail, /own serving instructions/);
     }
     const patties = generateMeal({ ...base, mainId: "pumpkin", methodId: "patties" });
     assert.ok(patties.prepMinutes >= 45);

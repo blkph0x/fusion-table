@@ -24,6 +24,8 @@ export interface PriceMemory {
   itemKey: string;
   itemName: string;
   cents: number;
+  /** Selling quantity, e.g. "500 g", "6 pack" or "per kg". Missing on older observations. */
+  packageSize?: string | null;
   kind: PriceKind;
   until: string;
   url: string;
@@ -95,6 +97,7 @@ function asPrice(value: unknown): PriceMemory | null {
     at: clean(row.at, 40),
     shopName, shopId: clean(row.shopId, 80), area,
     itemKey: itemKey(itemName), itemName, cents, kind,
+    packageSize: clean(row.packageSize, 80) || null,
     until: dayOf(row.until), url: clean(row.url, 300),
     label: kind === "special" ? (clean(row.url, 300) ? PAGE_SPECIAL_LABEL : SPECIAL_LABEL) : kind === "page" ? PAGE_LABEL : RECORDED_LABEL,
   };
@@ -107,6 +110,7 @@ export interface PriceInput {
   itemName: unknown;
   cents?: unknown;
   price?: unknown;
+  packageSize?: unknown;
   kind?: unknown;
   until?: unknown;
   url?: unknown;
@@ -126,6 +130,7 @@ export function rememberPrice<T extends PriceLedger>(ledger: T, input: PriceInpu
   const until = kind === "special" ? dayOf(input.until) : "";
   const price = asPrice({
     id, at: now, shopName, shopId: clean(input.shopId, 80), area, itemName, cents, kind, until, url: clean(input.url, 300),
+    packageSize: clean(input.packageSize, 80),
   });
   if (!price) return { ledger, error: "That price could not be saved. Nothing was invented." };
   return { ledger: { ...ledger, prices: [...ledger.prices, price] }, price };

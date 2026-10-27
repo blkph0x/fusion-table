@@ -1,0 +1,98 @@
+(node:65456) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:58380) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: canonical plan derives every dietary default/cut row and all4250 classics without generation
+ok 1 - canonical plan derives every dietary default/cut row and all4250 classics without generation
+  ---
+  duration_ms: 15.133
+  ...
+# Subtest: zero-based shards partition every index exactly, including uneven and empty workers
+ok 2 - zero-based shards partition every index exactly, including uneven and empty workers
+  ---
+  duration_ms: 2.0025
+  ...
+# Subtest: default CLI is plan-only and never creates its requested output directory
+ok 3 - default CLI is plan-only and never creates its requested output directory
+  ---
+  duration_ms: 733.068
+  ...
+# Subtest: partial witnesses retain every measured ingredient and resume without duplicates
+ok 4 - partial witnesses retain every measured ingredient and resume without duplicates
+  ---
+  duration_ms: 98.1447
+  ...
+# Subtest: all completed shards are required and their ingredient witnesses form one exact union
+ok 5 - all completed shards are required and their ingredient witnesses form one exact union
+  ---
+  duration_ms: 140.4762
+  ...
+# Subtest: a changed source, changed chunk contract or tampered committed file cannot resume
+ok 6 - a changed source, changed chunk contract or tampered committed file cannot resume
+  ---
+  duration_ms: 45.2817
+  ...
+# Subtest: source changes during a run and complete-dictionary mutations invalidate completion
+ok 7 - source changes during a run and complete-dictionary mutations invalidate completion
+  ---
+  duration_ms: 85.9706
+  ...
+# Subtest: quality and generation failures are witnessed with bounded examples, never silently passed
+ok 8 - quality and generation failures are witnessed with bounded examples, never silently passed
+  ---
+  duration_ms: 77.0392
+  ...
+# Subtest: streamed multi-chunk output handles backpressure without retaining all case records
+ok 9 - streamed multi-chunk output handles backpressure without retaining all case records
+  ---
+  duration_ms: 429.2185
+  ...
+# (node:5704) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: blocks a plural chilli dislike and does not put fish on a vegan plate
+ok 10 - blocks a plural chilli dislike and does not put fish on a vegan plate
+  ---
+  duration_ms: 17.0494
+  ...
+# Subtest: seeded fusion plates
+    # Subtest: keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+    ok 1 - keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+      ---
+      duration_ms: 585.2501
+      ...
+    # Subtest: keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+    ok 2 - keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+      ---
+      duration_ms: 6.7113
+      ...
+    # Subtest: obeys heat, diet and allergen clauses
+    ok 3 - obeys heat, diet and allergen clauses
+      ---
+      duration_ms: 834.5328
+      ...
+    # Subtest: does not make a seeded week alphabetical or identical, and does not relax a filter
+    ok 4 - does not make a seeded week alphabetical or identical, and does not relax a filter
+      ---
+      duration_ms: 20621.7081
+      ...
+    # Subtest: varies a classic remix without changing the unseeded template
+    ok 5 - varies a classic remix without changing the unseeded template
+      ---
+      duration_ms: 73.8551
+      ...
+    1..5
+ok 11 - seeded fusion plates
+  ---
+  duration_ms: 22123.3929
+  type: 'suite'
+  ...
+1..11
+# tests 15
+# suites 1
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25160.9091

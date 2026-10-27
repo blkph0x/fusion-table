@@ -1,0 +1,26 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "glyphs": 1683,
+      "outsideBounds": 0
+    },
+    {
+      "page": 2,
+      "glyphs": 2303,
+      "outsideBounds": 0
+    },
+    {
+      "page": 3,
+      "glyphs": 3121,
+      "outsideBounds": 0
+    },
+    {
+      "page": 4,
+      "glyphs": 1212,
+      "outsideBounds": 0
+    }
+  ],
+  "riceInstructionsPresent": true,
+  "internalSolverTextAbsent": true
+}

@@ -1,0 +1,96 @@
+FUSION TABLE: COMPLETE INGREDIENT PLANNING VALUES AND PRICE GATHERING
+27 October 2026
+
+Coverage and honest price labels
+
+Every authored ingredient/unit pair has an immediate Australian-dollar planning
+value. These are authored budgeting allowances, not measured local shelf prices.
+Food used in a recipe and the packs to buy have separate totals. Unknown product
+prices remain unknown in the observed-price fields: a fallback allowance is never
+inserted as if a retailer published it. The API includes planningEstimate beside
+its existing observed offer fields, and the interface can show a value before a
+network check completes.
+
+Profiles distinguish whole birds, different meat cuts/breeds, seafood, raw and
+ready-cooked starch, drained canned foods, fresh produce, herbs, specialist pastes,
+spices, bread pieces, eggs, dairy and plant proteins. Metric spoon volumes are
+exact: an Australian tablespoon is 20 ml and a teaspoon 5 ml. Dry-spice density, fresh
+citrus yield, drained-can yield and estimated bread/shell counts are explicitly
+documented assumptions only. They never become hidden conversions for observed
+retailer offers. Unsupported free-text units are declined rather than guessed.
+
+Observed product cost
+
+Compatible current or reviewed offers replace allowances for the quantities they
+can actually support. The consumed-food cost divides by the selling quantity;
+the shopping cost rounds up purchase packs. Whole ingredients at home still have
+a food-used cost even when the shopping shortfall is smaller. Exact name/unit
+and quantity checks prevent reusing a different ingredient or pantry shortfall
+as the full recipe cost.
+
+Gathering fixes and diagnosis
+
+Provider caches now retain 512 query results per provider/fetcher for ten minutes,
+use least-recently-used eviction and share duplicate requests across meals. Each
+caller cancels independently; the underlying work is cancelled when no views
+still await it. A 30 second per-query negative cache and 60 second blocked-provider
+backoff prevent repeated failed requests. Existing bounded provider concurrency
+and queues remain. Abandoned results cannot populate the cache, and injected
+test/provider fetch functions cannot contaminate one another's cache.
+
+Woolworths responses are streamed and cancelled above 2 MB, including a declared
+Content-Length check, instead of reading an unbounded body first. Coles retains
+its bounded HTML parsing and transparent fallback when no readable public
+product data is supplied. A third-party challenge is not bypassed.
+
+Live diagnosis found and fixed a real wrong-food match: Brown Onion Instant Gravy
+was previously eligible as a fresh onion price. Prepared-food exclusions now
+reject gravy, bouillon, dips, chutneys, relishes and marmalade. Reversed wording
+such as Onion Brown is accepted for the same plain produce. Narrow common-food
+rules resolve safe brand ties for raw chicken breast, carrots, plain flour and
+ordinary soy sauce while excluding cut/preparation/dietary alternatives.
+An exact-volume bug that missed 1 L bottles has also been corrected. Authoring
+suffixes such as 'for the side' no longer pollute product searches or matching;
+food-state, drained/cooked and dietary requirements remain.
+
+Evidence
+
+96 focused tests pass across ingredient allowances, existing provider/matcher
+tests, automatic offers, shopping-cost arithmetic and provider-cache races.
+The canonical fixture includes all 568 distinct name/unit pairs from the six
+completed authored-catalogue dictionaries (the 1,137 exact descriptors also
+include notes/alias variants sharing these pricing inputs). Quantity tests run
+each pair at 0.1,1,12 and 1000 units.
+
+The final browser review also exposed old seeded finishes tagged as specialty
+rather than produce. Exact fresh-food names now receive the appropriate fresh
+profile regardless of that legacy category, while powders, pickles and sauces
+cannot inherit it. Cucumber 100 g uses a 60-cent food allowance and snow peas
+75 g a 131-cent allowance, with their separate pack assumptions displayed.
+These are budgeting assumptions, not newly observed shelf prices. Version v2
+adds this classification correction without changing recipe ingredients or methods.
+
+The opt-in deterministic pricing audit passed 8,810 actual generated meals,
+covering 149,954 ingredient lines, all 76 regions,90 sides,30 mains,13 methods and 5 diets.
+It includes all 4,250 classic/diet/region combinations with rotating heat, serving
+count and seed, plus 4,560 stratified ingredient-led meals with cut variants.
+No ingredient line lacked an allowance and no invalid total was produced.
+This proves the tested rules and coverage, not exact checkout totals or taste.
+
+The small live provider diagnosis checks eight representative foods and records
+every source, product, pack, offer and fallback. After the fixes, all eight had
+compatible observed online quantity prices from Woolworths in about 1.1 seconds
+from this execution host. Coles supplied no readable public product data and
+its backoff/fallback worked. These are one-time unlocalized online observations,
+not a permanent availability or local-price guarantee.
+
+Reproducible evidence:
+  docs/audit-evidence-2026-10-27/account-pricing-coverage.json
+  docs/audit-evidence-2026-10-27/account-price-sources.json
+  tests/fixtures/pricing-ingredients.json
+  scripts/audit-pricing-coverage.mjs
+  scripts/audit-price-sources.mjs
+
+The coverage report binds pricing sources and a deterministic meal/result digest.
+The live diagnosis is opt-in and bounded to eight foods and a 30 second deadline.
+Neither script creates accounts, writes shopping/community data, or deploys.

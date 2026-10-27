@@ -1,0 +1,91 @@
+(node:65456) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:14380) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 28.0517
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 6.0194
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 10.8628
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 2.1892
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 1.5142
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 33.1168
+      ...
+    # Subtest: keeps raw salads crisp when scheduling sides near the end of a smoke
+    ok 7 - keeps raw salads crisp when scheduling sides near the end of a smoke
+      ---
+      duration_ms: 8.0217
+      ...
+    # Subtest: defers service until a coherent finish without losing the main's endpoint
+    ok 8 - defers service until a coherent finish without losing the main's endpoint
+      ---
+      duration_ms: 73.9795
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 9 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 39.9323
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 10 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 5.0177
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 11 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 0.7
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 12 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 1.0006
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 13 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 1.3108
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 14 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 1362.2934
+      ...
+    1..14
+ok 1 - complete meal integrity
+  ---
+  duration_ms: 1575.7801
+  type: 'suite'
+  ...
+1..1
+# tests 14
+# suites 1
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1851.2728

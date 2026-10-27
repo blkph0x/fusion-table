@@ -30,7 +30,7 @@ export type CleanKnobId = (typeof CLEAN_KNOB_IDS)[number];
 export const CLEAN_KNOB_LABELS: Readonly<Record<CleanKnobId, string>> = {
   cleanMode: "Clean / minimal plate",
   fewerBottles: "Fewer bottles",
-  moreVegetables: "More vegetables",
+  moreVegetables: "Prefer vegetable-rich sides",
   simplerMethod: "Simpler method",
   pantryFirstClean: "Pantry-first clean",
   allowSecondBottle: "Allow a second bottle",
@@ -45,7 +45,7 @@ const GRAIN_ID = /rice|noodle|pasta|couscous|quinoa|bulgur|bread|tortilla|chapat
 const VEG_SIDE = new Set([
   "garden-salad", "steamed-broccoli", "roast-veg-tray", "roast-pumpkin", "coleslaw-corn",
   "sesame-spinach", "quinoa-avocado", "cauli-rice-greens", "lentil-salad", "beetroot-salad",
-  "ratatouille", "sukuma-wiki", "gomen-greens", "plantain-greens", "yuca-greens",
+  "ratatouille-side", "sukuma-wiki-side", "gomen-style-greens", "plantain-greens", "yuca-greens",
 ]);
 const FRESH_SIDE_BOOST = new Set([
   ...VEG_SIDE,
@@ -261,22 +261,24 @@ export function applyPortionBalance<T extends RecipeIngredient>(
   });
 }
 
-/** Collapse adjacent prep steps that share a board; drop spare thermometer wording when no animal. */
+/** Combine only plain vegetable-board work; preserve cooking and finishing boundaries. */
 export function tidySteps(steps: readonly RecipeStep[], equipment: readonly string[], hasAnimalEndpoint: boolean): {
   steps: RecipeStep[];
   equipment: string[];
 } {
   const merged: RecipeStep[] = [];
+  const boardOnly = (step: RecipeStep) => !step.finishBoundary
+    && /^(?:wash|chop|slice|dice|peel|trim)\b/i.test(step.title)
+    && !/\b(?:raw|cook|cooking|roast|pan|fry|boil|simmer|steam|heat|finish|serve|sauce|cool|chill|soak|refrigerate|endpoint)\b/i.test(step.detail);
   for (const step of steps) {
     const prev = merged[merged.length - 1];
     if (
       prev
-      && /prepare|chop|wash|board/i.test(prev.title + prev.detail)
-      && /prepare|chop|wash|board/i.test(step.title + step.detail)
+      && boardOnly(prev) && boardOnly(step)
       && (prev.minutes ?? 0) + (step.minutes ?? 0) <= 25
     ) {
       merged[merged.length - 1] = {
-        title: prev.title,
+        ...prev, title: prev.title,
         detail: `${prev.detail} ${step.detail}`,
         minutes: (prev.minutes ?? 0) + (step.minutes ?? 0) || undefined,
       };
@@ -284,18 +286,7 @@ export function tidySteps(steps: readonly RecipeStep[], equipment: readonly stri
     }
     merged.push({ ...step });
   }
-  // Prefer one-pan wording when both sauce and main use a frying pan.
   const eq = [...equipment];
-  if (eq.includes("Small saucepan") && eq.includes("Wide frying pan") && merged.some((s) => /regional sauce/i.test(s.title))) {
-    for (let i = 0; i < merged.length; i += 1) {
-      if (/Make the regional sauce/i.test(merged[i].title)) {
-        merged[i] = {
-          ...merged[i],
-          detail: merged[i].detail.replace(/small saucepan/gi, "same wide pan (wipe if needed)"),
-        };
-      }
-    }
-  }
   const gear = hasAnimalEndpoint ? eq : eq.filter((item) => item !== "Food thermometer");
   return { steps: merged, equipment: gear };
 }

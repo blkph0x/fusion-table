@@ -1,0 +1,7 @@
+{
+  "releaseId": "20261026-090546",
+  "sourceManifestSha256": "3db1d699ed29d20a410cae5d7947a68351945b51323d4e7eaed0006104560592",
+  "runtime": "node",
+  "basePath": "/fusion",
+  "feature": "local-shopping"
+}

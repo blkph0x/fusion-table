@@ -1,0 +1,91 @@
+(node:27696) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:34288) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact cooked feedback in weekly suggestions
+    # Subtest: keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+    ok 1 - keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+      ---
+      duration_ms: 2482.8812
+      ...
+    # Subtest: moves a comparable exact seeded recipe down after three distinct cooked low reports
+    ok 2 - moves a comparable exact seeded recipe down after three distinct cooked low reports
+      ---
+      duration_ms: 1061.9124
+      ...
+    # Subtest: does not transfer a report from changed ingredients, instructions or a broad legacy identity
+    ok 3 - does not transfer a report from changed ingredients, instructions or a broad legacy identity
+      ---
+      duration_ms: 1381.0881
+      ...
+    # Subtest: uses the same learned ordering for dinner alternatives and a random replacement
+    ok 4 - uses the same learned ordering for dinner alternatives and a random replacement
+      ---
+      duration_ms: 1415.5863
+      ...
+    # Subtest: checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+    ok 5 - checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+      ---
+      duration_ms: 1308.1541
+      ...
+    # Subtest: limits feedback lookups to 16 built candidates per pick or alternatives pass
+    ok 6 - limits feedback lookups to 16 built candidates per pick or alternatives pass
+      ---
+      duration_ms: 531.9053
+      ...
+    # Subtest: keeps variety bands ahead of a strongly liked already-used dinner
+    ok 7 - keeps variety bands ahead of a strongly liked already-used dinner
+      ---
+      duration_ms: 761.5931
+      ...
+    # Subtest: does not make shared board updates part of the stored household brief or stale-plan signature
+    ok 8 - does not make shared board updates part of the stored household brief or stale-plan signature
+      ---
+      duration_ms: 2.9409
+      ...
+    1..8
+ok 1 - exact cooked feedback in weekly suggestions
+  ---
+  duration_ms: 8947.9053
+  type: 'suite'
+  ...
+# (node:68276) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one cooking concern is visible immediately before any trending threshold
+not ok 2 - one cooking concern is visible immediately before any trending threshold
+  ---
+  duration_ms: 73.0161
+  location: 'D:\\fusion-table\\tests\\trends-review.test.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(html.includes(current.title))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///D:/fusion-table/tests/trends-review.test.mjs:24:60)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:931:25)
+    Test.start (node:internal/test_runner/test:829:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: empty and historical review states remain visible without inventing reports
+ok 3 - empty and historical review states remain visible without inventing reports
+  ---
+  duration_ms: 8.6611
+  ...
+1..3
+# tests 10
+# suites 1
+# pass 9
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10432.5762

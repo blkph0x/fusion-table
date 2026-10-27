@@ -1,0 +1,235 @@
+TAP version 13
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 94.763794
+      type: 'test'
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 79.176147
+      type: 'test'
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 2720.455882
+      type: 'test'
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 132.32425
+      type: 'test'
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 27.136457
+      type: 'test'
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 85.587007
+      type: 'test'
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 1.855217
+      type: 'test'
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 1.259912
+      type: 'test'
+      ...
+    1..8
+ok 1 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 3145.105191
+  type: 'suite'
+  ...
+# Subtest: a pending region stops matching the previous Greek plate and survives a studio remount
+ok 2 - a pending region stops matching the previous Greek plate and survives a studio remount
+  ---
+  duration_ms: 5.745454
+  type: 'test'
+  ...
+# Subtest: main, method, side and explicit cut changes each invalidate only the pending result
+ok 3 - main, method, side and explicit cut changes each invalidate only the pending result
+  ---
+  duration_ms: 14.729339
+  type: 'test'
+  ...
+# Subtest: freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+ok 4 - freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+  ---
+  duration_ms: 0.658906
+  type: 'test'
+  ...
+# Subtest: Greek then Japanese generation replaces regional ingredients without changing the selected main
+ok 5 - Greek then Japanese generation replaces regional ingredients without changing the selected main
+  ---
+  duration_ms: 111.779157
+  type: 'test'
+  ...
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 57.775346
+      type: 'test'
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 8.648282
+      type: 'test'
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 15.597346
+      type: 'test'
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 2.742026
+      type: 'test'
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 1.771317
+      type: 'test'
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 43.832115
+      type: 'test'
+      ...
+    # Subtest: keeps raw salads crisp when scheduling sides near the end of a smoke
+    ok 7 - keeps raw salads crisp when scheduling sides near the end of a smoke
+      ---
+      duration_ms: 18.746378
+      type: 'test'
+      ...
+    # Subtest: defers service until a coherent finish without losing the main's endpoint
+    ok 8 - defers service until a coherent finish without losing the main's endpoint
+      ---
+      duration_ms: 86.97072
+      type: 'test'
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 9 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 45.803032
+      type: 'test'
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 10 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 6.029958
+      type: 'test'
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 11 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 0.844108
+      type: 'test'
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 12 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 1.425413
+      type: 'test'
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 13 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 2.671425
+      type: 'test'
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 14 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 1593.782245
+      type: 'test'
+      ...
+    1..14
+ok 6 - complete meal integrity
+  ---
+  duration_ms: 1889.432837
+  type: 'suite'
+  ...
+# Subtest: Japanese exploration excludes curry-only seasonings across seeds and heat levels
+ok 7 - Japanese exploration excludes curry-only seasonings across seeds and heat levels
+  ---
+  duration_ms: 75.517312
+  type: 'test'
+  ...
+# Subtest: sharing a staple does not import another region's authored flavour markers
+ok 8 - sharing a staple does not import another region's authored flavour markers
+  ---
+  duration_ms: 42.877704
+  type: 'test'
+  ...
+# Subtest: each region retains its own authored core and deterministic seeded variation
+ok 9 - each region retains its own authored core and deterministic seeded variation
+  ---
+  duration_ms: 34.98353
+  type: 'test'
+  ...
+# Subtest: unseeded profiles remain exactly the authored profiles
+ok 10 - unseeded profiles remain exactly the authored profiles
+  ---
+  duration_ms: 10.038595
+  type: 'test'
+  ...
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 66.75123
+      type: 'test'
+      ...
+    # Subtest: serves exact inspiration images and an honest labelled placeholder for recipes without an image
+    ok 2 - serves exact inspiration images and an honest labelled placeholder for recipes without an image
+      ---
+      duration_ms: 41.587694
+      type: 'test'
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 89.207741
+      type: 'test'
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 6.951565
+      type: 'test'
+      ...
+    1..4
+ok 11 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 206.752952
+  type: 'suite'
+  ...
+1..11
+# tests 34
+# suites 3
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3492.937776

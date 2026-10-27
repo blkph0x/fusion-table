@@ -1,0 +1,29 @@
+[
+  {
+    "path": "/deployment.json?release=20261026-075845",
+    "status": 200,
+    "passed": true,
+    "releaseId": "20261026-075845",
+    "manifestMatches": true
+  },
+  {
+    "path": "/",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "path": "/images/fusion-table-hero-480.webp",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "path": "/api/community",
+    "status": 200,
+    "passed": true
+  },
+  {
+    "path": "/api/recipe-pdf?t=invalid",
+    "status": 404,
+    "passed": true
+  }
+]

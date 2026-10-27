@@ -1,0 +1,147 @@
+{
+  "createdAt": "2026-10-27T07:17:29.136Z",
+  "status": "passed",
+  "scope": "Persistent bounded local recipe image queue and client polling; no cloud service or API key introduced.",
+  "files": [
+    {
+      "file": "app/api/plate/route.ts",
+      "sha256": "e8c8240f72c59e2b28c08da968512b764ffab3b69a8cc7f3eb053b8eac633645"
+    },
+    {
+      "file": "app/api/plate/image-service.ts",
+      "sha256": "a989bd1df52359edda2a4440de0018dc481499b42bf88d023b583b53988f1786"
+    },
+    {
+      "file": "components/recipe-image.tsx",
+      "sha256": "b561b8bbe47cc32587f0cfb6642207b6fa77868d4012cdbca3dfdd7b315b6ecc"
+    },
+    {
+      "file": "scripts/warm-recipe-images.mjs",
+      "sha256": "1932af85c9db1bf8e04772218eb0db9fac046de7842fdaea3894923bdc6974c0"
+    },
+    {
+      "file": "tests/recipe-image-service.test.ts",
+      "sha256": "eae305a001828f50ebf858a0e0040db9199bb47112753663662f5d99a0342342"
+    }
+  ],
+  "checks": {
+    "focusedTests": 7,
+    "finishGraphTests": 7,
+    "typecheck": "passed",
+    "targetedLint": "passed",
+    "warmScriptPlan": 7
+  },
+  "limits": {
+    "pendingJobs": 64,
+    "cachedImages": 500,
+    "cachedBytes": 134217728,
+    "globalConcurrentRenderers": 1,
+    "attemptsPerHourDefault": 24,
+    "attemptsPerJob": 3,
+    "renderTimeoutDefaultMs": 20000,
+    "renderTimeoutMaximumMs": 60000,
+    "imageResponseMaximumBytes": 5000000,
+    "autowarmCuratedPerDay": 8
+  },
+  "durability": {
+    "directory": "FUSION_DATA_DIR/plate-images or data/plate-images",
+    "atomicMetadata": true,
+    "rendererLeaseMs": 120000,
+    "queueSurvivesRestart": true,
+    "staleVersionJobsDropped": true,
+    "identity": "SHA256 of version, full ingredient names/IDs/amounts/units, region/main/method/side/diet/title and cooking steps"
+  },
+  "client": {
+    "endpoint": "/api/plate?t=TOKEN",
+    "statusQuery": "status=1",
+    "maxPollAttempts": 60,
+    "hiddenTabPolling": false,
+    "placeholderCache": "no-store",
+    "readyImageCacheSeconds": 86400
+  },
+  "localSmoke": {
+    "missingImage": [
+      {
+        "http": 200,
+        "ms": 771,
+        "type": "application/json",
+        "cache": "no-store",
+        "kind": null,
+        "body": {
+          "status": "unavailable",
+          "key": "a499f819e873c251064bc55d50ddbdd14e558883c1be6ce9a692ce42e6276088",
+          "retryAfterMs": 60000,
+          "note": "The recipe is ready. Its image model is currently unavailable."
+        }
+      },
+      {
+        "http": 200,
+        "ms": 819,
+        "type": "image/svg+xml",
+        "cache": "no-store",
+        "kind": "placeholder",
+        "body": {
+          "bytes": 1327
+        }
+      },
+      {
+        "http": 200,
+        "ms": 1038,
+        "type": "application/json",
+        "cache": "no-store",
+        "kind": null,
+        "body": {
+          "status": "unavailable",
+          "key": "a499f819e873c251064bc55d50ddbdd14e558883c1be6ce9a692ce42e6276088",
+          "retryAfterMs": 60000,
+          "note": "The recipe is ready. Its image model is currently unavailable."
+        }
+      }
+    ],
+    "cachedImage": [
+      {
+        "http": 200,
+        "ms": 711,
+        "type": "application/json",
+        "cache": "no-store",
+        "kind": null,
+        "body": {
+          "status": "ready",
+          "key": "5c407305da00c116016c4a5663f8c832ba8899513334dae803cde4fb6b1027ce",
+          "retryAfterMs": 0,
+          "note": "Generated inspiration image for this style of plate. Not a photograph of a cooked dish."
+        }
+      },
+      {
+        "http": 200,
+        "ms": 529,
+        "type": "image/jpeg",
+        "cache": "public, max-age=86400",
+        "kind": "image",
+        "body": {
+          "bytes": 163850
+        }
+      },
+      {
+        "http": 200,
+        "ms": 583,
+        "type": "application/json",
+        "cache": "no-store",
+        "kind": null,
+        "body": {
+          "status": "ready",
+          "key": "5c407305da00c116016c4a5663f8c832ba8899513334dae803cde4fb6b1027ce",
+          "retryAfterMs": 0,
+          "note": "Generated inspiration image for this style of plate. Not a photograph of a cooked dish."
+        }
+      }
+    ]
+  },
+  "limitsOfEvidence": [
+    "Local model endpoint not configured and port7860 not listening; actual model output quality not established by mock renderer tests.",
+    "Autowarm starts when the image service is first initialized; use the bounded warm script at supervised host startup for eager warming.",
+    "Persistent filesystem Node deployment required; Worker deployment needs a storage adapter.",
+    "A generated picture is an approximation and does not prove that a recipe was cooked or photographed.",
+    "No exhaustive image pre-generation; canonical20Mrecipe audit is separate."
+  ]
+}

@@ -1,0 +1,169 @@
+FUSION TABLE — IMPLEMENTATION AND FEATURE TEST PASS
+26 October 2026
+
+Later deployment update: this pass and the homepage/image follow-up fixes were
+published to the verified server on 26 October. See DEPLOYMENT_2026-10-26.txt.
+The local-only statements below describe the initial testing pass before that
+explicitly requested deployment.
+
+Status
+
+Implemented and tested in D:\fusion-table against the verified live application's
+source lineage. Changes are local and reviewable; the public server and Android
+application have not been redeployed or rebuilt by this pass.
+
+Preview: http://127.0.0.1:5173/fusion/
+Start on Windows: powershell -NoProfile -File scripts/Start-Fusion.ps1
+Build: add -Task build; preview the built Node server with -Task start.
+The launcher defaults to a conventional Node server. The Worker profile remains
+available explicitly. See DEV_ENVIRONMENT.txt and SELF_HOSTING.md.
+
+Recipe correctness fixes
+
+- Complete-plate diet, allergen and dislike checks now apply to unseeded meals
+  and classic presets as well as seeded variations. Exclusions are not relaxed.
+- Explicit vegan/vegetarian constraints reject incompatible animal mains.
+- Oyster sauce records mollusc as an allergen; supported aliases are normalised.
+- Corrected 57 citrus quantities and three dairy-free variants, and removed two
+  unfinished quantity placeholders in sides.
+- Cleaner settings retain authored quantities, so method amounts agree with the
+  ingredient list. The vegetable setting prefers vegetable-rich sides instead
+  of silently rewriting quantities after steps have been written.
+- Ingredient-led meals keep their selected side; rice/salad no longer silently
+  gains extra bread, potatoes or grains. Regional rice names, packet directions
+  and final serving instructions agree. Classic authored staple choices remain.
+- Specified vegan garlic bread/kimchi and a gluten-free oat-side alternative.
+- Smoking instructions retain the full cooking stage and doneness checks.
+- Cleaner sauces are described from retained ingredients, avoiding names such as
+  coconut sauce after coconut milk was removed.
+- Broth finishes require an appropriate curry/braise and sufficient measured
+  retained cooking liquid. Dry grilled plates cannot become a nominal broth bowl.
+- Transformed meals complete final assembly/chilling before serving. Earlier
+  cooking endpoints remain. Chilling time is explicitly additional.
+- Classic regional staples now include scaled preparation directions before
+  service; merely renamed existing rice is not cooked twice. Both classic and
+  ingredient variations defer serving until final assembly. Prawn additions are
+  cooked through and chilled before cold assembly, and finished-dish wording
+  calls them cooked. Fish sauce does not trigger a nonexistent fish-cooking step.
+
+Recipe identity, recovery and shopping fixes
+
+- Generated recipes retain their cooking inputs. Links and PDFs keep cuts,
+  cleaner preferences, constraints, seed, session and weekly flavour choices.
+- Sharing/PDF controls check that rebuilding still matches actual cooking
+  content. Older snapshots that no longer reproduce keep JSON download rather
+  than silently sharing a changed recipe.
+- Stored recipe identity includes cooking content, preventing two differing
+  recipes with the same old template ID from overwriting each other's notes.
+- Recipe images are derived from the verified snapshot, rather than trusting a
+  potentially unrelated imported token. Static meal inspiration images also
+  require the matching side.
+- Cookbook JSON import validates the whole file before changing anything,
+  merges without duplicate cooking snapshots, and preserves existing feedback.
+  Corrupt optional fields and hidden/inconsistent allergen summaries are rejected.
+- Active notes/rating forms stay in sync with imported/saved feedback. A zero
+  rating is retained. Opening a planned recipe clears unrelated prior notes.
+- Shopping preparation preserves pantry stock. 'Finished cooking' consumes once
+  per mounted recipe, with Undo; later external stock edits prevent unsafe undo.
+- Exact g/kg and ml/l conversions work; no spoon/density conversions are guessed.
+- Shopping uses current pantry stock/notes instead of stale imported ownership
+  flags. Lists retain their origin label rather than borrowing a newer meal title.
+
+Usability improvements
+
+- Both builders and weekly planning use one saved household preference record.
+- Week summaries describe the settings actually used. Edited settings show a
+  clear rebuild requirement and disable incompatible individual edits.
+- Plans, locks, household settings and the active recipe survive refresh.
+- View navigation uses browser history, and new recipe creation clears old share
+  parameters that could otherwise restore a previous recipe on refresh.
+- Dinners come before detailed pantry shortages. Shopping and planning notes
+  are expandable; optional pricing forms are collapsed by default.
+- Phone navigation fits at 320px; the location icon retains an accessible name,
+  and Android installation remains available in the phone menu.
+- Added regional-flavour search and corrected side-control accessibility roles.
+- Improved mobile field text sizes and kept important safety/ingredient details.
+- Cook-report quantity changes are explicit previews; they no longer replace
+  ingredient amounts while leaving the method and shopping unchanged.
+- Every displayed allergen exclusion is accepted by the weekly planner. Its
+  validator now shares canonical names with recipe generation and sharing.
+- Infeasible weeks clearly report zero matching dinners and disable shopping.
+- Recorded shop prices refresh immediately after saving. Catalogue matching
+  excludes clear tools, pet supplies and hardware while preserving food names.
+  Explicit vegan/vegetarian/gluten-free/dairy-free requests require an explicit
+  matching product claim for automatic selection; uncertain labels stay manual.
+- PDFs include equipment, allergens, prep/label notes and safety/session/method
+  guidance; measured text layout, page numbers and step grouping improve printing.
+
+Performance and backend reliability
+
+- Three inspiration PNGs total 9,449,533 bytes. Their 960px WebP versions total
+  570,102 bytes (94% smaller); 480px thumbnails total 169,578 bytes. Originals
+  are retained. Cards use responsive sizes, and matching static API images use WebP.
+- Week side alternatives are memoised instead of regenerated on unrelated renders.
+- Image requests coalesce by token. Cache is limited to 40 entries/24MB; two full
+  renders run concurrently by default. Excess work gets a short-lived fallback.
+  Configured-model failures can recover after five seconds, with a default
+  20-second model deadline rather than four minutes. Tests use fake renderers.
+- Confirmed Worker-preview community/price writes returned 503. The explicit
+  self-hosted Node profile fixes this with real filesystem storage.
+- Node dev and production report/price writes survived independent requests and
+  complete server restarts. Tests used isolated synthetic local ledgers only.
+- Ledger writes are atomic, byte-bounded and fail without deleting corrupt
+  existing data. Request bodies, request time, identifiers and rate-memory growth
+  are bounded. One supervised Node writer is required for the JSON ledger.
+
+Test coverage
+
+- The existing exhaustive meal suite passed all 12 tests across 668,430 valid
+  configurations: five diets, seven representative regions, all 90 sides and
+  compatible main/method pairs.
+- New integrity checks additionally cover 1,080 side/diet/serving variants,
+  all 266 main/method pairs with compatible seeded/scaled cuts, and all 76 regions.
+- Later broth/sequencing/descriptor changes passed focused seed, filtering,
+  identity and PDF regressions. They did not change the unseeded quantity matrix.
+- Final regression run: 238 passed, zero failed. Together with the separate
+  12-test exhaustive meal suite, 250 automated tests passed. TypeScript and the
+  Node production build passed. Lint returned zero errors and eight advisories
+  (seven native-image suggestions and one existing unused variable).
+- Nine final production-build smoke checks passed, including real PDF/shared
+  page routes, WebP delivery, ledger reads and rejection of oversized reports.
+- Detailed logs and browser results are under audit-evidence-2026-10-26.
+- Rendered six pages across a two-page recipe and a four-page BBQ PDF. Layout
+  checks found no clipped/overlapping text or split cooking steps in these samples.
+- Browser tests exercised generation, region search, diet/servings/heat/clean
+  settings, cut/method choices, stale-plan rebuild, lock/randomise/undo, refresh,
+  notes/ratings, cookbook export/import, share links, cooking controls, pantry
+  prepare/cook/undo, reporting/trends and phone navigation.
+- All 20 browser feature groups passed, including final classic assembly order,
+  every displayed allergen checkbox and the infeasible-week empty state.
+- Real map lookup and nearby shops were checked using a generic Sydney location.
+  A direct catalogue query for tofu returned six matches, and a complete recipe
+  check reached sourced matches or explicit unavailable states. Non-food and
+  dietary-claim regressions use fixtures without repeated retailer requests.
+  Quotes remain online catalogue evidence, not verified shelf prices or stock.
+- No messages were sent through external sharing services, no printer job was
+  submitted, and precise device geolocation was not requested.
+
+Limits and deployment boundary
+
+These tests establish declared structure, constraints, consistency and working
+flows. They do not establish taste, kitchen repeatability, allergen-free packaged
+products, retailer shelf stock or a production performance score. Full screen-
+reader/device testing remains separate from these browser/layout checks.
+
+The full 76-region cross-product is not claimed to have been exhaustively cooked
+or tested: all 76 profiles have coverage, while the 668,430-case exhaustive run
+uses seven representative regions. The Android companion was outside this
+website implementation pass. Classic multi-staple plates retain their existing
+authored behaviour, and pantry cook Undo lasts until leaving/reloading the recipe.
+Input-only share links rebuild with the current recipe rules. They are not an
+immutable archive across later generator releases; cookbook JSON retains the
+written snapshot, and saved recipes that no longer reproduce do not offer a
+misleading regenerated share/PDF from the planner.
+
+Deploy the Node profile with persistent data and the existing local image model's
+loopback environment setting if that model is wanted on the host. Worker and
+Node builds are different outputs. The live server is unchanged until a deliberate
+deployment; a tested local build alone does not update gearsqueens.online.
+

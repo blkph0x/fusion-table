@@ -1,0 +1,31 @@
+{
+  "release": {
+    "releaseId": "20261027-072707",
+    "sourceManifestSha256": "de5090f0824b5d7cc6ae729a0c1c10e13ad2a3b52a3ab970a45a0af3c46f14e2",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "constraint-quality-feedback"
+  },
+  "homepageCountVerified": true,
+  "priceCheckSeconds": 0.63,
+  "priceSummary": {
+    "knownSubtotalCents": 860,
+    "pricedLines": 2,
+    "totalLines": 2,
+    "unpricedLines": 0,
+    "complete": true,
+    "label": "Estimate for the listed quantities from the available sources. This is not a confirmed basket at one shop."
+  },
+  "prices": [
+    {
+      "name": "Mushrooms",
+      "estimatedCents": 450,
+      "chosenProduct": "Woolworths Mushrooms Button Punnet"
+    },
+    {
+      "name": "Cooking cream",
+      "estimatedCents": 410,
+      "chosenProduct": "Bulla Cooking Cream"
+    }
+  ]
+}

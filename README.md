@@ -1,8 +1,22 @@
 # Fusion Table
 
+**Current working projects (verified 27 October 2026):** the website is this repository, hosted at [gearsqueens.online/fusion](https://gearsqueens.online/fusion/). The native Android companion is the separate sibling project `D:\MealPlannerAU`. Open `FusionTable.code-workspace` to see both. For the Windows preview matching the deployed path, run `powershell -NoProfile -File scripts/Start-Fusion.ps1`; see [development environment](docs/DEV_ENVIRONMENT.txt) for versions, profiles and release identity. Earlier release notes below describe their historical versions.
+
+The current quality pass adds shared household settings, refresh-safe week plans, accurate recipe links/PDFs, cookbook import, separate shopping/cooking pantry actions, searchable regional flavours, faster images and a Node self-host profile with persistent reports/prices. It was deployed on 26 October 2026, together with exact-opening homepage suggestions and improved image fallbacks. See [changes and test evidence](docs/QUALITY_PASS_2026-10-26.txt) and the [verified deployment record](docs/DEPLOYMENT_2026-10-26.txt).
+
+The latest deployed update adds a [local shopping workspace](https://gearsqueens.online/fusion/?view=shops): automatic nearby-shop search for the selected area, recipe/week/custom lists, quantity-aware pack estimates, explicit product choices and persistent local recorded prices with pack sizes. Phones can switch directly between Prices and Nearby shops. Published online prices remain separate from unverified local branch stock; unavailable prices stay unknown. See the [shopping guide](docs/SHOPPING_WORKSPACE_2026-10-26.txt) and [current deployment record](docs/SHOPPING_DEPLOYMENT_2026-10-26.txt).
+
+The [27 October regional quality follow-up](docs/REGIONAL_QUALITY_2026-10-27.txt) fixes stale recipe previews after changing choices, retains pending choices across navigation, keeps seeded finishes on the selected main/method/side, and separates regional seasoning pools. It also improves missing-area guidance and uses retailer preparation evidence to exclude cooked rice from dry-rice cost estimates. See its [deployment record](docs/REGIONAL_DEPLOYMENT_2026-10-27.txt).
+
+The [culinary method follow-up](docs/CULINARY_QUALITY_2026-10-27.txt) assigns regional ingredients to appropriate cooking stages, protects crisp coatings and delicate finishes, adds a measured chilled coating for suitable Chinese stir-fry meats, and improves classic plate composition and timing. It is [deployed and verified](docs/CULINARY_DEPLOYMENT_2026-10-27.txt). Recipes remain template-generated and not kitchen-tested.
+
+The [wide catalogue quality pass](docs/WIDE_CULINARY_QUALITY_2026-10-27.txt) extends that review to all 90 sides, ingredient forms and selected cuts, with coordinated cooking windows, whole-bird quantities, accurate cooked-rice identity and preserved finishing boundaries. Run `node --experimental-strip-types scripts/audit-culinary-matrix.mjs` to see its coverage plan; add `--full --report <path.json>` for the complete catalogue audit. Full coverage checks structure and instructions, not taste or kitchen performance. The [verified website release](docs/WIDE_CULINARY_DEPLOYMENT_2026-10-27.txt) passed 2,012,468 structural cases and 16 public page/PDF checks. The separate [Android 1.5.5 release](docs/ANDROID_CULINARY_DEPLOYMENT_2026-10-27.txt) updates its native cooking rules, all 74 sides and 27 built-in meals, adds cooking-method display, and refreshes its 9,292 offline templates. Its 126 unit tests and signed build passed; the APK download is verified.
+
+The latest [plausibility audit](docs/PLAUSIBILITY_AUDIT_2026-10-27.txt) corrects practical composition, portions, ingredient forms, cooking order and time estimates across both products. The [verified delivery](docs/PLAUSIBILITY_DEPLOYMENT_2026-10-27.txt) passed 2,011,936 current-source cases, 443 website tests, 135 Android tests and 16 public page/PDF checks. Android **1.5.6/code13** is available from the normal download link. Earlier release notes above are historical.
+
 **Familiar classics, proper barbecue methods, regional flavour and nearby places to shop.**
 
-Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions, a browser-local cookbook, and a shared cook's book of ratings and recorded shop prices. Leaving the seed off still produces the same template. **Create my fusion**, and each new week, pass a new seed. A small SAT search on this device then chooses a finish: the same main can come back as a cold stir-fry, a hot stir-fry, a chopped salad, a wrap, or a broth, with a different sauce, heat, crunch and extra ingredient. The same seed repeats that finish. Hard filters stay in place. There is no cloud language model. A seeded plate is still template-generated and not kitchen-tested.
+Fusion Table is a responsive cooking website built from authored recipe templates. Choose a classic and region, or start with a main ingredient and cooking method. The app assembles measured ingredients, appropriate substitutions, cooking steps, shopping suggestions, a browser-local cookbook, and a shared cook's book of ratings and recorded shop prices. Leaving the seed off still produces the same template. **Create my fusion**, and each new week, pass a new seed. A small SAT search on this device chooses a compatible sauce finish, heat and crunch while keeping the selected main, cooking method and side. At most two extra finishing ingredients are added, without adding a second protein or changing the meal's format. The same seed repeats that finish. Hard filters stay in place. There is no cloud language model. A seeded plate is still template-generated and not kitchen-tested.
 
 All application source, recipe catalogs, images, server routes, tests, build tooling and lockfiles are included in this repository.
 
@@ -136,7 +150,7 @@ Local discovery searches a **1–25 km straight-line radius** around a selected 
 
 ## Regional staples and the week planner
 
-Every generated classic and ingredient meal adds that region's staple foods. A staple already on the plate is not added twice. Generic rice is renamed to the regional rice instead of a second rice. Gluten-free templates swap wheat breads, couscous, and chapati for labelled gluten-free alternatives. Ethiopian injera is named 100% teff and says to check the packet, because many injera mixes contain wheat. These staples are authored templates, not a traditional complete dish and not a packet check.
+Classic templates include their authored regional staple foods without repeating an already-present staple. Ingredient-led meals keep the side you selected: they do not automatically add bread, potatoes or extra grains. Existing generic rice can be named for the region, with its packet's cooking directions. Gluten-free templates use the specified gluten-free alternatives. Ethiopian injera is named 100% teff and says to check the packet, because many injera mixes contain wheat. These are authored templates, not a traditional complete dish or a packet check.
 
 `planWeek` fills 1–14 dinners from classics, barbecue templates, and a curated set of ingredient-led plates. It spreads region and meal style. Filters only tighten. The phone catalogue is a bounded export of those templates, not all 1,744,200 meal configurations written out in full.
 
@@ -199,3 +213,19 @@ The existing Sites deployment is public under its platform settings. `.openai/ho
 Fusion Table is an independent application. The week order and the extra plate on **Create my fusion** are chosen by a small CDCL solver whose propagate / 1-UIP / backjump loop follows the shape of `horn_cdclt_lab/cdcl.py` in [blkph0x/p-vs-np-proof-research](https://github.com/blkph0x/p-vs-np-proof-research). That lab decides the first free variable false and therefore returns one model. Fusion Table seeds the decision order, checks that the assignment satisfies the clauses, and stops there. It does not rely on a P-versus-NP result, and a satisfying assignment is not a proof of taste, safety, or kitchen testing.
 
 Read [Architecture](docs/ARCHITECTURE.md) for implementation boundaries, validation, storage and image provenance. Automated checks cover structure and declared constraints; taste, repeatability and retailer stock need separate real-world evidence.
+
+
+### Optional accounts and complete planning costs (0.3.0)
+
+Every authored ingredient has a labelled AUD planning value, with separate costs
+for food used and packs to buy. Compatible current store guides replace planning
+values where available. Meal cards show recipe and per-serving estimates.
+New visitors can choose their shopping area or continue with Australian estimates.
+
+Optional SQL accounts save a private kitchen across devices, with an explicit
+choice before importing browser data. Guests keep their browser kitchen.
+Sessions are server-side, with a 12-hour default or optional 30-day remembered
+session and seven-day inactivity limit. Email verification and email recovery
+are not yet available; authenticated password changes and sign-out on all devices
+are supported. See [account setup and security](docs/ACCOUNT_SECURITY_2026-10-27.txt)
+and [pricing coverage](docs/ACCOUNT_PRICING_BACKEND_2026-10-27.txt).

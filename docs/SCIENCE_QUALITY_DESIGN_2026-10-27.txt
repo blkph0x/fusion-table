@@ -1,0 +1,108 @@
+FUSION TABLE: VERIFIED SEARCH AND RECIPE FEEDBACK
+27 October 2026
+
+Research applied
+The current P vs NP checkpoint at C:/Users/Blkph0x/Desktop/p eq np/
+research_checkpoint_2026_10_17_v17/research_checkpoint_2026_10_17_v17 contains
+useful CDCL constraint-search work. Its README keeps P vs NP unresolved.
+The application uses constraint propagation, conflict learning and backjumping.
+This work does not establish a polynomial-time solver or prove that food tastes good.
+
+Solver correctness
+SAT assignments are checked against their original clauses. UNSAT is returned only
+after independent RUP replay of the learned-clause certificate reaches contradiction.
+Resource caps, incomplete decisions and proof failures are UNKNOWN, not UNSAT.
+The model enumerator blocks every full assignment previously emitted. Exhaustion is
+complete only when the remaining formula is independently certified UNSAT.
+The generic optimizer exposes optimal only for complete finite enumeration; bounded
+runs expose best-known. Exhaustive small truth tables and independent random-formula
+oracles test model sets, optimum values, source binding and certificate rejection.
+
+Website selection
+An existing plate keeps its main, method and side. Complete-plate hard clauses keep
+regional boundaries, ingredient exclusions and at most two compatible additions.
+The interactive path examines up to eight checked finishes, scoring ingredient
+simplicity, produce, pantry reuse and extra-pan effort. This is a transparent soft
+objective over the examined finishes, not a global taste ranking. A resource-limited
+search preserves the already validated authored base instead of relaxing filters.
+Independent recipe postconditions reject malformed portions/timing, duplicate shopping
+identities, unsuitable raw kidney-bean/cassava forms, fractional counted birds,
+slow-braised liver and overfilled open shells. Separate-sauce cooking remains valid.
+Large dry-starch/oil allocations are review warnings, not nutrition estimates.
+
+Coverage and replay
+scripts/audit-complete-catalogue.mjs dynamically enumerates the canonical authored
+catalogue: every compatible dietary default or explicit cut/main/method row, every
+region and every side, plus every classic/region/diet. At this checkpoint the target
+is 20,414,810 inputs. They use medium heat, four servings and no random seed.
+Five heat levels and twelve serving counts project to 1,224,888,600 inputs before
+seeded regional-pantry sampling, cleaner options and arbitrary household text.
+Those additional spaces are not described as exhaustively enumerated.
+Each canonical case has a compressed witness containing its exact input, ingredient
+identity/quantity references, timings, method/endpoint summary and issues. Worker
+ingredient dictionaries preserve names, units, notes, aliases and allergen labels.
+Chunks and dictionaries are hashed; resumable checkpoints verify committed records
+and source/checker fingerprints. Partial work cannot become a completion certificate.
+A separate finish-graph audit enumerates all feasible SAT finishes only for its named
+representative contexts. Regional pantry seed outcomes are a different mechanism.
+
+Cooked feedback and improvement
+First impressions are separate from cooked reports. Low scores (0-2), No and will-not-
+make-again require a structured reason, saved atomically with the vote. Other requires
+useful written detail. Thirteen categories include salt, heat, texture, timing,
+quantities, unclear steps, poor combinations, availability, cost and safety concerns.
+An optional ingredient and method step must exist in the exact supplied recipe.
+Server-side cooking identity includes actual ingredients, quantities, servings and
+method content. Equal actual food can share feedback despite seed provenance; changed
+food cannot inherit evidence from an old version or another region/diet.
+Anonymous browser counts are not verified people. Repeated reports from one browser
+cannot supply three independent browser opinions. Current cooked feedback has zero
+ranking influence before three distinct browsers; its bounded adjustment only ranks
+already-filtered candidates within existing variety/cleanliness bands, in a window of
+sixteen. Preview and legacy reports never become cooked-ranking evidence.
+Historical cooking/allergen concerns remain review requests and prevent positive
+promotion. Reports do not automatically alter ingredients, cooking endpoints or hard
+filters. Trends exposes reasons for editorial investigation. Personal cookbook stars
+remain private and are labelled separately from shared reports.
+
+Evidence limits
+A passing rule audit establishes the checked, encoded properties of its versioned
+catalogue. It does not prove taste, authenticity, nutrition, packet contents, allergy
+safety or every free-text setting. Kitchen trials and reviewed cooked reports are
+still needed to improve the authored culinary rules. New catalogue/rule versions
+must rerun the audit; historical results cannot certify changed source.
+
+Automatic recipe shopping estimates
+Recipe and shared-recipe pages check available online guides and area-recorded
+prices without a button press. The shopping workspace does the same after an area
+or list change. Requests are small batches of six, at most two together; equivalent
+views share in-flight work and a five-minute visit cache. Exact quantities, units,
+area, country and nearby-shop context bind the cache. Reviewed selections and explicit
+exclusions survive late automatic responses. Changed servings/pantry/area invalidate
+old values. Pack/rate shopping costs are distinct from food consumed per serving.
+Missing prices remain unknown and partial subtotals show the priced-item coverage.
+Narrow plain-product rules can resolve common brand ties while excluding changed food
+forms, unsuitable substitutes and non-food products. Australian tablespoons/teaspoons
+convert to20/5ml only for volume packs; no food density or dry/cooked yield is guessed.
+Loose-product weight increments without a verified selling-price basis are excluded.
+Retailer outages and ambiguous products remain visible for manual review.
+
+Persistent background pictures
+The image endpoint responds with a cached picture or labelled waiting placeholder.
+RecipeImage polls boundedly and swaps in the finished exact picture automatically.
+A SHA256 key binds complete actual ingredients/quantities/method content, rather than
+a truncated list or seed alone. Durable queue/cache files are atomic under
+FUSION_DATA_DIR/plate-images. One leased renderer, bounded pending work, retries,
+hourly attempt limits and disk limits prevent unbounded generation. Requested pictures
+outrank warm jobs. Opt-in warming queues eight curated plates daily; an explicit
+warm script can prime common exact tokens. It does not schedule20million renders.
+Only the existing loopback local diffusion model is used; no cloud API/key was added.
+The model requires host service supervision and its ready endpoint. Pictures are
+illustrations of recipe ideas and do not establish actual cooking results.
+
+Audit correction
+An independent seeded-model graph checker found duplicate red-pepper/capsicum finishes
+in75representative classic contexts. The generator now recognises plain sweet/bell
+pepper as capsicum, keeping chilli flakes, pepper powder and sauces distinct. The
+final finite graph passed1496contexts/21869models. The authored20million-case audit
+is replayed against the corrected frozen source, rather than reusing an old hash.

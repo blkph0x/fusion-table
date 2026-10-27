@@ -1,0 +1,588 @@
+{
+  "generatedAt": "2026-10-27T05:16:21.508Z",
+  "samples": [
+    {
+      "input": {
+        "classicId": "shotgun-shells",
+        "regionId": "korean-bbq",
+        "diet": "balanced",
+        "servings": 4,
+        "seed": 651244
+      },
+      "id": "shotgun-shells-korean-bbq-balanced-medium-4-sat-651244",
+      "title": "Korean BBQ pear & sesame sausage shotgun shells — red capsicum finish",
+      "prepMinutes": 25,
+      "cookMinutes": 88,
+      "totalMinutes": 113,
+      "ingredients": [
+        {
+          "id": "jumbo-shells",
+          "name": "Jumbo pasta shells",
+          "amount": 20,
+          "unit": ""
+        },
+        {
+          "id": "sausage-meat",
+          "name": "Raw pork sausage meat",
+          "amount": 500,
+          "unit": "g"
+        },
+        {
+          "id": "brown-onion",
+          "name": "Brown onion",
+          "amount": 120,
+          "unit": "g"
+        },
+        {
+          "id": "sat-capsicum",
+          "name": "Red capsicum",
+          "amount": 200,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Soften the shells",
+        "Fill the shells",
+        "Hot-smoke the shells",
+        "Prepare the slaw",
+        "Cook the regional sauce separately",
+        "Prepare the finishing ingredients",
+        "Add the fresh sauce finish",
+        "Sauce after cooking",
+        "Keep the cooked components ready",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Soften the shells",
+          "detail": "Boil the open jumbo pasta shells to al dente using their packet timing. Drain and cool just until you can handle them. Keep the cooked shells separate and fill promptly. Do not substitute dry cannelloni tubes or cook dry pasta with smoke alone.",
+          "minutes": 12
+        },
+        {
+          "title": "Fill the shells",
+          "detail": "Mix the raw pork sausage meat with the diced onion. Brush the sausage filling with 1 tbsp olive oil. Season with the 1 tsp smoked paprika, 0.5 tsp black pepper and 0.5 tsp salt allocated to the main. Reserve the regional seasoning ingredients for the separate sauce, including any additional smoked paprika. Divide the measured filling between the 20 cooked open jumbo pasta shells, about 30 g per shell, without packing a thick mound. Lay them opening-up in one layer in a snug heatproof baking dish. Add 100 ml hot water around the shells, not into the filling, and cover the dish tightly. Use additional dishes for larger batches.",
+          "minutes": 15
+        },
+        {
+          "title": "Hot-smoke the shells",
+          "detail": "Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the covered dish for about 35–55 minutes, checking that a little steaming liquid remains and adding hot water if the dish dries. The centre of the sausage filling must reach at least 75°C; check several shells with a clean food thermometer and continue covered if needed. Uncover for only a final 5–10 minutes once the filling is cooked, for a light smoke without drying the pasta. Start the slaw during the final 8 minutes.",
+          "minutes": 65
+        },
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "Prepare these finishing ingredients with clean utensils, separate from any raw main. Keep any uncooked main chilled and complete its cooking steps as written. Wash and thinly slice 200 g Red capsicum. Cook in a separate pan with a splash of water for 3–5 minutes, until tender, then drain and keep warm briefly. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Add the fresh sauce finish",
+          "detail": "Off the heat, scatter over the already toasted, reserved sesame seeds. Use the same measured portion prepared earlier; do not toast a second batch. Off the heat, fold in 80 g pear, 1 tsp toasted sesame oil, 2 spring onions. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. The finished sauce is ready for the filling, dip or serving plate. Keep it off direct flame to preserve the fresh finish.",
+          "minutes": 4,
+          "finishBoundary": true
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Red capsicum alongside. Do not chop or stir-fry the finished main. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "sesame",
+        "soy",
+        "wheat"
+      ]
+    },
+    {
+      "input": {
+        "classicId": "shotgun-shells",
+        "regionId": "japanese",
+        "diet": "vegan",
+        "servings": 1,
+        "seed": 42
+      },
+      "id": "shotgun-shells-japanese-vegan-medium-1-sat-42",
+      "title": "Miso-ginger bean-stuffed jumbo pasta shells — cucumber and snow peas finish",
+      "prepMinutes": 25,
+      "cookMinutes": 68,
+      "totalMinutes": 93,
+      "ingredients": [
+        {
+          "id": "jumbo-shells",
+          "name": "Jumbo pasta shells",
+          "amount": 5,
+          "unit": ""
+        },
+        {
+          "id": "cannellini-beans",
+          "name": "Canned cannellini beans, drained",
+          "amount": 125,
+          "unit": "g"
+        },
+        {
+          "id": "brown-onion",
+          "name": "Brown onion",
+          "amount": 30,
+          "unit": "g"
+        },
+        {
+          "id": "miso",
+          "name": "White miso",
+          "amount": 0.5,
+          "unit": "tbsp"
+        },
+        {
+          "id": "sat-cucumber",
+          "name": "Cucumber",
+          "amount": 50,
+          "unit": "g"
+        },
+        {
+          "id": "sat-snow-peas",
+          "name": "Snow peas",
+          "amount": 37.5,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Soften the shells",
+        "Fill the shells",
+        "Hot-smoke the shells",
+        "Prepare the slaw",
+        "Cook the regional sauce separately",
+        "Prepare the finishing ingredients",
+        "Add the fresh sauce finish",
+        "Sauce after cooking",
+        "Keep the cooked components ready",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Soften the shells",
+          "detail": "Boil the open jumbo pasta shells to al dente using their packet timing. Drain and cool just until you can handle them. Keep the cooked shells separate and fill promptly. Do not substitute dry cannelloni tubes or cook dry pasta with smoke alone.",
+          "minutes": 12
+        },
+        {
+          "title": "Fill the shells",
+          "detail": "Mash the drained cannellini beans with the diced onion. Brush the bean filling with 0.25 tbsp olive oil. Season with the 0.25 tsp smoked paprika, 0.125 tsp black pepper and 0.125 tsp salt allocated to the main. Reserve the regional seasoning ingredients for the separate sauce, including any additional smoked paprika. Divide the measured filling between the 5 cooked open jumbo pasta shells, about 30 g per shell, without packing a thick mound. Lay them opening-up in one layer in a snug heatproof baking dish. Add 25 ml hot water around the shells, not into the filling, and cover the dish tightly. Use additional dishes for larger batches.",
+          "minutes": 15
+        },
+        {
+          "title": "Hot-smoke the shells",
+          "detail": "Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Heat the covered dish for about 25–35 minutes, until the bean filling is hot throughout and the shells are tender; check that a little steaming liquid remains, adding hot water if the dish dries. Uncover for only the final 5–10 minutes for a light smoke, rather than drying the pasta for the full cook. Start the slaw during the final 8 minutes. Cook until hot throughout and the vegetables are tender. Follow any longer cooking requirement on prepared proteins' packets.",
+          "minutes": 45
+        },
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "Prepare these finishing ingredients with clean utensils, separate from any raw main. Keep any uncooked main chilled and complete its cooking steps as written. Wash and cut 50 g Cucumber into batons; keep it fresh in a clean bowl for plating. Wash and finely shred or slice 37.5 g Snow peas; keep it fresh in a clean bowl for plating. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Add the fresh sauce finish",
+          "detail": "Once the sauce base is ready, take the pan off the heat. Loosen 0.5 tbsp white miso with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 0.25 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, scatter over the already toasted, reserved sesame seeds. Use the same measured portion prepared earlier; do not toast a second batch. Off the heat, fold in 0.25 tsp toasted sesame oil, 0.75 spring onions. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. The finished sauce is ready for the filling, dip or serving plate. Keep it off direct flame to preserve the fresh finish.",
+          "minutes": 4,
+          "finishBoundary": true
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Cucumber and Snow peas alongside. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "sesame",
+        "soy",
+        "wheat"
+      ]
+    },
+    {
+      "input": {
+        "classicId": "burnt-ends",
+        "regionId": "japanese",
+        "diet": "balanced",
+        "servings": 2,
+        "seed": 42
+      },
+      "id": "burnt-ends-japanese-balanced-medium-2-sat-42",
+      "title": "Miso-ginger oven burnt ends — cucumber and snow peas finish",
+      "prepMinutes": 25,
+      "cookMinutes": 298,
+      "totalMinutes": 323,
+      "ingredients": [
+        {
+          "id": "bbq-buns",
+          "name": "Vegan buns",
+          "amount": 2,
+          "unit": ""
+        },
+        {
+          "id": "miso",
+          "name": "White miso",
+          "amount": 1,
+          "unit": "tbsp"
+        },
+        {
+          "id": "sat-cucumber",
+          "name": "Cucumber",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "id": "sat-snow-peas",
+          "name": "Snow peas",
+          "amount": 75,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Prepare the point",
+        "Braise the small point",
+        "Prepare the slaw",
+        "Cook the regional sauce separately",
+        "Cube and finish in the pan",
+        "Prepare the finishing ingredients",
+        "Add the fresh sauce finish",
+        "Warm the buns",
+        "Keep the cooked components ready",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Cube and finish in the pan",
+          "detail": "The meat must pass 71°C for safety; continue until probe-tender, usually around 90–96°C. Tenderness, cut thickness and a thermometer determine the finish, not the clock alone. Rest 15 minutes, cut into 3 cm cubes and put them in a pan with 40 ml hot water. Fold in the cooked regional sauce base off the direct flame, reserving its delicate finishing ingredients. Return the pan to indirect heat for 45–90 minutes, until the cubes are probe-tender, usually 90–96°C. Do not burn the sauce over an open flame. Take the pan off the heat before the fresh sauce finish.",
+          "minutes": 105
+        },
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "Prepare these finishing ingredients with clean utensils, separate from any raw main. Keep any uncooked main chilled and complete its cooking steps as written. Wash and cut 100 g Cucumber into batons; keep it fresh in a clean bowl for plating. Wash and finely shred or slice 75 g Snow peas; keep it fresh in a clean bowl for plating. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Add the fresh sauce finish",
+          "detail": "Once the cubes are tender, take their pan off the heat. Finish the cooked sauce coating them: Once the sauce base is ready, take the pan off the heat. Loosen 1 tbsp white miso with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 0.5 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, scatter over the already toasted, reserved sesame seeds. Use the same measured portion prepared earlier; do not toast a second batch. Off the heat, fold in 0.5 tsp toasted sesame oil, 1.5 spring onions. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. Serve after this fresh finish; do not return the finished sauce to the long pan cook.",
+          "minutes": 4,
+          "finishBoundary": true
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Cucumber and Snow peas alongside. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "sesame",
+        "soy",
+        "wheat"
+      ]
+    },
+    {
+      "input": {
+        "classicId": "burnt-ends",
+        "regionId": "italian",
+        "diet": "vegan",
+        "servings": 4,
+        "seed": 42
+      },
+      "id": "burnt-ends-italian-vegan-medium-4-sat-42",
+      "title": "Tomato-basil sauced mushroom & tempeh cubes — red capsicum finish",
+      "prepMinutes": 20,
+      "cookMinutes": 63,
+      "totalMinutes": 83,
+      "ingredients": [
+        {
+          "id": "bbq-buns",
+          "name": "Vegan buns",
+          "amount": 4,
+          "unit": ""
+        },
+        {
+          "id": "lemon",
+          "name": "Lemon",
+          "amount": 1,
+          "unit": ""
+        },
+        {
+          "id": "sat-capsicum",
+          "name": "Red capsicum",
+          "amount": 200,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Cube the plant pieces",
+        "Smoke, then finish in a pan",
+        "Prepare the slaw",
+        "Cook the regional sauce separately",
+        "Prepare the finishing ingredients",
+        "Add the fresh sauce finish",
+        "Serve the cubes",
+        "Warm the buns",
+        "Keep the cooked components ready",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Smoke, then finish in a pan",
+          "detail": "Hot-smoke the cubes in one layer at 130–140°C for 25 minutes. Move them into a pan with 60 ml hot water, off any direct flame, for another 15–25 minutes, until the tempeh is hot throughout and the mushrooms are tender. Leave the sauce and its delicate finishing ingredients for the finishing step below. Follow any longer tempeh packet direction. Cook until hot throughout and the vegetables are tender. Follow any longer cooking requirement on prepared proteins' packets.",
+          "minutes": 50
+        },
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "Prepare these finishing ingredients with clean utensils, separate from any raw main. Keep any uncooked main chilled and complete its cooking steps as written. Wash and thinly slice 200 g Red capsicum. Cook in a separate pan with a splash of water for 3–5 minutes, until tender, then drain and keep warm briefly. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Add the fresh sauce finish",
+          "detail": "Once the cubes are tender, take their pan off the heat and fold in the separately cooked regional sauce base. Finish the cooked sauce coating them: Off the heat, add 1 lemon gradually. Wash, zest and juice the listed whole citrus; use the juice and zest to finish, keeping seeds out. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, fold in 15 g fresh basil. Wash and finely chop the fresh produce first. Serve after this fresh finish; do not return the finished sauce to the long pan cook.",
+          "minutes": 4,
+          "finishBoundary": true
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Red capsicum alongside. Do not chop or stir-fry the finished main. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "soy",
+        "wheat"
+      ]
+    },
+    {
+      "input": {
+        "classicId": "cottage-pie",
+        "regionId": "japanese",
+        "diet": "balanced",
+        "servings": 4
+      },
+      "id": "cottage-pie-japanese-balanced-medium-4",
+      "title": "Miso-ginger cottage pie",
+      "prepMinutes": 15,
+      "cookMinutes": 60,
+      "totalMinutes": 75,
+      "ingredients": [
+        {
+          "id": "brown-onion",
+          "name": "Brown onion",
+          "amount": 1,
+          "unit": ""
+        },
+        {
+          "id": "miso",
+          "name": "White miso",
+          "amount": 2,
+          "unit": "tbsp"
+        }
+      ],
+      "stepOrder": [
+        "Prepare the mash",
+        "Cook the filling",
+        "Simmer until thick",
+        "Top and bake",
+        "Cook the regional sauce near serving time",
+        "Rest and finish"
+      ],
+      "keySteps": [
+        {
+          "title": "Simmer until thick",
+          "detail": "Add passata, 90 ml of the vegetable stock and the peas; reserve the remaining 60 ml stock for the regional sauce. Simmer for 10–12 minutes until the filling is thick enough to hold its shape. Check the filling reaches at least 75°C throughout before assembly. Taste and adjust salt."
+        },
+        {
+          "title": "Top and bake",
+          "detail": "Transfer filling to a baking dish. Spread mash over it and roughen the surface with a fork. Bake for 20–25 minutes until the filling bubbles and the top is golden."
+        },
+        {
+          "title": "Rest and finish",
+          "finishBoundary": true,
+          "detail": "Let the pie stand for 5 minutes. Once the sauce base is ready, take the pan off the heat. Loosen 2 tbsp white miso with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 1 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, scatter over the already toasted, reserved sesame seeds. Use the same measured portion prepared earlier; do not toast a second batch. Off the heat, fold in 1 tsp toasted sesame oil, 3 spring onions. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. Spoon the prepared regional sauce over individual servings or offer alongside, keeping the golden mash crisp."
+        }
+      ],
+      "allergens": [
+        "milk",
+        "sesame",
+        "soy"
+      ]
+    },
+    {
+      "input": {
+        "classicId": "grill-roasted-whole-chicken",
+        "regionId": "japanese",
+        "diet": "balanced",
+        "servings": 4
+      },
+      "id": "grill-roasted-whole-chicken-japanese-balanced-medium-4",
+      "title": "Miso-ginger grill-roasted whole chicken",
+      "prepMinutes": 25,
+      "cookMinutes": 125,
+      "totalMinutes": 150,
+      "ingredients": [
+        {
+          "id": "miso",
+          "name": "White miso",
+          "amount": 2,
+          "unit": "tbsp"
+        }
+      ],
+      "stepOrder": [
+        "Prepare without stuffing",
+        "Roast in the indirect zone",
+        "Cook potatoes near serving time",
+        "Cook the regional sauce separately",
+        "Add the fresh sauce finish",
+        "Rest and carve",
+        "Dress the warm vegetables",
+        "Serve the complete meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Roast in the indirect zone",
+          "detail": "Set a lidded barbecue to 180–200°C indirect heat with a drip tray below. Cook a 1.4–1.8 kg whole bird for 80–110 minutes, turning the tray if heat is uneven. Use a clean food thermometer: the centre must reach at least 75°C. Check several thickest parts, away from bone; cooking time alone does not establish doneness. Check the thickest breast and the inner thighs on both sides; add time if either is below 75°C. Start the potato side near the end.",
+          "minutes": 110
+        },
+        {
+          "title": "Add the fresh sauce finish",
+          "detail": "Once the sauce base is ready, take the pan off the heat. Loosen 2 tbsp white miso with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 1 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, scatter over the already toasted, reserved sesame seeds. Use the same measured portion prepared earlier; do not toast a second batch. Off the heat, fold in 1 tsp toasted sesame oil, 3 spring onions. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. The finished sauce is ready for the filling, dip or serving plate. Keep it off direct flame to preserve the fresh finish.",
+          "minutes": 4,
+          "finishBoundary": true
+        },
+        {
+          "title": "Rest and carve",
+          "detail": "Rest loosely covered for 10–15 minutes, then carve with clean utensils. Keep the meat hot for service and add the separately cooked regional sauce.",
+          "minutes": 15
+        }
+      ],
+      "allergens": [
+        "sesame",
+        "soy"
+      ]
+    },
+    {
+      "input": {
+        "mainId": "chicken",
+        "methodId": "schnitzel",
+        "regionId": "thai",
+        "sideId": "rice-greens",
+        "servings": 2,
+        "seed": 42
+      },
+      "id": "meal-chicken-schnitzel-thai-rice-greens-balanced-medium-2-sat-42",
+      "title": "Thai chicken schnitzel with rice & greens — red capsicum and bean sprouts finish",
+      "prepMinutes": 25,
+      "cookMinutes": 41,
+      "totalMinutes": 66,
+      "ingredients": [
+        {
+          "id": "sat-capsicum",
+          "name": "Red capsicum",
+          "amount": 100,
+          "unit": "g"
+        },
+        {
+          "id": "sat-sprouts",
+          "name": "Bean sprouts",
+          "amount": 75,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Prepare your main",
+        "Prepare the side ingredients",
+        "Start the rice",
+        "Crumb the schnitzel",
+        "Make the regional sauce base",
+        "Prepare the finishing ingredients",
+        "Shallow-fry until crisp",
+        "Steam the green beans",
+        "Finish the regional sauce",
+        "Bring the meal together",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "Prepare and measure these finishing ingredients before starting the main's final cooking step. Use clean utensils separate from the raw main, and keep uncooked animal ingredients chilled. Keep fresh garnishes chilled until plating; time any warm vegetables to finish with the main. Have a clean rack ready; drain the crisp main uncovered on a rack briefly after frying, then move straight to finishing and service. Wash and finely shred or slice 100 g Red capsicum; keep it fresh in a clean bowl for plating. Cook 75 g Bean sprouts in boiling water until steaming hot during the final minutes of the main's cooking, drain well and keep warm briefly; do not serve these sprouts raw. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Shallow-fry until crisp",
+          "detail": "Start this main cooking stage when the longest-cooking side has about 12 minutes remaining; keep the raw main refrigerated until needed. Read the later side-finishing steps now: they need about 7 minutes before service, alongside the main's final cooking/rest. Start longer side actions before this stage if the main cooks more quickly. Heat the 2 tbsp neutral cooking oil allocated to the main in a wide frying pan over medium heat. Fry the crumbed pieces in uncrowded batches for about 9–15 minutes total, turning carefully halfway, until golden on both sides. Reduce the heat if the crumbs brown too quickly. Check several thickest pieces with a clean food thermometer: the centre must reach 75°C. Continue cooking if needed. Drain briefly on a rack or kitchen paper.",
+          "minutes": 12
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "With the cooked main and side ready, gently warm the separate sauce base if needed. After the sauce has simmered, lift out and discard the woody pieces of galangal before the final garnishes; do not eat these whole aromatic pieces. Off the heat, fold in 7.5 g fresh coriander, 0.5 tbsp toasted sesame oil. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. Keep the sauce alongside the crisp coating, adding it only at the table.",
+          "minutes": 1
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Red capsicum and Bean sprouts alongside. Keep the sauce beside the crisp coating. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "celery",
+        "sesame",
+        "wheat"
+      ]
+    },
+    {
+      "input": {
+        "mainId": "beef",
+        "methodId": "braised",
+        "regionId": "japanese",
+        "sideId": "rice-greens",
+        "servings": 4,
+        "seed": 42
+      },
+      "id": "meal-beef-braised-japanese-rice-greens-balanced-medium-4-sat-42",
+      "title": "Japanese braised beef with rice & greens — cucumber and wombok finish",
+      "prepMinutes": 15,
+      "cookMinutes": 154,
+      "totalMinutes": 169,
+      "ingredients": [
+        {
+          "id": "sat-cucumber",
+          "name": "Cucumber",
+          "amount": 200,
+          "unit": "g"
+        },
+        {
+          "id": "sat-wombok",
+          "name": "Wombok",
+          "amount": 200,
+          "unit": "g"
+        }
+      ],
+      "stepOrder": [
+        "Prepare your main",
+        "Brown the main for the braise",
+        "Build the braising base",
+        "Braise gently",
+        "Near the end: prepare the side ingredients",
+        "Start the rice",
+        "Steam the green beans",
+        "Prepare the finishing ingredients",
+        "Finish the regional sauce",
+        "Bring the meal together",
+        "Assemble the finished meal"
+      ],
+      "keySteps": [
+        {
+          "title": "Prepare the finishing ingredients",
+          "detail": "During the final 8 minutes of the main's cooking or its stated rest, prepare these finishing ingredients with clean utensils, separate from any raw food. Keep fresh garnishes chilled until plating. Do not wait until the hot main is ready before starting this preparation. Wash and cut 200 g Cucumber into batons; keep it fresh in a clean bowl for plating. Wash and finely shred or slice 200 g Wombok; keep it fresh in a clean bowl for plating. Complete this preparation before the regional sauce's delicate final seasoning.",
+          "minutes": 8
+        },
+        {
+          "title": "Finish the regional sauce",
+          "finishBoundary": true,
+          "detail": "Finish when the main has reached its endpoint and the side is ready.  Once the main has reached its cooking endpoint, take the pan off the heat. Loosen 1 tbsp yuzu kosho with a spoonful of the warm cooked sauce, then stir it all back in. Keep this sauce gentle rather than bringing it back to a hard boil, to retain the delicate aroma. Off the heat, add 1 tbsp rice vinegar gradually. Fold through the cooked sauce and taste before adding extra seasoning. Off the heat, stir in or scatter over 0.25 tsp sansho pepper, 1 tsp shichimi togarashi. Off the heat, fold in 15 g spring onion, 1 tbsp toasted sesame oil. Wash and finely chop the fresh produce first. Add the toasted sesame oil only as a finishing seasoning, not as frying oil. Finish and plate immediately so the fresh seasoning stays bright.",
+          "minutes": 3
+        },
+        {
+          "title": "Assemble the finished meal",
+          "detail": "Plate the fully cooked main and its selected side, keeping their preparation as written. Serve the already prepared Cucumber and Wombok alongside. Serve promptly after this final assembly; the finishing ingredients are already prepared."
+        }
+      ],
+      "allergens": [
+        "celery",
+        "sesame",
+        "soy",
+        "wheat"
+      ]
+    }
+  ]
+}

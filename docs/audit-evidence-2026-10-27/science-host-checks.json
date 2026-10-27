@@ -1,0 +1,69 @@
+{
+  "releaseId": "20261027-072707",
+  "checks": [
+    {
+      "name": "Audited final source fingerprint",
+      "passed": true
+    },
+    {
+      "name": "Release identity",
+      "passed": true
+    },
+    {
+      "name": "Homepage combination count",
+      "passed": true
+    },
+    {
+      "name": "Low report without reason rejected atomically",
+      "passed": true
+    },
+    {
+      "name": "Cooked low report and exact reason saved together",
+      "passed": true
+    },
+    {
+      "name": "Exact-content cooked summary",
+      "passed": true
+    },
+    {
+      "name": "Preview cannot become a cooked star vote",
+      "passed": true
+    },
+    {
+      "name": "Foreign ingredient reason rejected without a partial vote",
+      "passed": true
+    },
+    {
+      "name": "Other needs useful detail",
+      "passed": true
+    },
+    {
+      "name": "Changed cooking content does not inherit evidence",
+      "passed": true
+    },
+    {
+      "name": "Unavailable price remains unknown rather than zero",
+      "passed": true
+    },
+    {
+      "name": "Shared recipe renders automatic estimate",
+      "passed": true
+    },
+    {
+      "name": "Missing image responds without waiting for the model",
+      "passed": true
+    },
+    {
+      "name": "Background local image becomes ready",
+      "passed": true
+    },
+    {
+      "name": "Ready image is a cached real raster",
+      "passed": true
+    }
+  ],
+  "firstImageResponseMs": 95,
+  "firstImageKind": "placeholder",
+  "backgroundReadyAfterMs": 39144,
+  "imageBytes": 384750
+}

@@ -1,0 +1,318 @@
+FUSION TABLE — VERIFIED LIVE WEBSITE AND ANDROID AUDIT
+26 October 2026 | https://gearsqueens.online/fusion/
+
+Decision
+
+The correct website has been found and confirmed against the running server.
+D:\fusion-table contains its application code. The confusion came from using
+a portable local preview without the server's /fusion routing, separate APK
+hosting and local image model. The Android app is a separate companion project
+at D:\MealPlannerAU. These are not two interchangeable copies of one application.
+
+The product is feasible and already substantial. The next release should make
+its existing cooking journey more trustworthy, faster on phones and easier to
+finish. Fix preference/recipe identity and data-recovery issues before adding
+more combinations or extra AI services.
+
+1. Identity and corrections to the first audit
+
+CONFIRMED WEBSITE
+- Server checkout: /home/blkph0x/src/fusion-table.
+- Branch deploy/fusion-overhaul-91e1, HEAD 765cfea796d5374735f249c7e59ccadc4204ad96.
+- Local branch cursor/fusion-overhaul-91e1, HEAD 2d0cee19080190039d98b56a45f586e117d5820e.
+- Local HEAD differs from that deployed commit only by the handoff document.
+- Server has uncommitted /fusion settings in next.config.ts and vite.config.ts.
+- Apache fronts a Wrangler/workerd local runner on 127.0.0.1:8792.
+- The live page, recipe catalogue counts and hero match this application.
+
+CONFIRMED ANDROID
+- Source D:\MealPlannerAU, branch cursor/fusion-overhaul-91e1, HEAD c29b83d.
+- Public APK responds HTTP 200: /downloads/MealPlannerAU.apk at the domain root.
+- Downloaded binary is au.mealplanner 1.5.3, versionCode 10, 12,853,981 bytes.
+- SHA-256 F015DF089B6745619B89F79D0C3D986D2BE51E0BCA5B4910E277F03472995A6F.
+- It exactly matches the Android project's release build output. The generic
+  local dist APK was stale 1.5.1/code8; cleanup preserved it and replaced the
+  generic copy with the verified release binary.
+- The release output dates from 24 October. Later source naming/score helpers
+  are absent from the public DEX files; version 1.5.3 alone does not identify the
+  latest source commit.
+
+RETRACTED / REFRAMED
+- The public Android download is working. Its local 404 was a preview limitation.
+- The live hero is an appetising generated food image, not the crude local
+  painted fallback. Improving a nonexistent live hero defect is not a priority.
+- The Android project and binaries exist outside the web folder.
+- The website is not established as a deployed Cloudflare cloud Worker. It uses
+  local workerd behind Apache. Storage compatibility remains a risk to verify;
+  production data loss was not demonstrated.
+
+2. Evidence and boundaries
+
+Reviewed the real public page on desktop and a 390px-wide phone viewport, generated
+a week, changed a recorded allergen, inspected recipe/detail and location flows,
+and inspected the server's source identity, running process and release file.
+No reports, votes, personal prices or fabricated community data were published.
+No live deployment, restart or production-file cleanup was performed.
+
+Android was reviewed from source, APK metadata/catalogue/DEX contents and existing
+JVM tests. No emulator or physical-device visual, installation or TalkBack audit
+was performed. No kitchen testing, exhaustive retailer survey, penetration test
+or controlled production load test is claimed.
+
+Automated evidence:
+- Website application baseline: 174 tests passed in 29 suites, zero failures;
+  TypeScript passed; lint zero errors and 10 warnings; production build passed.
+- Cleanup profile: /fusion production build passed, local preview returned 200
+  and included /fusion/api/plate and /fusion/favicon.svg. Type checking and lint
+  on the changed configuration both passed (exit 0), recorded in the evidence
+  directory. The root-path launcher selection was also checked.
+- Android current source: 92 existing JVM tests passed offline; no failures,
+  errors or skipped cases. These results do not establish performance on a phone.
+- A public homepage GET from the host returned 200, about 50KB HTML and roughly
+  0.10s time to first byte in one warm observation. This is not a speed score or
+  a cold-load/mobile performance benchmark.
+
+3. Fix first: recipe correctness and user data
+
+P1 — FILTER SUMMARY CAN MISREPRESENT AN EXISTING WEEK
+Live reproduction: generated a week whose Day 1 included prawns and listed
+crustacean. Ticking the crustacean avoidance box changed the summary to
+'Avoid: crustacean' while that same dinner remained unchanged.
+Evidence: app/page.tsx week controls/summary around 645–655.
+Fix: save the exact generation brief with each plan; distinguish draft settings
+from applied settings. Show 'Settings changed — rebuild plan' or safely regenerate
+before asserting compatibility. Never label an old plan with new exclusions.
+Acceptance: editing an avoidance setting cannot make an incompatible existing
+dinner appear to satisfy that setting.
+
+P1 — BUILDER AND WEEK DO NOT SHARE ONE HOUSEHOLD PROFILE
+MealBuilder owns its own diet, servings, heat and pantry state. receiveMeal stores
+the resulting recipe but does not synchronise those values into the parent state
+used by weekBrief. A vegan dinner built there does not establish a vegan week.
+Evidence: components/meal-builder.tsx:87; app/page.tsx:353 and 509.
+Fix: one versioned household profile, visible on Discover, Builder and Week;
+separate deliberate per-recipe overrides. Show the actual plan settings near Plan.
+
+P1 — SHARING AND PDF EXPORT CAN CHANGE THE DISH
+Focused source reproduction: a two-serving seeded Thai grilled chicken meal with
+clean mode/fewer bottles had 12 ingredients; rebuilding its share specification
+produced 21, with a different title and added sauces. ShareSpec omits cleaner
+preferences. Snapshot fallback also omits cutId: selected braised brisket rebuilt
+as beef chuck with different preparation. PDF export rebuilds from that token.
+Evidence: lib/share-recipe.ts:14 and 146; app/page.tsx:509;
+app/api/recipe-pdf/route.ts:11. These reproductions used matching local generator
+code rather than publishing altered recipes on the live site.
+Fix: preserve every generation input, explicit cut and generator version, or use
+an immutable recipe snapshot. Add round-trip checks of ingredients, quantities,
+allergens and method steps, including cleaner-mode and selected-cut examples.
+
+P1 — ANDROID BACKUP / RESTORE NEEDS TO PROTECT THE WHOLE DATASET
+The restore text field silently truncates input to 200,000 characters; BackupCodec
+allows 2,000,000 while export has no matching limit. A larger export cannot round-
+trip through the current UI. Restore clears/replaces several Room tables without
+a transaction, so interruption/error can leave partial data. Ratings/verdicts in
+recipe_notes and spice metadata are absent from the export. Delete-local-data
+acts immediately and does not clear all notes/setup metadata or in-memory notes.
+Evidence: Android PreferencesScreen.kt:322/329, BackupCodec.kt:22,
+AppRepository.kt:253/271/319. Data-loss scenarios were not exercised on user data.
+Fix: file-based backup/import with version, validation, preview and a single Room
+transaction; include all meaningful personal data; confirm deletion and offer
+export first. Test interruption/invalid import in an isolated test database.
+
+P2 — PANTRY IS CONSUMED WHEN PREPARING TO COOK
+'I'm making this' subtracts stock and builds shopping. It is repeatable without
+a cook-event identity or undo, so using it twice can consume the same stock twice.
+Evidence: components/kitchen-desk.tsx:37; lib/pantry.ts:70.
+Fix: separate 'Make shopping list' from an explicit 'Finished cooking' event with
+undo. Track planned/reserved quantities separately only if households need them.
+
+4. Usability and engagement on the actual site
+
+P1 — PHONE MENU IS OFF-SCREEN
+At a 390px viewport, client width was 375px but content extended to 446px. The menu
+button occupied x=423–446 and was outside the visible page area. The location and
+APK controls consume the available header space.
+Fix: preserve brand and menu in the compact header, move secondary actions into
+the menu/second row, and test long suburb names and enlarged text. Verify widths
+320, 360, 390 and 430px without horizontal page scrolling.
+Evidence: live-mobile-overflow.jpg and live DOM bounds.
+
+P1 — THE WEEK IS BURIED UNDER WARNINGS
+The live seven-day test rendered 97 pantry-shortfall lines before the dinners;
+Day 1 began around y=3181 in the desktop document. A new/unconfigured pantry is
+treated as zero stock. Some counts render as 'Have 0 , need 0.5 .'
+Fix: show dinner cards first, with one 'Shopping list ready — N items' summary.
+Put shortages into a separate expandable shopping section. Treat unknown pantry
+stock distinctly and format countable ingredients in everyday units.
+
+P2 — TOO MANY CHOICES AND TOO MUCH INTERNAL EXPLANATION
+The visual identity and live food image are good foundations. But a million-plus
+combination count, unexplained '115 WEEK SCORE', long seed/SAT explanations and
+local-server addresses draw attention away from choosing dinner. The region
+step lists all 76 profiles, while 90 sides are available.
+Fix: lead with 'Dinner tonight', 'Use what I have' and 'Plan my week'. Start with
+popular/compatible regions and search. Replace the unexplained score with
+practical reasons: time, ingredient count, equipment and pantry reuse. Keep
+template/allergen/price limits clear and concise; move implementation detail to
+About and developer docs. The score is a heuristic, not verified nutrition.
+
+P2 — WEEK PERSISTENCE AND NAVIGATION EXPECTATIONS
+Web weekly plan and locks are React state, unlike the browser-persisted cookbook.
+Refresh can lose planning work. Section navigation is local state rather than
+ordinary URLs/history. Android has durable Room plans, but selected navigation
+uses remember rather than rememberSaveable and can reset on recreation.
+Fix: persist a versioned active web plan; support normal Back/refresh behaviour;
+make Android navigation state restorable. Offer a usable backup/import workflow.
+
+P2 — LOCATION DISCOVERY FAILED THEN RECOVERED
+Searching 'Sydney 2000' reached 'Location search took too long. Please try again
+in a moment.' The error is clear, but the promised local-shopping journey did
+not complete on the first attempt. A later direct route probe returned 200 in
+about 1.22s; retrying in the browser then returned candidates. This is an
+intermittent failure, not a universal outage. Selecting Sydney Town Hall then
+completed the shop journey and showed 28 supermarket listings within the chosen
+5km area. 'Sydney 2000' returned landmarks rather than a suburb/postcode centre,
+so candidate ranking could also improve. Listings do not verify stock or prices.
+Fix: inspect upstream connectivity, runtime DNS/fetch behaviour, service deadlines
+and queued retries; provide recent-location/manual retailer fallbacks and keep
+the shopping list usable independently. Preserve honest unknown stock/prices.
+Evidence: live-location-timeout.jpg and live-shop-recovery.jpg. The provider probe
+also returned HTTP 200 in about 1.21s; recovery was checked in the app itself.
+
+P2 — ANDROID RESULTS ARRIVE TOO FAR DOWN THE SCREEN
+Source shows heat, explanatory copy, budget, meal-count controls, several planning
+actions, pantry setup and Plate Studio before results. The heat control appears
+global but only affects Studio; Fusion weekly templates remain medium heat.
+Fix: one main Plan action with editable household summary and meals immediately
+below. Put demonstration loading/advanced Studio behind explicit secondary flows.
+Keep the app's useful capped pantry warnings; it does not share the website's
+97-line warning behaviour.
+
+ENGAGEMENT WORTH BUILDING
+- Constrained surprise: 'same ingredients, new flavour', preserving exclusions.
+- A real weeknight time/equipment limit and maximum new ingredients. Cook-session
+  labels currently add schedule notes rather than enforcing a duration constraint.
+- Ingredient reuse and leftovers planning to reduce waste and shopping burden.
+- 'Tried and loved' plates backed by dated cook reports, sample sizes and clear
+  separation between community feedback and author kitchen testing.
+- Better cooking mode: active-step quantities, optional timers, larger type,
+  resumable steps and optional screen-awake support.
+Validate these with representative cooks before adding points, streaks or more
+catalogue breadth. Repeat-cook success is more useful than generation volume.
+
+5. Speed and technical feasibility
+
+ANDROID CATALOGUE IS THE LARGEST IMMEDIATE PHONE PERFORMANCE RISK
+The public APK ships a 48,472,455-byte JSON asset: 7,512 templates, 36 regions,
+98 classic/meal IDs, four-serving quantities. Compressed APK transfer disguises
+the much larger parse allocation. planFusionWeek reads the whole asset and parses
+it in viewModelScope.launch before the first suspension, without moving this
+work off the main UI coroutine. A phone freeze/memory risk is strongly supported
+by source, but no physical-device duration was measured.
+Fix: read on IO, parse/plan on Default, cache/index appropriately and avoid repeated
+whole-file parsing. Consider an indexed prebuilt database or streaming conversion.
+Do not expand the catalogue until memory and planning latency are measured.
+
+WEB IMAGES AND JAVASCRIPT
+The three inspiration PNG files total about 9.45MB. Lazy loading defers transfer,
+but does not reduce it. Generate sized WebP/AVIF variants and explicit dimensions.
+Suggested starting budgets: under 200KB/card and under 300KB/hero, checked visually.
+The observed local production page chunk is 591,850 bytes uncompressed, alongside
+196,238 and 190,152-byte substantial chunks. These are file sizes, not measured
+initial transfer. Split secondary views and avoid repeated side-candidate
+generation during unrelated week renders. Measure slow-phone long tasks before
+moving planning into a Web Worker.
+Reference: https://web.dev/learn/performance/image-performance
+
+LOCAL IMAGE GENERATION IS AN OPERATING DEPENDENCY
+The server's working image-model setup explains the live hero improvement. Keep
+that quality. However /api/plate caches only 40 entries and can call the local
+model on a miss with a 240-second timeout. Shuffled suggestions increase distinct
+keys; simultaneous misses can duplicate work. Pre-render/cache curated images
+durably, coalesce requests and show a fast fallback while generation is queued.
+Do not make uncached model work block the primary dinner journey.
+
+RUNTIME / PERSISTENCE NEED A CLEAR PRODUCTION CONTRACT
+Observed fusion-table.service is inactive. The running runner has parent PID 1
+but remains in an SSH session cgroup, rather than the named service. This leaves
+reboot/recovery/log ownership uncertain. Put the chosen production runner under
+one documented supervisor with health checks and tested restart/rollback.
+Do not simply start a second runner on the live port.
+
+Community/price records use a JSON filesystem ledger inside worker routes. The
+public board currently returns an empty successful response and no host ledger
+was found. Read-only inspection does not prove successful durable writes. Ordinary
+workerd/Workers virtual filesystem semantics and --persist-to for bindings should
+not be confused with persistence of arbitrary node:fs writes. Verify cross-request,
+restart and redeploy retention in isolation; then choose a proper storage adapter
+(for example SQLite in a conventional Node runtime or a configured Worker store).
+Reference: https://developers.cloudflare.com/workers/runtime-apis/nodejs/fs/
+
+Public writes trust a caller-supplied device identifier for in-memory rate limiting;
+changing it evades the quota and new keys are not pruned. Bound identifiers, body
+sizes and memory; enforce server-controlled limits. Ledger locking is process-local.
+Board building scans complete histories repeatedly, which becomes expensive at
+scale. These are source-based reliability/abuse risks, not demonstrated attacks.
+
+ANDROID PRICING
+Catalogue checks are networked and already run on IO, but only the first 24 lines
+are checked; alias searches can prolong the whole operation. Add an overall
+deadline, cancellation, partial progress/results and per-quote timestamps.
+Maintain clear distinctions between catalogue prices, local shelf prices and
+manual estimates. Branch-level stock and broad retailer coverage require real
+provider access and matching evidence; the current code cannot infer them.
+
+6. Accessibility and product trust
+
+Keep existing skip links, focus styling, labelled controls, modal focus trapping
+and reduced-motion support. Improve small 9–10px mobile builder labels, touch
+targets and tested contrast. Use correct active-page semantics and a coherent
+radio-group/listbox pattern for side selection; lint identifies mixed ARIA use.
+Android's custom dock lacks explicit tab/selected semantics and may repeat icon
+announcements. Run keyboard, 200% text, screen-reader and TalkBack checks on real
+journeys. No accessibility certification is implied by passing unit tests.
+
+Android has INTERNET permission, no location permission, disabled cleartext traffic
+and local Room personal data. OS backup is disabled, so explicit backup must be
+reliable. Room schemas are not exported and release lint checks are disabled;
+introduce schema/migration evidence and a useful release-quality gate.
+
+The app and website have different engines and catalogue coverage. The APK's
+catalogue is a 22 October snapshot, while website source includes later changes.
+Ship a catalogue/release manifest containing source commit, schema, generation
+date and hash. Do not promise complete web/app parity from a shared brand name.
+
+7. Development cleanup completed
+
+- Documented both companion project roots and verified server/source/APK identity.
+- Added FusionTable.code-workspace, naming website and Android separately.
+- Added scripts/Start-Fusion.ps1 with project-local compatible Node selection,
+  explicit /fusion profile, root-path option and build/verification tasks.
+- Made next/Vite base-path settings environment-driven, retaining root defaults.
+  A matching /fusion build and HTTP preview were verified locally.
+- Archived ten untracked debug/generator/backup files intact with original-path
+  hashes in D:\fusion-table-dev-archive\2026-10-26\manifest.json.
+- Preserved stale Android APK as a versioned archive and aligned the generic local
+  APK with the already-published binary, with checksum identity notes.
+- Updated project README identity notes and marked the first audit superseded.
+- Left production files, processes, signing material and unrelated projects intact.
+
+8. Recommended delivery order
+
+First release: correct stale filter summaries, unify profile state, fix share/PDF
+identity and Android backup/restore; repair mobile navigation and show dinners
+before warnings. Most UI changes fit the existing stack; identity/data changes
+need focused regression tests.
+
+Next: move Android catalogue work off the UI thread; optimise web image transfer,
+cache model images, persist web planning and supervise the production runner.
+Verify community persistence before depending on shared ratings/prices.
+
+Then: validate with 5–8 cooks, including a phone-only user and a household managing
+exclusions. Measure time to first appropriate dinner, save-to-cook rate, repeat
+cooking, completed shopping lists, planning latency and failed API journeys.
+
+Larger decisions: cross-device sync, richer retailer data and offline web/PWA
+support need explicit data/conflict/update designs. The existing Kotlin/Compose/
+Room and React/template stacks can support the highest-value improvements. A
+rewrite or new cloud AI generator is not required for this roadmap.

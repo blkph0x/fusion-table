@@ -1,0 +1,70 @@
+{
+  "base": "http://127.0.0.1:8793/fusion",
+  "releaseId": "20261027-042809",
+  "checks": [
+    {
+      "name": "Expected deployed release",
+      "passed": true
+    },
+    {
+      "name": "whole-bird recipe response",
+      "passed": true
+    },
+    {
+      "name": "whole-bird rendered methods",
+      "passed": true
+    },
+    {
+      "name": "Whole-bird PDF export",
+      "passed": true
+    },
+    {
+      "name": "sticky-rice recipe response",
+      "passed": true
+    },
+    {
+      "name": "sticky-rice rendered methods",
+      "passed": true
+    },
+    {
+      "name": "tostones recipe response",
+      "passed": true
+    },
+    {
+      "name": "tostones rendered methods",
+      "passed": true
+    },
+    {
+      "name": "cassava recipe response",
+      "passed": true
+    },
+    {
+      "name": "cassava rendered methods",
+      "passed": true
+    },
+    {
+      "name": "cut-timing recipe response",
+      "passed": true
+    },
+    {
+      "name": "cut-timing rendered methods",
+      "passed": true
+    },
+    {
+      "name": "clean-boundary recipe response",
+      "passed": true
+    },
+    {
+      "name": "clean-boundary rendered methods",
+      "passed": true
+    },
+    {
+      "name": "tongue recipe response",
+      "passed": true
+    },
+    {
+      "name": "tongue rendered methods",
+      "passed": true
+    }
+  ]
+}

@@ -55,6 +55,8 @@ export interface RecipeStep {
   title: string;
   detail: string;
   minutes?: number;
+  /** Extra finishing preparation belongs before this delicate finish or assembly. */
+  finishBoundary?: boolean;
 }
 
 /** Extra rules stacked on the single diet choice. They tighten a recipe; they never relax it. */
@@ -64,6 +66,19 @@ export interface RecipeConstraints {
   dairyFree?: boolean;
   glutenFree?: boolean;
   eggFree?: boolean;
+}
+
+/** Inputs that change cooking content; retained so shares and PDFs repeat it. */
+export interface RecipeGenerationInput {
+  v: 1;
+  seed?: number;
+  cookPace?: CookPace;
+  cutId?: string;
+  clean?: CleanPrefs;
+  constraints?: RecipeConstraints;
+  avoidAllergens?: string[];
+  dislikes?: string[];
+  softenIngredients?: string[];
 }
 
 export interface RecipeInput {
@@ -118,6 +133,7 @@ export interface Recipe {
   sideId?: string;
   components?: { main: string; side: string; vegetables: string; sauce: string };
   generation?: "authored";
+  generationInput?: RecipeGenerationInput;
   methodNotes?: string[];
   /** Soft clean-plate summary when cleaner prefs were applied. */
   cleanSummary?: string;

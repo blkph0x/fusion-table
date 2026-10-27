@@ -6,7 +6,7 @@ Fusion Table combines two authored recipe engines with live discovery of nearby 
 
 Shop discovery is separate: server routes call the configured map provider and return places that may carry an ingredient, with stock and prices explicitly unverified. A template proposal, an automated check, a cook's observation and actual retailer inventory evidence remain different records.
 
-The app uses React with the Next-style App Router through Vinext. Vite builds browser assets and a Cloudflare Worker. Tracked Sites integration remains for the existing public deployment; an independent Cloudflare deployment has its own configuration, account and audience.
+The app uses React with the Next-style App Router through Vinext. Vite can build browser assets with either a conventional Node server (`FUSION_RUNTIME=node`) or a Cloudflare Worker (the bare-script default). The Windows launcher selects Node so shared ledger writes use a persistent filesystem. Tracked Sites integration remains for the existing public deployment; an independent Cloudflare deployment has its own configuration, account and audience. The JSON ledger requires one Node writer; Worker deployments need a durable storage adapter for shared reports and price memory.
 
 This is a standalone application repository. The original [research repository](https://github.com/blkph0x/p-vs-np-proof-research) was inspected at [`7dedc73f758dfbdc072e7aa29dfc08505761ebd5`](https://github.com/blkph0x/p-vs-np-proof-research/tree/7dedc73f758dfbdc072e7aa29dfc08505761ebd5). No mathematics engine or P-versus-NP result is used by the website.
 

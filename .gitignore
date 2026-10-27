@@ -41,9 +41,13 @@ yarn-error.log*
 # Workspace scaffolding and publication archives
 /.agents/
 /.codex/
+/.codex-remote-attachments/
 /outputs/
 /work/
 /releases/
 
 # OS metadata
 .DS_Store
+
+# Large replayable catalogue witnesses stay local; manifests and summaries stay reviewable.
+/docs/audit-evidence-*/complete-catalogue*/shard-*/cases-*.ndjson.gz

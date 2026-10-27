@@ -67,20 +67,20 @@ describe("region ingredient affinity", () => {
     }
   });
 
-  it("keeps sriracha and fish sauce on SE Asian plates only, and miso on Japanese", () => {
-    let srirachaThai = 0;
+  it("keeps authored Thai heat and Japanese miso while excluding off-region sauces", () => {
+    let thaiSignature = 0;
     let srirachaItalian = 0;
     let misoJapanese = 0;
     let misoMexican = 0;
     for (const seed of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
-      if (mealHas("thai", seed, /sriracha/i)) srirachaThai += 1;
+      if (mealHas("thai", seed, /red curry paste|bird.s eye/i)) thaiSignature += 1;
       if (mealHas("italian", seed, /sriracha/i)) srirachaItalian += 1;
       if (mealHas("japanese", seed, /\bmiso\b/i)) misoJapanese += 1;
       if (mealHas("mexican", seed, /\bmiso\b/i)) misoMexican += 1;
       assert.equal(mealHas("french", seed, /fish sauce|fish-sauce/i), false);
       assert.equal(mealHas("korean", seed, /kimchi/i), false); // rice-greens side, not kimchi-rice
     }
-    assert.ok(srirachaThai >= 1, "thai should still be able to draw sriracha");
+    assert.equal(thaiSignature, 12, "Thai recipes keep their authored heat instead of requiring an extra bottled sauce");
     assert.equal(srirachaItalian, 0);
     assert.ok(misoJapanese >= 1, "japanese should still see miso");
     assert.equal(misoMexican, 0);

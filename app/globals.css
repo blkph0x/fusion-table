@@ -70,6 +70,7 @@ ul, ol { margin: 0; padding: 0; }
 .main-nav button:hover, .main-nav a:hover { color: var(--forest); }
 .main-nav .active { color: var(--forest); font-weight: 600; }
 .main-nav .active::after { position: absolute; content: ""; height: 2px; bottom: 23px; left: 0; right: 0; background: #698357; }
+.main-nav .mobile-nav-extra { display: none; }
 .header-actions { display: flex; align-items: center; gap: 12px; }
 .location-button { display: inline-flex; align-items: center; gap: 8px; min-height: 35px; max-width: 230px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 5px; color: #5c6f53; font-size: 10px; }
 .location-button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1058,6 +1059,9 @@ ul, ol { margin: 0; padding: 0; }
   .recipe-layout, .recipe-columns { grid-template-columns: 32% 1fr; gap: 30px; }
   .recipe-sidebar, .ingredient-panel, .ingredients-panel { background: white; border-color: #ddd; }
   .steps-list > li, .method-list > li { break-inside: avoid; }
+  .recipe-plate, .kitchen-desk, .cook-book, .recipe-detail button { display: none !important; }
+  .recipe-columns { display: block; }
+  .method-panel { margin-top: 24px; }
 }
 
 .builder-template-note { font-size: 11px; color: #7b896c; white-space: nowrap; }
@@ -1123,12 +1127,12 @@ ul, ol { margin: 0; padding: 0; }
 .field small { display: block; margin-top: 4px; color: #6d7b62; font-size: 12px; }
 .recipe-plate { margin: 18px 0 8px; }
 .recipe-plate img, .week-plate { width: 100%; object-fit: cover; border-radius: 12px; background: #e7ecdf; }
-.recipe-plate img { max-height: 420px; }
+.recipe-plate img { display: block; width: min(100%, 720px); height: auto; max-height: 520px; object-fit: contain; margin-inline: auto; }
 .week-plate { height: 140px; margin: 8px 0 10px; }
 .recipe-plate figcaption { margin-top: 8px; color: var(--muted); font-size: 12px; }
 .recipe-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 8px 0 22px; }
 .shared-recipe { padding: 36px 0 64px; }
-.shared-recipe h1 { margin: 8px 0 12px; }
+.shared-recipe h1 { margin: 8px 0 12px; font-size: clamp(25px, 3vw, 38px); line-height: 1.18; }
 .cook-book, .shop-prices, .cook-notes { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e0e6d6; }
 .cook-book h3, .shop-prices h3, .trends-page h2 { margin: 0 0 8px; }
 .cook-book p, .shop-prices p, .cook-notes p, .trends-page p { font-size: 13px; line-height: 1.5; color: #3e4a38; }
@@ -1145,5 +1149,57 @@ ul, ol { margin: 0; padding: 0; }
 .news-panel ul { list-style: none; margin: 0; padding: 0; }
 .news-panel li { padding: 8px 0; border-bottom: 1px solid #e6ecdc; }
 .news-panel span, .news-panel p { display: block; color: #516347; font-size: 13px; }
+
+/* Shared household settings and meal-first planning. */
+.household-settings { padding: 18px 20px; border: 1px solid var(--border); border-radius: 12px; background: var(--paper); margin: 0 0 20px; }
+.household-settings > summary { cursor: pointer; font-weight: 600; color: var(--forest); line-height: 1.6; }
+.household-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; padding: 20px 0 12px; }
+.household-fields input, .household-fields select { width: 100%; min-height: 44px; border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; background: var(--paper); }
+.household-settings .avoid-row { margin: 10px 0 14px; }
+.household-settings .avoid-row label { min-height: 40px; }
+.household-settings .avoid-row input { width: 17px; height: 17px; }
+.week-shopping-summary { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px; margin: 22px 0; padding: 18px; background: var(--sage-light); border-radius: 10px; }
+.week-shopping-summary p { flex: 1 1 240px; }
+.settings-warning { background: #fff5dd; border: 1px solid #ddc38b; border-radius: 10px; padding: 18px; margin: 20px 0; }
+.settings-warning p { margin-top: 7px; }
+.settings-warning .button { margin-top: 12px; }
+.week-shopping-details { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+.week-shopping-details summary { cursor: pointer; font-weight: 600; }
+.week-shopping-details ul { padding: 14px 0 0 20px; }
+.week-shopping-details li { margin: 6px 0; }
+.cookbook-backup { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin-bottom: 25px; }
+.cookbook-backup .device-note { margin: 0; }
+.region-search { margin: 0 0 18px; }
+.recipe-template-notes { margin: 16px 0; font-size: 13px; }
+.recipe-template-notes summary { cursor: pointer; color: var(--forest); font-weight: 600; }
+.recipe-template-notes p { margin-top: 10px; }
+.header-inner, .header-actions, .location-button { min-width: 0; }
+
+@media (max-width: 700px) {
+  .header-actions .android-download { display: none; }
+  .main-nav .mobile-nav-extra { display: inline-flex; }
+  .header-actions { flex-shrink: 0; gap: 6px; }
+  .header-actions .location-button { width: 44px; min-width: 44px; max-width: 44px; height: 44px; padding: 0; justify-content: center; }
+  .header-actions .location-button span, .header-actions .location-button > svg:last-child { display: none; }
+  .header-actions .location-button > svg:first-child { width: 19px; height: 19px; }
+  .header-actions .mobile-menu { width: 44px; height: 44px; flex: 0 0 44px; }
+  .household-settings { padding: 15px; }
+  .household-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .household-fields .field:last-child { grid-column: 1 / -1; }
+  .household-settings summary, .household-settings .field > span, .household-settings .avoid-row label { font-size: 13px; }
+  .meal-builder .builder-panel-heading p, .meal-builder .builder-footnote, .meal-builder .main-choice small, .meal-builder .method-choice small, .meal-builder .region-choice small, .meal-builder .side-choice small { font-size: 12px; }
+  .meal-builder .builder-steps button strong { font-size: 11px; }
+  .household-fields input, .household-fields select, .meal-builder input, .meal-builder select, .location-search input { font-size: 16px; }
+  .week-shopping-summary .button { width: 100%; }
+}
 .trends-page section { margin-top: 22px; }
 @media (max-width: 700px) { .news-panel { position: static; width: auto; margin-top: 8px; } }
+
+/* Food-used costs stay separate from pantry-aware packs to buy. */
+.ingredient-quantity-cost { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; text-align: right; flex: 0 0 145px; }
+.ingredient-list .ingredient-cost { color: var(--forest); font-size: 13px; font-weight: 650; }
+.ingredient-cost span { display: block; color: #586651; font-size: 10px; font-weight: 400; margin-top: 3px; }
+.meal-cost-badge { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 15px 0; color: var(--forest); font-size: 13px; line-height: 1.5; }
+.meal-cost-badge small { flex-basis: 100%; color: #586651; font-size: 11px; }
+.card-copy .meal-cost-badge { margin: 10px 0; }
+@media (max-width: 600px) { .ingredient-quantity-cost { flex-basis: 124px; } .header-actions { gap: 3px; } .header-actions .account-trigger { min-width: 40px; } }

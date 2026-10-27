@@ -1,0 +1,8 @@
+Final pricing validation captured from the tool result, 2026-10-27.
+This file preserves the final run result, rather than a newly repeated run.
+
+Command:
+node node_modules/eslint/bin/eslint.js lib/catalogue.ts lib/product-match.ts lib/shopping-costs.ts tests/catalogue.test.ts tests/shopping-costs.test.ts
+
+Exit code: 0
+Output: none

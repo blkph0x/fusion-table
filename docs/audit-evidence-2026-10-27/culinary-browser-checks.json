@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Thai schnitzel paste is fried before liquid, crisp coating protected, lime finishes off heat",
+    "passed": true
+  },
+  {
+    "name": "Chinese beef receives scaled refrigerated starch coating, divided oil and batch cooking",
+    "passed": true
+  },
+  {
+    "name": "Seeded cold-smoked platter finishes miso before chilling and keeps purchased main cold",
+    "passed": true
+  },
+  {
+    "name": "Seeded pasta prepares extras before its packet-timed cooking window",
+    "passed": true
+  },
+  {
+    "name": "Live release generates staged Thai curry sauce and protects crisp coating",
+    "passed": true
+  },
+  {
+    "name": "Live recipe fits 320px phone viewport without horizontal overflow",
+    "passed": true
+  },
+  {
+    "name": "Public PDF endpoint returns the freshly generated recipe",
+    "passed": true
+  }
+]

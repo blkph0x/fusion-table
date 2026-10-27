@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "mode": "full",
+  "status": "passed",
+  "startedAt": "2026-10-27T04:22:40.245Z",
+  "finishedAt": "2026-10-27T04:22:48.184Z",
+  "node": "v22.13.0",
+  "catalogue": {
+    "regions": 76,
+    "sides": 90,
+    "defaultMainMethods": 266,
+    "supportedCutMethods": 648,
+    "diets": 5,
+    "classics": 34,
+    "classicRegions": 25
+  },
+  "source": {
+    "sha256": "594c87090d6920bb7e8d2c11bf1237852cd1456883c09ba279b8753c09437cd9",
+    "files": 64
+  },
+  "planned": {
+    "classics": 8500
+  },
+  "plannedTotal": 8500,
+  "checked": 8500,
+  "failedCases": 0,
+  "violations": 0,
+  "elapsedSeconds": 7.9,
+  "phases": [
+    {
+      "id": "classics",
+      "planned": 8500,
+      "scheduled": 8500,
+      "checked": 8500,
+      "failedCases": 0,
+      "coverage": "Every classic × classic regional profile × all five diets, authored and seed7; heat and servings rotate."
+    }
+  ],
+  "checks": [
+    "selected identity/settings",
+    "positive finite quantities and total time",
+    "unique ingredient IDs",
+    "ingredient name, ID or authored whole-phrase alias occurs in method",
+    "exact allergen-tag union and diet exclusions",
+    "one explicit regional finish; complete-meal finish after main",
+    "seeded preparation before delicate finish",
+    "animal endpoint/source/thermometer",
+    "usable method notes/equipment",
+    "chosen cut retained"
+  ],
+  "issueCounts": {},
+  "examples": [],
+  "limits": [
+    "This checks authored content and recorded ingredient tags, not actual cooking, taste, packet contents or cross-contact.",
+    "All authored balanced combinations are exhaustive only after a completed full authored phase.",
+    "Seed/heat/serving/clean and cut/diet variants use the stated rotating cases, not every possible input Cartesian product.",
+    "Source hash covers local lib/*.ts at start and end; changing source invalidates the run."
+  ]
+}

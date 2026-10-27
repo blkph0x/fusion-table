@@ -1,0 +1,392 @@
+{
+  "versionName": "1.5.6",
+  "versionCode": 13,
+  "files": [
+    {
+      "file": "app/build.gradle.kts",
+      "bytes": 4209,
+      "sha256": "e9d41eecfbafb1528d7a61fb2fc8333a02682e83d454dd73380d570f0684d888"
+    },
+    {
+      "file": "app/src/androidTest/java/au/mealplanner/FullJourneyTest.kt",
+      "bytes": 894,
+      "sha256": "82c15a726e8b831d3fcf92c18cb1077e301fc5b1932e58450acd727a884a0456"
+    },
+    {
+      "file": "app/src/main/assets/fusion-table-recipes.json",
+      "bytes": 77475274,
+      "sha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/db/AppDatabase.kt",
+      "bytes": 3439,
+      "sha256": "ad8d67768c43731280f01743e0d1f57fc64cbfd5739f59d23f356bcf0a45e5ed"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/db/dao/Daos.kt",
+      "bytes": 2560,
+      "sha256": "78a2000c3ce57f96c582d3a24a65f4661b2be8dc7d12a07e004dce2452ae212b"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/db/entity/Entities.kt",
+      "bytes": 1448,
+      "sha256": "ae31f9cf619191cc8e3e0b68abc3bf64499f0cd2fec71223658a73926132752f"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/DemoCatalogue.kt",
+      "bytes": 13312,
+      "sha256": "f826bab91c1294140468f4e897659041f65a9fecafa25d18f18575cfe91ab7d7"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/DemoSides.kt",
+      "bytes": 73617,
+      "sha256": "85adb506389d1b5154619253747f1e074a1818b23229ec30d6d6bf2badc6f02d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/DiverseDemoMeals.kt",
+      "bytes": 7999,
+      "sha256": "94783ae70f67e3bed425f9d6608e250d5b4e30a1904c5f404428ff25725a4324"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/IllawarraShops.kt",
+      "bytes": 7115,
+      "sha256": "cd9cad4dfdf6f4f361092df1f4173316b2920a128c95a250c987c852687cd50d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/MoreDemoMeals.kt",
+      "bytes": 32352,
+      "sha256": "c81f9e83dce1bbb7d79a79ed9959bf7fa9de369a005d7c1d33d7515e525e08ba"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/fixtures/ShopDirectory.kt",
+      "bytes": 1000,
+      "sha256": "4cfa47397f677e61fd3d676062c93e01c64e52145d0d113c66de40e2291980ae"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/providers/Providers.kt",
+      "bytes": 5712,
+      "sha256": "9d5859bb578f69e161b535ceb2947fc98360d9f83b0d6ced624310e2ab1f4d7c"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/providers/WoolworthsCatalogueClient.kt",
+      "bytes": 5134,
+      "sha256": "bdf8ccc4c761b166931f4c1c46759ebc05089ea033319464b065b3b1e1ae5449"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/repo/AppRepository.kt",
+      "bytes": 21719,
+      "sha256": "cb912a3067cc20de2acda075eb67082b55b74d22ccb17b212535a1695a7eb822"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/data/repo/BackupCodec.kt",
+      "bytes": 1898,
+      "sha256": "d7f0c508b4d1326aa39fcc124f51d18e9f09d8aadccf259e27bd93f7304142cf"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/exclusion/ExclusionEngine.kt",
+      "bytes": 11394,
+      "sha256": "ee5e1c3678eea18991c66edbbf1feceafaa7564b8d21581813076e300351f866"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/exclusion/IngredientNormaliser.kt",
+      "bytes": 3330,
+      "sha256": "9a239a680ec557f4c217490a86f8cc0e80ea910da5eb6ee2f38f2769f5c8604b"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/model/Models.kt",
+      "bytes": 6409,
+      "sha256": "bfe2b6f13bae1c86ddc224758e6eeb52cf59818edf290fb5d48c66e8dda1cb54"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/model/RecipeNote.kt",
+      "bytes": 105,
+      "sha256": "d98f4c039d6f2295cee37695156632d875b315bd8ec8a36c88a7fe235b73975a"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/money/Money.kt",
+      "bytes": 2873,
+      "sha256": "750403353cdd30dd8dda38a5c06ff38a6acae78aa1705e74f3c6c4dce8b1c1b4"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/money/Pricing.kt",
+      "bytes": 1402,
+      "sha256": "0568360a2d5e2c6f2aabb2b58fffd56cdbca31b0281a9fa26580c8c4775e6a95"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/pantry/PantryCatalogue.kt",
+      "bytes": 2841,
+      "sha256": "4ffa47d4cd0c8b6c335082114852adb28b55ffe17a7f955a4d209744f8674272"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/pantry/PantryCook.kt",
+      "bytes": 5990,
+      "sha256": "c8812f22536a4a52668d836e136ac3e71b91a56b0d1aaab0add6c47acfb91de7"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/CookingDisplay.kt",
+      "bytes": 2784,
+      "sha256": "6ae9ad391727c2d951f843502d4f1dc4b19574752c8ddd2c2d5b860a8129b0eb"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/FusionComposer.kt",
+      "bytes": 27913,
+      "sha256": "5966a3be265f7a5a179f34797fc2979e38bbcae84a8c2942c0ffb422940e45c8"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/FusionSat.kt",
+      "bytes": 22754,
+      "sha256": "0923977ffadb2438d76051a4ed42319f8e5c499e29de90c2f1850b1c7d9e4c5d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/FusionTableCatalogue.kt",
+      "bytes": 9307,
+      "sha256": "f3400ae68a0f9b72f294dabf715d3b3f6c71cb7eb49a5f78605433a1b2a0604b"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/FusionTablePlanner.kt",
+      "bytes": 10973,
+      "sha256": "efc1473c7c573afadf82b1827fa159fd57cbd95c7e7c401ba1865d04731b83b8"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/ManualRecipeParser.kt",
+      "bytes": 3444,
+      "sha256": "590aa95af050a7b17c004246c05acac3180f146af784c7fb0323ca395cd3114f"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/MealPlanner.kt",
+      "bytes": 11657,
+      "sha256": "ec5495e4d05f1735c87059a084c50bb885009fe48aff4debdd0768fa967124b9"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/MealSchedule.kt",
+      "bytes": 2374,
+      "sha256": "352e11d3a2484e7793ea3ef5780adeb5bfef3d2e029bea455b1b967df458d33d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/NativeCooking.kt",
+      "bytes": 15226,
+      "sha256": "ca7a3bbb56f5dcb1f314d0e55bee71807690f74bf6368e0ab986751e215403cc"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/PlanVariety.kt",
+      "bytes": 323,
+      "sha256": "abc73bf95817e95005ab3a8affbce1aeaf1b4b1a1347cc89f386adfb76894afa"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/PlateStudio.kt",
+      "bytes": 31025,
+      "sha256": "18978499bc95efbed8c78a0bc44fcc0a2ee5277cb852296f80b809737cb0ec9d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/Postcodes.kt",
+      "bytes": 2559,
+      "sha256": "ca7470abc5cba4e7bee4e50fa812d4523ae370a9e314e49e64e0134d0e6b3a23"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/SatSolver.kt",
+      "bytes": 7853,
+      "sha256": "44c5880feb2246a57972dd1322e64ca14e3424587990ea0107144ef4bc6fe78e"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/ShopCoverage.kt",
+      "bytes": 8214,
+      "sha256": "c82f1845cc7b424b00256ede7928f1cd912685c9cbc4c8fc03561977e27ecadb"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/planner/StoreSelection.kt",
+      "bytes": 12428,
+      "sha256": "45533e6ac6a6249c17d994c9b3495bec4bb60b6d03435e377461c07c973c47cd"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/shopping/BudgetCalculator.kt",
+      "bytes": 3902,
+      "sha256": "c33dde822a6a992c236110c0a0cc2b18b8fa2604ce6e4868aee63dabc108a9a9"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/shopping/Catalogue.kt",
+      "bytes": 44214,
+      "sha256": "e1b172554c6a6d0f35bc1ab8ba34828bc328ed1fbfa87ba49084c8dafc0b7edb"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/shopping/CsvImport.kt",
+      "bytes": 4218,
+      "sha256": "d85424e25add31af0ed1256666bb37be1c9a3eb770464adb7da6ac8b9a010e3d"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/shopping/PackCalculator.kt",
+      "bytes": 4956,
+      "sha256": "d5e40d0f648aa459aad0c0794b25ab49004f3dfda71ecad4eef20c1d7dfad427"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/shopping/ShoppingAggregator.kt",
+      "bytes": 11627,
+      "sha256": "8a46bfcb4be0b7cc27a6c22c4b70bc260137ecd6fe5a11c27dd7a96f4eae2c5e"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/domain/units/Quantity.kt",
+      "bytes": 6408,
+      "sha256": "c319a34c053eed213bf2a2f93843c1e06a1d98af6238c7dce7c873bf11f49468"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/MealPlannerApp.kt",
+      "bytes": 241,
+      "sha256": "c35ae77e9ea57d6b9e0d74e5962f5faf2d6ae0d47d8584b2016cde294b0bc4a2"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/AppViewModel.kt",
+      "bytes": 31117,
+      "sha256": "d39219fc5f9eb151daf246f29a804e7a22203f0a58cdccd2a6d64e8842a11151"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/components/BenchChrome.kt",
+      "bytes": 11918,
+      "sha256": "f0edce92dd3595e2095b7eaff04b786aa5b2d37b74d4fc36bde8be294af7f09f"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/MainActivity.kt",
+      "bytes": 2965,
+      "sha256": "6e0feb82e36fae65372b29abc5360b3a117b25e6c5323dcae04f70dbbbae73d4"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/plan/PlanScreen.kt",
+      "bytes": 30188,
+      "sha256": "18e1570911dfb55d3a360fe16003e132d358211b94acbf8e896d3beb9c8a030e"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/plan/WeekControls.kt",
+      "bytes": 4408,
+      "sha256": "285bd881d760f3f7a8b64c1735964c9e1d41c436b137257d91d365da655eb14b"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/preferences/PreferencesScreen.kt",
+      "bytes": 18022,
+      "sha256": "0b4844b523fbf5f6ddea5e36eee0447cc98be8063574de6ba977dacf103660e5"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/shop/ShopScreen.kt",
+      "bytes": 12324,
+      "sha256": "98b7788d616253b997add614924f5bd5efe318a92fef86050168edc1f3eef93a"
+    },
+    {
+      "file": "app/src/main/java/au/mealplanner/ui/theme/Theme.kt",
+      "bytes": 5246,
+      "sha256": "bd889ac2415cf85d7efb424efab62ba0b787622cfaedaad7d9ee6784569dc85c"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/AcceptanceExtrasTest.kt",
+      "bytes": 22006,
+      "sha256": "64f1806161f1056371e8b88d64a45499071139f4ee8cb2edd533b6e250ed5a98"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/BudgetAndUnitsTest.kt",
+      "bytes": 9169,
+      "sha256": "2627c60ba911204d89e82fc0268b51b9e5289f944c40efb097b44ad682de42f4"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/CatalogueMatchTest.kt",
+      "bytes": 13489,
+      "sha256": "a776d598cfd00ffb32ac659520f003af111fb0463818455ce80c0253006bf9eb"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/CookingDisplayTest.kt",
+      "bytes": 2624,
+      "sha256": "4656a3fe12670d1b70fb2baaa7f787b5efd80e3dde71091ec83f11bd1da20222"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/ExclusionEngineTest.kt",
+      "bytes": 8942,
+      "sha256": "bbd525917fee2e3549ef901d585c591007ff7e39fbf6969af77b4eb5b931dd11"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/FusionSatTest.kt",
+      "bytes": 7999,
+      "sha256": "58086b2b8245ce192c83a4d5b0dc4f50ad084127afffd51f14d49fe90881c102"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/FusionTablePlanTest.kt",
+      "bytes": 12297,
+      "sha256": "14813e55ac5442e35a58142011f2879cd1d0ca013d69723d7efecf35dd4a108b"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/IllawarraAndFusionTest.kt",
+      "bytes": 12411,
+      "sha256": "3c909face786847544ba13fdb59e1140f8c420a93bf00a7f5429661ffabd1a14"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/LockedFusionSnapshotTest.kt",
+      "bytes": 2181,
+      "sha256": "d870cd8cd537e4e935c914043ec136b00fa826bb95bf5cd28869cc6963faa548"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/MealVarietyTest.kt",
+      "bytes": 4831,
+      "sha256": "83094e039ab76d4214e13a4f426eed757ec69e581c55b27cd6925331c7cddeb0"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/NativeBaseCookingTest.kt",
+      "bytes": 4221,
+      "sha256": "71c62256449f2008c94cf8e3633a7759c779ac5dcb24e8a2068f0a019b6b320e"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/NativeGeneratorCookingTest.kt",
+      "bytes": 17983,
+      "sha256": "35cc3b9eb037ee5e096e1ac2f9387906953350a1fa15166c4d2ebc998fb035df"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/NativePlausibilityTest.kt",
+      "bytes": 9144,
+      "sha256": "e156054d1d28022b657f81b9e81f3a76ea40d08bfdbdb0c1d9ba13bf2b6d0cec"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/NativeSideCookingTest.kt",
+      "bytes": 8603,
+      "sha256": "d87a52d4817d677ba927aa5cd63e8fa0d89a2559de894580ad86ed9d95f3721b"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/PackCalculatorTest.kt",
+      "bytes": 3365,
+      "sha256": "610fc487d9b7656c6285b105a7678b5f2159c63c4b87229d6a17a06327f71a8a"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/PantryAndScheduleTest.kt",
+      "bytes": 3766,
+      "sha256": "dec4e967398fd8ab5a13dd0438d2bf6cec9d6f91e8998e8ac16177e147cf8240"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/PlateStudioTest.kt",
+      "bytes": 10710,
+      "sha256": "1bffa406d443b4f29d93a291bc41b493d27adea063f5435a300bdcfb8362ee25"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/SideMealsTest.kt",
+      "bytes": 6268,
+      "sha256": "34e1174939a68d7c1642bc485c551c196a59474831f4eed4e879c033585c6d00"
+    },
+    {
+      "file": "app/src/test/java/au/mealplanner/domain/StreamingCatalogueTest.kt",
+      "bytes": 2782,
+      "sha256": "396c0cc68f75876596563b920cf658416624fc9b0ecb69a7ab250c41faa91f8d"
+    },
+    {
+      "file": "build.gradle.kts",
+      "bytes": 283,
+      "sha256": "0128456b0804d414c70f8c0838126281e42238fbbf1d65b8fa56be757bd88366"
+    },
+    {
+      "file": "gradle/wrapper/gradle-wrapper.properties",
+      "bytes": 251,
+      "sha256": "fc95aed1c7255ebaae61cf50e2401d3fd08e648f1ed69b722072b99bdf4e2b7e"
+    },
+    {
+      "file": "gradle.properties",
+      "bytes": 238,
+      "sha256": "c58a1b152b8992a27e691d9b2bd5ec5d3fbce60f1e819adb510b624211d7018c"
+    },
+    {
+      "file": "settings.gradle.kts",
+      "bytes": 347,
+      "sha256": "b162d8a5b428a2db0f8fe1a47ae4a3aa1f45e918df77db977b357b23549e15ce"
+    }
+  ],
+  "sha256": "87713507f7f7a8cc75bb03800e0d1dfc4aac3e1af303e3a0f146478ae63738f0"
+}

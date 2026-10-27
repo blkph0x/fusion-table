@@ -89,7 +89,7 @@ const MINCE = "Sausages and other minced meat must reach at least 75°C in the c
 const LONG_CUT = "The meat must pass 71°C for safety; continue until probe-tender, usually around 90–96°C. Tenderness, cut thickness and a thermometer determine the finish, not the clock alone.";
 const PLANT = "Cook until hot throughout and the vegetables are tender. Follow any longer cooking requirement on prepared proteins' packets.";
 
-type SideId = "slaw-buns" | "potato-greens" | "rice-salad" | "flatbread-salad" | "bread-crudites" | "bean-salad" | "salad";
+type SideId = "slaw-buns" | "slaw" | "potato-greens" | "rice-salad" | "flatbread-salad" | "bread-crudites" | "bean-salad" | "salad";
 interface Side {
   name: string;
   ingredients: DraftIngredient[];
@@ -102,12 +102,12 @@ function sideFor(id: SideId, context: RecipeContext): Side {
   const gf = context.glutenFree;
   const bread = (bun = false) => item(bun ? "bbq-buns" : "bbq-flatbread", gf ? `Gluten-free vegan ${bun ? "buns" : "flatbread"}` : `Vegan ${bun ? "buns" : "flatbread"}`, 4, "", "grocery", gf ? [] : ["wheat"], "Choose egg-free and dairy-free bread; for gluten-free recipes use a labelled product.");
   const vinegar = item("apple-cider-vinegar", "Apple cider vinegar", 1, "tbsp");
-  if (id === "slaw-buns") return {
-    name: "warm buns and cabbage-carrot slaw", minutes: 15,
-    ingredients: [bread(true), veg("cabbage", "Cabbage", 250, "Finely shred."), veg("carrot", "Carrot", 200, "Coarsely grate."), vinegar],
+  if (id === "slaw-buns" || id === "slaw") return {
+    name: id === "slaw" ? "cabbage-carrot slaw" : "warm buns and cabbage-carrot slaw", minutes: id === "slaw" ? 8 : 15,
+    ingredients: [...(id === "slaw-buns" ? [bread(true)] : []), veg("cabbage", "Cabbage", 250, "Finely shred."), veg("carrot", "Carrot", 200, "Coarsely grate."), vinegar],
     equipment: ["Mixing bowl", "Grater"], steps: [
       step("Prepare the slaw", `Shred the cabbage and grate the carrot. Toss with ${q(1, context)} tbsp apple cider vinegar allocated to this side and ${q(1, context)} tbsp of the olive oil allocated to the side. Keep chilled until serving.`, 8),
-      step("Warm the buns", "Split and toast the buns cut-side down on a clean grill area or in a dry pan for 1–2 minutes; watch closely. Serve the slaw alongside or tuck it into the buns.", 3),
+      ...(id === "slaw-buns" ? [step("Warm the buns", "Split and toast the buns cut-side down on a clean grill area or in a dry pan for 1–2 minutes; watch closely. Serve the slaw alongside or tuck it into the buns.", 3)] : []),
     ],
   };
   if (id === "potato-greens") return {
@@ -208,10 +208,13 @@ function assemble(context: RecipeContext, plan: Plan): BaseRecipe {
     ...(plan.notes ?? []),
     "Timings are estimates for the specified thickness. Read all steps first and prepare the sides near the end of long cooks. Scale quantities by servings, but check each piece independently; batch size does not scale the cooking time linearly.",
   ];
+  // The main's heat and rest stages are serial even when the side and sauce
+  // overlap. Do not advertise a shorter cook than those explicit allowances.
+  const mainMinutes = plan.steps.slice(1).reduce((total, stage) => total + (stage.minutes ?? 0), 0);
   return {
     name: plan.name, description: `${plan.description} Served with ${side.name} and your selected regional sauce.`,
     ingredients: [...plan.ingredients, ...side.ingredients, ...common], steps,
-    prep: plan.prep, cook: Math.max(plan.cook, side.minutes),
+    prep: plan.prep, cook: Math.max(plan.cook, side.minutes, mainMinutes),
     equipment: [...new Set([...plan.equipment, ...side.equipment, "Small saucepan", "Clean chopping board and knife", "Food thermometer", ...(plan.mode === "smoke" ? ["Grate-level thermometer", "Outdoor smoker or indirect barbecue (oven alternative provided)"] : [])])],
     meat: plan.meat,
     ...(plan.safety ? { safetyNote: `${plan.safety} Keep raw food separate from ready-to-eat ingredients. Keep cold foods at 5°C or colder and hot food above 60°C until serving; refrigerate leftovers promptly in shallow containers.`, safetySource: plan.source ?? BBQ_SOURCES.foodSafety } : { safetyNote: "Use already-cooked canned pulses and follow prepared proteins' package directions. Keep cold ingredients at 5°C or colder and hot food above 60°C until serving. Refrigerate leftovers promptly in shallow containers.", safetySource: BBQ_SOURCES.foodSafety }),
@@ -469,19 +472,19 @@ export function bbqBaseFor(context: RecipeContext): BaseRecipe | undefined {
       const shells = item(
         "jumbo-shells",
         glutenFree ? "Gluten-free jumbo pasta shells" : "Jumbo pasta shells",
-        12,
+        20,
         "",
         "grocery",
         glutenFree ? [] : ["wheat"],
-        glutenFree ? "Large cannelloni or jumbo shells explicitly labelled gluten-free. Many pasta shells contain wheat." : "Large cannelloni or jumbo pasta shells. Check the packet for wheat.",
-        glutenFree ? ["gluten-free jumbo pasta shells"] : ["jumbo pasta shells", "cannelloni shells"],
+        glutenFree ? "Open jumbo conchiglioni shells explicitly labelled gluten-free, not long cannelloni tubes. Follow the packet cooking time." : "Open jumbo conchiglioni shells, not long cannelloni tubes. Follow the packet cooking time and check for wheat.",
+        glutenFree ? ["gluten-free jumbo pasta shells"] : ["jumbo pasta shells", "conchiglioni"],
       );
       const filling = vegetarian
         ? beans(500)
         : item(
           "sausage-meat",
           glutenFree ? "Gluten-free raw pork sausage meat" : dairyFree ? "Dairy-free raw pork sausage meat" : "Raw pork sausage meat",
-          650,
+          500,
           "g",
           "butcher",
           glutenFree ? [] : ["wheat"],
@@ -491,26 +494,24 @@ export function bbqBaseFor(context: RecipeContext): BaseRecipe | undefined {
       return assemble(context, {
         name: vegetarian ? "bean-stuffed jumbo pasta shells" : "sausage shotgun shells",
         description: vegetarian ? "Jumbo pasta shells are filled with seasoned beans and hot-smoked until tender." : "Jumbo pasta shells are filled with sausage meat and hot-smoked until the centre is cooked.",
-        prep: 25, cook: vegetarian ? 50 : 75, side: "slaw-buns", mode: "smoke", meat: !vegetarian, finishAfterSides: true,
+        prep: 25, cook: vegetarian ? 50 : 75, side: "slaw", mode: "smoke", meat: !vegetarian, finishAfterSides: true,
         ingredients: [shells, filling, veg("brown-onion", "Brown onion", 120, "Finely dice.")],
-        equipment: ["Saucepan", "Heatproof tray", "Piping bag or teaspoon"],
+        equipment: ["Saucepan", "Snug heatproof baking dish", "Cooking foil or ovenproof lid", "Tablespoon"],
         safety: vegetarian ? undefined : MINCE, source: BBQ_SOURCES.temperatures,
         steps: [
-          step("Soften the shells", `Boil the jumbo pasta shells for 2 minutes, or follow the packet if it asks for a different start. Drain and cool until you can handle them. Do not cook dry pasta with smoke alone.`, 12),
-          step("Fill the shells", vegetarian
-            ? `Mash the drained cannellini beans with the diced onion. ${rub(context, "the bean filling")} Spoon it into the jumbo pasta shells. Stand the shells upright in a single layer on a heatproof tray.`
-            : `Mix the raw pork sausage meat with the diced onion. ${rub(context, "the sausage filling")} Spoon it into the jumbo pasta shells and press the filling in so there are no large gaps. Stand the shells upright in a single layer on a heatproof tray. A strip of streaky bacon around each shell is optional and is pork; leave it off if you are not eating pork.`, 15),
+          step("Soften the shells", "Boil the open jumbo pasta shells to al dente using their packet timing. Drain and cool just until you can handle them. Keep the cooked shells separate and fill promptly. Do not substitute dry cannelloni tubes or cook dry pasta with smoke alone.", 12),
+          step("Fill the shells", `${vegetarian ? "Mash the drained cannellini beans with the diced onion." : "Mix the raw pork sausage meat with the diced onion."} ${rub(context, vegetarian ? "the bean filling" : "the sausage filling")} Divide the measured filling between the ${q(20, context)} cooked open jumbo pasta shells, about 30 g per shell, without packing a thick mound. Lay them opening-up in one layer in a snug heatproof baking dish. Add ${q(100, context)} ml hot water around the shells, not into the filling, and cover the dish tightly. Use additional dishes for larger batches.`, 15),
           step("Hot-smoke the shells", vegetarian
-            ? `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the jumbo pasta shells for 35–50 minutes, until the shells are tender and the bean filling is hot throughout. Start the slaw during the final 15 minutes. ${PLANT}`
-            : `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the jumbo pasta shells for 45–70 minutes. The centre of the sausage filling must reach at least 75°C. Check several shells with a clean food thermometer. Start the slaw during the final 15 minutes.`, vegetarian ? 50 : 70),
+            ? `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Heat the covered dish for about 25–35 minutes, until the bean filling is hot throughout and the shells are tender; check that a little steaming liquid remains, adding hot water if the dish dries. Uncover for only the final 5–10 minutes for a light smoke, rather than drying the pasta for the full cook. Start the slaw during the final 8 minutes. ${PLANT}`
+            : `Stabilise the outdoor smoker at 140–149°C, inside the 107–149°C smoking range. Cook the covered dish for about 35–55 minutes, checking that a little steaming liquid remains and adding hot water if the dish dries. The centre of the sausage filling must reach at least 75°C; check several shells with a clean food thermometer and continue covered if needed. Uncover for only a final 5–10 minutes once the filling is cooked, for a light smoke without drying the pasta. Start the slaw during the final 8 minutes.`, vegetarian ? 45 : 65),
           step("Sauce after cooking", "Spoon the regional sauce over the shells only after they leave the heat. Do not put a sweet glaze on them for the whole smoke."),
         ],
         oven: vegetarian
-          ? "Bake the filled jumbo pasta shells at 180°C conventional / 160°C fan for 25–35 minutes, until the shells are tender and the bean filling is hot throughout."
-          : "Bake the filled jumbo pasta shells at 180°C conventional / 160°C fan for 25–40 minutes, until the sausage centre reaches 75°C.",
+          ? "Use the packet-cooked, filled open shells and scaled water in a tightly covered dish. Bake at 180°C conventional / 160°C fan for 20–30 minutes until the filling is hot throughout; uncover for at most 5 minutes at the end. Keep the shells moist and add the regional sauce after cooking."
+          : "Use the packet-cooked, filled open shells and scaled water in a tightly covered dish. Bake at 180°C conventional / 160°C fan for about 25–40 minutes, checking several sausage centres reach 75°C; extend covered if needed. Uncover briefly only after the filling is cooked. Add the regional sauce after cooking.",
         notes: vegetarian
           ? ["This is the plant shotgun shell: jumbo pasta shells and beans. It is not a sausage filling."]
-          : ["This template leaves cheese out of the filling so the same shells can stay dairy-free. Optional bacon is pork and is not part of the measured shopping list."],
+          : ["This is a moist, open-jumbo-shell adaptation of shotgun shells; it does not use long cannelloni tubes or bacon wrapping. Cheese is left out so the same measured filling can stay dairy-free."],
       });
     }
 
@@ -572,21 +573,21 @@ export function bbqBaseFor(context: RecipeContext): BaseRecipe | undefined {
       equipment: ["Heatproof tray", "Foil pan or small roasting dish"],
       steps: [
         step("Cube the plant pieces", `Cut the tempeh and mushrooms into 3 cm cubes. ${rub(context, "the tempeh and mushroom cubes")}`, 15),
-        step("Smoke, then finish in a pan", `Hot-smoke the cubes in one layer at 130–140°C for 25 minutes. Move them into a pan with ${q(60, context)} ml hot water, off any direct flame, for another 15–25 minutes, until the tempeh is hot throughout and the mushrooms are tender. Fold in the regional sauce only after it has been cooked. Follow any longer tempeh packet direction. ${PLANT}`, 50),
+        step("Smoke, then finish in a pan", `Hot-smoke the cubes in one layer at 130–140°C for 25 minutes. Move them into a pan with ${q(60, context)} ml hot water, off any direct flame, for another 15–25 minutes, until the tempeh is hot throughout and the mushrooms are tender. Leave the sauce and its delicate finishing ingredients for the finishing step below. Follow any longer tempeh packet direction. ${PLANT}`, 50),
         step("Serve the cubes", "Spoon the sauced tempeh and mushroom cubes into the buns. Keep the pan above 60°C until it is served, then refrigerate leftovers promptly.", 5),
       ],
       oven: "Roast the tempeh and mushroom cubes at 200°C conventional / 180°C fan for 25 minutes, then finish in a covered pan with the scaled water for 15 minutes. Add the sauce off the heat.",
       notes: ["These are pan-finished cubes, not a whole roast. Sweet sauce stays off the direct flame."],
     } : {
-      name: small ? "oven burnt ends" : "brisket burnt ends", description: "A brisket point is cooked until it can be cubed, then finished in a pan of sauce.", prep: 25, cook: small ? 160 : 300, side: "slaw-buns", mode: small ? "grill" : "smoke", meat: true,
+      name: small ? "oven burnt ends" : "brisket burnt ends", description: "A brisket point is cooked until it can be cubed, then finished in a pan of sauce.", prep: 25, cook: small ? 290 : 350, side: "slaw-buns", mode: small ? "grill" : "smoke", meat: true,
       ingredients: [meat("brisket-point", "Beef brisket point", 1200, "The thicker point, unrolled. This is not a whole packer. Smaller servings use the covered-oven method.")],
       equipment: ["Heatproof tray", "Foil pan", "Probe thermometer"], safety: LONG_CUT,
       steps: [
         step("Prepare the point", `Trim loose fat and leave some surface fat. ${rub(context, "the brisket point")}`, 20),
         step(small ? "Braise the small point" : "Smoke the point", small
           ? `Put the scaled point in a snug dish with ${q(200, context)} ml water, cover tightly and cook at 160°C conventional / 140°C fan for 2–3 hours, checking from 90 minutes, until a probe slides in.`
-          : "Stabilise the outdoor smoker at 120–140°C. Smoke the point indirectly for 3–4 hours, until the surface has a bark and the centre has passed 71°C and is approaching tenderness.", small ? 150 : 210),
-        step("Cube and finish in the pan", `${LONG_CUT} Rest 15 minutes, cut into 3 cm cubes and put them in a pan with ${q(80, context)} ml hot water. Fold in the cooked regional sauce off the direct flame. Return the pan to indirect heat for 45–90 minutes, until the cubes are probe-tender, usually 90–96°C. Do not burn the sauce over an open flame.`, small ? 40 : 90),
+          : "Stabilise the outdoor smoker at 120–140°C. Smoke the point indirectly for 3–4 hours, until the surface has a bark and the centre has passed 71°C and is approaching tenderness.", small ? 180 : 240),
+        step("Cube and finish in the pan", `${LONG_CUT} Rest 15 minutes, cut into 3 cm cubes and put them in a pan with ${q(80, context)} ml hot water. Fold in the cooked regional sauce base off the direct flame, reserving its delicate finishing ingredients. Return the pan to indirect heat for 45–90 minutes, until the cubes are probe-tender, usually 90–96°C. Do not burn the sauce over an open flame. Take the pan off the heat before the fresh sauce finish.`, 105),
       ],
       oven: "Cover a 1.2 kg point with 200 ml water and braise at 160°C conventional / 140°C fan for 3–4 hours, then cube and finish in the sauce pan until probe-tender. This timing is not a whole packer.",
       notes: ["Burnt ends are the point, cubed and sauced, not sliced brisket. The 1.2 kg piece is not a 16-hour packer cook. Sweet sauce stays off the direct flame.", "Choose 4 or more servings for the outdoor smoke. Smaller portions use the covered oven and still finish probe-tender, usually 90–96°C."],

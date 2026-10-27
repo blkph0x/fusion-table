@@ -1,0 +1,1142 @@
+TAP version 13
+# Subtest: classics that require an animal-main thermometer endpoint include the thermometer
+ok 1 - classics that require an animal-main thermometer endpoint include the thermometer
+  ---
+  duration_ms: 777.862988
+  type: 'test'
+  ...
+# Subtest: every classic, regional profile and diet routes its listed regional ingredients into the method
+ok 2 - every classic, regional profile and diet routes its listed regional ingredients into the method
+  ---
+  duration_ms: 2572.35223
+  type: 'test'
+  ...
+# Subtest: Japanese miso is a deliberate off-heat finish, with ginger cooked first
+ok 3 - Japanese miso is a deliberate off-heat finish, with ginger cooked first
+  ---
+  duration_ms: 3.61014
+  type: 'test'
+  ...
+# Subtest: risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+ok 4 - risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+  ---
+  duration_ms: 1.455417
+  type: 'test'
+  ...
+# Subtest: delicate spice and woody herbs have explicit finishing or removal instructions
+ok 5 - delicate spice and woody herbs have explicit finishing or removal instructions
+  ---
+  duration_ms: 5.329359
+  type: 'test'
+  ...
+# Subtest: crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+ok 6 - crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+  ---
+  duration_ms: 0.926711
+  type: 'test'
+  ...
+# Subtest: classic plates retain one authored starch rather than gaining a second full grain or bread
+ok 7 - classic plates retain one authored starch rather than gaining a second full grain or bread
+  ---
+  duration_ms: 493.488712
+  type: 'test'
+  ...
+# Subtest: regional sauce amounts scale once and split base oil and stock without double allocation
+ok 8 - regional sauce amounts scale once and split base oil and stock without double allocation
+  ---
+  duration_ms: 1.552217
+  type: 'test'
+  ...
+# Subtest: every classic marks one authored finishing boundary before seeded extras are assembled
+ok 9 - every classic marks one authored finishing boundary before seeded extras are assembled
+  ---
+  duration_ms: 252.256316
+  type: 'test'
+  ...
+# Subtest: pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+ok 10 - pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+  ---
+  duration_ms: 6.670175
+  type: 'test'
+  ...
+# Subtest: seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+ok 11 - seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+  ---
+  duration_ms: 97.312387
+  type: 'test'
+  ...
+# Subtest: cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+ok 12 - cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+  ---
+  duration_ms: 1.446516
+  type: 'test'
+  ...
+# Subtest: classic preparation and final assembly
+    # Subtest: serves hot stuffed shells with slaw and one starch
+    ok 1 - serves hot stuffed shells with slaw and one starch
+      ---
+      duration_ms: 125.955806
+      type: 'test'
+      ...
+    # Subtest: does not add a second cooking step when an existing rice is only renamed
+    ok 2 - does not add a second cooking step when an existing rice is only renamed
+      ---
+      duration_ms: 2.471728
+      type: 'test'
+      ...
+    # Subtest: keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+    ok 3 - keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+      ---
+      duration_ms: 36.411205
+      type: 'test'
+      ...
+    1..3
+ok 13 - classic preparation and final assembly
+  ---
+  duration_ms: 171.636216
+  type: 'suite'
+  ...
+# Subtest: stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+ok 14 - stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+  ---
+  duration_ms: 1953.833623
+  type: 'test'
+  ...
+# Subtest: cottage-pie estimate covers its serial filling, oven and resting stages
+ok 15 - cottage-pie estimate covers its serial filling, oven and resting stages
+  ---
+  duration_ms: 102.680347
+  type: 'test'
+  ...
+# Subtest: BBQ cooking estimates include required rest after the timed heat stages
+ok 16 - BBQ cooking estimates include required rest after the timed heat stages
+  ---
+  duration_ms: 20.306625
+  type: 'test'
+  ...
+# Subtest: burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+ok 17 - burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+  ---
+  duration_ms: 758.866477
+  type: 'test'
+  ...
+# Subtest: seeded fast mains prepare additions before cooking and retain final fresh service
+ok 18 - seeded fast mains prepare additions before cooking and retain final fresh service
+  ---
+  duration_ms: 124.801094
+  type: 'test'
+  ...
+# Subtest: slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+ok 19 - slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+  ---
+  duration_ms: 15.249769
+  type: 'test'
+  ...
+# Subtest: opt-in audit plans the complete authored matrix without generating it during normal tests
+ok 20 - opt-in audit plans the complete authored matrix without generating it during normal tests
+  ---
+  duration_ms: 24.423574
+  type: 'test'
+  ...
+# Subtest: every region/main-method receives all five seeded heat/serving presets, rotating every side
+ok 21 - every region/main-method receives all five seeded heat/serving presets, rotating every side
+  ---
+  duration_ms: 276.63999
+  type: 'test'
+  ...
+# Subtest: audit detects substantive content and quantity failures with small real fixtures
+ok 22 - audit detects substantive content and quantity failures with small real fixtures
+  ---
+  duration_ms: 19.916821
+  type: 'test'
+  ...
+# Subtest: smoke indices are bounded, unique and include the edges of each phase
+ok 23 - smoke indices are bounded, unique and include the edges of each phase
+  ---
+  duration_ms: 0.307303
+  type: 'test'
+  ...
+# Subtest: audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+ok 24 - audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+  ---
+  duration_ms: 45.502109
+  type: 'test'
+  ...
+# Subtest: classic ingredient references require the verified authored cooking phase
+ok 25 - classic ingredient references require the verified authored cooking phase
+  ---
+  duration_ms: 127.391623
+  type: 'test'
+  ...
+# Subtest: mince and lean chosen cuts never inherit a slow joint's simmer estimate
+ok 26 - mince and lean chosen cuts never inherit a slow joint's simmer estimate
+  ---
+  duration_ms: 212.881377
+  type: 'test'
+  ...
+# Subtest: whole birds are rounded to whole shopping units at every serving size
+ok 27 - whole birds are rounded to whole shopping units at every serving size
+  ---
+  duration_ms: 94.670657
+  type: 'test'
+  ...
+# Subtest: slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+ok 28 - slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+  ---
+  duration_ms: 3.411438
+  type: 'test'
+  ...
+# Subtest: gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+ok 29 - gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+  ---
+  duration_ms: 2.75333
+  type: 'test'
+  ...
+# Subtest: whole-bird portions and advance side preparation survive recipe sharing
+ok 30 - whole-bird portions and advance side preparation survive recipe sharing
+  ---
+  duration_ms: 33.787878
+  type: 'test'
+  ...
+# Subtest: tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+ok 31 - tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+  ---
+  duration_ms: 6.585274
+  type: 'test'
+  ...
+# Subtest: cut × method allowlists
+    # Subtest: forbids stew cuts with steak-style quick methods
+    ok 1 - forbids stew cuts with steak-style quick methods
+      ---
+      duration_ms: 14.437962
+      type: 'test'
+      ...
+    # Subtest: forbids whole birds with schnitzel, patties and stir-fry
+    ok 2 - forbids whole birds with schnitzel, patties and stir-fry
+      ---
+      duration_ms: 4.657952
+      type: 'test'
+      ...
+    # Subtest: forbids mince as schnitzel steaks
+    ok 3 - forbids mince as schnitzel steaks
+      ---
+      duration_ms: 0.340604
+      type: 'test'
+      ...
+    # Subtest: lists only affinity cuts in the builder helper
+    ok 4 - lists only affinity cuts in the builder helper
+      ---
+      duration_ms: 2.094924
+      type: 'test'
+      ...
+    1..4
+ok 32 - cut × method allowlists
+  ---
+  duration_ms: 25.360283
+  type: 'suite'
+  ...
+# Subtest: cut-aware prep wording
+    # Subtest: grinds brisket for patties and never says cut steaks 2 cm thick
+    ok 1 - grinds brisket for patties and never says cut steaks 2 cm thick
+      ---
+      duration_ms: 23.352461
+      type: 'test'
+      ...
+    # Subtest: pulls or shreds brisket when braised
+    ok 2 - pulls or shreds brisket when braised
+      ---
+      duration_ms: 3.898144
+      type: 'test'
+      ...
+    # Subtest: cubes chuck for braise without steak language
+    ok 3 - cubes chuck for braise without steak language
+      ---
+      duration_ms: 7.531584
+      type: 'test'
+      ...
+    # Subtest: keeps steak cuts on the grill at measured thickness
+    ok 4 - keeps steak cuts on the grill at measured thickness
+      ---
+      duration_ms: 2.642928
+      type: 'test'
+      ...
+    # Subtest: shapes mince for grill as patties or crumble, not steaks
+    ok 5 - shapes mince for grill as patties or crumble, not steaks
+      ---
+      duration_ms: 8.9549
+      type: 'test'
+      ...
+    # Subtest: cooks sausages as links
+    ok 6 - cooks sausages as links
+      ---
+      duration_ms: 0.813609
+      type: 'test'
+      ...
+    # Subtest: leaves short ribs whole on the bone for braise
+    ok 7 - leaves short ribs whole on the bone for braise
+      ---
+      duration_ms: 0.443105
+      type: 'test'
+      ...
+    # Subtest: flattens only true steak/fillet forms for schnitzel
+    ok 8 - flattens only true steak/fillet forms for schnitzel
+      ---
+      duration_ms: 0.288403
+      type: 'test'
+      ...
+    1..8
+ok 33 - cut-aware prep wording
+  ---
+  duration_ms: 49.098148
+  type: 'suite'
+  ...
+# Subtest: matrix coverage of every cut form
+    # Subtest: every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+    ok 1 - every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+      ---
+      duration_ms: 28.244716
+      type: 'test'
+      ...
+    1..1
+ok 34 - matrix coverage of every cut form
+  ---
+  duration_ms: 29.881834
+  type: 'suite'
+  ...
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 192.38215
+      type: 'test'
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 151.627993
+      type: 'test'
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 4372.11373
+      type: 'test'
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 156.742151
+      type: 'test'
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 31.24295
+      type: 'test'
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 94.425555
+      type: 'test'
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 2.307525
+      type: 'test'
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 1.176214
+      type: 'test'
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 59.579464
+      type: 'test'
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 4.840354
+      type: 'test'
+      ...
+    # Subtest: uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+    ok 11 - uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+      ---
+      duration_ms: 16.466384
+      type: 'test'
+      ...
+    # Subtest: keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+    ok 12 - keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+      ---
+      duration_ms: 40.628355
+      type: 'test'
+      ...
+    1..12
+ok 35 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 5126.933762
+  type: 'suite'
+  ...
+# Subtest: liver finishes briefly in cooked sauce instead of inheriting a joint braise
+ok 36 - liver finishes briefly in cooked sauce instead of inheriting a joint braise
+  ---
+  duration_ms: 788.283604
+  type: 'test'
+  ...
+# Subtest: bone-in shopping portions account for bones at household serving scales
+ok 37 - bone-in shopping portions account for bones at household serving scales
+  ---
+  duration_ms: 28.66742
+  type: 'test'
+  ...
+# Subtest: a home mincer never receives bone-in slow joints
+ok 38 - a home mincer never receives bone-in slow joints
+  ---
+  duration_ms: 0.554807
+  type: 'test'
+  ...
+# Subtest: paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+ok 39 - paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+  ---
+  duration_ms: 5.956167
+  type: 'test'
+  ...
+# Subtest: thin stir-fry strips have short batch cooks and larger households include all batches once
+ok 40 - thin stir-fry strips have short batch cooks and larger households include all batches once
+  ---
+  duration_ms: 7.18018
+  type: 'test'
+  ...
+# Subtest: one oven is never assumed to run conflicting main and side temperatures simultaneously
+ok 41 - one oven is never assumed to run conflicting main and side temperatures simultaneously
+  ---
+  duration_ms: 1.79912
+  type: 'test'
+  ...
+# Subtest: a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+ok 42 - a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+  ---
+  duration_ms: 5.258659
+  type: 'test'
+  ...
+# Subtest: ingredient quantities remain four-serving drafts while preparation scales exactly once
+ok 43 - ingredient quantities remain four-serving drafts while preparation scales exactly once
+  ---
+  duration_ms: 0.95971
+  type: 'test'
+  ...
+# Subtest: kilogram inputs and reduced main oil retain measured metric water and exact allocations
+ok 44 - kilogram inputs and reduced main oil retain measured metric water and exact allocations
+  ---
+  duration_ms: 0.690008
+  type: 'test'
+  ...
+# Subtest: only the explicitly scoped regional thin-meat stir-fries receive the coating
+ok 45 - only the explicitly scoped regional thin-meat stir-fries receive the coating
+  ---
+  duration_ms: 1.585718
+  type: 'test'
+  ...
+# Subtest: whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+ok 46 - whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+  ---
+  duration_ms: 0.745608
+  type: 'test'
+  ...
+# Subtest: corn and maize exclusions skip the coating without confusing peppercorn
+ok 47 - corn and maize exclusions skip the coating without confusing peppercorn
+  ---
+  duration_ms: 5.300459
+  type: 'test'
+  ...
+# Subtest: raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+ok 48 - raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+  ---
+  duration_ms: 0.511206
+  type: 'test'
+  ...
+# Subtest: invalid amounts, unknown mass units and absent usable oil do not invent a coating
+ok 49 - invalid amounts, unknown mass units and absent usable oil do not invent a coating
+  ---
+  duration_ms: 0.648907
+  type: 'test'
+  ...
+# Subtest: a pending region stops matching the previous Greek plate and survives a studio remount
+ok 50 - a pending region stops matching the previous Greek plate and survives a studio remount
+  ---
+  duration_ms: 5.518761
+  type: 'test'
+  ...
+# Subtest: main, method, side and explicit cut changes each invalidate only the pending result
+ok 51 - main, method, side and explicit cut changes each invalidate only the pending result
+  ---
+  duration_ms: 27.790011
+  type: 'test'
+  ...
+# Subtest: freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+ok 52 - freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+  ---
+  duration_ms: 0.747209
+  type: 'test'
+  ...
+# Subtest: Greek then Japanese generation replaces regional ingredients without changing the selected main
+ok 53 - Greek then Japanese generation replaces regional ingredients without changing the selected main
+  ---
+  duration_ms: 246.534154
+  type: 'test'
+  ...
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 54 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 100.150818
+  type: 'test'
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 55 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 9.879211
+  type: 'test'
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 56 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 41.13776
+  type: 'test'
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 57 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 862.404932
+  type: 'test'
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 58 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 2.460628
+  type: 'test'
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 59 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 5.159557
+  type: 'test'
+  ...
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 121.997563
+      type: 'test'
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 21.544239
+      type: 'test'
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 23.770966
+      type: 'test'
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 7.12228
+      type: 'test'
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 3.56614
+      type: 'test'
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 102.748448
+      type: 'test'
+      ...
+    # Subtest: explains the actual seeded sauce instead of the region's unselected default seasonings
+    ok 7 - explains the actual seeded sauce instead of the region's unselected default seasonings
+      ---
+      duration_ms: 43.060682
+      type: 'test'
+      ...
+    # Subtest: keeps raw salads crisp when scheduling sides near the end of a smoke
+    ok 8 - keeps raw salads crisp when scheduling sides near the end of a smoke
+      ---
+      duration_ms: 26.675798
+      type: 'test'
+      ...
+    # Subtest: defers service until a coherent finish without losing the main's endpoint
+    ok 9 - defers service until a coherent finish without losing the main's endpoint
+      ---
+      duration_ms: 188.321703
+      type: 'test'
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 10 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 93.475344
+      type: 'test'
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 11 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 16.91099
+      type: 'test'
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 12 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 1.535518
+      type: 'test'
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 13 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 4.367749
+      type: 'test'
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 14 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 7.465984
+      type: 'test'
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 15 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 2793.679002
+      type: 'test'
+      ...
+    1..15
+ok 60 - complete meal integrity
+  ---
+  duration_ms: 3460.708351
+  type: 'suite'
+  ...
+# Subtest: household allergen planner integration
+    # Subtest: accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+    ok 1 - accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+      ---
+      duration_ms: 1464.302255
+      type: 'test'
+      ...
+    # Subtest: keeps the hyphenated tree-nut exclusion and its supported alias canonical
+    ok 2 - keeps the hyphenated tree-nut exclusion and its supported alias canonical
+      ---
+      duration_ms: 1139.026021
+      type: 'test'
+      ...
+    # Subtest: uses the same complete supported list as direct generators instead of a separate allowlist
+    ok 3 - uses the same complete supported list as direct generators instead of a separate allowlist
+      ---
+      duration_ms: 357.512792
+      type: 'test'
+      ...
+    1..3
+ok 61 - household allergen planner integration
+  ---
+  duration_ms: 2964.517709
+  type: 'suite'
+  ...
+# Subtest: complete recipe PDF export
+    # Subtest: includes equipment, recorded allergens, preparation/label notes and method guidance
+    ok 1 - includes equipment, recorded allergens, preparation/label notes and method guidance
+      ---
+      duration_ms: 41.839068
+      type: 'test'
+      ...
+    # Subtest: moves a whole cooking step onto the next page when it fits there
+    ok 2 - moves a whole cooking step onto the next page when it fits there
+      ---
+      duration_ms: 10.427016
+      type: 'test'
+      ...
+    # Subtest: retains ingredient-level allergens when an older summary is incomplete
+    ok 3 - retains ingredient-level allergens when an older summary is incomplete
+      ---
+      duration_ms: 5.799965
+      type: 'test'
+      ...
+    # Subtest: wraps wide unbroken words inside the printable area and safely escapes PDF literals
+    ok 4 - wraps wide unbroken words inside the printable area and safely escapes PDF literals
+      ---
+      duration_ms: 3.937143
+      type: 'test'
+      ...
+    # Subtest: writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+    ok 5 - writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+      ---
+      duration_ms: 7.962389
+      type: 'test'
+      ...
+    # Subtest: rejects excessive output rather than silently dropping cooking instructions
+    ok 6 - rejects excessive output rather than silently dropping cooking instructions
+      ---
+      duration_ms: 1139.591629
+      type: 'test'
+      ...
+    1..6
+ok 62 - complete recipe PDF export
+  ---
+  duration_ms: 1212.471444
+  type: 'suite'
+  ...
+# Subtest: Japanese exploration excludes curry-only seasonings across seeds and heat levels
+ok 63 - Japanese exploration excludes curry-only seasonings across seeds and heat levels
+  ---
+  duration_ms: 111.00904
+  type: 'test'
+  ...
+# Subtest: sharing a staple does not import another region's authored flavour markers
+ok 64 - sharing a staple does not import another region's authored flavour markers
+  ---
+  duration_ms: 99.594312
+  type: 'test'
+  ...
+# Subtest: each region retains its own authored core and deterministic seeded variation
+ok 65 - each region retains its own authored core and deterministic seeded variation
+  ---
+  duration_ms: 73.217416
+  type: 'test'
+  ...
+# Subtest: unseeded profiles remain exactly the authored profiles
+ok 66 - unseeded profiles remain exactly the authored profiles
+  ---
+  duration_ms: 14.37836
+  type: 'test'
+  ...
+# Subtest: quantified regional cooking stages
+    # Subtest: fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+    ok 1 - fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+      ---
+      duration_ms: 14.508761
+      type: 'test'
+      ...
+    # Subtest: tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+    ok 2 - tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+      ---
+      duration_ms: 3.043834
+      type: 'test'
+      ...
+    # Subtest: dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+    ok 3 - dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+      ---
+      duration_ms: 2.160924
+      type: 'test'
+      ...
+    # Subtest: retrieves woody infusions, while finely minced tender lemongrass stays edible
+    ok 4 - retrieves woody infusions, while finely minced tender lemongrass stays edible
+      ---
+      duration_ms: 3.021634
+      type: 'test'
+      ...
+    # Subtest: infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+    ok 5 - infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+      ---
+      duration_ms: 9.472206
+      type: 'test'
+      ...
+    # Subtest: keeps fresh and delicate finishes explicit without adding imaginary ingredients
+    ok 6 - keeps fresh and delicate finishes explicit without adding imaginary ingredients
+      ---
+      duration_ms: 3.473339
+      type: 'test'
+      ...
+    # Subtest: uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+    ok 7 - uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+      ---
+      duration_ms: 5.871066
+      type: 'test'
+      ...
+    # Subtest: allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+    ok 8 - allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+      ---
+      duration_ms: 4018.366879
+      type: 'test'
+      ...
+    # Subtest: defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+    ok 9 - defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+      ---
+      duration_ms: 1.493717
+      type: 'test'
+      ...
+    # Subtest: lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+    ok 10 - lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+      ---
+      duration_ms: 1.020412
+      type: 'test'
+      ...
+    # Subtest: rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+    ok 11 - rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+      ---
+      duration_ms: 0.589007
+      type: 'test'
+      ...
+    # Subtest: blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+    ok 12 - blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+      ---
+      duration_ms: 0.768609
+      type: 'test'
+      ...
+    # Subtest: respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+    ok 13 - respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+      ---
+      duration_ms: 1.235914
+      type: 'test'
+      ...
+    # Subtest: hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+    ok 14 - hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+      ---
+      duration_ms: 1.310115
+      type: 'test'
+      ...
+    # Subtest: toasts raw sesame before the hot stages and references that same portion at the finish
+    ok 15 - toasts raw sesame before the hot stages and references that same portion at the finish
+      ---
+      duration_ms: 0.92291
+      type: 'test'
+      ...
+    1..15
+ok 67 - quantified regional cooking stages
+  ---
+  duration_ms: 4070.749463
+  type: 'suite'
+  ...
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 132.304178
+      type: 'test'
+      ...
+    # Subtest: serves exact inspiration images and an honest labelled placeholder for recipes without an image
+    ok 2 - serves exact inspiration images and an honest labelled placeholder for recipes without an image
+      ---
+      duration_ms: 92.24243
+      type: 'test'
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 209.478939
+      type: 'test'
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 22.265249
+      type: 'test'
+      ...
+    1..4
+ok 68 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 458.791824
+  type: 'suite'
+  ...
+# Subtest: metric packs round up whole purchases and preserve purchased quantity
+ok 69 - metric packs round up whole purchases and preserve purchased quantity
+  ---
+  duration_ms: 6.29947
+  type: 'test'
+  ...
+# Subtest: multipacks and explicit count units are costed without discarding their contents
+ok 70 - multipacks and explicit count units are costed without discarding their contents
+  ---
+  duration_ms: 0.645207
+  type: 'test'
+  ...
+# Subtest: explicit rates use the needed quantity with money rounded once
+ok 71 - explicit rates use the needed quantity with money rounded once
+  ---
+  duration_ms: 0.469905
+  type: 'test'
+  ...
+# Subtest: unknown units, densities and approximate pack sizes never become free or guessed food
+ok 72 - unknown units, densities and approximate pack sizes never become free or guessed food
+  ---
+  duration_ms: 0.570906
+  type: 'test'
+  ...
+# Subtest: Woolworths and Coles are separate online evidence, never the default local fulfilment store
+ok 73 - Woolworths and Coles are separate online evidence, never the default local fulfilment store
+  ---
+  duration_ms: 6.766776
+  type: 'test'
+  ...
+# Subtest: only explicitly associated local records belong to a nearby shop
+ok 74 - only explicitly associated local records belong to a nearby shop
+  ---
+  duration_ms: 14.025956
+  type: 'test'
+  ...
+# Subtest: different areas and different item keys cannot contaminate local costs
+ok 75 - different areas and different item keys cannot contaminate local costs
+  ---
+  duration_ms: 0.734608
+  type: 'test'
+  ...
+# Subtest: old manual observations remain readable without treating their unknown pack as the whole recipe
+ok 76 - old manual observations remain readable without treating their unknown pack as the whole recipe
+  ---
+  duration_ms: 0.728708
+  type: 'test'
+  ...
+# Subtest: manual selling quantities survive normalizing and legacy observations remain compatible
+ok 77 - manual selling quantities survive normalizing and legacy observations remain compatible
+  ---
+  duration_ms: 3.214436
+  type: 'test'
+  ...
+# Subtest: latest observation for the same shop, item and pack supersedes its earlier cheaper price
+ok 78 - latest observation for the same shop, item and pack supersedes its earlier cheaper price
+  ---
+  duration_ms: 0.971411
+  type: 'test'
+  ...
+# Subtest: stale, future and missing timestamps remain visible but cannot silently enter an estimate
+ok 79 - stale, future and missing timestamps remain visible but cannot silently enter an estimate
+  ---
+  duration_ms: 1.74842
+  type: 'test'
+  ...
+# Subtest: special end dates are interpreted as Australian local days and malformed dates fail closed
+ok 80 - special end dates are interpreted as Australian local days and malformed dates fail closed
+  ---
+  duration_ms: 14.768263
+  type: 'test'
+  ...
+# Subtest: dietary wording still requires explicit matching product evidence before automatic cost choice
+ok 81 - dietary wording still requires explicit matching product evidence before automatic cost choice
+  ---
+  duration_ms: 10.904922
+  type: 'test'
+  ...
+# Subtest: plain staple brand ties produce a suggested estimate while preserving explicit choice
+ok 82 - plain staple brand ties produce a suggested estimate while preserving explicit choice
+  ---
+  duration_ms: 3.159835
+  type: 'test'
+  ...
+# Subtest: actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+ok 83 - actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+  ---
+  duration_ms: 2.846032
+  type: 'test'
+  ...
+# Subtest: generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+ok 84 - generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+  ---
+  duration_ms: 2.387127
+  type: 'test'
+  ...
+# Subtest: Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+ok 85 - Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+  ---
+  duration_ms: 5.954667
+  type: 'test'
+  ...
+# Subtest: unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+ok 86 - unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+  ---
+  duration_ms: 8.704497
+  type: 'test'
+  ...
+# Subtest: official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+ok 87 - official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+  ---
+  duration_ms: 3.346838
+  type: 'test'
+  ...
+# Subtest: a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+ok 88 - a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+  ---
+  duration_ms: 0.803309
+  type: 'test'
+  ...
+# Subtest: fresh produce cannot be automatically replaced by powder, paste or preserved products
+ok 89 - fresh produce cannot be automatically replaced by powder, paste or preserved products
+  ---
+  duration_ms: 7.643686
+  type: 'test'
+  ...
+# Subtest: brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+ok 90 - brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+  ---
+  duration_ms: 6.190769
+  type: 'test'
+  ...
+# Subtest: unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+ok 91 - unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+  ---
+  duration_ms: 2.64103
+  type: 'test'
+  ...
+# Subtest: all meaningful requested staple words must occur even if the catalogue matcher chose one row
+ok 92 - all meaningful requested staple words must occur even if the catalogue matcher chose one row
+  ---
+  duration_ms: 1.441816
+  type: 'test'
+  ...
+# Subtest: partial list totals expose missing lines during progressive batches and never call them zero
+ok 93 - partial list totals expose missing lines during progressive batches and never call them zero
+  ---
+  duration_ms: 0.689608
+  type: 'test'
+  ...
+# Subtest: all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+ok 94 - all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+  ---
+  duration_ms: 254.502543
+  type: 'test'
+  ...
+# Subtest: cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+ok 95 - cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+  ---
+  duration_ms: 1.265514
+  type: 'test'
+  ...
+# Subtest: tostones soften, flatten and refry with separate measured oil portions
+ok 96 - tostones soften, flatten and refry with separate measured oil portions
+  ---
+  duration_ms: 1.025011
+  type: 'test'
+  ...
+# Subtest: sticky rice counts advance soaking separately and steams hydrated grains above the water
+ok 97 - sticky rice counts advance soaking separately and steams hydrated grains above the water
+  ---
+  duration_ms: 2.272726
+  type: 'test'
+  ...
+# Subtest: miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+ok 98 - miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+  ---
+  duration_ms: 23.27936
+  type: 'test'
+  ...
+# Subtest: named side flavours have real portions, cooking actions and removal of inedible infusions
+ok 99 - named side flavours have real portions, cooking actions and removal of inedible infusions
+  ---
+  duration_ms: 8.697496
+  type: 'test'
+  ...
+# Subtest: oil divisions and cooked-rice forms survive servings and regional staple handling
+ok 100 - oil divisions and cooked-rice forms survive servings and regional staple handling
+  ---
+  duration_ms: 19.181814
+  type: 'test'
+  ...
+# Subtest: long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+ok 101 - long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+  ---
+  duration_ms: 2.048023
+  type: 'test'
+  ...
+# Subtest: prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+ok 102 - prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+  ---
+  duration_ms: 2.997534
+  type: 'test'
+  ...
+# Subtest: whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+ok 103 - whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+  ---
+  duration_ms: 6.924777
+  type: 'test'
+  ...
+# Subtest: short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+ok 104 - short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+  ---
+  duration_ms: 6.579274
+  type: 'test'
+  ...
+# Subtest: soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+ok 105 - soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+  ---
+  duration_ms: 2.961934
+  type: 'test'
+  ...
+# Subtest: all ninety sides keep plausible four-person starch portions across form and diet variants
+ok 106 - all ninety sides keep plausible four-person starch portions across form and diet variants
+  ---
+  duration_ms: 63.49431
+  type: 'test'
+  ...
+# Subtest: powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+ok 107 - powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+  ---
+  duration_ms: 27.286104
+  type: 'test'
+  ...
+# Subtest: powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+ok 108 - powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+  ---
+  duration_ms: 3.57854
+  type: 'test'
+  ...
+# Subtest: counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+ok 109 - counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+  ---
+  duration_ms: 2.70913
+  type: 'test'
+  ...
+# Subtest: implicit sauce water scales independently of whether supplied quantities were already scaled
+ok 110 - implicit sauce water scales independently of whether supplied quantities were already scaled
+  ---
+  duration_ms: 0.585007
+  type: 'test'
+  ...
+# Subtest: a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+ok 111 - a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+  ---
+  duration_ms: 0.998711
+  type: 'test'
+  ...
+# Subtest: substantive secondary side cooking starts with the accompaniment, before a quick main
+ok 112 - substantive secondary side cooking starts with the accompaniment, before a quick main
+  ---
+  duration_ms: 46.017613
+  type: 'test'
+  ...
+# Subtest: simpler methods retain main cooking and the delicate finishing boundary
+ok 113 - simpler methods retain main cooking and the delicate finishing boundary
+  ---
+  duration_ms: 60.786979
+  type: 'test'
+  ...
+# Subtest: long preparation and special side handling remain visible in full recipes
+ok 114 - long preparation and special side handling remain visible in full recipes
+  ---
+  duration_ms: 3.212537
+  type: 'test'
+  ...
+# Subtest: regional rice names never rewrite rice miso or its measured glaze water
+ok 115 - regional rice names never rewrite rice miso or its measured glaze water
+  ---
+  duration_ms: 179.629006
+  type: 'test'
+  ...
+# Subtest: regional coconut rice counts its listed milk toward packet cooking liquid
+ok 116 - regional coconut rice counts its listed milk toward packet cooking liquid
+  ---
+  duration_ms: 4.018345
+  type: 'test'
+  ...
+1..116
+# tests 177
+# suites 10
+# pass 177
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5922.283843

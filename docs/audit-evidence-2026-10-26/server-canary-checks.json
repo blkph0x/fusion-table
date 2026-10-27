@@ -1,0 +1,64 @@
+{
+  "checks": [
+    {
+      "label": "deployment identity",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "application",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "optimized image",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "shared recipe",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "PDF",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "exact still rendering",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "invalid report rejected",
+      "status": 400,
+      "passed": true
+    },
+    {
+      "label": "oversized report rejected",
+      "status": 413,
+      "passed": true
+    },
+    {
+      "label": "price persistence write",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "price persistence read",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "community persistence write",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "label": "community persistence read",
+      "status": 200,
+      "passed": true
+    }
+  ]
+}

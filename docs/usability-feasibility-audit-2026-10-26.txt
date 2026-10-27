@@ -1,0 +1,116 @@
+SUPERSEDED: This reviewed a local preview, not the actual hosted configuration.
+Use live-site-audit-2026-10-26.txt for the corrected audit. The public Android
+download works, the Android project is D:\MealPlannerAU, and the live hero uses
+the host's local image model. Do not treat this document's local APK, hero-image
+or deployment-persistence assumptions as verified findings about the live site.
+
+FUSION TABLE — USABILITY, PERFORMANCE AND FEASIBILITY AUDIT
+26 October 2026
+
+Overall assessment
+
+Fusion Table has a substantial working foundation. The strongest proposition is helping a household choose dinner, adapt it, plan several nights and produce one useful shopping list. The current experience gives catalogue breadth and generation mechanics more prominence than that practical outcome. Prioritise a dependable, welcoming cooking journey before expanding the catalogue further.
+
+Scope and confidence
+
+Reviewed the source in D:\fusion-table, architecture and release documentation, generated production assets, desktop homepage, weekly planning and recipe detail. Tested a phone-sized viewport and inspected its layout bounds. Executed tests, type checking, lint and the production build plus its post-build scripts using the bundled compatible Node runtime. No application source was changed.
+
+This is an expert review with local browser verification, not observed research with representative cooks. No deployed production performance benchmark, Lighthouse score, screen-reader certification, kitchen validation or Android device test is claimed. Live shop coverage and retailer prices were not independently validated. The Android source and APK were absent from this checkout; the native app needs a separate audit.
+
+Verification results
+
+- 174 tests passed; 29 suites; no failed or skipped tests. Test run took about 101 seconds.
+- TypeScript checking passed.
+- Lint: zero errors, 10 warnings, including images, an incompatible ARIA attribute and unused variables.
+- Production framework build and public-file/image-environment post-processing completed.
+- The default shell has Node 20.18 and a failing pnpm launcher, despite the project requiring Node >=22.13. Checks succeeded with a compatible bundled runtime. Fix developer environment selection; this is not an application defect.
+- Existing untracked maintenance scripts and a backup fragment were left untouched.
+
+1. Fix before broader promotion
+
+PHONE NAVIGATION OVERFLOWS — confirmed, high priority, small effort
+At a 390px viewport the document reported a 375px client area and 446px scroll width. The header action group and menu extend to x=446. The location control and Android link consume the space needed by navigation. A visitor may need horizontal scrolling to reach the menu.
+Evidence: app/page.tsx header; app/globals.css header and mobile rules; live DOM bounds and screenshot.
+Change: retain brand and menu on the smallest header; move location and Android installation into the menu or a secondary row. Give flexible elements min-width:0 and sensible wrapping. Test 320, 360, 390, 430px widths, long location names and enlarged text. Success: no horizontal page scroll and the menu remains visible and keyboard reachable.
+
+ANDROID DOWNLOAD IS BROKEN LOCALLY — confirmed, high priority, small/medium effort
+/downloads/MealPlannerAU.apk returns HTTP 404. There is no APK or native Android project in this checkout, despite the header and README advertising a signed build.
+Change: restore a verified release asset or point an installation page at the actual release. Show version, release date, supported Android versions, installation instructions and checksum. Verify the download in release checks. Review real device installation, offline operation, permissions, upgrade data preservation and website/app catalogue parity separately.
+
+SHARED COMMUNITY STORAGE DOES NOT FIT WORKERS PERSISTENCE — architectural blocker, medium effort
+lib/ledger.ts writes a JSON file using node:fs; app/api/community and app/api/price-memory use it. The configured deployment is a Cloudflare Worker. Workers' ordinary filesystem is not durable shared application storage: writable temporary files are request-local. The current default path may also be unwritable. Successful local Node behaviour does not establish production durability.
+Change: put reports, prices and shop-page records into a durable store such as D1, with explicit migrations, transactions, bounded reads and backup/export. Keep personal offline cookbook storage separate. Verify POST then GET across separate requests, fresh instances and redeployments before promising shared history.
+Source: https://developers.cloudflare.com/workers/runtime-apis/nodejs/fs/
+
+DIET AND AVOIDANCE RULES NEED ONE CLEAR SCOPE — source-confirmed inconsistency, high priority, medium effort
+Week planning uses parent state for diet, servings, spice and pantry. MealBuilder maintains separate local state. The week page tells users to change settings in Recipe studio, but these are not one consistent preference model. Classic inspiration presets intentionally omit the current avoid/dislike constraints in createRecipe. Discover suggestions and shared recipes also require an explicit policy for personal filtering.
+Change: create one household preference record and show its summary on Discover, Builder and Week. Enforce exclusions on generation; visibly label or block incompatible inspiration and shared recipes rather than silently implying compatibility. Distinguish a recipe's own properties from a household's saved preferences. Regression cases should start from every entry point, not just call the generator directly.
+
+2. Make the core experience easier and more appealing
+
+PUT DINNERS BEFORE PANTRY WARNINGS — confirmed, high impact, small effort
+A fresh seven-day plan displayed roughly 90 'Not enough...' lines before Day 1. An unconfigured pantry is treated as zero stock. The user sees a wall of shortages before the result they requested. Empty units produce text such as 'Have 0 , need 2 .'
+Evidence: app/page.tsx around line 650; lib/pantry.ts weekShortfalls and groupedNeed.
+Change: show dinner cards first and a compact 'Shopping list ready — N items' summary. Put detailed shortages in an expandable shopping section. Say 'Pantry not set up' when stock is unknown, and format countable ingredients as '2 lemons' or '2 pieces'. Success: first dinner appears immediately after the planning controls on a phone.
+
+SELL THE OUTCOME AND SHOW APPETISING FOOD — high impact, small/medium effort
+The cream/forest palette, typography and card structure are cohesive. However, the current hero is a coarse programmatically painted plate, while other sections have much more convincing inspiration imagery. This creates an uneven first impression.
+Change: use a small set of high-quality, accurately labelled curated hero images and consistent thumbnails. Use an intentional illustration style for dishes without images, rather than a pseudo-food rendering. Prefer real cooked photographs as recipes become tested. Keep generated-image provenance concise and accessible. Never imply a picture proves a dish was cooked.
+
+REDUCE DECISION LOAD — high impact, small/medium effort
+The region step renders all 76 profiles; the site highlights 1,819,440 combinations. These are engineering coverage figures rather than evidence of useful dinner quality. '115 WEEK SCORE' has no visible scale or familiar meaning. Detailed model settings and loopback addresses appear in recipe captions.
+Change: start with 'Dinner tonight', 'Use what I have' and 'Plan my week'. Offer popular or compatible regions first, with search and an expandable full list. Replace the score with useful reasons such as time, ingredient count and shared pantry items. Move algorithm and image-server details into About/developer documentation. Retain important template and dietary limitations near the relevant action without repeating long explanations throughout the page.
+
+SAVE THE WORK PEOPLE EXPECT TO RETURN TO — high impact, medium effort
+Cookbook snapshots, pantry and purchase lists persist locally, but the weekly plan, locks and many preference states are React state and disappear on reload. Export is present; a corresponding visible cookbook restore/import journey was not found. Views are state changes rather than distinct navigation URLs, so browser Back and refresh do not behave like ordinary page navigation.
+Change: version and persist the active week and household settings; add validated import with preview and duplicate handling; use routes or URL view state with browser history. Show an optional backup reminder after meaningful cooking activity. Verify refresh, browser Back, corrupted imports and quota failures.
+
+MAKE COOKING MODE A REASON TO RETURN — medium impact, medium effort
+Build on the existing step mode with ingredient quantities beside the active step, adjustable text, optional timers and optional screen-awake support with graceful fallback. Persist the last step locally. Keep the flow usable with one hand. Validate with a cook using a phone on a bench rather than adding controls solely because they are technically possible.
+
+3. Performance priorities
+
+OPTIMISE IMAGES FIRST — measured assets, small effort
+The three inspiration PNGs are about 2.98MB, 2.99MB and 3.47MB: 9.45MB combined before other assets. Lazy loading helps scheduling but does not reduce transfer size once viewed. Use responsive WebP/AVIF variants, declared dimensions and appropriately sized thumbnails. Preserve high-priority loading for the actual hero only. Suggested budgets, to validate visually: under 200KB per card and under 300KB for a large hero.
+Source: https://web.dev/learn/performance/image-performance
+
+SPLIT THE CLIENT AND DEFER WORK — measured build and source risk, medium effort
+The largest page JavaScript asset is 591,850 bytes uncompressed; two other substantial assets are 196,238 and 190,152 bytes. These are build-file sizes, not measured network transfer or a confirmed initial-load total. app/page.tsx is a large client component importing planning, generation, shops and community views. Home suggestions are generated before a user asks to plan. planWeek runs synchronously, and sideOptions performs candidate generation while rendering the week.
+Change: split views and load secondary features on demand; memoise side alternatives against stable plan/preferences; measure long tasks on a slower phone before moving expensive planning into a worker. Keep a responsive progress state and cancellation if measurements justify background computation. Avoid a framework migration as the first performance fix.
+
+AVOID COLD IMAGE GENERATION ON THE CRITICAL PATH — source risk, medium effort
+/api/plate reconstructs recipes and renders pictures on cache misses. Its cache holds 40 entries, while suggestions change on each page load. Concurrent misses for a token can duplicate work; local-model requests can add latency when configured. Pre-render curated plates, cache by recipe identity plus renderer version, coalesce in-flight work and measure cold/warm response times. A loopback image model is a local-machine feature, not an available production cloud image service.
+
+Measure production LCP, INP and CLS plus successful first-recipe and week-generation timings. Do not use development-server timings as production evidence.
+
+4. Accessibility and trust
+
+Existing positives: skip link, visible focus styling, a focus-trapping dialog, labelled controls, live status messages and reduced-motion CSS.
+Improve small mobile text: some builder rules use 9–10px. Increase readable labels, verify contrast and give small controls sufficient touch area. Add active-page semantics to navigation. The side picker mixes option semantics and aria-pressed; choose either a complete keyboard-operable listbox or a simpler radio group. Test keyboard-only operation, focus after view changes, 200% text size and a real screen reader. These checks remain outstanding; no compliance certification is implied.
+
+Community writes use a caller-provided device string for rate limiting, and rate state lives in process memory. This is easy to evade and does not coordinate across instances. Before promoting public voting, add server-enforced limits, bounded request bodies and identifiers, duplicate/report handling and an appropriate moderation path. Check that untrusted reports cannot disproportionately alter recipe ranking. No exploit or spam test was performed.
+
+5. Feasibility and product direction
+
+HIGH FEASIBILITY NOW
+Responsive header repair, warning collapse, image variants, clearer copy, searchable regions, persistent week, preference summaries and download validation fit the present codebase. Indicative scope: a few focused development days plus regression and device checks, not a delivery promise.
+
+FEASIBLE WITH A STRUCTURAL CHANGE
+Durable shared reports/prices, household sync and resilient public APIs need proper storage and conflict rules. A progressive web app could reuse the web experience, but offline operation requires explicit caching, migrations and update handling. No manifest or service worker was found in application source. It is not currently a verified offline web app. Confirm actual Android architecture before choosing between a native app and an installable web experience.
+
+EXTERNAL DEPENDENCY / NOT ESTABLISHED
+Accurate branch-level stock, broad retailer pricing, nutrition and guaranteed cost optimisation cannot be inferred from the template catalogue or shop map. They need data rights, reliable product matching and source coverage. The present honest missing-price handling is worth preserving. A free-form cloud AI generator is unnecessary for the most valuable improvements and would introduce a different validation and operating-cost problem.
+
+ENGAGEMENT THAT SUPPORTS COOKING
+Build a small 'tried and loved' collection from actual cook reports, with dates, sample sizes and separate author-tested status. Offer constrained surprise ('same ingredients, new flavour') rather than unrestricted novelty. Let users choose a weeknight time limit, equipment and maximum number of extra ingredients; the current cook-session option is only a schedule note and should not be mistaken for a time constraint. Add leftovers planning and ingredient reuse to reduce shopping burden. Reuse existing repeat-cook verdicts as an optional preference signal while retaining hard exclusions.
+
+6. Recommended order and evidence of success
+
+First: repair mobile navigation and Android delivery; resolve preference scope and durable shared storage before broader promotion.
+Next: put dinners first, compress images, improve hero imagery/copy, and persist the active week.
+Then: split heavier client features, add recovery/import and improve cooking mode; validate on real phones and with representative households.
+Finally: decide sync/offline/native direction using actual usage and Android source evidence.
+
+Track successful first recipe, time to first dinner, week completion, save-to-cook rate, repeat-cook rate, shopping-list completion and API failure rates. Start with privacy-conscious aggregate measurements or moderated usability sessions. Interview 5–8 representative cooks, including a phone-only user and a household managing exclusions. A useful acceptance test: can a new visitor choose an appropriate dinner, adjust servings, understand what to buy and start cooking without help?
+
+The highest-value next release is a simpler, faster and more dependable version of the existing product. Its catalogue is already large enough to support that work.

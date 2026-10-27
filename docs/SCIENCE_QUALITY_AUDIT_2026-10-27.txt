@@ -1,0 +1,161 @@
+FUSION TABLE: COMPLETED QUALITY AND FEASIBILITY AUDIT
+Verified and published 27 October 2026
+
+Live website: https://gearsqueens.online/fusion/
+Active release: 20261027-075114 on 10.1.1.111.
+Android: https://gearsqueens.online/downloads/MealPlannerAU.apk
+Published Android version: 1.5.7, code 14.
+
+What is now working
+Recipe and shared-recipe pages automatically check their shopping costs. The
+shopping workspace also starts automatically when its area or list changes.
+Prices update for changed servings, pantry quantities, ingredients and shopping
+area. Reviewed product choices and exclusions survive navigation and late
+responses. Available prices appear progressively with their sources, dates and
+priced-item coverage. Missing prices stay unknown; a partial subtotal is never
+presented as a complete basket. Costs describe packs/weighed amounts to buy,
+including leftovers, rather than only the food consumed per serving.
+
+Pictures now have a durable background queue and cache. Missing pictures return
+a labelled waiting image immediately, then appear automatically when ready.
+Requested pictures take priority over warming; one renderer, bounded queues,
+retries, hourly limits and disk limits keep this manageable. Daily warming fills
+popular authored choices rather than scheduling twenty million images. Nine
+pictures were already cached by the final check. Images keep the complete dish
+visible, and shared-recipe titles have a clear reading hierarchy.
+
+The homepage now reports 20,414,810 authored choice combinations, 76 meal regions,
+90 sides and 34 classic dishes, and explains what the count includes.
+
+Exhaustive catalogue result
+ALL 20,414,810 canonical authored combinations passed, with ZERO detected rule
+violations and ZERO review warnings, against the final frozen recipe source.
+This includes every compatible dietary default or chosen-cut/main/method row,
+every meal region and every side, plus every classic/region/diet combination.
+There are 20,410,560 ingredient-led cases and 4,250 classic cases.
+The audited settings are FOUR SERVINGS, MEDIUM HEAT and UNSEEDED authored profiles.
+The 210 compressed witness chunks retain every input and exact ingredient
+quantity/identity, plus timing, method/endpoint summaries and check results.
+Final compressed witness size: 652,994,161 bytes. Distinct ingredient descriptors:
+1,137. Source and every committed chunk/dictionary were verified before completion.
+
+Five heat levels and twelve serving counts project to 1,224,888,600 inputs before
+random seeds, arbitrary household text, cleaner options and exclusions. Those
+larger spaces are not described as exhaustively enumerated. Boundary/seed/filter
+regressions and runtime postconditions cover additional properties. Passing these
+rules does not establish taste, authenticity, nutrition or packet/allergy safety.
+
+Independent finish-model result
+A separate checker exhausted all feasible SAT finishes in 1,496 named representative
+contexts: every region/diet representative, every supported main/method with rotating
+region/serving boundaries, and every classic/region at the balanced setting.
+Final result: 21,869 verified Boolean models, ZERO issues. These graphs are not
+all side choices, all household filters or all regional-pantry sampling seeds.
+The audit found and fixed one genuine residual issue: some BBQ recipes listed
+red pepper and could then add capsicum as another ingredient. Plain sweet/bell
+pepper is now recognised as that same vegetable; flakes, powder and sauces stay
+distinct. The earlier failed graph witnesses are retained, and the full authored
+catalogue was replayed against the corrected source rather than reusing an old hash.
+
+Research applied
+Reviewed the actual current local P vs NP research checkpoint v17. Applied sound
+conflict learning, backjumping and independent result checking. The solver now
+returns SAT, independently certified UNSAT, or UNKNOWN when limits prevent a valid
+conclusion. An unfinished search cannot masquerade as no solution. Finite model
+enumeration blocks previously emitted assignments; optimal is reserved for verified
+exhaustion. Interactive meals compare up to eight compatible checked finishes by
+explicit ingredient simplicity, produce, pantry and extra-pan preferences. This is
+a bounded best-known objective, not a global taste optimum or a proof of P = NP.
+
+Feedback that can improve meals
+Cooked reports and first impressions are separate. Low web scores of 0-2, negative
+answers and will-not-make-again require a reason saved atomically with the vote.
+Thirteen categories include salt, heat, texture, quantities, timing, instructions,
+combinations, availability, cost and cooking/allergen concerns. Optional ingredient
+and step references must exist in the exact supplied recipe version.
+Actual ingredient amounts, methods and servings bind the report. Legacy and other-
+version evidence cannot silently rank a current meal. At least three distinct
+anonymous browsers must report cooking an exact version before shared rankings
+change, and the adjustment is bounded within eligible comparable candidates.
+Browsers are not authenticated people. Serious concerns enter a review section
+immediately and prevent positive promotion; they never automatically rewrite
+ingredients, cooking endpoints or hard filters. Personal cookbook ratings remain
+private and explicitly labelled. Opening a report's current base template may
+produce a different version; those reports are not transferred to it.
+
+Pricing safeguards and limits
+Narrow plain-product rules can resolve common brand ties, while different food
+forms, unsuitable automatic substitutes and obvious non-food products are excluded.
+Loose-product weight increments without a verified selling-price basis are not
+used as unit prices. Australian tablespoons/teaspoons convert to 20/5 ml only for
+volume packs. No food density, count-to-weight conversion or dry/cooked yield is
+guessed. Retailer blocking and missing/ambiguous products still require review.
+Online chain guides are not verified local branch stock or shelf prices. A live
+verification found suitable mushroom and cooking-cream packs and priced both lines;
+other real recipe lists correctly remained partial when usable quantity prices
+were absent. No prices were invented to fill those gaps.
+
+Measured image and performance results
+The isolated production-host check returned a waiting picture in 95 ms, then a real
+384-pixel image became ready in the background after about 39 seconds. The public
+browser verified the automatic image swap and persistence across a website restart.
+The existing local SD-Turbo backend is supervised as fusion-image-model.service,
+listening only on 127.0.0.1:7860 and enabled at boot. Website warming is enabled.
+No paid cloud image API or key was added. Generated pictures are visualisations of
+ideas; they are not photographs of actual cooked meals or visual proof of ingredients.
+At this measured serial rate, pre-rendering 20.4 million pictures would take roughly
+25 years and several terabytes. Bounded warming plus demand caching is the practical
+approach; faster hardware could change those figures.
+Local CPU generation while six audit workers ran: seeded meal median 6.3 ms,
+p95 10.2 ms; seven-day plan median 725.76 ms, maximum 886.74 ms. These are generation
+timings, not complete browser/network latency.
+
+Android result
+All 154 native tests passed, including the complete 9,600 Studio main/flavour/heat/
+serving grid at unseeded and seed 7 (19,200 cases), and all 9,292 bundled templates.
+The bundled catalogue remained byte-identical to the current authored export.
+Private cooked feedback now captures reasons, binds content plus target servings,
+and guides comparable planning choices after exclusions and locks. Legacy reports
+remain separate; no automatic upload was added. Studio supports 1-20 people with
+scaled pan batches. External URL-only methods permit first impressions until the
+cooking method is saved locally. Existing private notes/backups remain readable.
+The signed 1.5.7/code14 APK was independently downloaded from the public URL and
+matches all three local built/archived copies: 13,982,261 bytes, SHA-256
+1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef
+The signing certificate matches 1.5.6. No physical phone was connected; the existing
+emulator image could not boot. Compiled UI and production form-state flows passed,
+but a real-device installation was not tested.
+
+Release validation and evidence
+527 website tests passed on the production host. Fifteen isolated live checks passed,
+including atomic feedback, version isolation, honest unknown costs and an actual
+background render. Sixteen public method/PDF checks passed after publication.
+A final image-framing/title change touched only app/globals.css; its source-manifest
+delta was checked, rebuilt, tested with another 16 isolated checks, and verified in
+the public browser. It changed no recipe or application logic. Tests never inserted
+canary reports into the public cookbook. Both temporary services were stopped.
+Both production services are enabled/active with zero restarts; the website remains
+healthy after disconnecting SSH. Existing data, Apache/TLS and rollback releases
+were preserved. No Git reset, commit or push was performed.
+
+Final culinary/checker fingerprint (69 files):
+025b745dab67aa68f0058886f654bae70ed3b0cac6bd8e1daa908bf97f693b88
+Final catalogue completion certificate SHA-256:
+0f0747885d521b9d964c3ffd7653dea4237f0ace5fa8dfb1324dff12ec14e22d
+Final release source-manifest SHA-256 (342 files):
+3b3f1343a9b341f422c5f410fa4211dccf6476a06f3aa05b9862706616cb46a9
+
+Evidence folder: docs/audit-evidence-2026-10-27/
+Canonical completion: complete-catalogue-final/completion.json
+Ingredients and inputs: complete-catalogue-final/shard-*/
+Finite model graphs: science-finish-graph.json and its gzip witnesses
+Host tests/checks: science-host-tests.log, science-host-checks.json
+Public checks: science-final-public-method-checks.json, science-final-public-state.json
+Images: science-public-full-dish.png, science-public-shopping.png
+Native: plausibility-native-feedback.json, science-android-public.json
+Large replayable case witnesses stay local and are excluded from source packages.
+Full design and rerun guidance: SCIENCE_QUALITY_DESIGN_2026-10-27.txt.
+
+Primary references
+https://www.claymath.org/millennium/p-vs-np/
+https://www.cs.utexas.edu/~marijn/drat-trim/

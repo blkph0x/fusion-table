@@ -1,0 +1,26 @@
+{
+  "area": "2000",
+  "checkedAt": "2026-10-26T09:03:53.71Z",
+  "label": "Online price guides and local recorded prices; quantities and source are shown for each offer.",
+  "lines": [
+    {
+      "id": "test",
+      "name": "Unlisted verification ingredient",
+      "amount": 450,
+      "unit": "g",
+      "offers": [],
+      "chosenOfferId": null,
+      "estimatedCents": null,
+      "reason": "No price found. This item is not counted as $0."
+    }
+  ],
+  "summary": {
+    "knownSubtotalCents": null,
+    "pricedLines": 0,
+    "totalLines": 1,
+    "unpricedLines": 1,
+    "complete": false,
+    "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+  },
+  "warnings": []
+}

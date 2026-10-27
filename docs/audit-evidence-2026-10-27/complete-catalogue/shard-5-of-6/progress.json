@@ -1,0 +1,14 @@
+{
+  "status": "running",
+  "shard": {
+    "index": 5,
+    "count": 6
+  },
+  "processed": 3373500,
+  "committed": 3300000,
+  "scheduled": 3402468,
+  "failedCases": 0,
+  "dictionaryEntries": 660,
+  "heapMiB": 24,
+  "elapsedSeconds": 1193
+}

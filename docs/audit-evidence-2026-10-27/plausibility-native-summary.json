@@ -1,0 +1,528 @@
+{
+  "date": "2026-10-27",
+  "scope": "Native on-device generators and built-in recipes/sides only; source changes, no Gradle/APK/deployment performed by this audit agent.",
+  "sampleCases": 96,
+  "guardedSweetCases": 32,
+  "observedExamples": [
+    {
+      "baseId": "demo-breakfast-yoghurt",
+      "cuisine": "THAI",
+      "seed": 14,
+      "beforeTitle": "Fusion experiment: Thai Yoghurt and berries · as plated with Sriracha, Bird's eye chillies and Tamarind paste accompaniment",
+      "afterTitle": null,
+      "afterNote": "This is a sweet breakfast or dessert. Choose a savoury meal for these regional sauces and vegetables; the original recipe is unchanged.",
+      "beforeIngredients": [
+        [
+          "Plain yoghurt",
+          {
+            "amount": 600.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Mixed berries",
+          {
+            "amount": 300.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Tamarind paste",
+          {
+            "amount": 20.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Sriracha",
+          {
+            "amount": 15.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Bird's eye chillies",
+          {
+            "amount": 3.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Cucumber",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Sweet chilli sauce",
+          {
+            "amount": 60.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Galangal",
+          {
+            "amount": 15.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Lime",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ]
+      ],
+      "afterIngredients": []
+    },
+    {
+      "baseId": "demo-breakfast-porridge",
+      "cuisine": "KOREAN",
+      "seed": 1,
+      "beforeTitle": "Fusion experiment: Korean Banana porridge · chopped salad with Soy sauce, Rice vinegar and Fresh ginger accompaniment",
+      "afterTitle": null,
+      "afterNote": "This is a sweet breakfast or dessert. Choose a savoury meal for these regional sauces and vegetables; the original recipe is unchanged.",
+      "beforeIngredients": [
+        [
+          "Rolled oats",
+          {
+            "amount": 160.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Milk",
+          {
+            "amount": 500.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Banana",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Rice vinegar",
+          {
+            "amount": 30.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Soy sauce",
+          {
+            "amount": 20.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Red capsicum",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Wombok",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Fresh ginger",
+          {
+            "amount": 20.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Cucumber",
+          {
+            "amount": 1.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Gochujang",
+          {
+            "amount": 40.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Spring onion",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ]
+      ],
+      "afterIngredients": []
+    },
+    {
+      "baseId": "demo-mushroom-pasta",
+      "cuisine": "KOREAN",
+      "seed": 1,
+      "beforeTitle": "Fusion experiment: Korean Mushroom pasta · chopped salad with Soy sauce, Rice vinegar and Fresh ginger accompaniment",
+      "afterTitle": "Fusion experiment: Korean Mushroom pasta · regional finish with Rice vinegar, Soy sauce, Red capsicum",
+      "afterNote": "Saved a Korean fusion experiment on this meal. Composed on this phone, not by a live model. The original main keeps its method. Not kitchen-tested or guaranteed allergy-safe. Check the packet.",
+      "beforeIngredients": [
+        [
+          "Pasta",
+          {
+            "amount": 400.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Mushroom",
+          {
+            "amount": 300.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Cheddar",
+          {
+            "amount": 80.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Rice vinegar",
+          {
+            "amount": 30.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Soy sauce",
+          {
+            "amount": 20.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Red capsicum",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Wombok",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Fresh ginger",
+          {
+            "amount": 20.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Cucumber",
+          {
+            "amount": 1.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Gochujang",
+          {
+            "amount": 40.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Spring onion",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ]
+      ],
+      "afterIngredients": [
+        [
+          "Pasta",
+          {
+            "amount": 400.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Mushroom",
+          {
+            "amount": 300.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Cheddar",
+          {
+            "amount": 80.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Rice vinegar",
+          {
+            "amount": 30.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Soy sauce",
+          {
+            "amount": 20.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Red capsicum",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Wombok",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Fresh ginger",
+          {
+            "amount": 20.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Cucumber",
+          {
+            "amount": 1.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Gochujang",
+          {
+            "amount": 40.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Spring onion",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ]
+      ]
+    },
+    {
+      "baseId": "demo-dinner-parma",
+      "cuisine": "JAPANESE",
+      "seed": 1,
+      "beforeTitle": "Fusion experiment: Japanese Chicken parma · as plated with Soy sauce, Rice vinegar and Garlic accompaniment",
+      "afterTitle": "Fusion experiment: Japanese Chicken parma · regional finish with Rice vinegar, Soy sauce, Red capsicum",
+      "afterNote": "Saved a Japanese fusion experiment on this meal. Composed on this phone, not by a live model. The original main keeps its method. Not kitchen-tested or guaranteed allergy-safe. Check the packet.",
+      "beforeIngredients": [
+        [
+          "Chicken breast",
+          {
+            "amount": 600.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Breadcrumbs",
+          {
+            "amount": 80.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Egg",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Cheddar",
+          {
+            "amount": 120.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Rice vinegar",
+          {
+            "amount": 30.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Soy sauce",
+          {
+            "amount": 20.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Red capsicum",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Garlic",
+          {
+            "amount": 3.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Spring onion",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Ginger",
+          {
+            "amount": 15.0,
+            "unit": "GRAM"
+          }
+        ]
+      ],
+      "afterIngredients": [
+        [
+          "Chicken breast",
+          {
+            "amount": 600.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Breadcrumbs",
+          {
+            "amount": 80.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Egg",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Cheddar",
+          {
+            "amount": 120.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Rice vinegar",
+          {
+            "amount": 30.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Soy sauce",
+          {
+            "amount": 20.0,
+            "unit": "MILLILITRE"
+          }
+        ],
+        [
+          "Red capsicum",
+          {
+            "amount": 200.0,
+            "unit": "GRAM"
+          }
+        ],
+        [
+          "Garlic",
+          {
+            "amount": 3.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Spring onion",
+          {
+            "amount": 2.0,
+            "unit": "EACH"
+          }
+        ],
+        [
+          "Ginger",
+          {
+            "amount": 15.0,
+            "unit": "GRAM"
+          }
+        ]
+      ]
+    }
+  ],
+  "checks": {
+    "pureKotlinCompiledSourceFiles": 57,
+    "focusedJUnitTestsPassed": 77,
+    "unitHeapMiB": 512,
+    "suiteNames": [
+      "NativePlausibilityTest",
+      "NativeGeneratorCookingTest",
+      "NativeBaseCookingTest",
+      "NativeSideCookingTest",
+      "FusionSatTest",
+      "PlateStudioTest",
+      "IllawarraAndFusionTest",
+      "SideMealsTest",
+      "AcceptanceExtrasTest"
+    ]
+  },
+  "substantiveChanges": [
+    "Savoury remix guard for sweet breakfasts and repeated fusion layering.",
+    "Saved-main serving form preserved; pasta receives offheat regional finish, actual cold salads receive ready-to-mix cold dressings.",
+    "One added acid and one added hot condiment, at most two added strong condiments across SAT and exploration; canonical duplicate peppers/herbs handled once.",
+    "Optional heat affects only newly added chilli; non-medium identities include heat suffix.",
+    "Studio profiles retain 400 g vegetables per four servings, with crisp salad separated from hot sauce.",
+    "Four-serving cooked rice portions: dinner egg fried rice 800 g; cold rice salad 600 g.",
+    "Seven named native sides gain defining fruit, dressing, sauce and seasoning; jollof counts tomato liquid and reduces extra water.",
+    "Barley tagged BARLEY+GLUTEN, no false WHEAT tag."
+  ],
+  "limitations": [
+    "Automated recipe and ingredient plausibility regressions do not establish taste or kitchen testing.",
+    "Arbitrary saved user methods are preserved; their own quantities and cooking technique are not rewritten.",
+    "Packet composition, product form, pan capacity and actual doneness still govern cooking.",
+    "A newly regenerated web catalogue and Android release build are integrated separately by root."
+  ],
+  "primaryReferences": [
+    "https://patijinich.com/crazy-corn/",
+    "https://www.seriouseats.com/nigerian-jollof-rice-recipe-6741471",
+    "https://www.sbs.com.au/food/the-cook-up-with-adam-liaw/recipe/patatas-bravas/5s8a3tj1v",
+    "https://www.sbs.com.au/food/the-cook-up-with-adam-liaw/recipe/persian-jewelled-pilaf/07q090dpj",
+    "https://www.foodauthority.nsw.gov.au/consumer/food-extra-care/sprouts",
+    "https://www.foodauthority.nsw.gov.au/consumer/food-extra-care/leftovers"
+  ]
+}

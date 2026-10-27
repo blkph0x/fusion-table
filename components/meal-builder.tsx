@@ -10,14 +10,22 @@ import { preferredSidesForRegion } from "@/lib/side-plans";
 import type { MealInput } from "@/lib/meal-types";
 import type { CookPace, DietId, Recipe, SpiceHeat } from "@/lib/recipe-types";
 import { CLEAN_KNOB_LABELS, cleanActive, orderSidesForClean, type CleanPrefs } from "@/lib/clean-prefs";
+import type { MealPreferences } from "@/lib/kitchen-state";
+import { mealDraftFromRecipe, normalizeMealBuilderDraft, restoreMealBuilderDraft, type MealBuilderDraft } from "@/lib/meal-builder-state";
+
+export type { MealBuilderDraft } from "@/lib/meal-builder-state";
 
 type Props = {
   onCreated: (recipe: Recipe, brief: MealInput) => void;
   initialRecipe?: Recipe | null;
+  initialDraft?: MealBuilderDraft;
+  onDraftChange?: (draft: MealBuilderDraft) => void;
   avoidAllergens?: string[];
   dislikes?: string[];
   clean?: CleanPrefs;
   onCleanChange?: (next: CleanPrefs) => void;
+  preferences: MealPreferences;
+  onPreferencesChange: (next: MealPreferences) => void;
 };
 
 type RememberedChoices = {
@@ -30,6 +38,7 @@ type RememberedChoices = {
   servings?: number;
   cookPace?: CookPace | "";
   pantry?: string;
+  cutId?: string;
 };
 
 const MEMORY_KEY = "fusion-meal-builder-last-v1";
@@ -67,39 +76,29 @@ const STEPS = ["Main ingredient", "Cooking method", "Regional flavour", "Make it
 const POPULAR = ["chicken", "beef", "duck", "kangaroo", "salmon", "prawns", "tuna", "tofu", "mushrooms", "cauliflower", "chickpeas", "jackfruit", "paneer"];
 const CATEGORIES = [{ id: "all", name: "All ingredients" }, { id: "meat", name: "Meat & poultry" }, { id: "seafood", name: "Seafood" }, { id: "plant", name: "Plants & pulses" }, { id: "vegetarian", name: "Eggs & cheese" }] as const;
 
-export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens = [], dislikes = [], clean = {}, onCleanChange }: Props) {
-  const seed = initialRecipe?.kind === "meal" ? initialRecipe : null;
-  const remembered = !seed ? readMemory() : null;
-  const startMain = seed?.mainId || remembered?.mainId || "";
-  const startMethodRaw = seed?.methodId || remembered?.methodId || "";
-  const methodOk = !startMethodRaw || !startMain || getMethodsForMain(startMain).some((item) => item.id === startMethodRaw);
-  const startMethod = methodOk ? startMethodRaw : "";
-  const startSide = (() => {
-    const side = seed?.sideId || remembered?.sideId || "rice-greens";
-    return MEAL_SIDES.some((item) => item.id === side) ? side : "rice-greens";
-  })();
-  const startRegion = (() => {
-    const region = seed?.regionId || remembered?.regionId || "japanese";
-    return MEAL_REGIONS.some((item) => item.id === region) ? region : "japanese";
-  })();
-  const [step, setStep] = useState(seed ? 3 : startMain && startMethod ? 3 : startMain && !methodOk ? 1 : 0);
-  const [mainId, setMainId] = useState(startMain);
-  const [methodId, setMethodId] = useState(startMethod);
-  const [regionId, setRegionId] = useState(startRegion);
-  const [sideId, setSideId] = useState(startSide);
-  const [diet, setDiet] = useState<DietId>(seed?.diet || remembered?.diet || "balanced");
-  const [spiceHeat, setSpiceHeat] = useState<SpiceHeat>(seed?.spiceHeat || remembered?.spiceHeat || "medium");
-  const [cookPace, setCookPace] = useState<CookPace | "">(seed?.cookPace || remembered?.cookPace || "");
-  const [servings, setServings] = useState(seed?.servings || remembered?.servings || 2);
-  const [cutId, setCutId] = useState("");
-  const [pantry, setPantry] = useState(seed?.ingredients.filter((i) => i.inPantry).map((i) => i.name).join(", ") || remembered?.pantry || "");
+export default function MealBuilder({ onCreated, initialRecipe, initialDraft, onDraftChange, avoidAllergens = [], dislikes = [], clean = {}, onCleanChange, preferences, onPreferencesChange }: Props) {
+  const [starting] = useState(() => {
+    const seeded = mealDraftFromRecipe(initialRecipe);
+    const remembered = !initialDraft && !seeded ? readMemory() : null;
+    return { draft: restoreMealBuilderDraft(initialDraft, initialRecipe, remembered), remembered: !!remembered?.mainId };
+  });
+  const [draft, setDraft] = useState(starting.draft);
+  const { mainId, methodId, regionId, sideId, cutId } = draft;
+  const [requestedStep, setStep] = useState(mainId ? methodId ? 3 : 1 : 0);
+  const { diet, spiceHeat, cookPace, servings, pantry } = preferences;
+  const setDiet = (next: DietId) => onPreferencesChange({ ...preferences, diet: next });
+  const setSpiceHeat = (next: SpiceHeat) => onPreferencesChange({ ...preferences, spiceHeat: next });
+  const setCookPace = (next: CookPace | "") => onPreferencesChange({ ...preferences, cookPace: next });
+  const setServings = (next: number) => onPreferencesChange({ ...preferences, servings: next });
+  const setPantry = (next: string) => onPreferencesChange({ ...preferences, pantry: next });
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [sideSearch, setSideSearch] = useState("");
+  const [regionSearch, setRegionSearch] = useState("");
   const [showAllSides, setShowAllSides] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [error, setError] = useState("");
-  const [rememberedNote, setRememberedNote] = useState(!!remembered?.mainId && !seed);
+  const [rememberedNote, setRememberedNote] = useState(starting.remembered);
   const panelRef = useRef<HTMLHeadingElement>(null);
 
   const allowedMains = getMainsForDiet(diet);
@@ -110,10 +109,13 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
       (!query || `${main.name} ${main.ingredientAliases.join(" ")}`.toLowerCase().includes(query)) &&
       (showAll || query || category !== "all" || POPULAR.includes(main.id)));
   }, [diet, category, search, showAll]);
-  const main = MAIN_INGREDIENTS.find((item) => item.id === mainId);
-  const methods = getMethodsForMain(mainId);
+  const compatibleMain = !mainId || allowedMains.some((item) => item.id === mainId);
+  const step = compatibleMain ? requestedStep : 0;
+  const main = compatibleMain ? MAIN_INGREDIENTS.find((item) => item.id === mainId) : undefined;
+  const methods = compatibleMain ? getMethodsForMain(mainId) : [];
   const method = methods.find((item) => item.id === methodId);
   const region = MEAL_REGIONS.find((item) => item.id === regionId);
+  const visibleRegions = MEAL_REGIONS.filter((item) => `${item.name} ${item.description}`.toLowerCase().includes(regionSearch.trim().toLowerCase()));
   const side = MEAL_SIDES.find((item) => item.id === sideId);
   const cuts = useMemo(() => (methodId ? cutsForMethod(mainId, methodId) : cutsForMethod(mainId)), [mainId, methodId]);
   const suggestedSideIds = useMemo(() => {
@@ -148,16 +150,21 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
     setStep(next); setError("");
     requestAnimationFrame(() => { panelRef.current?.focus({ preventScroll: true }); panelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
   }
+  function updateDraft(patch: Partial<MealBuilderDraft>) {
+    const next = normalizeMealBuilderDraft({ ...draft, ...patch });
+    if ((Object.keys(next) as (keyof MealBuilderDraft)[]).every((key) => next[key] === draft[key])) return;
+    setDraft(next);
+    setRememberedNote(false);
+    onDraftChange?.(next);
+  }
   function chooseMain(id: string) {
-    setMainId(id);
-    setCutId("");
-    if (!getMethodsForMain(id).some((item) => item.id === methodId)) setMethodId("");
+    updateDraft({ mainId: id, cutId: "" });
     goTo(1);
   }
   function changeDiet(next: DietId) {
     setDiet(next); setError("");
     if (mainId && !getMainsForDiet(next).some((item) => item.id === mainId)) {
-      setMainId(""); setMethodId(""); setCutId(""); goTo(0); setCategory("all"); setSearch(""); setShowAll(true);
+      updateDraft({ mainId: "", methodId: "", cutId: "" }); goTo(0); setCategory("all"); setSearch(""); setShowAll(true);
       setError(`${main?.name || "Your main"} doesn’t fit that preference. Choose a compatible main below.`);
     }
   }
@@ -167,7 +174,7 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
     try {
       const recipe = generateMeal(made);
       writeMemory({
-        mainId, methodId, regionId, sideId, diet, spiceHeat, servings, cookPace, pantry,
+        mainId, methodId, regionId, sideId, cutId, diet, spiceHeat, servings, cookPace, pantry,
       });
       setRememberedNote(false);
       onCreated(recipe, made);
@@ -189,18 +196,18 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
         {!visibleMains.length && <p className="builder-no-results">No mains match these filters. Try another category or dietary preference.</p>}
         {!search && category === "all" && <button type="button" className="text-button show-ingredients" onClick={() => setShowAll(!showAll)} aria-expanded={showAll}>{showAll ? "Show popular ingredients" : `Explore all ${allowedMains.length} ingredients`}<ChevronDown size={15} className={showAll ? "rotated" : ""} /></button>}
       </>}
-      {step === 1 && <div className="method-choices">{methods.map((item) => <button type="button" key={item.id} className={`method-choice ${methodId === item.id ? "selected" : ""}`} onClick={() => { setMethodId(item.id); setCutId((current) => { if (!current) return current; return cutsForMethod(mainId, item.id).some((cut) => cut.id === current) ? current : ""; }); goTo(2); }} aria-label={`Cook ${item.name}`} aria-pressed={methodId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🍽️"}</span><strong>{item.name}</strong><small>{item.description}</small><ArrowRight size={16} /></button>)}</div>}
-      {step === 2 && <div className="region-choices"><p className="region-group-label">HOME KITCHEN</p>{MEAL_REGIONS.filter((item) => item.id === "home-kitchen").map((item) => <button type="button" key={item.id} className={`region-choice ${regionId === item.id ? "selected" : ""}`} onClick={() => { setRegionId(item.id); goTo(3); }} aria-label={`Add ${item.name} flavour`} aria-pressed={regionId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🌿"}</span><strong>{item.name.replace("-inspired", "")}</strong><small>{item.description}</small><ArrowRight size={15} /></button>)}<p className="region-group-label">REGIONAL FLAVOURS</p>{MEAL_REGIONS.filter((item) => item.id !== "home-kitchen").map((item) => <button type="button" key={item.id} className={`region-choice ${regionId === item.id ? "selected" : ""}`} onClick={() => { setRegionId(item.id); goTo(3); }} aria-label={`Add ${item.name} flavour`} aria-pressed={regionId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🌿"}</span><strong>{item.name.replace("-inspired", "")}</strong><small>{item.description}</small><ArrowRight size={15} /></button>)}</div>}
+      {step === 1 && <div className="method-choices">{methods.map((item) => <button type="button" key={item.id} className={`method-choice ${methodId === item.id ? "selected" : ""}`} onClick={() => { updateDraft({ methodId: item.id }); goTo(2); }} aria-label={`Cook ${item.name}`} aria-pressed={methodId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🍽️"}</span><strong>{item.name}</strong><small>{item.description}</small><ArrowRight size={16} /></button>)}</div>}
+      {step === 2 && <><label className="ingredient-search region-search"><Search size={17} /><span className="sr-only">Search regional flavours</span><input value={regionSearch} onChange={(event) => setRegionSearch(event.target.value)} placeholder="Search a region or flavour…" maxLength={80} /></label><div className="region-choices"><p className="region-group-label">HOME KITCHEN</p>{visibleRegions.filter((item) => item.id === "home-kitchen").map((item) => <button type="button" key={item.id} className={`region-choice ${regionId === item.id ? "selected" : ""}`} onClick={() => { updateDraft({ regionId: item.id }); goTo(3); }} aria-label={`Add ${item.name} flavour`} aria-pressed={regionId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🌿"}</span><strong>{item.name.replace("-inspired", "")}</strong><small>{item.description}</small><ArrowRight size={15} /></button>)}<p className="region-group-label">REGIONAL FLAVOURS</p>{visibleRegions.filter((item) => item.id !== "home-kitchen").map((item) => <button type="button" key={item.id} className={`region-choice ${regionId === item.id ? "selected" : ""}`} onClick={() => { updateDraft({ regionId: item.id }); goTo(3); }} aria-label={`Add ${item.name} flavour`} aria-pressed={regionId === item.id}><span className="choice-symbol" aria-hidden="true">{item.emoji || "🌿"}</span><strong>{item.name.replace("-inspired", "")}</strong><small>{item.description}</small><ArrowRight size={15} /></button>)}</div>{!visibleRegions.length && <p className="builder-no-results" role="status">No regional flavours match. Try a country or ingredient, or clear the search.</p>}</>}
       {step === 3 && <form onSubmit={create}>
         <fieldset className="meal-settings"><legend className="sr-only">Finish your meal</legend>
           <div className="meal-selection-summary"><span><ChefHat size={16} /> {main?.name}</span><ArrowRight size={13} /><span>{method?.name}</span><ArrowRight size={13} /><span><Globe2 size={16} /> {region?.name}</span>{side && <><ArrowRight size={13} /><span>{side.name}</span></>}</div>
           <div className="side-picker-header"><h4>Choose a side</h4><p className="subtle-small">Suggested for {region?.name?.replace("-inspired", "") || "this region"} first. Search all {MEAL_SIDES.length} accompaniments. Templates are not kitchen-tested.</p></div>
           <label className="builder-search side-search"><Search size={17} /><span className="sr-only">Search sides</span><input value={sideSearch} onChange={(event) => setSideSearch(event.target.value)} placeholder="Search rice, salad, bread, mash…" maxLength={60} /></label>
-          <div className="side-choices" role="listbox" aria-label="Side dishes">{visibleSides.map((item) => <button type="button" key={item.id} role="option" aria-selected={sideId === item.id} className={`side-choice ${sideId === item.id ? "selected" : ""} ${suggestedSideIds.includes(item.id) && !sideSearch ? "suggested" : ""}`} aria-pressed={sideId === item.id} onClick={() => setSideId(item.id)}><span aria-hidden="true">{item.emoji}</span><span><strong>{item.name}</strong><small>{item.description}</small>{suggestedSideIds.includes(item.id) && !sideSearch && <em className="side-suggested-tag">Suits this region</em>}</span>{sideId === item.id && <Check size={16} />}</button>)}</div>
+          <div className="side-choices" role="group" aria-label="Side dishes">{visibleSides.map((item) => <button type="button" key={item.id} className={`side-choice ${sideId === item.id ? "selected" : ""} ${suggestedSideIds.includes(item.id) && !sideSearch ? "suggested" : ""}`} aria-pressed={sideId === item.id} onClick={() => updateDraft({ sideId: item.id })}><span aria-hidden="true">{item.emoji}</span><span><strong>{item.name}</strong><small>{item.description}</small>{suggestedSideIds.includes(item.id) && !sideSearch && <em className="side-suggested-tag">Suits this region</em>}</span>{sideId === item.id && <Check size={16} />}</button>)}</div>
           {!visibleSides.length && <p className="builder-no-results" role="status">No sides match that search. Clear the search or try “rice”, “salad” or “potato”.</p>}
           {!sideSearch && !showAllSides && MEAL_SIDES.length > visibleSides.length && <button type="button" className="text-button show-ingredients" onClick={() => setShowAllSides(true)} aria-expanded={false}>Show all {MEAL_SIDES.length} sides</button>}
           {showAllSides && !sideSearch && <button type="button" className="text-button show-ingredients" onClick={() => setShowAllSides(false)} aria-expanded={true}>Show suggested sides</button>}
-          <div className="meal-preferences"><label className="field"><span>Servings</span><select value={servings} onChange={(event) => setServings(Number(event.target.value))}>{Array.from({ length: 12 }, (_, i) => i + 1).map((value) => <option key={value} value={value}>{value} {value === 1 ? "person" : "people"}</option>)}</select></label><label className="field"><span>Dietary preference</span><select value={diet} onChange={(event) => changeDiet(event.target.value as DietId)}>{DIETS.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label className="field"><span>Spice level</span><select value={spiceHeat} onChange={(event) => setSpiceHeat(event.target.value as SpiceHeat)}><option value="gentle">Gentle</option><option value="mild">Mild & mellow</option><option value="medium">A little kick</option><option value="hot">Bring the heat</option><option value="fiery">Fiery</option></select></label><label className="field"><span>Cook session</span><select aria-label="Cook session" value={cookPace} onChange={(event) => setCookPace(event.target.value as CookPace | "")}><option value="">Template timing</option>{(Object.keys(COOK_PACE_LABELS) as CookPace[]).map((pace) => <option key={pace} value={pace}>{COOK_PACE_LABELS[pace]}</option>)}</select><small>Optional. The method stays the same. Long smoke day is a schedule note.</small></label>{cuts.length > 0 && <label className="field"><span>Cut</span><select aria-label="Meat cut" value={cuts.some((cut) => cut.id === cutId) ? cutId : ""} onChange={(event) => setCutId(event.target.value)}><option value="">Match the cooking method</option>{(["Everyday", "Breed", "Less common"] as const).map((group) => { const groupCuts = cuts.filter((cut) => cut.group === group); return groupCuts.length ? <optgroup key={group} label={group}>{groupCuts.map((cut) => <option key={cut.id} value={cut.id}>{cut.shoppingName}</option>)}</optgroup> : null; })}</select><small>Only cuts that suit {method?.name?.toLowerCase() || "this method"} are listed. Check the packet. Angus or wagyu is the cut to shop for, not a marble grade.</small></label>}</div>
+          <div className="meal-preferences"><label className="field"><span>Servings</span><select value={servings} onChange={(event) => setServings(Number(event.target.value))}>{Array.from({ length: 12 }, (_, i) => i + 1).map((value) => <option key={value} value={value}>{value} {value === 1 ? "person" : "people"}</option>)}</select></label><label className="field"><span>Dietary preference</span><select value={diet} onChange={(event) => changeDiet(event.target.value as DietId)}>{DIETS.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label className="field"><span>Spice level</span><select value={spiceHeat} onChange={(event) => setSpiceHeat(event.target.value as SpiceHeat)}><option value="gentle">Gentle</option><option value="mild">Mild & mellow</option><option value="medium">A little kick</option><option value="hot">Bring the heat</option><option value="fiery">Fiery</option></select></label><label className="field"><span>Cook session</span><select aria-label="Cook session" value={cookPace} onChange={(event) => setCookPace(event.target.value as CookPace | "")}><option value="">Template timing</option>{(Object.keys(COOK_PACE_LABELS) as CookPace[]).map((pace) => <option key={pace} value={pace}>{COOK_PACE_LABELS[pace]}</option>)}</select><small>Optional. The method stays the same. Long smoke day is a schedule note.</small></label>{cuts.length > 0 && <label className="field"><span>Cut</span><select aria-label="Meat cut" value={cuts.some((cut) => cut.id === cutId) ? cutId : ""} onChange={(event) => updateDraft({ cutId: event.target.value })}><option value="">Match the cooking method</option>{(["Everyday", "Breed", "Less common"] as const).map((group) => { const groupCuts = cuts.filter((cut) => cut.group === group); return groupCuts.length ? <optgroup key={group} label={group}>{groupCuts.map((cut) => <option key={cut.id} value={cut.id}>{cut.shoppingName}</option>)}</optgroup> : null; })}</select><small>Only cuts that suit {method?.name?.toLowerCase() || "this method"} are listed. Check the packet. Angus or wagyu is the cut to shop for, not a marble grade.</small></label>}</div>
           <label className="field meal-pantry"><span>Already in your pantry</span><input value={pantry} onChange={(event) => setPantry(event.target.value)} maxLength={500} placeholder="e.g. rice, garlic, olive oil" /><small>Separate items with commas to leave them off your shopping list.</small></label>
           <div className="field clean-field"><span>Cleaner plate</span>
             <div className="clean-knobs" role="group" aria-label="Cleaner meal preferences">
@@ -214,9 +221,9 @@ export default function MealBuilder({ onCreated, initialRecipe, avoidAllergens =
             </div>
           </div>
         </fieldset>
-        <div className="builder-create-row"><p><Utensils size={17} /><span><strong>A different plate each time</strong>Same main, region and side. A new seeded search on every click.</span></p><button type="submit" className="button primary" disabled={!canCreate} aria-disabled={!canCreate} title={canCreate ? undefined : "Choose a main, method, region and side first"}><Sparkles size={18} />{regionId === "home-kitchen" ? "Create this plate" : "Create my fusion"}<ArrowRight size={18} /></button></div>
+        <div className="builder-create-row"><p><Utensils size={17} /><span><strong>A different plate each time</strong>Keep your main, regional flavour and side. Try a new variation each time.</span></p><button type="submit" className="button primary" disabled={!canCreate} aria-disabled={!canCreate} title={canCreate ? undefined : "Choose a main, method, region and side first"}><Sparkles size={18} />{regionId === "home-kitchen" ? "Create this plate" : "Create my fusion"}<ArrowRight size={18} /></button></div>
 
-        <p className="builder-footnote">Template-generated · not kitchen-tested. Home kitchen is the weekday flavour, without a second regional paste. The other profiles are fusion, from a simple side to a long braise. Each click uses a new seed, so the same main and region can come back as a different dish, such as a cold stir-fry or a chopped salad. The same seed would repeat. A cook session only adds a schedule note. Hard filters stay in place. The cut you pick is the one the shopping list asks for. Check the packet.</p>
+        <p className="builder-footnote">Your main, method, regional flavour and side stay under your control. Each click explores a new variation while keeping exclusions strict. Templates are not kitchen-tested; check packaged ingredients.</p>
       </form>}
       {step > 0 && <button type="button" className="text-button builder-back" onClick={() => goTo(step - 1)}><ArrowLeft size={15} /> Back to {STEPS[step - 1].toLowerCase()}</button>}
     </div>

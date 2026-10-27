@@ -1,0 +1,16 @@
+{
+  "measuredAt": "2026-10-27T06:03:02.369Z",
+  "condition": "Local Node22 while six exhaustive catalogue workers run concurrently; generation CPU time, not browser/network latency.",
+  "seededMeal": {
+    "runs": 120,
+    "medianMs": 6.3,
+    "p95Ms": 10.2,
+    "maxMs": 13.27
+  },
+  "sevenDayPlan": {
+    "runs": 6,
+    "medianMs": 725.76,
+    "p95Ms": 886.74,
+    "maxMs": 886.74
+  }
+}

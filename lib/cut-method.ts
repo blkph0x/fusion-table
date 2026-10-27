@@ -3,6 +3,7 @@
  * and how to prepare them so steps never ask for steak slices on a grind/pull cut.
  */
 
+import { isBoneInCut } from "./cut-cooking.ts";
 import { cutsForMain as allCutsForMain, getCut, type CutForm, type MeatCut } from "./cuts.ts";
 import { cutAllowedForSmoke, prepareSmokeCut, smokeMismatchMessage } from "./smoke-method.ts";
 
@@ -62,6 +63,8 @@ const WHOLE_SLOW_IDS = new Set([
 const SAUSAGE_IDS = new Set(["beef-sausage", "lamb-sausage", "pork-sausage"]);
 
 export function cutAllowedForMethod(cut: MeatCut, methodId: string): boolean {
+  if (methodId === "patties" && isBoneInCut(cut)) return false; // Bone-in joints cannot go into a home mincer.
+  if (cut.id === "chicken-frame") return false; // Stock bones, not a main-meal portion.
   const allowed = FORM_METHODS[cut.form];
   if (!allowed.includes(methodId)) return false;
   if (methodId === "smoked") return cutAllowedForSmoke(cut);
@@ -88,6 +91,8 @@ export interface CutPrep {
   endpoint: string;
   /** Extra minutes when the cut needs longer than the method default. */
   minutesBump?: number;
+  prepMinutes?: number;
+  prepEquipment?: string[];
 }
 
 function poultryNote(cut: MeatCut): string {
@@ -141,7 +146,7 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
     }
     // grilled / pan-fried / air-fried / baked / roasted with mince → cook as loose mince or quick patties, never steaks
     return {
-      preparation: `Keep the raw ${name} refrigerated. Shape into flat patties about 1.5 cm thick, or cook it crumbled in the pan — do not treat mince as steaks.${wash}`,
+      preparation: `Keep the raw ${name} refrigerated. Shape into flat patties about 1.5 cm thick for this method; do not put loose mince on a grill or treat it as steaks.${wash}`,
       endpoint: "The centre must reach 75°C on a clean food thermometer; check several pieces and cook longer if needed.",
     };
   }
@@ -155,9 +160,26 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
   }
 
   if (cut.form === "offal") {
+    if (/liver$/.test(cut.id)) return {
+      preparation: `Keep the ${name} refrigerated, trim membranes and visible ducts, and slice into even 1 cm pieces. Cook this delicate offal shortly before serving; it does not need a joint-style long tenderising simmer. Do not serve liver rare.${wash}`,
+      endpoint: "Check the centre of several pieces reaches 75\u00b0C with a clean thermometer. Stop cooking once that endpoint is reached; prolonged boiling makes liver dry and grainy.",
+    };
+    if (cut.id === "beef-tongue") return {
+      preparation: `Measure the listed raw ${name} before cooking. Put in a deep saucepan, cover with water and bring to a gentle simmer. Cook for about 2–3 hours, checking from 2 hours, until a skewer enters easily; extend if still firm. Ensure the centre reaches 75°C. When cool enough to handle, peel off and discard the tough outer skin and trim the root. Slice the tender meat into even 1 cm pieces for the short finishing stage. If preparing ahead, cool promptly and refrigerate at 5°C or colder; use clean utensils for the cooked meat.`,
+      endpoint: "Finish until hot throughout; if chilled after preparation, reheat the centre to 75°C. The tongue should already be tender from its preparation simmer.",
+      prepMinutes: 180, prepEquipment: ["Deep saucepan", "Colander", "Skewer and sharp knife"],
+    };
+    // Emeril's Dirty Rice and Food Network Kitchen both tenderise gizzards in
+    // a covered gentle simmer before a short finishing cook. Time is a texture
+    // estimate; FSANZ's 75°C offal endpoint still applies.
+    if (cut.id === "chicken-gizzard" && !SLOW_SIMMER.has(methodId)) return {
+      preparation: `Trim membranes and excess fat from the ${name}; measure the listed raw weight before cooking. Cover with water in a saucepan, bring to a gentle simmer and cook for 60–90 minutes until tender, checking from 60 minutes. Check the centre reaches 75°C. Drain well, then slice and pat dry for the short final cooking stage. If preparing ahead, cool promptly and refrigerate at 5°C or colder. Do not wash raw poultry.`,
+      endpoint: "Finish until browned where appropriate and steaming hot throughout; if chilled after preparation, reheat the centre to 75°C.",
+      prepMinutes: 90, prepEquipment: ["Saucepan", "Colander"],
+    };
     return {
-      preparation: `Keep the ${name} cold until cooking and trim ducts or sinew. Do not serve offal rare.${wash}`,
-      endpoint: "The centre must reach 75°C on a clean food thermometer.",
+      preparation: `Keep the ${name} cold until cooking and trim ducts, hard white cores, valves or sinew as appropriate. Cut into even ${SLOW_SIMMER.has(methodId) ? "2–3 cm pieces for the gentle simmer" : "1 cm slices or strips so the centre cooks before the outside toughens"}.${methodId === "grilled" ? " Use a grill pan or flat barbecue plate for these small pieces, rather than loose pieces over open grates." : ""} Do not serve offal rare.${wash}`,
+      endpoint: `The centre must reach 75°C on a clean food thermometer.${cut.id === "chicken-gizzard" ? " Continue the gentle simmer until the gizzards are tender, checking from about 60 minutes; the temperature endpoint alone does not make them tender." : ""}`,
     };
   }
 
@@ -215,7 +237,7 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
     }
     if (methodId === "stir-fried") {
       return {
-        preparation: `For stir-fry, freeze the ${name} briefly until firm, then slice very thinly across the grain (about 2–3 mm). Marinate if you like; do not cut thick steaks.${wash}`,
+        preparation: `For stir-fry, chill the ${name} briefly in the freezer until just firm, then slice very thinly across the grain (about 2–3 mm). Keep the raw strips refrigerated until the pan is ready; blot excess moisture just before searing. Use the recipe's measured coating if supplied.${wash}`,
         endpoint: poultry
           ? "The strips must reach 75°C throughout."
           : "Cook the thin strips until browned and at least 71°C; do not leave thick pieces.",
@@ -223,6 +245,10 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
     }
   }
 
+  if (cut.id === "lamb-rack" && ["pan-fried", "air-fried", "grilled"].includes(methodId)) return {
+    preparation: `Ask the butcher to divide the ${name} into individual rib cutlets about 2 cm thick. Keep the bone attached to each cutlet; do not use this short direct-heat method for an intact rack. Pat dry before cooking.`,
+    endpoint: "Check the thickest meat beside the bone reaches at least 71\u00b0C, then rest for 3 minutes.",
+  };
   if (cut.form === "bone-in") {
     const boneExtra = " This cut is bone-in, so allow extra time and check next to the bone.";
     if (methodId === "stir-fried") {
@@ -287,7 +313,7 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
         : `Trim the ${name} and cut into even 3 cm cubes for simmering.`,
       endpoint: poultry
         ? "Check several thickest pieces with a clean food thermometer: the centre must reach 75°C."
-        : "Cook until fork-tender as well as at least 71°C in the centre. Extend the gentle simmer if still tough.",
+        : "Check the thickest pieces reach at least 71°C. These lean boneless pieces need a short gentle simmer; stop once cooked instead of holding them for a slow-joint braise.",
     };
   }
   // grilled / pan / air / bake / roast / poach / steam — even steak thickness
@@ -302,6 +328,7 @@ export function prepareCut(cut: MeatCut, methodId: string): CutPrep | null {
 }
 
 export function cutMethodMismatchMessage(cut: MeatCut, methodId: string): string {
+  if (cut.id === "chicken-frame") return "Chicken frames are stock bones, not a meaty main-meal portion. Choose chicken thigh, breast or another meaty cut for this plate.";
   const method = methodId.replace(/-/g, " ");
   if (methodId === "smoked") return smokeMismatchMessage(cut.mainId, cut.id);
   if (cut.form === "slow" && STEAK_QUICK.has(methodId)) {

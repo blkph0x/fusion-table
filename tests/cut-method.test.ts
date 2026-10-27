@@ -134,6 +134,11 @@ describe("matrix coverage of every cut form", () => {
     ];
     for (const cut of MEAT_CUTS) {
       const allowed = methods.filter((method) => cutAllowedForMethod(cut, method));
+      if (cut.id === "chicken-frame") {
+        assert.deepEqual(allowed, [], "stock bones remain in the shopping catalogue, outside meal-main choices");
+        for (const method of methods) assert.equal(prepareCut(cut, method), null);
+        continue;
+      }
       assert.ok(allowed.length > 0, `${cut.id} has no methods`);
       for (const method of allowed) {
         const prep = prepareCut(cut, method);

@@ -1,0 +1,37 @@
+{
+  "verifiedDate": "2026-10-26",
+  "website": {
+    "url": "https://gearsqueens.online/fusion/",
+    "serverSource": "/home/blkph0x/src/fusion-table",
+    "serverCommit": "765cfea796d5374735f249c7e59ccadc4204ad96",
+    "serverBranch": "deploy/fusion-overhaul-91e1",
+    "localSource": "D:/fusion-table",
+    "localCommit": "2d0cee19080190039d98b56a45f586e117d5820e",
+    "runtime": "Apache proxy to Wrangler/workerd local on 127.0.0.1:8792"
+  },
+  "android": {
+    "source": "D:/MealPlannerAU",
+    "sourceCommit": "c29b83d",
+    "publicVersion": "1.5.3",
+    "publicVersionCode": 10,
+    "publicBytes": 12853981,
+    "publicSha256": "F015DF089B6745619B89F79D0C3D986D2BE51E0BCA5B4910E277F03472995A6F",
+    "catalogueBytes": 48472455,
+    "catalogueRecipes": 7512,
+    "catalogueSha256": "2EC83315CCD58B5AF3BFBC65F6B463281E8C5BCCAACFA08F2F8939007DB7F61E",
+    "testsPassed": 92
+  },
+  "liveChecks": {
+    "mobileClientWidth": 375,
+    "mobileScrollWidth": 446,
+    "menuLeft": 423,
+    "menuRight": 446,
+    "generatedWeekWarnings": 97,
+    "firstDinnerTop": 3181,
+    "allergenSummaryStaleConfirmed": true,
+    "locationInitialTimeout": true,
+    "locationRetryRecovered": true,
+    "shopSupermarketResults": 28
+  },
+  "productionChanged": false
+}
