@@ -328,6 +328,34 @@ test("queued ingredients recheck provider backoff after an earlier browser refus
   releases.get(aldiUrl)(); await Promise.all([first,second]);
 });
 
+test("cold Coles queries use one gate call while the remaining queries wait for its backoff",async t => {
+  let releaseGate, colesCalls = 0;
+  const renderer = {configured:true,connected:true,close:async () => releaseGate?.(),render:async url => {
+    if (url.includes("coles.com.au")) {
+      colesCalls++; await new Promise(resolve => { releaseGate = resolve; });
+      return {html:"",url,status:403,providerStatus:"needs-browser",message:"Open Coles"};
+    }
+    return {html:"<main>Published local products</main>",url,status:200,providerStatus:"ready"};
+  }};
+  const worker = await startRetailerBrowser({port:0,renderer}); t.after(() => worker.close());
+  const base = `http://127.0.0.1:${worker.port}`;
+  const post = body => fetch(base+"/render",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(response => response.json());
+  const pending = ["rice","chicken","onion"].map(query => post({url:`https://www.coles.com.au/search?q=${query}`}));
+  for (let index = 0; index < 100; index++) {
+    const health = await (await fetch(base+"/health")).json();
+    if (health.queued === 2 && health.active === 1) break;
+    if (index === 99) assert.fail("The Coles gate queries did not share one active slot.");
+    await new Promise(resolve => setTimeout(resolve,5));
+  }
+  assert.equal(colesCalls,1);
+  const local = await post({url:"https://butcher.retailer.net/",source:"local-shop"});
+  assert.equal(local.providerStatus,"ready");
+  releaseGate();
+  const results = await Promise.all(pending);
+  assert.equal(colesCalls,1); assert.ok(results.every(result => result.providerStatus === "needs-browser"));
+  assert.equal(results.filter(result => result.cached).length,2);
+});
+
 test("HTTP response deadlines are bounded even if the browser has not finished shutting its page",async t => {
   let release;
   const renderer = {configured:true,connected:true,close:async () => release?.(),render:() => new Promise(resolve => { release = () => resolve({html:"",providerStatus:"unavailable"}); })};
@@ -399,8 +427,8 @@ test("HTTP cancellation preserves a shared survivor and aborts work only after i
   third.req.destroy(new Error("Third closed")); fourth.req.destroy(new Error("Fourth closed"));
   await waitHealth(health => health.active === 0 && health.subscribers === 0);
   assert.equal(aborted,1); assert.equal(jobs.get(other).signal.aborted,true);
-  const activeOne = open("https://www.coles.com.au/search?q=active-one");
-  const activeTwo = open("https://www.coles.com.au/search?q=active-two");
+  const activeOne = open("https://www.woolworths.com.au/shop/search/products?searchTerm=active-one");
+  const activeTwo = open("https://www.aldi.com.au/results?q=active-two");
   await waitHealth(health => health.active === 2);
   const queuedUrl = "https://www.coles.com.au/search?q=cancel-queued", queued = open(queuedUrl);
   await waitHealth(health => health.queued === 1);

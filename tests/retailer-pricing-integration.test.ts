@@ -76,6 +76,12 @@ test("an uncooperative nearby lookup cannot hold completed prices beyond the req
   assert.match(completed.warnings.join(" "), /took too long/);
 });
 
+test("a failed verified IGA lookup is unavailable rather than asking for a store again", async () => {
+  const input = parseShoppingPriceRequest({ lines: [rice], area: "2042" });
+  const result = await compareShopping(input, { woolworths: async () => [], coles: async () => [], iga: async () => [quote("iga-online-catalogue", { fetchedAt: null, matches: [], status: "unavailable", error: "The price check timed out." })], recorded: async () => [], now: () => now });
+  assert.equal(result.providerStatuses.find(provider => provider.id === "iga")?.status, "unavailable");
+});
+
 test("browser client confines private service and retailer destinations, passes no visitor cookies", async () => {
   for (const endpoint of ["https://remote.example.org/render", "http://0.0.0.0:8794", "http://user:pass@127.0.0.1:8794"]) assert.throws(() => browserPriceRenderer(endpoint));
   let calls = 0;

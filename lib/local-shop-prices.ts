@@ -11,7 +11,7 @@ export interface LocalShopQuote extends Omit<PriceQuote,"source"> {
   scope: "shop-website";
   shop: { id: string; name: string; website: string; area: string; lat: number; lon: number };
 }
-export interface LocalShopPriceDependencies { read?: ShopPageReader; render?: ShopPageReader; now?: () => Date }
+export interface LocalShopPriceDependencies { read?: ShopPageReader; render?: ShopPageReader; discover?: ShopPageReader; now?: () => Date }
 export interface CheckedLocalShop { id: string; name: string; website: string }
 type LocalFailure={message:string;status:"needs-browser"|"needs-store"|"not-configured"|"unavailable"};
 const cache = new SharedPriceCache<{products:CatalogueProduct[];fetchedAt:string;searched:string[];issues:Record<string,LocalFailure>}>(96,10*60_000);
@@ -172,7 +172,19 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
         const combined=AbortSignal.any([shared,AbortSignal.timeout(26_000)]),release=await shopSlot(combined);const searched:string[]=[];const found:CatalogueProduct[]=[];const seen=new Set<string>();const issues:Record<string,LocalFailure>={};
         async function read(url:string){combined.throwIfAborted();const page=await reader(url,combined);combined.throwIfAborted();if(page.status!==undefined&&(page.status<200||page.status>=300))throw new Error([401,403,429].includes(page.status)?"This shop requires a browser check.":"This shop did not return a public price page.");publicShopUrl(page.url);if(new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The shop redirected to a different website.");searched.push(page.url);for(const product of parseLocalShopProducts(page.html,page.url,now)){const key=JSON.stringify([product.url,product.name,product.priceCents,product.packageSize]);if(!seen.has(key)){seen.add(key);found.push(product);}}return page;}
         try{
-          const home:PublicShopPage=await read(base.href),shopify=/Shopify|cdn\.shopify\.com|shopify-section/i.test(home.html);
+          let metadata:PublicShopPage|null=null,homepageHasProducts=false;
+          if(deps.render&&deps.discover){
+            try{
+              const page=await deps.discover(base.href,combined);combined.throwIfAborted();
+              publicShopUrl(page.url);
+              if(page.status!==undefined&&(page.status<200||page.status>=300)||new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The homepage metadata was unavailable.");
+              // Discovery can identify an offer, but none of its prices or stock
+              // enter found. Verify that homepage through the browser instead.
+              homepageHasProducts=parseLocalShopProducts(page.html,page.url,now).length>0;
+              metadata=page;
+            }catch{combined.throwIfAborted();/* Fall back to an ordinary browser homepage. */}
+          }
+          const home:PublicShopPage=metadata&&!homepageHasProducts?metadata:await read(base.href),shopify=/Shopify|cdn\.shopify\.com|shopify-section/i.test(home.html);
           const commerce=shopify||/woocommerce|wc-block|wc\/store|post_type=product/i.test(home.html)||[...home.html.matchAll(/href\s*=\s*["']([^"']+)["']/gi)].slice(0,1000).some(match=>{const url=sameShopUrl(match[1],new URL(home.url));return !!url&&/\/(?:products?|shop)\/[^/]+/.test(new URL(url).pathname);});
           for(const query of queries){
             if(matchProducts(query,found).some(match=>match.selected))continue;

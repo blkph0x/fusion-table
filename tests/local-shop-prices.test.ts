@@ -66,6 +66,29 @@ test("a relevant homepage product link avoids a redundant search and keeps the p
  assert.equal(calls.length,2);assert.equal(calls.some(url=>new URL(url).search),false);assert.equal(result.quotes[0].matches[0].priceCents,1388);
 });
 
+test("homepage metadata prices cannot enter browser-backed quotes without actual browser verification",async()=>{
+ const calls:string[]=[];
+ const result=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:"metadata-price-proof"})],context,{discover:async url=>({url,html:fixture(product({offers:{...product().offers,price:0.01}}))}),render:async url=>{calls.push(url);return {url,html:fixture(product())};}});
+ assert.deepEqual(calls,["https://butcher.example.com/"]);assert.equal(result.quotes[0].matches[0].priceCents,1388);assert.equal(result.quotes[0].collectionMethod,"browser");
+ const none=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:"metadata-no-browser-price"})],context,{discover:async url=>({url,html:fixture(product({offers:{...product().offers,price:0.01}}))}),render:async url=>({url,html:"<h1>No product prices published</h1>"})});assert.deepEqual(none.quotes[0].matches,[]);
+});
+
+test("safe homepage metadata avoids the browser homepage while search and product prices still use the browser",async()=>{
+ const calls:string[]=[];let discovered=0;
+ const result=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:"metadata-fast-discovery"})],context,{discover:async url=>{discovered++;return {url,html:'Shopify <script type="application/ld+json">{"@type":"Organization","name":"Butcher"}</script><p>Editorial price example $0.01</p>'};},render:async url=>{calls.push(url);return {url,html:calls.length===1?'<a href="/products/chicken-breast-fillets">Chicken breast fillets</a>':fixture(product())};}});
+ assert.equal(discovered,1);assert.equal(calls.length,2);assert.equal(new URL(calls[0]).pathname,"/search");assert.equal(new URL(calls[1]).pathname,"/products/chicken-breast-fillets");assert.equal(result.quotes[0].matches[0].priceCents,1388);assert.equal(result.quotes[0].collectionMethod,"browser");
+});
+
+test("blocked or unreadable metadata falls back to one normal browser homepage",async()=>{
+ for(const blocked of [true,false]){
+  let rendered=0;const result=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:`metadata-fallback-${blocked}`})],context,{discover:async url=>{if(!blocked)throw new Error("The metadata could not be read.");return {url,status:403,html:"Check required"};},render:async url=>{rendered++;return {url,html:fixture(product())};}});assert.equal(rendered,1);assert.equal(result.quotes[0].matches[0].priceCents,1388);
+ }
+});
+
+test("an informational market with safe metadata takes no browser slot and invents no price",async()=>{
+ let rendered=0;const result=await lookupLocalShopPrices([{id:"tomato",name:"Tomatoes",amount:500,unit:"g",category:"produce"}],[shop({id:"metadata-info-market",kind:"market",shopType:undefined,name:"Local Farmers Market"})],context,{discover:async url=>({url,html:"<h1>Farmers market every Saturday</h1>"}),render:async()=>{rendered++;throw new Error("No browser page should be needed.");}});assert.equal(rendered,0);assert.equal(result.quotes[0].status,"unavailable");assert.deepEqual(result.quotes[0].matches,[]);
+});
+
 test("browser provider statuses survive custom messages in both home and ingredient failures",async()=>{
  for(const status of ["needs-browser","needs-store","not-configured","unavailable"] as const){
   const result=await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:`status-${status}`})],context,{render:async()=>{throw Object.assign(new Error("An explicit source state."),{providerStatus:status});}});assert.equal(result.quotes[0].status,status);assert.equal(result.quotes[0].collectionMethod,"browser");

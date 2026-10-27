@@ -57,7 +57,7 @@ Published data checks
 - https://schema.org/Offer documents the explicit offer fields used here.
 
 Validation
-26 local-pricing tests, six website-discovery tests and three specialist-map
+30 local-pricing tests, six website-discovery tests and three specialist-map
 tests cover positive products, quantity costs, unsupported/member/
 expired prices, stock uncertainty, product identity, geographical exclusions,
 discovery bounds, duplicates, partial success, browser-check states, independent
@@ -106,3 +106,10 @@ another shop timing out or the caller ending the shared request.
 The local batch has a 28-second limit and each shop a 26-second limit, including
 provider queueing. These fit inside the 35-second API limit after a 6.5-second
 website-enrichment budget, while allowing a cold browser session to finish.
+When a browser renderer and explicit discover reader are supplied, safe pinned
+HTTP can read homepage metadata only to identify the commerce platform and
+same-site product links. Its prices and stock are discarded. Product offers found
+on that homepage require browser verification before any quote; search/product
+price evidence still comes from the real browser. Unreadable or blocked metadata
+falls back to one ordinary browser homepage. Informational market pages can exit
+without taking a browser slot.

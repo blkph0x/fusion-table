@@ -425,7 +425,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
           while (backoff.size > 128) backoff.delete(backoff.keys().next().value);
         }
         return result;
-      },signal,store && !source && retailer === "iga" ? `iga:${verifiedStoreKey(store)}` : null);
+      },signal,!source && retailer === "coles" ? "retailer:coles" : store && !source && retailer === "iga" ? `iga:${verifiedStoreKey(store)}` : null);
       shared.task = Promise.race([scheduled,timeout]).then(result => {
         if (!signal.aborted && result.providerStatus === "ready" && Buffer.byteLength(result.html || "") <= PAGE_LIMIT) {
           cache.delete(key); cache.set(key,{result,at:Date.now()});

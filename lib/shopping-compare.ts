@@ -74,7 +74,7 @@ export async function compareShopping(request: ShoppingPriceRequest, deps: Depen
     const quotes = catalogue.filter(quote => quote.source === `${guide.id}-online-catalogue`);
     const errors = quotes.filter(quote => quote.error);
     const actionable = quotes.find(quote => quote.status === "needs-browser" || quote.status === "needs-store" || quote.status === "not-configured");
-    const status = actionable?.status || (quotes.some(quote => quote.fetchedAt) ? errors.length ? "partial" : "ready" : guide.id === "iga" ? "needs-store" : "unavailable");
+    const status = actionable?.status || (quotes.some(quote => quote.fetchedAt) ? errors.length ? "partial" : "ready" : quotes.some(quote => quote.status === "unavailable") ? "unavailable" : guide.id === "iga" ? "needs-store" : "unavailable");
     providerStatuses.push({ ...guide, status, message: actionable?.error || (errors[0]?.error ?? (status === "ready" ? "Published online price guide. Confirm the selected store, availability and final price on the retailer." : guide.id === "iga" ? "Choose an IGA store to see its own prices. A default branch is not treated as your local shop." : !online ? "Online price checking is disabled or outside the supported area." : "No readable prices were returned for this batch. Open the retailer to check.")) });
   }
   for (const shop of localResult?.checkedShops || []) {

@@ -5,6 +5,7 @@ import { lookupAldiQueries } from "@/lib/aldi-catalogue";
 import { lookupIgaQueries } from "@/lib/iga-catalogue";
 import { browserPriceRenderer, localShopPageRenderer } from "@/lib/browser-price-client";
 import { lookupLocalShopPrices } from "@/lib/local-shop-prices";
+import { readPublicShopPage } from "@/lib/public-shop-reader";
 import { searchShopsWithFresh } from "@/lib/location-providers";
 import { enrichShopWebsites } from "@/lib/shop-website-discovery";
 import type { Shop } from "@/lib/locations";
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
         // The visitor supplies coordinates only. Shop identities/websites come from
         // our existing server-side map search, never request-provided URLs.
         const shops = await nearbyShops();
-        return lookupLocalShopPrices(context.lines, shops, { area: context.area, location: context.location, radiusKm: context.radiusKm ?? 5, country: context.country }, { render: renderShop }, abort);
+        return lookupLocalShopPrices(context.lines, shops, { area: context.area, location: context.location, radiusKm: context.radiusKm ?? 5, country: context.country }, { render: renderShop, ...(renderShop ? { discover: readPublicShopPage } : {}) }, abort);
       },
       recorded: (area, items, today) => withLedger(ledgerFile(), (ledger) => ({ result: quoteItems(ledger, area, items, today) })),
     }, signal);
