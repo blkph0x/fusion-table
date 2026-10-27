@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Star } from "lucide-react";
-import { VERDICTS, formatPantryQuantity, isConsumable, makeRecipe, pantryOwnedIds, prepareRecipe, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
+import { VERDICTS, declarePantryOwnership, formatPantryQuantity, isConsumable, makeRecipe, pantryAmountKey, pantryOnHand, pantryOwnedIds, prepareRecipe, type ShopNeed, type Stock, type UseLine, type VerdictId } from "@/lib/pantry";
 
 const pantrySignature = (pantry: readonly Stock[]) => JSON.stringify(pantry.map((item) => [item.key, item.unit, item.onHand]).sort());
 
@@ -32,6 +32,33 @@ export function KitchenDesk({
   const [message, setMessage] = useState("");
   const [receipt, setReceipt] = useState<{ before: Stock[]; after: string } | null>(null);
   const recorded = useRef(false);
+  const declarations = useRef(new Map<string, { amount: number; unit: string; expected: number; added: Set<string> }>());
+
+  function declare(item: typeof ingredients[number]) {
+    const nextOwned = new Set(owned), have = !nextOwned.has(item.id);
+    if (have) nextOwned.add(item.id); else nextOwned.delete(item.id);
+    const key = pantryAmountKey(item.name, item.unit);
+    let prior = declarations.current.get(key);
+    if (prior && pantryOnHand(pantry, item.name, prior.unit) !== prior.expected) {
+      declarations.current.delete(key); prior = undefined;
+    }
+    // Unticking an originally owned use is a correction, not a reversal of a new top-up.
+    if (prior && !have && !prior.added.has(item.id)) prior.amount = 0;
+    const next = declarePantryOwnership(pantry, ingredients.map(line => ({ ...line, have: nextOwned.has(line.id) })), item.id, !have && prior ? prior : undefined);
+    const before = pantryOnHand(pantry, item.name, item.unit), after = pantryOnHand(next, item.name, item.unit);
+    if (have && after > before) {
+      prior ||= { amount: before, unit: item.unit, expected: before, added: new Set<string>() };
+      prior.added.add(item.id);
+      declarations.current.set(key, prior);
+    } else if (!have && prior) {
+      prior.added.delete(item.id);
+      if (!prior.added.size) declarations.current.delete(key);
+    }
+    if (prior) prior.expected = pantryOnHand(next, item.name, prior.unit);
+    setSelection({ signature: pantrySignature(next), owned: nextOwned });
+    onPantry(next);
+    setMessage(have ? `Pantry updated for ${item.name}. Your shopping shortfall updates automatically.` : `Updated what you have for ${item.name}. Nothing has been used up.`);
+  }
 
   function selectedLines(): UseLine[] {
     return ingredients.map((item) => ({
@@ -74,7 +101,7 @@ export function KitchenDesk({
   return (
     <section className="kitchen-desk" aria-label="Pantry and shopping">
       <div className="subheading"><h3>Pantry and shopping</h3></div>
-      <p className="subtle-small">Tick what you already have, then make your shopping list. Pantry amounts are only used when you record a finished cook. Nothing here has a shelf price.</p>
+      <p className="subtle-small">Tick what you already have to update your pantry and shopping costs immediately. Untick to correct what you have. Amounts are only used up when you record a finished cook.</p>
       <ul className="ingredient-list">
         {ingredients.map((item) => (
           <li key={item.id}>
@@ -82,12 +109,7 @@ export function KitchenDesk({
               <input
                 type="checkbox"
                 checked={owned.has(item.id)}
-                onChange={() => {
-                  const next = new Set(owned);
-                  if (next.has(item.id)) next.delete(item.id);
-                  else next.add(item.id);
-                  setSelection({ signature, owned: next });
-                }}
+                onChange={() => declare(item)}
               />
               <span>
                 <strong>{item.name}</strong>
@@ -112,7 +134,7 @@ export function KitchenDesk({
           </button>
         ))}
       </div>
-      <p className="subtle-small">These stars and make-again notes stay in this browser&apos;s cookbook. They do not change shared suggestions. Use “Tell us about this recipe” to share a cooked report. Ratings do not verify food safety.</p>
+      <p className="subtle-small">These stars and make-again notes stay in your private kitchen. They do not change shared suggestions. Use “Tell us about this recipe” to share a cooked report. Ratings do not verify food safety.</p>
       <div className="avoid-row" role="group" aria-label="Personal make-again note">
         {VERDICTS.map((choice) => (
           <button key={choice.id} type="button" className={verdict === choice.id ? "button primary small" : "text-button"} aria-pressed={verdict === choice.id} onClick={() => onVerdict(choice.id)}>

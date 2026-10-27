@@ -43,7 +43,7 @@ export function AccountPanel({ snapshot, ready, onRestore, onNotice }: Props) {
   const restoreGuest = useCallback((message: string) => {
     generation.current++;
     activeId.current = null;
-    setEnabled(false); setChoice(null); setConflict(null); setDiscardLogout(false);
+    setEnabled(false); setChoice(null); setConflict(null); setDiscardLogout(false); setMode("login");
     let data: KitchenData = {};
     try { data = leaveAccountKitchen(accountStorage()); }
     catch { /* Restore a clean guest view even when browser persistence is unavailable. */ }

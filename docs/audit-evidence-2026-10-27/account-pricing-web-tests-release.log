@@ -1,0 +1,3446 @@
+(node:12448) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:21424) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: account snapshots include kitchen content but never navigation, passwords or unrecognized storage
+ok 1 - account snapshots include kitchen content but never navigation, passwords or unrecognized storage
+  ---
+  duration_ms: 2.0902
+  ...
+# Subtest: guest storage stays separate while an account is active, including cross-tab logout races
+ok 2 - guest storage stays separate while an account is active, including cross-tab logout races
+  ---
+  duration_ms: 0.7111
+  ...
+# Subtest: a reload removes stale private mirrors before the page can hydrate and preserves the guest backup
+ok 3 - a reload removes stale private mirrors before the page can hydrate and preserves the guest backup
+  ---
+  duration_ms: 0.632
+  ...
+# Subtest: missing or corrupt guest backup starts an empty guest instead of leaking account data
+ok 4 - missing or corrupt guest backup starts an empty guest instead of leaking account data
+  ---
+  duration_ms: 0.2768
+  ...
+# Subtest: account reads are same-origin, uncacheable and never store a bearer token in browser state
+ok 5 - account reads are same-origin, uncacheable and never store a bearer token in browser state
+  ---
+  duration_ms: 30.6727
+  ...
+# Subtest: sign-in sends explicit long-session choice with the same-origin mutation header
+ok 6 - sign-in sends explicit long-session choice with the same-origin mutation header
+  ---
+  duration_ms: 1.3399
+  ...
+# Subtest: optimistic saves bind account identity and strip unsynced fields before sending
+ok 7 - optimistic saves bind account identity and strip unsynced fields before sending
+  ---
+  duration_ms: 0.7043
+  ...
+# Subtest: a version conflict carries the other saved kitchen without silently replacing either side
+ok 8 - a version conflict carries the other saved kitchen without silently replacing either side
+  ---
+  duration_ms: 1.2087
+  ...
+# Subtest: oversized sync is refused before any request, while guest storage keeps its own browser capacity
+ok 9 - oversized sync is refused before any request, while guest storage keeps its own browser capacity
+  ---
+  duration_ms: 44.0464
+  ...
+# Subtest: unavailable and malformed services become understandable errors without exposing proxy HTML
+ok 10 - unavailable and malformed services become understandable errors without exposing proxy HTML
+  ---
+  duration_ms: 2.2976
+  ...
+# Subtest: logout and password change require acknowledged server responses
+ok 11 - logout and password change require acknowledged server responses
+  ---
+  duration_ms: 2.8355
+  ...
+# Subtest: blocked storage keeps a tab-local guest recovery without preventing SQL accounts
+ok 12 - blocked storage keeps a tab-local guest recovery without preventing SQL accounts
+  ---
+  duration_ms: 0.3684
+  ...
+# Subtest: a full storage quota cannot leave a durable account marker without guest recovery
+ok 13 - a full storage quota cannot leave a durable account marker without guest recovery
+  ---
+  duration_ms: 0.1852
+  ...
+# (node:67116) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sign-in asks which kitchen to use before uploading any browser data
+ok 14 - sign-in asks which kitchen to use before uploading any browser data
+  ---
+  duration_ms: 63.1191
+  ...
+# Subtest: the production signup form validates password length and sends explicit persistent-session choice
+ok 15 - the production signup form validates password length and sends explicit persistent-session choice
+  ---
+  duration_ms: 6.236
+  ...
+# Subtest: a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+ok 16 - a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+  ---
+  duration_ms: 4.3346
+  ...
+# Subtest: conflicting changes require a choice and never overwrite the other device automatically
+ok 17 - conflicting changes require a choice and never overwrite the other device automatically
+  ---
+  duration_ms: 5.6997
+  ...
+# Subtest: failed automatic saves pause without a request storm and can be retried explicitly
+ok 18 - failed automatic saves pause without a request storm and can be retried explicitly
+  ---
+  duration_ms: 5.2455
+  ...
+# Subtest: session expiry restores guest content instead of leaving a private account visible
+ok 19 - session expiry restores guest content instead of leaving a private account visible
+  ---
+  duration_ms: 3.2865
+  ...
+# Subtest: an offline account check leaves the guest kitchen usable without uploading it
+ok 20 - an offline account check leaves the guest kitchen usable without uploading it
+  ---
+  duration_ms: 2.8838
+  ...
+# Subtest: a tab left open checks the session deadline and clears expired private content without a keepalive loop
+ok 21 - a tab left open checks the session deadline and clears expired private content without a keepalive loop
+  ---
+  duration_ms: 6.2002
+  ...
+# Subtest: an authenticated different browser must choose cloud or browser before either side changes
+ok 22 - an authenticated different browser must choose cloud or browser before either side changes
+  ---
+  duration_ms: 4.6949
+  ...
+# Subtest: the explicit conflict choice can keep the current kitchen against the newest version
+ok 23 - the explicit conflict choice can keep the current kitchen against the newest version
+  ---
+  duration_ms: 5.1248
+  ...
+# Subtest: signing out flushes the latest unscheduled edit and clears password form state
+ok 24 - signing out flushes the latest unscheduled edit and clears password form state
+  ---
+  duration_ms: 6.3677
+  ...
+# Subtest: the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+ok 25 - the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+  ---
+  duration_ms: 4.3154
+  ...
+# Subtest: the production password form rotates credentials and clears its password inputs
+ok 26 - the production password form rotates credentials and clears its password inputs
+  ---
+  duration_ms: 2.847
+  ...
+# (node:66968) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: account config fails closed for missing secrets and untrusted remote origins
+ok 27 - account config fails closed for missing secrets and untrusted remote origins
+  ---
+  duration_ms: 2.9401
+  ...
+# Subtest: account writes reject cross-site origins, missing custom headers and simple forms
+ok 28 - account writes reject cross-site origins, missing custom headers and simple forms
+  ---
+  duration_ms: 25.955
+  ...
+# Subtest: cookies are HttpOnly secure path-scoped and persistence is explicit
+ok 29 - cookies are HttpOnly secure path-scoped and persistence is explicit
+  ---
+  duration_ms: 0.6174
+  ...
+# Subtest: session parser ignores malformed and duplicate cookies
+ok 30 - session parser ignores malformed and duplicate cookies
+  ---
+  duration_ms: 0.845
+  ...
+# Subtest: identity input validation preserves passwords and safely normalizes emails
+ok 31 - identity input validation preserves passwords and safely normalizes emails
+  ---
+  duration_ms: 0.6932
+  ...
+# Subtest: state validation bounds bytes, recursion and prototype keys without truncating
+ok 32 - state validation bounds bytes, recursion and prototype keys without truncating
+  ---
+  duration_ms: 15.5356
+  ...
+# Subtest: JSON body limits apply both to advertised and streamed actual bytes
+ok 33 - JSON body limits apply both to advertised and streamed actual bytes
+  ---
+  duration_ms: 124.8453
+  ...
+# Subtest: password hashes use independent salts and fixed validated scrypt work
+ok 34 - password hashes use independent salts and fixed validated scrypt work
+  ---
+  duration_ms: 2372.7521
+  ...
+# Subtest: password hashing has an immediate concurrency ceiling
+ok 35 - password hashing has an immediate concurrency ceiling
+  ---
+  duration_ms: 457.4205
+  ...
+# Subtest: session tokens have 256 random bits and only hashes identify stored sessions
+ok 36 - session tokens have 256 random bits and only hashes identify stored sessions
+  ---
+  duration_ms: 2.8135
+  ...
+# Subtest: sign up creates a private account and browser-session login without sharing kitchen data
+ok 37 - sign up creates a private account and browser-session login without sharing kitchen data
+  ---
+  duration_ms: 433.9837
+  ...
+# Subtest: remembered login has thirty-day absolute life and seven-day idle expiry
+ok 38 - remembered login has thirty-day absolute life and seven-day idle expiry
+  ---
+  duration_ms: 445.7927
+  ...
+# Subtest: active remembered sessions refresh idle time but never extend absolute expiry
+ok 39 - active remembered sessions refresh idle time but never extend absolute expiry
+  ---
+  duration_ms: 489.2455
+  ...
+# Subtest: ordinary sessions expire after twelve hours and cannot be revived by activity
+ok 40 - ordinary sessions expire after twelve hours and cannot be revived by activity
+  ---
+  duration_ms: 499.0052
+  ...
+# Subtest: login rotates an old session and rejects incorrect or unknown credentials equally
+ok 41 - login rotates an old session and rejects incorrect or unknown credentials equally
+  ---
+  duration_ms: 1878.7669
+  ...
+# Subtest: sign-up duplicate never returns an existing account session or plaintext secrets
+ok 42 - sign-up duplicate never returns an existing account session or plaintext secrets
+  ---
+  duration_ms: 1059.3052
+  ...
+# Subtest: saved kitchens are private to the authenticated account and use atomic version checks
+ok 43 - saved kitchens are private to the authenticated account and use atomic version checks
+  ---
+  duration_ms: 1018.6873
+  ...
+# Subtest: cross-tab cookie changes cannot save an old account's kitchen into another account
+ok 44 - cross-tab cookie changes cannot save an old account's kitchen into another account
+  ---
+  duration_ms: 961.3569
+  ...
+# Subtest: state version and content are validated before changing any stored data
+ok 45 - state version and content are validated before changing any stored data
+  ---
+  duration_ms: 481.3109
+  ...
+# Subtest: logout invalidates the SQL session and clears the cookie without deleting saved data
+ok 46 - logout invalidates the SQL session and clears the cookie without deleting saved data
+  ---
+  duration_ms: 929.3257
+  ...
+# Subtest: logout-all revokes every session even when a stale session row survives cleanup
+ok 47 - logout-all revokes every session even when a stale session row survives cleanup
+  ---
+  duration_ms: 946.5397
+  ...
+# Subtest: password changes verify the current password, revoke old sessions and issue a new one
+ok 48 - password changes verify the current password, revoke old sessions and issue a new one
+  ---
+  duration_ms: 3286.3264
+  ...
+# Subtest: persistent per-email throttling precedes password hashing and resets at the next window
+ok 49 - persistent per-email throttling precedes password hashing and resets at the next window
+  ---
+  duration_ms: 485.4141
+  ...
+# (node:42016) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: plain brand ties become transparent suggestions while changed food forms stay excluded
+ok 50 - plain brand ties become transparent suggestions while changed food forms stay excluded
+  ---
+  duration_ms: 3.64
+  ...
+# Subtest: a weight increment cannot masquerade as the selling price basis for loose produce
+ok 51 - a weight increment cannot masquerade as the selling price basis for loose produce
+  ---
+  duration_ms: 3.0709
+  ...
+# Subtest: volume spoons convert only to volume, never to a guessed food density
+ok 52 - volume spoons convert only to volume, never to a guessed food density
+  ---
+  duration_ms: 2.0692
+  ...
+# Subtest: stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+ok 53 - stale, unavailable, dietary-substitute and non-reviewable candidates cannot be auto-priced
+  ---
+  duration_ms: 0.6614
+  ...
+# Subtest: full catalogue pipeline cannot retain automatic eligibility for a rejected plain food form
+ok 54 - full catalogue pipeline cannot retain automatic eligibility for a rejected plain food form
+  ---
+  duration_ms: 8.011
+  ...
+# Subtest: obvious non-food matches cannot be priced or manually substituted as ingredients
+ok 55 - obvious non-food matches cannot be priced or manually substituted as ingredients
+  ---
+  duration_ms: 0.8726
+  ...
+# Subtest: scoped plain rules retain other ingredient matches and exact Australian spoon volumes
+ok 56 - scoped plain rules retain other ingredient matches and exact Australian spoon volumes
+  ---
+  duration_ms: 0.6107
+  ...
+# Subtest: brown-onion gravy cannot become fresh onion and reversed produce words stay equivalent
+ok 57 - brown-onion gravy cannot become fresh onion and reversed produce words stay equivalent
+  ---
+  duration_ms: 0.4419
+  ...
+# Subtest: explicit plain-food rules resolve brand ties while prepared or alternative foods stay excluded
+ok 58 - explicit plain-food rules resolve brand ties while prepared or alternative foods stay excluded
+  ---
+  duration_ms: 1.3099
+  ...
+# (node:20500) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: deterministic barbecue and smoking expansion
+    # Subtest: retains every original selection and adds the promised distinct classics and profiles
+    ok 1 - retains every original selection and adds the promised distinct classics and profiles
+      ---
+      duration_ms: 2.6732
+      ...
+    # Subtest: generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+    ok 2 - generates the complete classic × region × five-diet matrix with deterministic output and dietary safeguards
+      ---
+      duration_ms: 3994.5773
+      ...
+    # Subtest: composes recipes without network access or randomness
+    ok 3 - composes recipes without network access or randomness
+      ---
+      duration_ms: 35.5681
+      ...
+    # Subtest: selects appropriate animal cuts and already-cooked products for each technique
+    ok 4 - selects appropriate animal cuts and already-cooked products for each technique
+      ---
+      duration_ms: 12.9739
+      ...
+    # Subtest: uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+    ok 5 - uses cut-specific thermometer endpoints and tenderness checks, including fully cooked seafood
+      ---
+      duration_ms: 20.9904
+      ...
+    # Subtest: keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+    ok 6 - keeps cold-smoked platters to commercially ready-to-eat products with explicit cold-chain guidance
+      ---
+      duration_ms: 1.9848
+      ...
+    # Subtest: keeps gluten-free and plant alternatives distinct in pantry matching
+    ok 7 - keeps gluten-free and plant alternatives distinct in pantry matching
+      ---
+      duration_ms: 2.8045
+      ...
+    # Subtest: gives vegetarian and vegan adaptations their own preparation and cooking instructions
+    ok 8 - gives vegetarian and vegan adaptations their own preparation and cooking instructions
+      ---
+      duration_ms: 534.772
+      ...
+    # Subtest: scales BBQ food quantities once without weakening the safety guidance
+    ok 9 - scales BBQ food quantities once without weakening the safety guidance
+      ---
+      duration_ms: 79.0569
+      ...
+    # Subtest: uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+    ok 10 - uses bone-in portions and shorter covered methods for small servings instead of fractional whole birds
+      ---
+      duration_ms: 18.8461
+      ...
+    # Subtest: explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+    ok 11 - explains smoker versus kitchen methods and reserves regional sauces for a controlled finish
+      ---
+      duration_ms: 3.6659
+      ...
+    # Subtest: routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+    ok 12 - routes BBQ spices, cheese, meat and seafood to suitable shops without generic specialty assumptions
+      ---
+      duration_ms: 13.4164
+      ...
+    # Subtest: leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+    ok 13 - leaves an omitted cook session unchanged and keeps thermometer endpoints when one is set
+      ---
+      duration_ms: 7.9146
+      ...
+    1..13
+ok 59 - deterministic barbecue and smoking expansion
+  ---
+  duration_ms: 4731.9152
+  type: 'suite'
+  ...
+# (node:60324) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cuts stay optional
+    # Subtest: keeps the method cut when none is chosen
+    ok 1 - keeps the method cut when none is chosen
+      ---
+      duration_ms: 25.0298
+      ...
+    # Subtest: shops the chosen cut and leaves the dish title on the main
+    ok 2 - shops the chosen cut and leaves the dish title on the main
+      ---
+      duration_ms: 2.8115
+      ...
+    # Subtest: rejects an unknown cut and a cut for the wrong main
+    ok 3 - rejects an unknown cut and a cut for the wrong main
+      ---
+      duration_ms: 0.6932
+      ...
+    # Subtest: covers everyday cuts, Angus, wagyu and the less common ones
+    ok 4 - covers everyday cuts, Angus, wagyu and the less common ones
+      ---
+      duration_ms: 2.0243
+      ...
+    1..4
+ok 60 - cuts stay optional
+  ---
+  duration_ms: 32.0617
+  type: 'suite'
+  ...
+# Subtest: smart catalogue matching
+    # Subtest: excludes actual lime-juice accessories and strong pet/tool listings from edible suggestions
+    ok 1 - excludes actual lime-juice accessories and strong pet/tool listings from edible suggestions
+      ---
+      duration_ms: 6.2829
+      ...
+    # Subtest: keeps food names that resemble pet or kitchen words and preserves ambiguous choices
+    ok 2 - keeps food names that resemble pet or kitchen words and preserves ambiguous choices
+      ---
+      duration_ms: 20.35
+      ...
+    # Subtest: uses explicit retailer non-food categories without assuming food names certify a diet
+    ok 3 - uses explicit retailer non-food categories without assuming food names certify a diet
+      ---
+      duration_ms: 1.2163
+      ...
+    # Subtest: does not automatically select an unlabelled product for an explicit dietary request
+    ok 4 - does not automatically select an unlabelled product for an explicit dietary request
+      ---
+      duration_ms: 1.6917
+      ...
+    # Subtest: accepts explicit product claim metadata but never infers it from a category
+    ok 5 - accepts explicit product claim metadata but never infers it from a category
+      ---
+      duration_ms: 1.8031
+      ...
+    # Subtest: picks thigh fillet and does not pick breast
+    ok 6 - picks thigh fillet and does not pick breast
+      ---
+      duration_ms: 0.9296
+      ...
+    # Subtest: keeps wagyu and Angus out of an ordinary pick, and does not swap in ordinary meat
+    ok 7 - keeps wagyu and Angus out of an ordinary pick, and does not swap in ordinary meat
+      ---
+      duration_ms: 0.9407
+      ...
+    # Subtest: does not select out of stock, unknown stock, or a missing price
+    ok 8 - does not select out of stock, unknown stock, or a missing price
+      ---
+      duration_ms: 0.5948
+      ...
+    # Subtest: recognises a different name for the same food
+    ok 9 - recognises a different name for the same food
+      ---
+      duration_ms: 3.2877
+      ...
+    # Subtest: rounds a positive catalogue price half up and never turns zero into money
+    ok 10 - rounds a positive catalogue price half up and never turns zero into money
+      ---
+      duration_ms: 0.3487
+      ...
+    1..10
+ok 61 - smart catalogue matching
+  ---
+  duration_ms: 38.4241
+  type: 'suite'
+  ...
+# Subtest: woolworths catalogue payload
+    # Subtest: reads the public search shape and drops a zero price
+    ok 1 - reads the public search shape and drops a zero price
+      ---
+      duration_ms: 0.6376
+      ...
+    # Subtest: preserves explicit cooked-rice metadata even when the title omits its preparation
+    ok 2 - preserves explicit cooked-rice metadata even when the title omits its preparation
+      ---
+      duration_ms: 0.9957
+      ...
+    # Subtest: filters non-food rows before the food result cap and reads bounded category labels
+    ok 3 - filters non-food rows before the food result cap and reads bounded category labels
+      ---
+      duration_ms: 1.4415
+      ...
+    # Subtest: does not hang a catalogue price on a butcher, and an empty selection is not $0
+    ok 4 - does not hang a catalogue price on a butcher, and an empty selection is not $0
+      ---
+      duration_ms: 0.6078
+      ...
+    # Subtest: reads a fixture response and refuses a redirect off Woolworths
+    ok 5 - reads a fixture response and refuses a redirect off Woolworths
+      ---
+      duration_ms: 44.6942
+      ...
+    # Subtest: looks up the other shop name when the list wording is not what the catalogue uses
+    ok 6 - looks up the other shop name when the list wording is not what the catalogue uses
+      ---
+      duration_ms: 4.2259
+      ...
+    # Subtest: does not follow a Woolworths redirect onto another port or with credentials
+    ok 7 - does not follow a Woolworths redirect onto another port or with credentials
+      ---
+      duration_ms: 1.8274
+      ...
+    # Subtest: matches chillies to chilli and does not treat eggplant as eggs
+    ok 8 - matches chillies to chilli and does not treat eggplant as eggs
+      ---
+      duration_ms: 0.4455
+      ...
+    # Subtest: cancels a queued lookup before busy slots finish and removes it without consuming a slot
+    ok 9 - cancels a queued lookup before busy slots finish and removes it without consuming a slot
+      ---
+      duration_ms: 30.1743
+      ...
+    1..9
+ok 62 - woolworths catalogue payload
+  ---
+  duration_ms: 85.7562
+  type: 'suite'
+  ...
+# (node:5708) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classics that require an animal-main thermometer endpoint include the thermometer
+ok 63 - classics that require an animal-main thermometer endpoint include the thermometer
+  ---
+  duration_ms: 457.1054
+  ...
+# Subtest: every classic, regional profile and diet routes its listed regional ingredients into the method
+ok 64 - every classic, regional profile and diet routes its listed regional ingredients into the method
+  ---
+  duration_ms: 1867.3157
+  ...
+# Subtest: Japanese miso is a deliberate off-heat finish, with ginger cooked first
+ok 65 - Japanese miso is a deliberate off-heat finish, with ginger cooked first
+  ---
+  duration_ms: 5.4687
+  ...
+# Subtest: risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+ok 66 - risotto cooks curry paste and aromatics before stock, and dissolves sweet condiments after stock
+  ---
+  duration_ms: 1.2323
+  ...
+# Subtest: delicate spice and woody herbs have explicit finishing or removal instructions
+ok 67 - delicate spice and woody herbs have explicit finishing or removal instructions
+  ---
+  duration_ms: 3.4955
+  ...
+# Subtest: crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+ok 68 - crisp formats cook wet regional sauces separately, cool yogurt mixes and retain their main endpoints
+  ---
+  duration_ms: 0.94
+  ...
+# Subtest: classic plates retain one authored starch rather than gaining a second full grain or bread
+ok 69 - classic plates retain one authored starch rather than gaining a second full grain or bread
+  ---
+  duration_ms: 1054.9405
+  ...
+# Subtest: regional sauce amounts scale once and split base oil and stock without double allocation
+ok 70 - regional sauce amounts scale once and split base oil and stock without double allocation
+  ---
+  duration_ms: 3.1148
+  ...
+# Subtest: every classic marks one authored finishing boundary before seeded extras are assembled
+ok 71 - every classic marks one authored finishing boundary before seeded extras are assembled
+  ---
+  duration_ms: 335.6928
+  ...
+# Subtest: pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+ok 72 - pasta enters its packet-timed final window after the regional base, then is tossed without waiting
+  ---
+  duration_ms: 6.6448
+  ...
+# Subtest: seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+ok 73 - seeded pasta prepares extra vegetables before its packet cooking window, without holding drained pasta
+  ---
+  duration_ms: 228.167
+  ...
+# Subtest: cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+ok 74 - cold platter finishes warm-loosened ingredients before chilling and adds fresh seasoning without reheating
+  ---
+  duration_ms: 2.1641
+  ...
+# (node:44672) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: classic preparation and final assembly
+    # Subtest: serves hot stuffed shells with slaw and one starch
+    ok 1 - serves hot stuffed shells with slaw and one starch
+      ---
+      duration_ms: 121.2845
+      ...
+    # Subtest: does not add a second cooking step when an existing rice is only renamed
+    ok 2 - does not add a second cooking step when an existing rice is only renamed
+      ---
+      duration_ms: 3.1222
+      ...
+    # Subtest: keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+    ok 3 - keeps a chickpea curry free of random secondary proteins and phantom seafood cooking steps
+      ---
+      duration_ms: 22.153
+      ...
+    1..3
+ok 75 - classic preparation and final assembly
+  ---
+  duration_ms: 148.2516
+  type: 'suite'
+  ...
+# (node:47692) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: featured classic cards open the displayed recipe
+    # Subtest: uses identical classic, region, diet, servings and heat for each card, image token and opened recipe
+    ok 1 - uses identical classic, region, diet, servings and heat for each card, image token and opened recipe
+      ---
+      duration_ms: 41.4148
+      ...
+    # Subtest: opens a fixed unseeded template without household remixes or extra finishes
+    ok 2 - opens a fixed unseeded template without household remixes or extra finishes
+      ---
+      duration_ms: 6.3939
+      ...
+    1..2
+ok 76 - featured classic cards open the displayed recipe
+  ---
+  duration_ms: 49.3663
+  type: 'suite'
+  ...
+# (node:63904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+ok 77 - stuffed shells have feasible portions and one starch, with moist packet-cooked pasta
+  ---
+  duration_ms: 1570.6692
+  ...
+# Subtest: cottage-pie estimate covers its serial filling, oven and resting stages
+ok 78 - cottage-pie estimate covers its serial filling, oven and resting stages
+  ---
+  duration_ms: 55.881
+  ...
+# Subtest: BBQ cooking estimates include required rest after the timed heat stages
+ok 79 - BBQ cooking estimates include required rest after the timed heat stages
+  ---
+  duration_ms: 3.075
+  ...
+# Subtest: burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+ok 80 - burnt ends finish delicate sauce only after the final pan cook, for every profile and diet
+  ---
+  duration_ms: 878.0082
+  ...
+# Subtest: seeded fast mains prepare additions before cooking and retain final fresh service
+ok 81 - seeded fast mains prepare additions before cooking and retain final fresh service
+  ---
+  duration_ms: 261.0191
+  ...
+# Subtest: slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+ok 82 - slow-cook additions overlap the final cooking minutes instead of waiting for the hot main
+  ---
+  duration_ms: 20.9025
+  ...
+# (node:6240) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cleaner meals
+    # Subtest: recognises current vegetable-side ids when ranking accompaniments
+    ok 1 - recognises current vegetable-side ids when ranking accompaniments
+      ---
+      duration_ms: 19.0178
+      ...
+    # Subtest: normalizes clean knobs and scores bottles and steps
+    ok 2 - normalizes clean knobs and scores bottles and steps
+      ---
+      duration_ms: 44.3182
+      ...
+    # Subtest: reduces bottles and ingredients versus an uncleaned seeded plate
+    ok 3 - reduces bottles and ingredients versus an uncleaned seeded plate
+      ---
+      duration_ms: 42.1126
+      ...
+    # Subtest: keeps hard filters and region affinity under clean prefs
+    ok 4 - keeps hard filters and region affinity under clean prefs
+      ---
+      duration_ms: 34.7161
+      ...
+    # Subtest: SAT clean mode prefers fewer bottled umami options on Western plates
+    ok 5 - SAT clean mode prefers fewer bottled umami options on Western plates
+      ---
+      duration_ms: 8.0776
+      ...
+    # Subtest: week planner ranks cleaner dinners without relaxing allergens
+    ok 6 - week planner ranks cleaner dinners without relaxing allergens
+      ---
+      duration_ms: 1503.3813
+      ...
+    1..6
+ok 83 - cleaner meals
+  ---
+  duration_ms: 1653.2363
+  type: 'suite'
+  ...
+# (node:4596) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a retailer refusal triggers a short backoff instead of repeated search attempts
+ok 84 - a retailer refusal triggers a short backoff instead of repeated search attempts
+  ---
+  duration_ms: 47.6154
+  ...
+# Subtest: Coles reads public product fields and selling price, never comparison or crossed-out prices
+ok 85 - Coles reads public product fields and selling price, never comparison or crossed-out prices
+  ---
+  duration_ms: 3.9624
+  ...
+# Subtest: Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+ok 86 - Coles preserves unavailable or unknown stock instead of advertising it as ready to buy
+  ---
+  duration_ms: 18.3743
+  ...
+# Subtest: Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+ok 87 - Coles skips advertisements, duplicate IDs, missing IDs and obvious non-food listings
+  ---
+  duration_ms: 0.759
+  ...
+# Subtest: malformed and oversized public payloads fail clearly without fabricated rows
+ok 88 - malformed and oversized public payloads fail clearly without fabricated rows
+  ---
+  duration_ms: 0.9526
+  ...
+# Subtest: public product links stay on Coles even when a matching href points elsewhere
+ok 89 - public product links stay on Coles even when a matching href points elsewhere
+  ---
+  duration_ms: 0.4444
+  ...
+# Subtest: Coles redirects cannot escape the official secure origin
+ok 90 - Coles redirects cannot escape the official secure origin
+  ---
+  duration_ms: 5.1948
+  ...
+# Subtest: response streaming stops at the byte cap rather than reading an arbitrarily large page
+ok 91 - response streaming stops at the byte cap rather than reading an arbitrarily large page
+  ---
+  duration_ms: 2.1137
+  ...
+# Subtest: identical in-flight searches coalesce and subsequent lookups use the bounded cache
+ok 92 - identical in-flight searches coalesce and subsequent lookups use the bounded cache
+  ---
+  duration_ms: 12.388
+  ...
+# Subtest: failed searches release their pending entry so a retry can recover
+ok 93 - failed searches release their pending entry so a retry can recover
+  ---
+  duration_ms: 5.2561
+  ...
+# Subtest: an aborted coalesced consumer stops waiting without cancelling the original request
+ok 94 - an aborted coalesced consumer stops waiting without cancelling the original request
+  ---
+  duration_ms: 3.8907
+  ...
+# Subtest: queued Coles requests observe cancellation before a busy request releases its slot
+ok 95 - queued Coles requests observe cancellation before a busy request releases its slot
+  ---
+  duration_ms: 6.4419
+  ...
+# (node:27080) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: community learning
+    # Subtest: keeps an unseeded meal byte-for-byte and only scales a copy
+    ok 1 - keeps an unseeded meal byte-for-byte and only scales a copy
+      ---
+      duration_ms: 39.2204
+      ...
+    # Subtest: requires the reason before saving each current low report and keeps the plate
+    ok 2 - requires the reason before saving each current low report and keeps the plate
+      ---
+      duration_ms: 13.5103
+      ...
+    # Subtest: stops offering a plate only after a large majority, and later votes can bring it back
+    ok 3 - stops offering a plate only after a large majority, and later votes can bring it back
+      ---
+      duration_ms: 8.7478
+      ...
+    # Subtest: keeps a later yes when the same person adds stars, and agrees an amount without removing it
+    ok 4 - keeps a later yes when the same person adds stars, and agrees an amount without removing it
+      ---
+      duration_ms: 2.2373
+      ...
+    # Subtest: writes the book to disk and refuses to wipe a file it cannot read
+    ok 5 - writes the book to disk and refuses to wipe a file it cannot read
+      ---
+      duration_ms: 18.4544
+      ...
+    1..5
+ok 96 - community learning
+  ---
+  duration_ms: 83.9783
+  type: 'suite'
+  ...
+# Subtest: shop prices
+    # Subtest: keeps recorded prices by area, leaves specials out of the average, and never stores a blank as zero
+    ok 1 - keeps recorded prices by area, leaves specials out of the average, and never stores a blank as zero
+      ---
+      duration_ms: 1.7337
+      ...
+    # Subtest: reads one public price and refuses a private or unsigned page
+    ok 2 - reads one public price and refuses a private or unsigned page
+      ---
+      duration_ms: 31.7378
+      ...
+    1..2
+ok 97 - shop prices
+  ---
+  duration_ms: 34.1934
+  type: 'suite'
+  ...
+# (node:33244) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a first impression cannot silently become a cooked star rating
+ok 98 - a first impression cannot silently become a cooked star rating
+  ---
+  duration_ms: 35.0946
+  ...
+# Subtest: two cooked stars open reasons and save the rating and category atomically without mandatory prose
+ok 99 - two cooked stars open reasons and save the rating and category atomically without mandatory prose
+  ---
+  duration_ms: 38.7319
+  ...
+# Subtest: No and will-not-make-again both require a reason, including first impressions
+ok 100 - No and will-not-make-again both require a reason, including first impressions
+  ---
+  duration_ms: 26.9828
+  ...
+# Subtest: Something else requires a useful note and can bind an exact ingredient and step
+ok 101 - Something else requires a useful note and can bind an exact ingredient and step
+  ---
+  duration_ms: 31.7214
+  ...
+# Subtest: network failure keeps the draft and an exact recipe change resets stale references
+ok 102 - network failure keeps the draft and an exact recipe change resets stale references
+  ---
+  duration_ms: 16.8816
+  ...
+# Subtest: a fresh high rating clears an invisible earlier No and will-not-make-again choice
+ok 103 - a fresh high rating clears an invisible earlier No and will-not-make-again choice
+  ---
+  duration_ms: 11.1912
+  ...
+# Subtest: a doneness report prompts review and shows exact ingredient and step without claiming safety
+ok 104 - a doneness report prompts review and shows exact ingredient and step without claiming safety
+  ---
+  duration_ms: 14.8275
+  ...
+# Subtest: earlier unstructured reasons remain readable beside a current version
+ok 105 - earlier unstructured reasons remain readable beside a current version
+  ---
+  duration_ms: 5.1583
+  ...
+# (node:64688) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: atomic audit replacement tolerates brief Windows sharing locks without deleting prior evidence
+ok 106 - atomic audit replacement tolerates brief Windows sharing locks without deleting prior evidence
+  ---
+  duration_ms: 2.7212
+  ...
+# Subtest: canonical plan derives every dietary default/cut row and all4250 classics without generation
+ok 107 - canonical plan derives every dietary default/cut row and all4250 classics without generation
+  ---
+  duration_ms: 8.6237
+  ...
+# Subtest: zero-based shards partition every index exactly, including uneven and empty workers
+ok 108 - zero-based shards partition every index exactly, including uneven and empty workers
+  ---
+  duration_ms: 1.3236
+  ...
+# Subtest: default CLI is plan-only and never creates its requested output directory
+ok 109 - default CLI is plan-only and never creates its requested output directory
+  ---
+  duration_ms: 529.6715
+  ...
+# Subtest: partial witnesses retain every measured ingredient and resume without duplicates
+ok 110 - partial witnesses retain every measured ingredient and resume without duplicates
+  ---
+  duration_ms: 67.4422
+  ...
+# Subtest: all completed shards are required and their ingredient witnesses form one exact union
+ok 111 - all completed shards are required and their ingredient witnesses form one exact union
+  ---
+  duration_ms: 77.6056
+  ...
+# Subtest: a changed source, changed chunk contract or tampered committed file cannot resume
+ok 112 - a changed source, changed chunk contract or tampered committed file cannot resume
+  ---
+  duration_ms: 32.2953
+  ...
+# Subtest: source changes during a run and complete-dictionary mutations invalidate completion
+ok 113 - source changes during a run and complete-dictionary mutations invalidate completion
+  ---
+  duration_ms: 50.3666
+  ...
+# Subtest: quality and generation failures are witnessed with bounded examples, never silently passed
+ok 114 - quality and generation failures are witnessed with bounded examples, never silently passed
+  ---
+  duration_ms: 30.4
+  ...
+# Subtest: streamed multi-chunk output handles backpressure without retaining all case records
+ok 115 - streamed multi-chunk output handles backpressure without retaining all case records
+  ---
+  duration_ms: 200.6688
+  ...
+# (node:67400) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opt-in audit plans the complete authored matrix without generating it during normal tests
+ok 116 - opt-in audit plans the complete authored matrix without generating it during normal tests
+  ---
+  duration_ms: 12.4312
+  ...
+# Subtest: every region/main-method receives all five seeded heat/serving presets, rotating every side
+ok 117 - every region/main-method receives all five seeded heat/serving presets, rotating every side
+  ---
+  duration_ms: 216.457
+  ...
+# Subtest: audit detects substantive content and quantity failures with small real fixtures
+ok 118 - audit detects substantive content and quantity failures with small real fixtures
+  ---
+  duration_ms: 18.9798
+  ...
+# Subtest: smoke indices are bounded, unique and include the edges of each phase
+ok 119 - smoke indices are bounded, unique and include the edges of each phase
+  ---
+  duration_ms: 0.3101
+  ...
+# Subtest: audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+ok 120 - audit accepts authored side aliases and classic cold-service boundaries without weakening unused checks
+  ---
+  duration_ms: 73.8405
+  ...
+# Subtest: classic ingredient references require the verified authored cooking phase
+ok 121 - classic ingredient references require the verified authored cooking phase
+  ---
+  duration_ms: 126.2324
+  ...
+# (node:59116) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: mince and lean chosen cuts never inherit a slow joint's simmer estimate
+ok 122 - mince and lean chosen cuts never inherit a slow joint's simmer estimate
+  ---
+  duration_ms: 115.2938
+  ...
+# Subtest: whole birds are rounded to whole shopping units at every serving size
+ok 123 - whole birds are rounded to whole shopping units at every serving size
+  ---
+  duration_ms: 90.078
+  ...
+# Subtest: slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+ok 124 - slow-cut oven recipes use a covered moist stage and a realistic tenderness window
+  ---
+  duration_ms: 2.6662
+  ...
+# Subtest: gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+ok 125 - gizzards get a tenderising preparation before quick cooking and sausages stay links until cooked
+  ---
+  duration_ms: 1.2113
+  ...
+# Subtest: whole-bird portions and advance side preparation survive recipe sharing
+ok 126 - whole-bird portions and advance side preparation survive recipe sharing
+  ---
+  duration_ms: 69.8797
+  ...
+# Subtest: tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+ok 127 - tongue is tenderised and peeled before every finishing method, while stock frames are not meal mains
+  ---
+  duration_ms: 5.0928
+  ...
+# (node:47956) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cut × method allowlists
+    # Subtest: forbids stew cuts with steak-style quick methods
+    ok 1 - forbids stew cuts with steak-style quick methods
+      ---
+      duration_ms: 3.187
+      ...
+    # Subtest: forbids whole birds with schnitzel, patties and stir-fry
+    ok 2 - forbids whole birds with schnitzel, patties and stir-fry
+      ---
+      duration_ms: 3.9703
+      ...
+    # Subtest: forbids mince as schnitzel steaks
+    ok 3 - forbids mince as schnitzel steaks
+      ---
+      duration_ms: 0.3654
+      ...
+    # Subtest: lists only affinity cuts in the builder helper
+    ok 4 - lists only affinity cuts in the builder helper
+      ---
+      duration_ms: 0.6573
+      ...
+    1..4
+ok 128 - cut × method allowlists
+  ---
+  duration_ms: 9.7893
+  type: 'suite'
+  ...
+# Subtest: cut-aware prep wording
+    # Subtest: grinds brisket for patties and never says cut steaks 2 cm thick
+    ok 1 - grinds brisket for patties and never says cut steaks 2 cm thick
+      ---
+      duration_ms: 21.2317
+      ...
+    # Subtest: pulls or shreds brisket when braised
+    ok 2 - pulls or shreds brisket when braised
+      ---
+      duration_ms: 3.2463
+      ...
+    # Subtest: cubes chuck for braise without steak language
+    ok 3 - cubes chuck for braise without steak language
+      ---
+      duration_ms: 1.7668
+      ...
+    # Subtest: keeps steak cuts on the grill at measured thickness
+    ok 4 - keeps steak cuts on the grill at measured thickness
+      ---
+      duration_ms: 2.7612
+      ...
+    # Subtest: shapes mince for grill as patties or crumble, not steaks
+    ok 5 - shapes mince for grill as patties or crumble, not steaks
+      ---
+      duration_ms: 1.7185
+      ...
+    # Subtest: cooks sausages as links
+    ok 6 - cooks sausages as links
+      ---
+      duration_ms: 0.354
+      ...
+    # Subtest: leaves short ribs whole on the bone for braise
+    ok 7 - leaves short ribs whole on the bone for braise
+      ---
+      duration_ms: 0.2629
+      ...
+    # Subtest: flattens only true steak/fillet forms for schnitzel
+    ok 8 - flattens only true steak/fillet forms for schnitzel
+      ---
+      duration_ms: 0.1835
+      ...
+    1..8
+ok 129 - cut-aware prep wording
+  ---
+  duration_ms: 32.2357
+  type: 'suite'
+  ...
+# Subtest: matrix coverage of every cut form
+    # Subtest: every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+    ok 1 - every catalogue cut has at least one allowed method, and prepareCut returns for allowed pairs
+      ---
+      duration_ms: 5.803
+      ...
+    1..1
+ok 130 - matrix coverage of every cut form
+  ---
+  duration_ms: 5.9685
+  type: 'suite'
+  ...
+# (node:51800) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Discover opens the exact featured plate
+    # Subtest: keeps Tonight's Ideas unchanged instead of applying another household recipe
+    ok 1 - keeps Tonight's Ideas unchanged instead of applying another household recipe
+      ---
+      duration_ms: 121.1409
+      ...
+    # Subtest: keeps the Meal of the Week's visible servings, diet and original cooking content
+    ok 2 - keeps the Meal of the Week's visible servings, diet and original cooking content
+      ---
+      duration_ms: 36.7085
+      ...
+    # Subtest: rejects mismatched or invalid card tokens instead of opening a different dish
+    ok 3 - rejects mismatched or invalid card tokens instead of opening a different dish
+      ---
+      duration_ms: 30.1873
+      ...
+    1..3
+ok 131 - Discover opens the exact featured plate
+  ---
+  duration_ms: 189.7026
+  type: 'suite'
+  ...
+# (node:59920) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: representative context boundary remains1496, not a claim about all seeds or sides
+ok 132 - representative context boundary remains1496, not a claim about all seeds or sides
+  ---
+  duration_ms: 2.141
+  ...
+# Subtest: form checks independently preserve cooking technique, temperature and cold service
+ok 133 - form checks independently preserve cooking technique, temperature and cold service
+  ---
+  duration_ms: 1.7482
+  ...
+# Subtest: broth form requires retained measured liquid in an integrated liquid cooking method
+ok 134 - broth form requires retained measured liquid in an integrated liquid cooking method
+  ---
+  duration_ms: 0.2438
+  ...
+# Subtest: aliases, exact portions and all dietary exclusions are checked outside SAT evaluation
+ok 135 - aliases, exact portions and all dietary exclusions are checked outside SAT evaluation
+  ---
+  duration_ms: 0.9622
+  ...
+# Subtest: fresh capsicum identity is distinct from a dried chilli seasoning alias
+ok 136 - fresh capsicum identity is distinct from a dried chilli seasoning alias
+  ---
+  duration_ms: 0.4292
+  ...
+# Subtest: compressed witnesses contain every model and bind both library and auditor code
+ok 137 - compressed witnesses contain every model and bind both library and auditor code
+  ---
+  duration_ms: 29.8267
+  ...
+# Subtest: context errors preserve other witnesses; incomplete, duplicate and changed-code results fail
+ok 138 - context errors preserve other witnesses; incomplete, duplicate and changed-code results fail
+  ---
+  duration_ms: 32.3893
+  ...
+# (node:4304) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: coherent seeded finishes on complete meals
+    # Subtest: fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+    ok 1 - fixes Italian grilled chicken seeds that formerly added tamarind/tofu, prawns/ginger and wombok
+      ---
+      duration_ms: 151.8203
+      ...
+    # Subtest: does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+    ok 2 - does not slice filled shells, burgers or cottage pie into a new cold/wrap/stir-fry structure
+      ---
+      duration_ms: 175.4975
+      ...
+    # Subtest: covers every region and every compatible main/method without growing a second protein
+    ok 3 - covers every region and every compatible main/method without growing a second protein
+      ---
+      duration_ms: 8352.1001
+      ...
+    # Subtest: keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+    ok 4 - keeps meaningful deterministic variation, exact scaled quantities and stable share regeneration
+      ---
+      duration_ms: 628.0493
+      ...
+    # Subtest: keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+    ok 5 - keeps hard diets, allergens, dislikes, pantry flags and cleaner preferences strict
+      ---
+      duration_ms: 108.0517
+      ...
+    # Subtest: gives real preparation for every finish and cooks sprouts rather than serving them raw
+    ok 6 - gives real preparation for every finish and cooks sprouts rather than serving them raw
+      ---
+      duration_ms: 378.2563
+      ...
+    # Subtest: adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+    ok 7 - adds no invented ingredients, title suffix or eight-minute delay when the existing plate needs no finish
+      ---
+      duration_ms: 2.4896
+      ...
+    # Subtest: retains the standalone solver's existing diet/allergen clauses
+    ok 8 - retains the standalone solver's existing diet/allergen clauses
+      ---
+      duration_ms: 1.2974
+      ...
+    # Subtest: prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+    ok 9 - prepares seeded additions before delicate curry/schnitzel sauce finishes and assembles without cooking again
+      ---
+      duration_ms: 205.1547
+      ...
+    # Subtest: moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+    ok 10 - moves the existing eight-minute allowance once and leaves legacy classics' preparation in their final step
+      ---
+      duration_ms: 16.004
+      ...
+    # Subtest: uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+    ok 11 - uses explicit classic finish boundaries so Japanese42 additions precede sauce finish and assembly
+      ---
+      duration_ms: 65.055
+      ...
+    # Subtest: keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+    ok 12 - keeps seeded cold-smoked salmon, cheddar and ready-to-eat tofu chilled without recooking the main
+      ---
+      duration_ms: 155.9116
+      ...
+    1..12
+ok 139 - coherent seeded finishes on complete meals
+  ---
+  duration_ms: 10242.6715
+  type: 'suite'
+  ...
+# (node:54992) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: finite finish graph exhaustion is complete, unique and hard-constraint checked
+ok 140 - finite finish graph exhaustion is complete, unique and hard-constraint checked
+  ---
+  duration_ms: 157.4146
+  ...
+# Subtest: finish graph caps stay incomplete and whole-word dislikes exclude every model
+ok 141 - finish graph caps stay incomplete and whole-word dislikes exclude every model
+  ---
+  duration_ms: 22.3645
+  ...
+# Subtest: fresh red pepper is the same vegetable as capsicum, while chilli flakes remain a different form
+ok 142 - fresh red pepper is the same vegetable as capsicum, while chilli flakes remain a different form
+  ---
+  duration_ms: 35.2902
+  ...
+# (node:64300) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fusion overhaul — naming
+    # Subtest: builds appetising titles without the old · method pattern
+    ok 1 - builds appetising titles without the old · method pattern
+      ---
+      duration_ms: 20.4105
+      ...
+    1..1
+ok 143 - fusion overhaul — naming
+  ---
+  duration_ms: 21.6331
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — meal of the week
+    # Subtest: scores wholesome quick plates above slow heavy ones
+    ok 1 - scores wholesome quick plates above slow heavy ones
+      ---
+      duration_ms: 7.3072
+      ...
+    # Subtest: picks a stable MOTW within the same week seed
+    ok 2 - picks a stable MOTW within the same week seed
+      ---
+      duration_ms: 69.1176
+      ...
+    1..2
+ok 144 - fusion overhaul — meal of the week
+  ---
+  duration_ms: 76.8872
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — randomised home suggestions
+    # Subtest: shuffles differently per load seed and keeps MOTW out of the strip
+    ok 1 - shuffles differently per load seed and keeps MOTW out of the strip
+      ---
+      duration_ms: 58.1941
+      ...
+    1..1
+ok 145 - fusion overhaul — randomised home suggestions
+  ---
+  duration_ms: 58.3745
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — recipe-tied images
+    # Subtest: keys and prompts include the actual meal identity, not a generic stock slug
+    ok 1 - keys and prompts include the actual meal identity, not a generic stock slug
+      ---
+      duration_ms: 1.3863
+      ...
+    1..1
+ok 146 - fusion overhaul — recipe-tied images
+  ---
+  duration_ms: 1.7646
+  type: 'suite'
+  ...
+# Subtest: fusion overhaul — large generated meal suite
+    # Subtest: samples hundreds of meals for affinity, realism, naming and no duplicate finishes
+    ok 1 - samples hundreds of meals for affinity, realism, naming and no duplicate finishes
+      ---
+      duration_ms: 2916.5722
+      ...
+    # Subtest: covers every curated plate without affinity leaks
+    ok 2 - covers every curated plate without affinity leaks
+      ---
+      duration_ms: 63.8886
+      ...
+    # Subtest: keeps method catalogue and combination count honest
+    ok 3 - keeps method catalogue and combination count honest
+      ---
+      duration_ms: 0.2171
+      ...
+    1..3
+ok 147 - fusion overhaul — large generated meal suite
+  ---
+  duration_ms: 2981.3335
+  type: 'suite'
+  ...
+# (node:63960) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: blocks a plural chilli dislike and does not put fish on a vegan plate
+ok 148 - blocks a plural chilli dislike and does not put fish on a vegan plate
+  ---
+  duration_ms: 10.8333
+  ...
+# Subtest: seeded fusion plates
+    # Subtest: keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+    ok 1 - keeps an unseeded meal byte-for-byte and changes the plate when the seed changes
+      ---
+      duration_ms: 414.7686
+      ...
+    # Subtest: keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+    ok 2 - keeps Thai fish sauce and sriracha, and Chinese oyster sauce, on the right plates
+      ---
+      duration_ms: 4.6586
+      ...
+    # Subtest: obeys heat, diet and allergen clauses
+    ok 3 - obeys heat, diet and allergen clauses
+      ---
+      duration_ms: 530.9397
+      ...
+    # Subtest: does not make a seeded week alphabetical or identical, and does not relax a filter
+    ok 4 - does not make a seeded week alphabetical or identical, and does not relax a filter
+      ---
+      duration_ms: 12783.1234
+      ...
+    # Subtest: varies a classic remix without changing the unseeded template
+    ok 5 - varies a classic remix without changing the unseeded template
+      ---
+      duration_ms: 40.7968
+      ...
+    1..5
+ok 149 - seeded fusion plates
+  ---
+  duration_ms: 13775.2077
+  type: 'suite'
+  ...
+# (node:37668) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ingredient diversity
+    # Subtest: keeps unseeded regional plates byte-stable and expands the explore pool past the fixed plate
+    ok 1 - keeps unseeded regional plates byte-stable and expands the explore pool past the fixed plate
+      ---
+      duration_ms: 23.5609
+      ...
+    # Subtest: varies aromatics within a region across seeds while keeping the signature heat
+    ok 2 - varies aromatics within a region across seeds while keeping the signature heat
+      ---
+      duration_ms: 55.5446
+      ...
+    # Subtest: meets min unique flavours per region over random meals and caps non-staple dominance
+    ok 3 - meets min unique flavours per region over random meals and caps non-staple dominance
+      ---
+      duration_ms: 65221.6636
+      ...
+    # Subtest: softens already-heavy week flavours and labels intentional pantry reuse
+    ok 4 - softens already-heavy week flavours and labels intentional pantry reuse
+      ---
+      duration_ms: 5603.4708
+      ...
+    1..4
+ok 150 - ingredient diversity
+  ---
+  duration_ms: 70905.9267
+  type: 'suite'
+  ...
+# (node:58896) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+ok 151 - all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+  ---
+  duration_ms: 67.2876
+  ...
+# Subtest: food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+ok 152 - food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+  ---
+  duration_ms: 1.6764
+  ...
+# Subtest: special foods, counted produce and prepared foods get their own planning forms
+ok 153 - special foods, counted produce and prepared foods get their own planning forms
+  ---
+  duration_ms: 0.5295
+  ...
+# Subtest: saved seeded fresh finishes are recognized by exact food form despite specialty category
+ok 154 - saved seeded fresh finishes are recognized by exact food form despite specialty category
+  ---
+  duration_ms: 0.6126
+  ...
+# Subtest: invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+ok 155 - invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+  ---
+  duration_ms: 0.5281
+  ...
+# Subtest: observed compatible unit costs replace assumptions without making the pack price the food-used price
+ok 156 - observed compatible unit costs replace assumptions without making the pack price the food-used price
+  ---
+  duration_ms: 3.6236
+  ...
+# Subtest: API exposes fallback allowances separately and never counts invented live prices
+ok 157 - API exposes fallback allowances separately and never counts invented live prices
+  ---
+  duration_ms: 1.2481
+  ...
+# (node:41708) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: household preferences reject invalid persisted controls and routes
+ok 158 - household preferences reject invalid persisted controls and routes
+  ---
+  duration_ms: 1.7315
+  ...
+# Subtest: plan settings identity is stable for reordered exclusions but changes for meaningful edits
+ok 159 - plan settings identity is stable for reordered exclusions but changes for meaningful edits
+  ---
+  duration_ms: 0.5206
+  ...
+# Subtest: recipe snapshots and cookbook imports validate before merging and preserve existing notes
+ok 160 - recipe snapshots and cookbook imports validate before merging and preserve existing notes
+  ---
+  duration_ms: 5.7052
+  ...
+# Subtest: opened recipes report conflicts without rewriting a household or its saved snapshot
+ok 161 - opened recipes report conflicts without rewriting a household or its saved snapshot
+  ---
+  duration_ms: 0.7455
+  ...
+# Subtest: a persisted plan restores its applied brief and rejects corrupt or falsely labelled sessions
+ok 162 - a persisted plan restores its applied brief and rejects corrupt or falsely labelled sessions
+  ---
+  duration_ms: 685.0501
+  ...
+# (node:51008) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: queued ledger changes preserve every successful write and recover from a failed change
+ok 163 - queued ledger changes preserve every successful write and recover from a failed change
+  ---
+  duration_ms: 180.2542
+  ...
+# Subtest: a malformed, wrong-shaped or oversized ledger is never replaced with an empty book
+ok 164 - a malformed, wrong-shaped or oversized ledger is never replaced with an empty book
+  ---
+  duration_ms: 43.2902
+  ...
+# Subtest: the ledger cap counts UTF-8 bytes and an oversized update preserves the original
+ok 165 - the ledger cap counts UTF-8 bytes and an oversized update preserves the original
+  ---
+  duration_ms: 80.3526
+  ...
+# Subtest: post quotas bound identities without evicting an active device quota
+ok 166 - post quotas bound identities without evicting an active device quota
+  ---
+  duration_ms: 1.3986
+  ...
+# Subtest: rotating device strings cannot bypass the aggregate post backstop
+ok 167 - rotating device strings cannot bypass the aggregate post backstop
+  ---
+  duration_ms: 0.3341
+  ...
+# Subtest: bounded JSON reads split Unicode correctly and rejects invalid JSON
+ok 168 - bounded JSON reads split Unicode correctly and rejects invalid JSON
+  ---
+  duration_ms: 36.0808
+  ...
+# Subtest: report bodies enforce the byte cap with or without truthful Content-Length
+ok 169 - report bodies enforce the byte cap with or without truthful Content-Length
+  ---
+  duration_ms: 2.97
+  ...
+# Subtest: stalled report streams have a deadline and cancel their underlying reader
+ok 170 - stalled report streams have a deadline and cancel their underlying reader
+  ---
+  duration_ms: 10.7214
+  ...
+# (node:66316) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:66316) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: location and shop clients use encoded same-origin API paths and accept valid results
+ok 171 - location and shop clients use encoded same-origin API paths and accept valid results
+  ---
+  duration_ms: 42.6429
+  ...
+# Subtest: HTML HTTP errors become a friendly directory error without exposing markup or parser details
+ok 172 - HTML HTTP errors become a friendly directory error without exposing markup or parser details
+  ---
+  duration_ms: 1.9482
+  ...
+# Subtest: JSON service errors preserve actionable instructions, while invalid messages use a safe fallback
+ok 173 - JSON service errors preserve actionable instructions, while invalid messages use a safe fallback
+  ---
+  duration_ms: 1.493
+  ...
+# Subtest: malformed successful responses and responses for a different search are rejected
+ok 174 - malformed successful responses and responses for a different search are rejected
+  ---
+  duration_ms: 3.298
+  ...
+# Subtest: a successful HTML response is reported as unreadable, and an empty valid search remains valid
+ok 175 - a successful HTML response is reported as unreadable, and an empty valid search remains valid
+  ---
+  duration_ms: 1.7211
+  ...
+# Subtest: network failures have a useful message instead of a raw fetch exception
+ok 176 - network failures have a useful message instead of a raw fetch exception
+  ---
+  duration_ms: 0.4936
+  ...
+# Subtest: the client aborts a stalled request at 45 seconds and reports timeout as a retriable error
+ok 177 - the client aborts a stalled request at 45 seconds and reports timeout as a retriable error
+  ---
+  duration_ms: 1.79
+  ...
+# Subtest: caller cancellation remains AbortError, including pre-aborted and custom-reason signals
+ok 178 - caller cancellation remains AbortError, including pre-aborted and custom-reason signals
+  ---
+  duration_ms: 0.9784
+  ...
+# (node:43596) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:43596) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: provider fetch uses a Workers-supported redirect mode and successful results are cached
+ok 179 - provider fetch uses a Workers-supported redirect mode and successful results are cached
+  ---
+  duration_ms: 44.1895
+  ...
+# Subtest: an upstream redirect is rejected without forwarding the request to another destination
+ok 180 - an upstream redirect is rejected without forwarding the request to another destination
+  ---
+  duration_ms: 3.4249
+  ...
+# Subtest: a transient shop-provider 503 is retried once and real results retain radius and inventory semantics
+ok 181 - a transient shop-provider 503 is retried once and real results retain radius and inventory semantics
+  ---
+  duration_ms: 18.2145
+  ...
+# Subtest: a transient fetch failure can recover but persistent failure stays an error after two attempts
+ok 182 - a transient fetch failure can recover but persistent failure stays an error after two attempts
+  ---
+  duration_ms: 15.1841
+  ...
+# Subtest: overlapping location and shop searches queue instead of rejecting another visitor immediately
+ok 183 - overlapping location and shop searches queue instead of rejecting another visitor immediately
+  ---
+  duration_ms: 16.796
+  ...
+# Subtest: the queue has a fixed capacity and expires waiting searches without making extra provider calls
+ok 184 - the queue has a fixed capacity and expires waiting searches without making extra provider calls
+  ---
+  duration_ms: 12.6581
+  ...
+# Subtest: upstream Retry-After is preserved for queued and subsequent callers without retrying the provider
+ok 185 - upstream Retry-After is preserved for queued and subsequent callers without retrying the provider
+  ---
+  duration_ms: 11.415
+  ...
+# Subtest: two slow attempts share a bounded total timeout instead of doubling the wait
+ok 186 - two slow attempts share a bounded total timeout instead of doubling the wait
+  ---
+  duration_ms: 10.1286
+  ...
+# (node:17028) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: radius and coordinates cannot escape the bounded numeric query
+ok 187 - radius and coordinates cannot escape the bounded numeric query
+  ---
+  duration_ms: 5.2674
+  ...
+# Subtest: service stations and unnamed convenience shops are not offered as grocery stops
+ok 188 - service stations and unnamed convenience shops are not offered as grocery stops
+  ---
+  duration_ms: 1.8206
+  ...
+# Subtest: geodesic distance handles identical points, dateline and antipodes
+ok 189 - geodesic distance handles identical points, dateline and antipodes
+  ---
+  duration_ms: 0.3247
+  ...
+# Subtest: exact radius filter excludes a just-outside shop before display rounding
+ok 190 - exact radius filter excludes a just-outside shop before display rounding
+  ---
+  duration_ms: 0.3471
+  ...
+# Subtest: map geometry centres, missing data and marketplace category are handled honestly
+ok 191 - map geometry centres, missing data and marketplace category are handled honestly
+  ---
+  duration_ms: 0.5955
+  ...
+# Subtest: partial Overpass failure is not presented as an empty successful search
+ok 192 - partial Overpass failure is not presented as an empty successful search
+  ---
+  duration_ms: 0.2509
+  ...
+# Subtest: presentation cap preserves actual counts and discloses upstream truncation
+ok 193 - presentation cap preserves actual counts and discloses upstream truncation
+  ---
+  duration_ms: 4.2648
+  ...
+# Subtest: geocoder keeps country/state distinctions and rejects malformed provider data
+ok 194 - geocoder keeps country/state distinctions and rejects malformed provider data
+  ---
+  duration_ms: 0.9194
+  ...
+# Subtest: external shop links only accept ordinary web URLs
+ok 195 - external shop links only accept ordinary web URLs
+  ---
+  duration_ms: 0.6531
+  ...
+# Subtest: Photon nearby results retain source ids and distinguish a returned count from total coverage
+ok 196 - Photon nearby results retain source ids and distinguish a returned count from total coverage
+  ---
+  duration_ms: 1.2576
+  ...
+# (node:13536) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: liver finishes briefly in cooked sauce instead of inheriting a joint braise
+ok 197 - liver finishes briefly in cooked sauce instead of inheriting a joint braise
+  ---
+  duration_ms: 813.2174
+  ...
+# Subtest: bone-in shopping portions account for bones at household serving scales
+ok 198 - bone-in shopping portions account for bones at household serving scales
+  ---
+  duration_ms: 21.398
+  ...
+# Subtest: a home mincer never receives bone-in slow joints
+ok 199 - a home mincer never receives bone-in slow joints
+  ---
+  duration_ms: 0.438
+  ...
+# Subtest: paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+ok 200 - paneer schnitzel has coat-able slabs and quick rack cooking uses rib cutlets
+  ---
+  duration_ms: 1.9055
+  ...
+# Subtest: thin stir-fry strips have short batch cooks and larger households include all batches once
+ok 201 - thin stir-fry strips have short batch cooks and larger households include all batches once
+  ---
+  duration_ms: 3.0966
+  ...
+# Subtest: one oven is never assumed to run conflicting main and side temperatures simultaneously
+ok 202 - one oven is never assumed to run conflicting main and side temperatures simultaneously
+  ---
+  duration_ms: 1.5513
+  ...
+# (node:62904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+ok 203 - a light coating uses 1.5% starch and 60 ml water per kg without adding oil
+  ---
+  duration_ms: 5.2194
+  ...
+# Subtest: ingredient quantities remain four-serving drafts while preparation scales exactly once
+ok 204 - ingredient quantities remain four-serving drafts while preparation scales exactly once
+  ---
+  duration_ms: 3.5091
+  ...
+# Subtest: kilogram inputs and reduced main oil retain measured metric water and exact allocations
+ok 205 - kilogram inputs and reduced main oil retain measured metric water and exact allocations
+  ---
+  duration_ms: 1.0256
+  ...
+# Subtest: only the explicitly scoped regional thin-meat stir-fries receive the coating
+ok 206 - only the explicitly scoped regional thin-meat stir-fries receive the coating
+  ---
+  duration_ms: 5.5598
+  ...
+# Subtest: whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+ok 207 - whole birds, bone-in cuts, mince, offal and sausage forms are excluded
+  ---
+  duration_ms: 1.1872
+  ...
+# Subtest: corn and maize exclusions skip the coating without confusing peppercorn
+ok 208 - corn and maize exclusions skip the coating without confusing peppercorn
+  ---
+  duration_ms: 1.6693
+  ...
+# Subtest: raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+ok 209 - raw coating instructions mandate fridge handling and disposal without introducing bicarbonate, egg or rinsing
+  ---
+  duration_ms: 0.6343
+  ...
+# Subtest: invalid amounts, unknown mass units and absent usable oil do not invent a coating
+ok 210 - invalid amounts, unknown mass units and absent usable oil do not invent a coating
+  ---
+  duration_ms: 0.3391
+  ...
+# (node:68000) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a pending region stops matching the previous Greek plate and survives a studio remount
+ok 211 - a pending region stops matching the previous Greek plate and survives a studio remount
+  ---
+  duration_ms: 5.4303
+  ...
+# Subtest: main, method, side and explicit cut changes each invalidate only the pending result
+ok 212 - main, method, side and explicit cut changes each invalidate only the pending result
+  ---
+  duration_ms: 26.7508
+  ...
+# Subtest: freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+ok 213 - freshly opened recipes override remembered choices and corrupted remembered fields are bounded
+  ---
+  duration_ms: 0.6259
+  ...
+# Subtest: Greek then Japanese generation replaces regional ingredients without changing the selected main
+ok 214 - Greek then Japanese generation replaces regional ingredients without changing the selected main
+  ---
+  duration_ms: 197.1521
+  ...
+# (node:64968) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+ok 215 - Thai schnitzel keeps a crisp coating and cooks paste before liquid, with fresh finishing at service
+  ---
+  duration_ms: 79.461
+  ...
+# Subtest: Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+ok 216 - Japanese braising adds miso only after the main endpoint and removes woody infusions before service
+  ---
+  duration_ms: 6.9127
+  ...
+# Subtest: Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+ok 217 - Chinese stir-fry coating is chilled, uses the existing oil portions and survives sharing and scaling
+  ---
+  duration_ms: 15.7349
+  ...
+# Subtest: every main/method and regional profile receives one final sauce finish with consistent timing
+ok 218 - every main/method and regional profile receives one final sauce finish with consistent timing
+  ---
+  duration_ms: 815.156
+  ...
+# Subtest: long smokes schedule the sauce near service and include the actual rest
+ok 219 - long smokes schedule the sauce near service and include the actual rest
+  ---
+  duration_ms: 1.9243
+  ...
+# Subtest: dried-chilli soaking precedes browning and its time is counted once in preparation
+ok 220 - dried-chilli soaking precedes browning and its time is counted once in preparation
+  ---
+  duration_ms: 9.6335
+  ...
+# (node:4596) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: current-version meal feedback
+    # Subtest: groups identical food from different seeds but separates quantity, timing, serving and method changes
+    ok 1 - groups identical food from different seeds but separates quantity, timing, serving and method changes
+      ---
+      duration_ms: 21.9103
+      ...
+    # Subtest: rejects malformed snapshots before fingerprinting and does not retain mutable reason arrays
+    ok 2 - rejects malformed snapshots before fingerprinting and does not retain mutable reason arrays
+      ---
+      duration_ms: 6.3114
+      ...
+    # Subtest: requires a reason before every low rating, downvote or wont report, without saving half a report
+    ok 3 - requires a reason before every low rating, downvote or wont report, without saving half a report
+      ---
+      duration_ms: 7.7409
+      ...
+    # Subtest: accepts category-only reasons but requires useful Other detail and rejects malformed choices
+    ok 4 - accepts category-only reasons but requires useful Other detail and rejects malformed choices
+      ---
+      duration_ms: 6.9169
+      ...
+    # Subtest: binds ingredient and zero-based step references to the complete current snapshot
+    ok 5 - binds ingredient and zero-based step references to the complete current snapshot
+      ---
+      duration_ms: 6.2257
+      ...
+    # Subtest: keeps first impressions out of cooked averages, shelving and confidence
+    ok 6 - keeps first impressions out of cooked averages, shelving and confidence
+      ---
+      duration_ms: 18.3773
+      ...
+    # Subtest: counts one latest report per browser and outcome, with small samples clearly bounded
+    ok 7 - counts one latest report per browser and outcome, with small samples clearly bounded
+      ---
+      duration_ms: 9.1199
+      ...
+    # Subtest: preserves readable legacy votes without treating them as current-version evidence
+    ok 8 - preserves readable legacy votes without treating them as current-version evidence
+      ---
+      duration_ms: 3.2458
+      ...
+    # Subtest: treats safety reports as review requests and never as automatic amount or filter changes
+    ok 9 - treats safety reports as review requests and never as automatic amount or filter changes
+      ---
+      duration_ms: 9.3082
+      ...
+    # Subtest: keeps a historical safety concern visible even if a browser later changes its stars
+    ok 10 - keeps a historical safety concern visible even if a browser later changes its stars
+      ---
+      duration_ms: 5.9627
+      ...
+    1..10
+ok 221 - current-version meal feedback
+  ---
+  duration_ms: 98.0596
+  type: 'suite'
+  ...
+# (node:28688) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete meal integrity
+    # Subtest: checks every side's measured citrus and oil against its steps, variants and serving sizes
+    ok 1 - checks every side's measured citrus and oil against its steps, variants and serving sizes
+      ---
+      duration_ms: 86.4441
+      ...
+    # Subtest: keeps cleaner ingredient portions equal to the method portions
+    ok 2 - keeps cleaner ingredient portions equal to the method portions
+      ---
+      duration_ms: 13.5124
+      ...
+    # Subtest: describes the trimmed sauce and regional rice consistently at service
+    ok 3 - describes the trimmed sauce and regional rice consistently at service
+      ---
+      duration_ms: 33.7116
+      ...
+    # Subtest: keeps the selected side instead of adding extra regional starches
+    ok 4 - keeps the selected side instead of adding extra regional starches
+      ---
+      duration_ms: 5.2628
+      ...
+    # Subtest: finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+    ok 5 - finishes short smoked animal cooks before resting and uses a smoke timeline for sides
+      ---
+      duration_ms: 2.3287
+      ...
+    # Subtest: only chooses a broth bowl when the base has enough retained simmering liquid
+    ok 6 - only chooses a broth bowl when the base has enough retained simmering liquid
+      ---
+      duration_ms: 71.8705
+      ...
+    # Subtest: explains the actual seeded sauce instead of the region's unselected default seasonings
+    ok 7 - explains the actual seeded sauce instead of the region's unselected default seasonings
+      ---
+      duration_ms: 36.4939
+      ...
+    # Subtest: keeps raw salads crisp when scheduling sides near the end of a smoke
+    ok 8 - keeps raw salads crisp when scheduling sides near the end of a smoke
+      ---
+      duration_ms: 32.1543
+      ...
+    # Subtest: defers service until a coherent finish without losing the main's endpoint
+    ok 9 - defers service until a coherent finish without losing the main's endpoint
+      ---
+      duration_ms: 271.569
+      ...
+    # Subtest: enforces exclusions on the whole plate with and without a seed
+    ok 10 - enforces exclusions on the whole plate with and without a seed
+      ---
+      duration_ms: 108.9997
+      ...
+    # Subtest: tightens a selected diet with explicit constraints instead of retaining meat
+    ok 11 - tightens a selected diet with explicit constraints instead of retaining meat
+      ---
+      duration_ms: 15.1185
+      ...
+    # Subtest: writes usable sauce instructions after disliked flavour ingredients are omitted
+    ok 12 - writes usable sauce instructions after disliked flavour ingredients are omitted
+      ---
+      duration_ms: 2.3968
+      ...
+    # Subtest: specifies dietary versions of purchased garlic bread, kimchi and oat sides
+    ok 13 - specifies dietary versions of purchased garlic bread, kimchi and oat sides
+      ---
+      duration_ms: 3.9738
+      ...
+    # Subtest: excludes oyster sauce for a recorded mollusc avoidance
+    ok 14 - excludes oyster sauce for a recorded mollusc avoidance
+      ---
+      duration_ms: 2.3338
+      ...
+    # Subtest: covers every region and main/method with seeded, scaled compatible cuts
+    ok 15 - covers every region and main/method with seeded, scaled compatible cuts
+      ---
+      duration_ms: 4782.1244
+      ...
+    1..15
+ok 222 - complete meal integrity
+  ---
+  duration_ms: 5471.2514
+  type: 'suite'
+  ...
+# (node:60376) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ingredient-first complete meal engine
+    # Subtest: counts only supported main/method/region/side configurations and exposes every promised chicken method
+    ok 1 - counts only supported main/method/region/side configurations and exposes every promised chicken method
+      ---
+      duration_ms: 2.0554
+      ...
+    # Subtest: generates complete meals for every compatible configuration and dietary preference
+    ok 2 - generates complete meals for every compatible configuration and dietary preference
+      ---
+      duration_ms: 176998.6862
+      ...
+    # Subtest: selects appropriate cuts and meaningfully different processes for the same main
+    ok 3 - selects appropriate cuts and meaningfully different processes for the same main
+      ---
+      duration_ms: 3.4868
+      ...
+    # Subtest: retains the selected main and rejects incompatible diets or methods
+    ok 4 - retains the selected main and rejects incompatible diets or methods
+      ---
+      duration_ms: 29.9895
+      ...
+    # Subtest: starts long braises before fast sides and includes precooking and chilling in patty prep
+    ok 5 - starts long braises before fast sides and includes precooking and chilling in patty prep
+      ---
+      duration_ms: 21.6017
+      ...
+    # Subtest: scales all ingredient quantities for every main and method from one through twelve servings
+    ok 6 - scales all ingredient quantities for every main and method from one through twelve servings
+      ---
+      duration_ms: 415.7431
+      ...
+    # Subtest: uses explicit gluten-free alternatives and their actual cooking instructions
+    ok 7 - uses explicit gluten-free alternatives and their actual cooking instructions
+      ---
+      duration_ms: 4.4568
+      ...
+    # Subtest: only marks exact pantry names or suitable explicit aliases, including restricted products
+    ok 8 - only marks exact pantry names or suitable explicit aliases, including restricted products
+      ---
+      duration_ms: 3.4126
+      ...
+    # Subtest: keeps sufficient doneness instructions and primary safety sources for each animal main
+    ok 9 - keeps sufficient doneness instructions and primary safety sources for each animal main
+      ---
+      duration_ms: 40.0417
+      ...
+    # Subtest: varies heat without dropping required sauce ingredients and keeps recipe identity stable
+    ok 10 - varies heat without dropping required sauce ingredients and keeps recipe identity stable
+      ---
+      duration_ms: 98.5399
+      ...
+    # Subtest: merges shared shopping ingredients while keeping component amounts explicit in the method
+    ok 11 - merges shared shopping ingredients while keeping component amounts explicit in the method
+      ---
+      duration_ms: 2.1065
+      ...
+    # Subtest: normalizes defaults and rejects malformed or unbounded inputs
+    ok 12 - normalizes defaults and rejects malformed or unbounded inputs
+      ---
+      duration_ms: 0.9676
+      ...
+    1..12
+ok 223 - ingredient-first complete meal engine
+  ---
+  duration_ms: 177623.0715
+  type: 'suite'
+  ...
+# (node:64060) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a base path is taken from the environment or next.config, and nowhere else
+ok 224 - a base path is taken from the environment or next.config, and nowhere else
+  ---
+  duration_ms: 2.4271
+  ...
+# Subtest: public pictures are copied under the prefix without touching other built files
+ok 225 - public pictures are copied under the prefix without touching other built files
+  ---
+  duration_ms: 21.2474
+  ...
+# (node:47844) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: pack and money maths (estimate only)
+    # Subtest: uses ceil packs: 600 g / 500 g → 2 packs; pantry 200 g → 1 pack
+    ok 1 - uses ceil packs: 600 g / 500 g → 2 packs; pantry 200 g → 1 pack
+      ---
+      duration_ms: 2.3132
+      ...
+    # Subtest: never treats unknown price as zero or within-budget when unpriced
+    ok 2 - never treats unknown price as zero or within-budget when unpriced
+      ---
+      duration_ms: 0.659
+      ...
+    # Subtest: rejects zero or negative pack sizes as unresolved
+    ok 3 - rejects zero or negative pack sizes as unresolved
+      ---
+      duration_ms: 0.1678
+      ...
+    1..3
+ok 226 - pack and money maths (estimate only)
+  ---
+  duration_ms: 5.0557
+  type: 'suite'
+  ...
+# (node:35224) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: oils, butter and flour are pantry consumables, and a steak is not
+ok 227 - oils, butter and flour are pantry consumables, and a steak is not
+  ---
+  duration_ms: 2.7656
+  ...
+# Subtest: making a meal uses what is on hand and shops only the shortfall
+ok 228 - making a meal uses what is on hand and shops only the shortfall
+  ---
+  duration_ms: 2.2632
+  ...
+# Subtest: a week plan warns before the pantry is used up
+ok 229 - a week plan warns before the pantry is used up
+  ---
+  duration_ms: 0.3745
+  ...
+# Subtest: flour left after a cook is marked low and is not given a price
+ok 230 - flour left after a cook is marked low and is not given a price
+  ---
+  duration_ms: 0.3519
+  ...
+# Subtest: a week records oil and flour on the pantry before they are bought
+ok 231 - a week records oil and flour on the pantry before they are bought
+  ---
+  duration_ms: 1.87
+  ...
+# Subtest: a week shopping list is the shortfall only and has no price
+ok 232 - a week shopping list is the shortfall only and has no price
+  ---
+  duration_ms: 0.4655
+  ...
+# Subtest: preparing shopping repeatedly never consumes stock or mutates the original records
+ok 233 - preparing shopping repeatedly never consumes stock or mutates the original records
+  ---
+  duration_ms: 3.2709
+  ...
+# Subtest: saved metric quantities cover compatible recipe units and are deducted once
+ok 234 - saved metric quantities cover compatible recipe units and are deducted once
+  ---
+  duration_ms: 0.615
+  ...
+# Subtest: spoons, counts and mass are not guessed from other units
+ok 235 - spoons, counts and mass are not guessed from other units
+  ---
+  duration_ms: 0.7255
+  ...
+# Subtest: automatic ownership allocates pantry once across duplicate ingredient lines
+ok 236 - automatic ownership allocates pantry once across duplicate ingredient lines
+  ---
+  duration_ms: 1.0127
+  ...
+# Subtest: declared ownership and a cook aggregate duplicate requirements before deduction
+ok 237 - declared ownership and a cook aggregate duplicate requirements before deduction
+  ---
+  duration_ms: 0.5237
+  ...
+# Subtest: counted ingredients have readable quantities without blank unit gaps
+ok 238 - counted ingredients have readable quantities without blank unit gaps
+  ---
+  duration_ms: 0.323
+  ...
+# (node:57320) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: household allergen planner integration
+    # Subtest: accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+    ok 1 - accepts every checked UI allergen and keeps restrictions even when no dinner can fit
+      ---
+      duration_ms: 753.6053
+      ...
+    # Subtest: keeps the hyphenated tree-nut exclusion and its supported alias canonical
+    ok 2 - keeps the hyphenated tree-nut exclusion and its supported alias canonical
+      ---
+      duration_ms: 1268.7217
+      ...
+    # Subtest: uses the same complete supported list as direct generators instead of a separate allowlist
+    ok 3 - uses the same complete supported list as direct generators instead of a separate allowlist
+      ---
+      duration_ms: 535.7436
+      ...
+    1..3
+ok 239 - household allergen planner integration
+  ---
+  duration_ms: 2559.4829
+  type: 'suite'
+  ...
+# (node:67316) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact cooked feedback in weekly suggestions
+    # Subtest: keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+    ok 1 - keeps no-feedback behavior deterministic and ignores a single browser or first impressions
+      ---
+      duration_ms: 2712.7676
+      ...
+    # Subtest: moves a comparable exact seeded recipe down after three distinct cooked low reports
+    ok 2 - moves a comparable exact seeded recipe down after three distinct cooked low reports
+      ---
+      duration_ms: 1022.3776
+      ...
+    # Subtest: does not transfer a report from changed ingredients, instructions or a broad legacy identity
+    ok 3 - does not transfer a report from changed ingredients, instructions or a broad legacy identity
+      ---
+      duration_ms: 1315.0506
+      ...
+    # Subtest: uses the same learned ordering for dinner alternatives and a random replacement
+    ok 4 - uses the same learned ordering for dinner alternatives and a random replacement
+      ---
+      duration_ms: 1504.4097
+      ...
+    # Subtest: checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+    ok 5 - checks hard exclusions before ranking and refuses an explicitly requested blocked choice
+      ---
+      duration_ms: 1150.3676
+      ...
+    # Subtest: limits feedback lookups to 16 built candidates per pick or alternatives pass
+    ok 6 - limits feedback lookups to 16 built candidates per pick or alternatives pass
+      ---
+      duration_ms: 316.3139
+      ...
+    # Subtest: keeps variety bands ahead of a strongly liked already-used dinner
+    ok 7 - keeps variety bands ahead of a strongly liked already-used dinner
+      ---
+      duration_ms: 481.4347
+      ...
+    # Subtest: does not make shared board updates part of the stored household brief or stale-plan signature
+    ok 8 - does not make shared board updates part of the stored household brief or stale-plan signature
+      ---
+      duration_ms: 2.9244
+      ...
+    1..8
+ok 240 - exact cooked feedback in weekly suggestions
+  ---
+  duration_ms: 8507.5756
+  type: 'suite'
+  ...
+# (node:68572) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fusion week planner
+    # Subtest: fills seven different dinners and does not invent a price
+    ok 1 - fills seven different dinners and does not invent a price
+      ---
+      duration_ms: 783.487
+      ...
+    # Subtest: stacks vegan and gluten-free without wheat, milk, egg, or oats
+    ok 2 - stacks vegan and gluten-free without wheat, milk, egg, or oats
+      ---
+      duration_ms: 550.8142
+      ...
+    # Subtest: does not relax a sesame filter or a hard dislike, and leaves an unsafe lock empty
+    ok 3 - does not relax a sesame filter or a hard dislike, and leaves an unsafe lock empty
+      ---
+      duration_ms: 1539.4074
+      ...
+    # Subtest: uses gluten-free burger mix without oats and egg-free fried rice without eggs
+    ok 4 - uses gluten-free burger mix without oats and egg-free fried rice without eggs
+      ---
+      duration_ms: 3.418
+      ...
+    # Subtest: keeps pantry matches off the merged list and refuses to drop every filter
+    ok 5 - keeps pantry matches off the merged list and refuses to drop every filter
+      ---
+      duration_ms: 778.5637
+      ...
+    # Subtest: rejects an unknown allergen and an unbounded week
+    ok 6 - rejects an unknown allergen and an unbounded week
+      ---
+      duration_ms: 0.6326
+      ...
+    # Subtest: keeps an unseeded week stable and lets a seed change the dinners
+    ok 7 - keeps an unseeded week stable and lets a seed change the dinners
+      ---
+      duration_ms: 7100.9198
+      ...
+    # Subtest: does not relax filters when a seed or a randomise asks for another meal
+    ok 8 - does not relax filters when a seed or a randomise asks for another meal
+      ---
+      duration_ms: 3300.3798
+      ...
+    # Subtest: swaps only the side on a meal-kind dinner and refuses a broccoli dislike on steamed broccoli
+    ok 9 - swaps only the side on a meal-kind dinner and refuses a broccoli dislike on steamed broccoli
+      ---
+      duration_ms: 4015.2029
+      ...
+    1..9
+ok 241 - fusion week planner
+  ---
+  duration_ms: 18075.2455
+  type: 'suite'
+  ...
+# (node:55384) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: identical concurrent image requests share one render and then use the cache
+ok 242 - identical concurrent image requests share one render and then use the cache
+  ---
+  duration_ms: 2.084
+  ...
+# Subtest: failed images release their slot and can be rendered again
+ok 243 - failed images release their slot and can be rendered again
+  ---
+  duration_ms: 0.6444
+  ...
+# Subtest: image cache evicts least-recently-used entries by both byte and entry budgets
+ok 244 - image cache evicts least-recently-used entries by both byte and entry budgets
+  ---
+  duration_ms: 0.6092
+  ...
+# Subtest: capacity overflow paints immediately instead of queuing model work and retries after a short cache
+ok 245 - capacity overflow paints immediately instead of queuing model work and retries after a short cache
+  ---
+  duration_ms: 0.4151
+  ...
+# Subtest: model configuration has bounded defaults and cannot restore a four-minute request
+ok 246 - model configuration has bounded defaults and cannot restore a four-minute request
+  ---
+  duration_ms: 0.1823
+  ...
+# Subtest: the default allows two full renders while other unique requests get immediate fallbacks
+ok 247 - the default allows two full renders while other unique requests get immediate fallbacks
+  ---
+  duration_ms: 0.557
+  ...
+# Subtest: a configured-model failure keeps its normal-slot fallback temporary and retries for quality
+ok 248 - a configured-model failure keeps its normal-slot fallback temporary and retries for quality
+  ---
+  duration_ms: 0.2666
+  ...
+# (node:66808) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: the fallback is an explicit restrained placeholder with escaped recipe text
+ok 249 - the fallback is an explicit restrained placeholder with escaped recipe text
+  ---
+  duration_ms: 1.2025
+  ...
+# Subtest: no-model fallback stays normal while a failed configured model is temporary
+ok 250 - no-model fallback stays normal while a failed configured model is temporary
+  ---
+  duration_ms: 41.2456
+  ...
+# Subtest: local image size and step budgets keep the original defaults and reject unsupported values
+ok 251 - local image size and step budgets keep the original defaults and reject unsupported values
+  ---
+  duration_ms: 0.2027
+  ...
+# (node:24028) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: identical concurrent queries share one provider request and future views reuse it
+ok 252 - identical concurrent queries share one provider request and future views reuse it
+  ---
+  duration_ms: 40.1046
+  ...
+# Subtest: cancelling one subscriber leaves the other active and cancelling all aborts shared work
+ok 253 - cancelling one subscriber leaves the other active and cancelling all aborts shared work
+  ---
+  duration_ms: 4.7408
+  ...
+# Subtest: LRU capacity, negative cache and fetcher identity are independent bounds
+ok 254 - LRU capacity, negative cache and fetcher identity are independent bounds
+  ---
+  duration_ms: 0.7242
+  ...
+# Subtest: Woolworths rejects declared and streamed oversized bodies and backs off blocked requests
+ok 255 - Woolworths rejects declared and streamed oversized bodies and backs off blocked requests
+  ---
+  duration_ms: 2.6408
+  ...
+# Subtest: Coles repeated failures are backed off and different fetchers do not inherit failures
+ok 256 - Coles repeated failures are backed off and different fetchers do not inherit failures
+  ---
+  duration_ms: 2.5791
+  ...
+# Subtest: authored serving-role suffixes do not pollute searches or matching while food/diet forms remain
+ok 257 - authored serving-role suffixes do not pollute searches or matching while food/diet forms remain
+  ---
+  duration_ms: 1.3018
+  ...
+# (node:68512) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+ok 258 - automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+  ---
+  duration_ms: 39.2054
+  ...
+# Subtest: one failed batch preserves other prices and never silently turns the failure into zero
+ok 259 - one failed batch preserves other prices and never silently turns the failure into zero
+  ---
+  duration_ms: 1.2038
+  ...
+# Subtest: stale or foreign response quantities cannot enter a new recipe estimate
+ok 260 - stale or foreign response quantities cannot enter a new recipe estimate
+  ---
+  duration_ms: 0.8454
+  ...
+# Subtest: shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+ok 261 - shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+  ---
+  duration_ms: 0.2964
+  ...
+# Subtest: identical mounted views share one request and detached views cannot get late updates
+ok 262 - identical mounted views share one request and detached views cannot get late updates
+  ---
+  duration_ms: 2.7761
+  ...
+# Subtest: a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+ok 263 - a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+  ---
+  duration_ms: 22.5771
+  ...
+# Subtest: malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+ok 264 - malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+  ---
+  duration_ms: 0.6428
+  ...
+# Subtest: homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+ok 265 - homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+  ---
+  duration_ms: 10.4017
+  ...
+# (node:36964) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete recipe sharing identity
+    # Subtest: keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+    ok 1 - keeps cleaner settings instead of adding sauces when a shared recipe or PDF is opened
+      ---
+      duration_ms: 82.6196
+      ...
+    # Subtest: keeps the butcher cut, constraints, seeded regional variety and cook session
+    ok 2 - keeps the butcher cut, constraints, seeded regional variety and cook session
+      ---
+      duration_ms: 32.623
+      ...
+    # Subtest: keeps classic clean flags and hard filters along with seed and session
+    ok 3 - keeps classic clean flags and hard filters along with seed and session
+      ---
+      duration_ms: 16.418
+      ...
+    # Subtest: shares pantry-first cooking choices without sharing what is in the household pantry
+    ok 4 - shares pantry-first cooking choices without sharing what is in the household pantry
+      ---
+      duration_ms: 17.3538
+      ...
+    # Subtest: retains input snapshots when a caller later edits their preference objects
+    ok 5 - retains input snapshots when a caller later edits their preference objects
+      ---
+      duration_ms: 17.2772
+      ...
+    # Subtest: still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+    ok 6 - still opens old v1 links and preserves cuts recoverable from old recipe snapshots
+      ---
+      duration_ms: 10.107
+      ...
+    # Subtest: does not pretend it can reproduce missing cleaner settings in an old saved recipe
+    ok 7 - does not pretend it can reproduce missing cleaner settings in an old saved recipe
+      ---
+      duration_ms: 14.0408
+      ...
+    # Subtest: bounds and validates additional token options rather than silently discarding them
+    ok 8 - bounds and validates additional token options rather than silently discarding them
+      ---
+      duration_ms: 0.8479
+      ...
+    # Subtest: verifies a current recipe while ignoring a renamed display title and pantry ticks
+    ok 9 - verifies a current recipe while ignoring a renamed display title and pantry ticks
+      ---
+      duration_ms: 26.3312
+      ...
+    # Subtest: refuses links that would recreate changed quantities, methods or another recipe
+    ok 10 - refuses links that would recreate changed quantities, methods or another recipe
+      ---
+      duration_ms: 44.8642
+      ...
+    # Subtest: returns false for malformed or unsupported old-token specifications without throwing
+    ok 11 - returns false for malformed or unsupported old-token specifications without throwing
+      ---
+      duration_ms: 2.4099
+      ...
+    1..11
+ok 266 - complete recipe sharing identity
+  ---
+  duration_ms: 267.2049
+  type: 'suite'
+  ...
+# Subtest: complete classic recipe exclusions
+    # Subtest: rejects a recorded allergen in the base recipe even without a random seed
+    ok 1 - rejects a recorded allergen in the base recipe even without a random seed
+      ---
+      duration_ms: 5.1587
+      ...
+    # Subtest: checks hard dislikes against the full base and aliases, with and without a seed
+    ok 2 - checks hard dislikes against the full base and aliases, with and without a seed
+      ---
+      duration_ms: 7.1913
+      ...
+    1..2
+ok 267 - complete classic recipe exclusions
+  ---
+  duration_ms: 12.5197
+  type: 'suite'
+  ...
+# (node:11784) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: full image identity includes every ingredient, quantity and cooking form
+ok 268 - full image identity includes every ingredient, quantity and cooking form
+  ---
+  duration_ms: 56.7451
+  ...
+# Subtest: missing images queue immediately, deduplicate and survive service restart
+ok 269 - missing images queue immediately, deduplicate and survive service restart
+  ---
+  duration_ms: 105.8749
+  ...
+# Subtest: a durable renderer claim prevents duplicate work across service instances
+ok 270 - a durable renderer claim prevents duplicate work across service instances
+  ---
+  duration_ms: 92.0052
+  ...
+# Subtest: retry delays, attempt budgets and pending capacity are enforced
+ok 271 - retry delays, attempt budgets and pending capacity are enforced
+  ---
+  duration_ms: 99.3647
+  ...
+# Subtest: requested images take priority over warm jobs and unavailable model is explicit
+ok 272 - requested images take priority over warm jobs and unavailable model is explicit
+  ---
+  duration_ms: 84.6348
+  ...
+# Subtest: persistent cache obeys entry and byte budgets
+ok 273 - persistent cache obeys entry and byte budgets
+  ---
+  duration_ms: 108.196
+  ...
+# Subtest: expired renderer leases resume and obsolete queued versions cannot block new work
+ok 274 - expired renderer leases resume and obsolete queued versions cannot block new work
+  ---
+  duration_ms: 88.9389
+  ...
+# (node:62640) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cookbook cooking-content identity
+    # Subtest: keeps distinct cleaner plates even when their legacy template ids match
+    ok 1 - keeps distinct cleaner plates even when their legacy template ids match
+      ---
+      duration_ms: 41.934
+      ...
+    # Subtest: distinguishes actual cuts and preparation when a snapshot carries a colliding id
+    ok 2 - distinguishes actual cuts and preparation when a snapshot carries a colliding id
+      ---
+      duration_ms: 8.5439
+      ...
+    # Subtest: does not fork the same cooked recipe for pantry ticks, display copy or generation metadata
+    ok 3 - does not fork the same cooked recipe for pantry ticks, display copy or generation metadata
+      ---
+      duration_ms: 25.8465
+      ...
+    # Subtest: ignores ingredient/equipment/allergen ordering but preserves the cooking sequence and quantities
+    ok 4 - ignores ingredient/equipment/allergen ordering but preserves the cooking sequence and quantities
+      ---
+      duration_ms: 1.8426
+      ...
+    1..4
+ok 275 - cookbook cooking-content identity
+  ---
+  duration_ms: 79.5955
+  type: 'suite'
+  ...
+# (node:62904) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete recipe PDF export
+    # Subtest: includes equipment, recorded allergens, preparation/label notes and method guidance
+    ok 1 - includes equipment, recorded allergens, preparation/label notes and method guidance
+      ---
+      duration_ms: 21.3865
+      ...
+    # Subtest: moves a whole cooking step onto the next page when it fits there
+    ok 2 - moves a whole cooking step onto the next page when it fits there
+      ---
+      duration_ms: 2.6255
+      ...
+    # Subtest: retains ingredient-level allergens when an older summary is incomplete
+    ok 3 - retains ingredient-level allergens when an older summary is incomplete
+      ---
+      duration_ms: 3.1812
+      ...
+    # Subtest: wraps wide unbroken words inside the printable area and safely escapes PDF literals
+    ok 4 - wraps wide unbroken words inside the printable area and safely escapes PDF literals
+      ---
+      duration_ms: 2.77
+      ...
+    # Subtest: writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+    ok 5 - writes correct page counts, footer numbering, stream lengths and cross-reference offsets
+      ---
+      duration_ms: 2.4003
+      ...
+    # Subtest: rejects excessive output rather than silently dropping cooking instructions
+    ok 6 - rejects excessive output rather than silently dropping cooking instructions
+      ---
+      duration_ms: 210.3133
+      ...
+    1..6
+ok 276 - complete recipe PDF export
+  ---
+  duration_ms: 244.0268
+  type: 'suite'
+  ...
+# (node:61092) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent recipe quality postconditions
+    # Subtest: accepts a separately finished sauce before a long main cook
+    ok 1 - accepts a separately finished sauce before a long main cook
+      ---
+      duration_ms: 17.4354
+      ...
+    # Subtest: rejects explicit prolonged reheating of already finished sauce
+    ok 2 - rejects explicit prolonged reheating of already finished sauce
+      ---
+      duration_ms: 4.922
+      ...
+    # Subtest: rejects hidden invalid portions, duplicate identities and irreconcilable times
+    ok 3 - rejects hidden invalid portions, duplicate identities and irreconcilable times
+      ---
+      duration_ms: 1.6489
+      ...
+    # Subtest: rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+    ok 4 - rejects raw kidney beans and unspecified cassava forms while accepting prepared forms
+      ---
+      duration_ms: 5.1518
+      ...
+    # Subtest: checks actual bean-filled shells and delicate liver rather than just meat cases
+    ok 5 - checks actual bean-filled shells and delicate liver rather than just meat cases
+      ---
+      duration_ms: 2.4328
+      ...
+    # Subtest: distinguishes review warnings from broken recipes and never claims a taste probability
+    ok 6 - distinguishes review warnings from broken recipes and never claims a taste probability
+      ---
+      duration_ms: 0.5776
+      ...
+    # Subtest: retains postconditions after seed, serving and cleaner settings
+    ok 7 - retains postconditions after seed, serving and cleaner settings
+      ---
+      duration_ms: 140.7965
+      ...
+    1..7
+ok 277 - independent recipe quality postconditions
+  ---
+  duration_ms: 174.8918
+  type: 'suite'
+  ...
+# (node:67536) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fusion recipe engine
+    # Subtest: produces complete, bounded recipes for every authored classic, region and dietary preference
+    ok 1 - produces complete, bounded recipes for every authored classic, region and dietary preference
+      ---
+      duration_ms: 1612.9681
+      ...
+    # Subtest: scales every ingredient from one through twelve servings without changing the method's safety endpoint
+    ok 2 - scales every ingredient from one through twelve servings without changing the method's safety endpoint
+      ---
+      duration_ms: 2.8841
+      ...
+    # Subtest: uses actual substitutes in methods and does not ask a vegan to cook chicken, beef or eggs
+    ok 3 - uses actual substitutes in methods and does not ask a vegan to cook chicken, beef or eggs
+      ---
+      duration_ms: 9.9054
+      ...
+    # Subtest: requires exact pantry matches and keeps unsuitable dairy or gluten substitutions unmarked
+    ok 4 - requires exact pantry matches and keeps unsuitable dairy or gluten substitutions unmarked
+      ---
+      duration_ms: 2.1998
+      ...
+    # Subtest: reduces chilli paste for mild and increases it for hot
+    ok 5 - reduces chilli paste for mild and increases it for hot
+      ---
+      duration_ms: 3.4387
+      ...
+    # Subtest: rejects unknown selections and unbounded or fractional servings
+    ok 6 - rejects unknown selections and unbounded or fractional servings
+      ---
+      duration_ms: 0.5137
+      ...
+    # Subtest: formats small and fractional quantities without dropping units
+    ok 7 - formats small and fractional quantities without dropping units
+      ---
+      duration_ms: 21.1329
+      ...
+    1..7
+ok 278 - fusion recipe engine
+  ---
+  duration_ms: 1654.7453
+  type: 'suite'
+  ...
+# (node:36372) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: region ingredient affinity
+    # Subtest: keeps kimchi off non-Korean sides, plates and preferred lists
+    ok 1 - keeps kimchi off non-Korean sides, plates and preferred lists
+      ---
+      duration_ms: 6.1792
+      ...
+    # Subtest: does not put kimchi, sriracha, fish sauce or miso on Western random samples
+    ok 2 - does not put kimchi, sriracha, fish sauce or miso on Western random samples
+      ---
+      duration_ms: 1246.1847
+      ...
+    # Subtest: keeps authored Thai heat and Japanese miso while excluding off-region sauces
+    ok 3 - keeps authored Thai heat and Japanese miso while excluding off-region sauces
+      ---
+      duration_ms: 533.7542
+      ...
+    # Subtest: does not explore sibling strong markers onto the wrong region
+    ok 4 - does not explore sibling strong markers onto the wrong region
+      ---
+      duration_ms: 11.8881
+      ...
+    # Subtest: keeps kimchi out of seeded weeks unless the dinner is Korean with kimchi-rice
+    ok 5 - keeps kimchi out of seeded weeks unless the dinner is Korean with kimchi-rice
+      ---
+      duration_ms: 33132.562
+      ...
+    # Subtest: aligns authored side marker hints with the affinity table
+    ok 6 - aligns authored side marker hints with the affinity table
+      ---
+      duration_ms: 0.5268
+      ...
+    1..6
+ok 279 - region ingredient affinity
+  ---
+  duration_ms: 34932.6812
+  type: 'suite'
+  ...
+# (node:25384) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Japanese exploration excludes curry-only seasonings across seeds and heat levels
+ok 280 - Japanese exploration excludes curry-only seasonings across seeds and heat levels
+  ---
+  duration_ms: 48.6815
+  ...
+# Subtest: sharing a staple does not import another region's authored flavour markers
+ok 281 - sharing a staple does not import another region's authored flavour markers
+  ---
+  duration_ms: 47.8814
+  ...
+# Subtest: each region retains its own authored core and deterministic seeded variation
+ok 282 - each region retains its own authored core and deterministic seeded variation
+  ---
+  duration_ms: 38.1364
+  ...
+# Subtest: unseeded profiles remain exactly the authored profiles
+ok 283 - unseeded profiles remain exactly the authored profiles
+  ---
+  duration_ms: 20.8831
+  ...
+# (node:10532) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: region pantry
+    # Subtest: links every catalogue item to a region, and puts bird's eye only on cuisines that use it
+    ok 1 - links every catalogue item to a region, and puts bird's eye only on cuisines that use it
+      ---
+      duration_ms: 24.4753
+      ...
+    # Subtest: keeps the locked condiment names and scales each signature heat from mild to hot
+    ok 2 - keeps the locked condiment names and scales each signature heat from mild to hot
+      ---
+      duration_ms: 15.5582
+      ...
+    # Subtest: keeps peanut off the week-planner plates and repeats an unseeded regional meal
+    ok 3 - keeps peanut off the week-planner plates and repeats an unseeded regional meal
+      ---
+      duration_ms: 22.7521
+      ...
+    1..3
+ok 284 - region pantry
+  ---
+  duration_ms: 64.4476
+  type: 'suite'
+  ...
+# (node:10184) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: quantified regional cooking stages
+    # Subtest: fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+    ok 1 - fries Thai curry paste before stock/coconut and keeps citrus/herbs for off-heat finishing
+      ---
+      duration_ms: 8.4171
+      ...
+    # Subtest: tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+    ok 2 - tempers whole seeds before aromatics and blooms ground spices briefly before liquid
+      ---
+      duration_ms: 2.2852
+      ...
+    # Subtest: dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+    ok 3 - dissolves sugar and fermented condiments in liquid, keeping miso/yuzu kosho after the main endpoint
+      ---
+      duration_ms: 1.0908
+      ...
+    # Subtest: retrieves woody infusions, while finely minced tender lemongrass stays edible
+    ok 4 - retrieves woody infusions, while finely minced tender lemongrass stays edible
+      ---
+      duration_ms: 1.6696
+      ...
+    # Subtest: infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+    ok 5 - infuses/strains annatto seeds and hydrates saffron without leaving ground spices burning while it soaks
+      ---
+      duration_ms: 0.9244
+      ...
+    # Subtest: keeps fresh and delicate finishes explicit without adding imaginary ingredients
+    ok 6 - keeps fresh and delicate finishes explicit without adding imaginary ingredients
+      ---
+      duration_ms: 1.2197
+      ...
+    # Subtest: uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+    ok 7 - uses each duplicate quantity once, preserves distinct oil portions, and supports already-scaled callers
+      ---
+      duration_ms: 1.3523
+      ...
+    # Subtest: allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+    ok 8 - allocates all pantry IDs and all76 authored/seeded profiles across heat, diet and serving scales
+      ---
+      duration_ms: 4451.1998
+      ...
+    # Subtest: defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+    ok 9 - defaults unknown products to gentle wet cooking and handles absent oil/empty profiles without guessing food
+      ---
+      duration_ms: 1.7608
+      ...
+    # Subtest: lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+    ok 10 - lets a separate cooked sauce finish before the main while integrated miso still follows the main endpoint
+      ---
+      duration_ms: 0.9356
+      ...
+    # Subtest: rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+    ok 11 - rehydrates whole ancho before heating oil and uses the prepared portion rather than charging it twice
+      ---
+      duration_ms: 0.4828
+      ...
+    # Subtest: blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+    ok 12 - blooms spoon-measured ground star anise but infuses and removes explicitly whole or counted stars
+      ---
+      duration_ms: 0.9248
+      ...
+    # Subtest: respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+    ok 13 - respects explicit powder and edible fine-cut forms without inventing whole pieces to retrieve
+      ---
+      duration_ms: 2.2117
+      ...
+    # Subtest: hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+    ok 14 - hydrates explicitly dried herb forms instead of washing them as fresh garnishes
+      ---
+      duration_ms: 1.7446
+      ...
+    # Subtest: toasts raw sesame before the hot stages and references that same portion at the finish
+    ok 15 - toasts raw sesame before the hot stages and references that same portion at the finish
+      ---
+      duration_ms: 1.103
+      ...
+    1..15
+ok 285 - quantified regional cooking stages
+  ---
+  duration_ms: 4479.6217
+  type: 'suite'
+  ...
+# (node:63004) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: runtime selection keeps Worker as the default and requires an explicit Node profile
+ok 286 - runtime selection keeps Worker as the default and requires an explicit Node profile
+  ---
+  duration_ms: 1.0373
+  ...
+# (node:47160) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all512 two-variable CNFs enumerate exactly the independent truth-table models
+ok 287 - all512 two-variable CNFs enumerate exactly the independent truth-table models
+  ---
+  duration_ms: 31.555
+  ...
+# Subtest: random small models and scored optima agree with an independent exhaustive oracle
+ok 288 - random small models and scored optima agree with an independent exhaustive oracle
+  ---
+  duration_ms: 238.8326
+  ...
+# Subtest: independent RUP replay binds an UNSAT certificate to the actual original clauses
+ok 289 - independent RUP replay binds an UNSAT certificate to the actual original clauses
+  ---
+  duration_ms: 0.9154
+  ...
+# Subtest: resource limits and bad decisions remain UNKNOWN rather than false UNSAT claims
+ok 290 - resource limits and bad decisions remain UNKNOWN rather than false UNSAT claims
+  ---
+  duration_ms: 0.6141
+  ...
+# Subtest: caps report incomplete best-known results, including the exact model-cap boundary
+ok 291 - caps report incomplete best-known results, including the exact model-cap boundary
+  ---
+  duration_ms: 0.6664
+  ...
+# Subtest: soft scores cannot violate a hard exclusion, mutate models or claim unknown optima
+ok 292 - soft scores cannot violate a hard exclusion, mutate models or claim unknown optima
+  ---
+  duration_ms: 1.2365
+  ...
+# Subtest: seeded ties stay deterministic while full model sets and optimum values remain invariant
+ok 293 - seeded ties stay deterministic while full model sets and optimum values remain invariant
+  ---
+  duration_ms: 3.6222
+  ...
+# Subtest: malformed literals are rejected even when hidden after a tautology or empty clause
+ok 294 - malformed literals are rejected even when hidden after a tautology or empty clause
+  ---
+  duration_ms: 0.3938
+  ...
+# (node:56868) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: seeded CDCL
+    # Subtest: rejects a contradiction and accepts a forced literal
+    ok 1 - rejects a contradiction and accepts a forced literal
+      ---
+      duration_ms: 2.2444
+      ...
+    # Subtest: matches brute force on small random formulas and returns a real model
+    ok 2 - matches brute force on small random formulas and returns a real model
+      ---
+      duration_ms: 10.7571
+      ...
+    # Subtest: lets the seed change which member of an exactly-one group is chosen
+    ok 3 - lets the seed change which member of an exactly-one group is chosen
+      ---
+      duration_ms: 1.7581
+      ...
+    1..3
+ok 295 - seeded CDCL
+  ---
+  duration_ms: 16.5855
+  type: 'suite'
+  ...
+# (node:58456) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shared recipes, pictures and PDF
+    # Subtest: rebuilds the same template from a link and rejects anything that is not a recipe
+    ok 1 - rebuilds the same template from a link and rejects anything that is not a recipe
+      ---
+      duration_ms: 98.9513
+      ...
+    # Subtest: serves exact inspiration images and an honest labelled placeholder for recipes without an image
+    ok 2 - serves exact inspiration images and an honest labelled placeholder for recipes without an image
+      ---
+      duration_ms: 72.7542
+      ...
+    # Subtest: fills an empty public-file signal from disk and refuses a path outside the site
+    ok 3 - fills an empty public-file signal from disk and refuses a path outside the site
+      ---
+      duration_ms: 52.7904
+      ...
+    # Subtest: writes a PDF that names the dish and says it is not kitchen-tested
+    ok 4 - writes a PDF that names the dish and says it is not kitchen-tested
+      ---
+      duration_ms: 6.3541
+      ...
+    1..4
+ok 296 - shared recipes, pictures and PDF
+  ---
+  duration_ms: 232.4929
+  type: 'suite'
+  ...
+# (node:68336) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shopping requests normalize the area and bound six distinct ingredient lines
+ok 297 - shopping requests normalize the area and bound six distinct ingredient lines
+  ---
+  duration_ms: 2.1103
+  ...
+# Subtest: invalid names, identifiers, amounts, units and shapes are rejected before provider work
+ok 298 - invalid names, identifiers, amounts, units and shapes are rejected before provider work
+  ---
+  duration_ms: 0.7204
+  ...
+# Subtest: oversized or malformed shop metadata cannot become an association by prefix truncation
+ok 299 - oversized or malformed shop metadata cannot become an association by prefix truncation
+  ---
+  duration_ms: 1.5401
+  ...
+# Subtest: the streamed request size cap rejects large JSON without reading the entire body
+ok 300 - the streamed request size cap rejects large JSON without reading the entire body
+  ---
+  duration_ms: 24.6849
+  ...
+# Subtest: Woolworths failure leaves Coles and exact local recorded prices available
+ok 301 - Woolworths failure leaves Coles and exact local recorded prices available
+  ---
+  duration_ms: 26.2163
+  ...
+# Subtest: synchronous provider failures are isolated like rejected asynchronous calls
+ok 302 - synchronous provider failures are isolated like rejected asynchronous calls
+  ---
+  duration_ms: 0.8466
+  ...
+# Subtest: local ledger failure and per-item catalogue errors leave honest partial results
+ok 303 - local ledger failure and per-item catalogue errors leave honest partial results
+  ---
+  duration_ms: 0.8896
+  ...
+# Subtest: no successful provider yields a missing estimate rather than a zero basket
+ok 304 - no successful provider yields a missing estimate rather than a zero basket
+  ---
+  duration_ms: 0.4429
+  ...
+# Subtest: non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+ok 305 - non-Australian areas do not borrow Australian catalogue prices or collide with Australian postcodes
+  ---
+  duration_ms: 0.7925
+  ...
+# Subtest: generic GPS locations can use online guides without borrowing a shared generic area's records
+ok 306 - generic GPS locations can use online guides without borrowing a shared generic area's records
+  ---
+  duration_ms: 0.8224
+  ...
+# Subtest: explicitly disabling online checks prevents retailer requests
+ok 307 - explicitly disabling online checks prevents retailer requests
+  ---
+  duration_ms: 0.4532
+  ...
+# Subtest: duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+ok 308 - duplicate ingredient names are looked up once and long names stay as unpriced local-only lines
+  ---
+  duration_ms: 0.9048
+  ...
+# Subtest: special filtering receives Sydney's date rather than the previous UTC day
+ok 309 - special filtering receives Sydney's date rather than the previous UTC day
+  ---
+  duration_ms: 0.4135
+  ...
+# Subtest: aborting catalogue checks retains finished local evidence and gives a partial-source notice
+ok 310 - aborting catalogue checks retains finished local evidence and gives a partial-source notice
+  ---
+  duration_ms: 10.6222
+  ...
+# (node:36524) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: metric packs round up whole purchases and preserve purchased quantity
+ok 311 - metric packs round up whole purchases and preserve purchased quantity
+  ---
+  duration_ms: 3.7552
+  ...
+# Subtest: multipacks and explicit count units are costed without discarding their contents
+ok 312 - multipacks and explicit count units are costed without discarding their contents
+  ---
+  duration_ms: 0.3666
+  ...
+# Subtest: explicit rates use the needed quantity with money rounded once
+ok 313 - explicit rates use the needed quantity with money rounded once
+  ---
+  duration_ms: 0.3634
+  ...
+# Subtest: unknown units, densities and approximate pack sizes never become free or guessed food
+ok 314 - unknown units, densities and approximate pack sizes never become free or guessed food
+  ---
+  duration_ms: 0.4041
+  ...
+# Subtest: Woolworths and Coles are separate online evidence, never the default local fulfilment store
+ok 315 - Woolworths and Coles are separate online evidence, never the default local fulfilment store
+  ---
+  duration_ms: 4.6604
+  ...
+# Subtest: only explicitly associated local records belong to a nearby shop
+ok 316 - only explicitly associated local records belong to a nearby shop
+  ---
+  duration_ms: 17.8697
+  ...
+# Subtest: different areas and different item keys cannot contaminate local costs
+ok 317 - different areas and different item keys cannot contaminate local costs
+  ---
+  duration_ms: 0.5573
+  ...
+# Subtest: old manual observations remain readable without treating their unknown pack as the whole recipe
+ok 318 - old manual observations remain readable without treating their unknown pack as the whole recipe
+  ---
+  duration_ms: 0.4195
+  ...
+# Subtest: manual selling quantities survive normalizing and legacy observations remain compatible
+ok 319 - manual selling quantities survive normalizing and legacy observations remain compatible
+  ---
+  duration_ms: 1.4555
+  ...
+# Subtest: latest observation for the same shop, item and pack supersedes its earlier cheaper price
+ok 320 - latest observation for the same shop, item and pack supersedes its earlier cheaper price
+  ---
+  duration_ms: 1.0533
+  ...
+# Subtest: stale, future and missing timestamps remain visible but cannot silently enter an estimate
+ok 321 - stale, future and missing timestamps remain visible but cannot silently enter an estimate
+  ---
+  duration_ms: 1.0739
+  ...
+# Subtest: special end dates are interpreted as Australian local days and malformed dates fail closed
+ok 322 - special end dates are interpreted as Australian local days and malformed dates fail closed
+  ---
+  duration_ms: 13.2798
+  ...
+# Subtest: dietary wording still requires explicit matching product evidence before automatic cost choice
+ok 323 - dietary wording still requires explicit matching product evidence before automatic cost choice
+  ---
+  duration_ms: 4.9867
+  ...
+# Subtest: plain staple brand ties produce a suggested estimate while preserving explicit choice
+ok 324 - plain staple brand ties produce a suggested estimate while preserving explicit choice
+  ---
+  duration_ms: 1.4146
+  ...
+# Subtest: actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+ok 325 - actual firm tofu and jasmine rice brand alternatives produce the cheapest quantity-aware suggestion
+  ---
+  duration_ms: 1.5602
+  ...
+# Subtest: generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+ok 326 - generated Plain firm tofu wording accepts explicitly Original firm tofu without widening other wording
+  ---
+  duration_ms: 0.7058
+  ...
+# Subtest: Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+ok 327 - Original tofu equivalence preserves flavour, preparation, dietary and stock restrictions
+  ---
+  duration_ms: 2.4346
+  ...
+# Subtest: unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+ok 328 - unrequested rice and tofu food forms stay out of automatic estimates even for one catalogue hit
+  ---
+  duration_ms: 2.2794
+  ...
+# Subtest: official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+ok 329 - official cooked-rice metadata blocks a blandly named ready pack from dry-rice costs or manual cost selection
+  ---
+  duration_ms: 1.5893
+  ...
+# Subtest: a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+ok 330 - a genuine dry 450g rice pack remains costable and explicitly cooked weights can match cooked packs
+  ---
+  duration_ms: 0.5041
+  ...
+# Subtest: fresh produce cannot be automatically replaced by powder, paste or preserved products
+ok 331 - fresh produce cannot be automatically replaced by powder, paste or preserved products
+  ---
+  duration_ms: 0.8058
+  ...
+# Subtest: brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+ok 332 - brand-tie suggestions never broaden meat or fish cuts or bypass dietary evidence
+  ---
+  duration_ms: 2.7561
+  ...
+# Subtest: unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+ok 333 - unknown stock, ambiguous products and cooked/drained conversions cannot create automatic totals
+  ---
+  duration_ms: 0.6187
+  ...
+# Subtest: all meaningful requested staple words must occur even if the catalogue matcher chose one row
+ok 334 - all meaningful requested staple words must occur even if the catalogue matcher chose one row
+  ---
+  duration_ms: 0.4551
+  ...
+# Subtest: partial list totals expose missing lines during progressive batches and never call them zero
+ok 335 - partial list totals expose missing lines during progressive batches and never call them zero
+  ---
+  duration_ms: 0.3943
+  ...
+# (node:53364) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: nearby shopping-list relevance
+    # Subtest: explains likely list coverage separately from stock, prices or cheapest claims
+    ok 1 - explains likely list coverage separately from stock, prices or cheapest claims
+      ---
+      duration_ms: 3.8295
+      ...
+    # Subtest: matches only the relevant fresh, bakery and spice categories
+    ok 2 - matches only the relevant fresh, bakery and spice categories
+      ---
+      duration_ms: 19.1445
+      ...
+    # Subtest: infers old/custom ingredient categories without mistaking substitutes or condiments for meat
+    ok 3 - infers old/custom ingredient categories without mistaking substitutes or condiments for meat
+      ---
+      duration_ms: 3.5624
+      ...
+    # Subtest: uses pantry needs, de-duplicates ids, applies name filters and leaves inputs unchanged
+    ok 4 - uses pantry needs, de-duplicates ids, applies name filters and leaves inputs unchanged
+      ---
+      duration_ms: 0.5044
+      ...
+    # Subtest: orders equal coverage by real distance, then stable name/id, and preserves unknown distances honestly
+    ok 5 - orders equal coverage by real distance, then stable name/id, and preserves unknown distances honestly
+      ---
+      duration_ms: 1.0649
+      ...
+    # Subtest: respects the exact selected radius and source subtype
+    ok 6 - respects the exact selected radius and source subtype
+      ---
+      duration_ms: 0.5642
+      ...
+    1..6
+ok 336 - nearby shopping-list relevance
+  ---
+  duration_ms: 30.6016
+  type: 'suite'
+  ...
+# Subtest: public retailer ingredient links
+    # Subtest: encodes full dietary/product terms in verified Woolworths and Coles searches
+    ok 1 - encodes full dietary/product terms in verified Woolworths and Coles searches
+      ---
+      duration_ms: 1.2231
+      ...
+    # Subtest: uses official ALDI/IGA destinations without inventing stock or unsupported search parameters
+    ok 2 - uses official ALDI/IGA destinations without inventing stock or unsupported search parameters
+      ---
+      duration_ms: 0.6639
+      ...
+    # Subtest: offers a public shop website and area-specific web fallback, rejecting unsafe destinations
+    ok 3 - offers a public shop website and area-specific web fallback, rejecting unsafe destinations
+      ---
+      duration_ms: 1.109
+      ...
+    1..3
+ok 337 - public retailer ingredient links
+  ---
+  duration_ms: 3.7038
+  type: 'suite'
+  ...
+# (node:68200) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: shopping list sources
+    # Subtest: gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+    ok 1 - gives grams and cloves distinct stable IDs and keeps IDs stable through editing a quantity
+      ---
+      duration_ms: 2.778
+      ...
+    # Subtest: merges exact metric conversions so one product is not bought twice
+    ok 2 - merges exact metric conversions so one product is not bought twice
+      ---
+      duration_ms: 1.4159
+      ...
+    # Subtest: does not guess fresh-food density or spoon-to-weight conversions
+    ok 3 - does not guess fresh-food density or spoon-to-weight conversions
+      ---
+      duration_ms: 0.3498
+      ...
+    # Subtest: preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+    ok 4 - preserves a custom display unit across edits and reloads while using the same physical-quantity identity
+      ---
+      duration_ms: 0.4132
+      ...
+    # Subtest: loads valid custom entries without trusting persisted extra fields
+    ok 5 - loads valid custom entries without trusting persisted extra fields
+      ---
+      duration_ms: 0.3295
+      ...
+    1..5
+ok 338 - shopping list sources
+  ---
+  duration_ms: 7.4811
+  type: 'suite'
+  ...
+# (node:42192) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: six products from one retailer cannot hide the second retailer
+ok 339 - six products from one retailer cannot hide the second retailer
+  ---
+  duration_ms: 4.1249
+  ...
+# Subtest: only safe eligible choices are ranked by quantity cost
+ok 340 - only safe eligible choices are ranked by quantity cost
+  ---
+  duration_ms: 0.2691
+  ...
+# Subtest: unresolved brand choices show the first reviewable candidate without inferring cheapest food
+ok 341 - unresolved brand choices show the first reviewable candidate without inferring cheapest food
+  ---
+  duration_ms: 0.4146
+  ...
+# Subtest: an explicit pack choice remains visible, including a seller outside the four-source preview
+ok 342 - an explicit pack choice remains visible, including a seller outside the four-source preview
+  ---
+  duration_ms: 0.3177
+  ...
+# Subtest: separate local shops and online catalogue scope remain distinct
+ok 343 - separate local shops and online catalogue scope remain distinct
+  ---
+  duration_ms: 0.2596
+  ...
+# Subtest: a failed retailer remains visible with unknown cost beside available prices
+ok 344 - a failed retailer remains visible with unknown cost beside available prices
+  ---
+  duration_ms: 0.4871
+  ...
+# Subtest: review-only and unmatched retailer results stay unknown, never zero
+ok 345 - review-only and unmatched retailer results stay unknown, never zero
+  ---
+  duration_ms: 0.2838
+  ...
+# Subtest: local recorded evidence stays separate from a failed chain guide
+ok 346 - local recorded evidence stays separate from a failed chain guide
+  ---
+  duration_ms: 0.218
+  ...
+# (node:63896) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: miso is never matched to a bakery, cheese shop, spice shop, deli or generic specialty shop
+ok 347 - miso is never matched to a bakery, cheese shop, spice shop, deli or generic specialty shop
+  ---
+  duration_ms: 4.0977
+  ...
+# Subtest: fresh produce, meat and seafood stay in their actual specialized shop families
+ok 348 - fresh produce, meat and seafood stay in their actual specialized shop families
+  ---
+  duration_ms: 0.3591
+  ...
+# Subtest: bakery recommendations are for actual bread products, never flour or condiments
+ok 349 - bakery recommendations are for actual bread products, never flour or condiments
+  ---
+  duration_ms: 0.4325
+  ...
+# Subtest: cheese shops require dairy cheese, not any dairy or a plant-based substitute
+ok 350 - cheese shops require dairy cheese, not any dairy or a plant-based substitute
+  ---
+  duration_ms: 0.5842
+  ...
+# Subtest: spice shops match dried spices and exclude fresh herbs, pastes and oils
+ok 351 - spice shops match dried spices and exclude fresh herbs, pastes and oils
+  ---
+  duration_ms: 0.4418
+  ...
+# Subtest: delicatessens only match narrow deli families; generic markets imply no stock
+ok 352 - delicatessens only match narrow deli families; generic markets imply no stock
+  ---
+  duration_ms: 0.3146
+  ...
+# Subtest: specialized sources rank before supermarkets, then distance orders equivalent sources
+ok 353 - specialized sources rank before supermarkets, then distance orders equivalent sources
+  ---
+  duration_ms: 2.704
+  ...
+# Subtest: original subtype overrides an inconsistent broad label and duplicate ids are removed
+ok 354 - original subtype overrides an inconsistent broad label and duplicate ids are removed
+  ---
+  duration_ms: 0.3963
+  ...
+# (node:47536) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+ok 355 - all ninety sides keep four-serving draft quantities, bounded instructions and usable late-step metadata
+  ---
+  duration_ms: 121.6345
+  ...
+# Subtest: cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+ok 356 - cassava uses a labelled fully cooked product, never a raw-root short-boil safety claim
+  ---
+  duration_ms: 0.7204
+  ...
+# Subtest: tostones soften, flatten and refry with separate measured oil portions
+ok 357 - tostones soften, flatten and refry with separate measured oil portions
+  ---
+  duration_ms: 0.864
+  ...
+# Subtest: sticky rice counts advance soaking separately and steams hydrated grains above the water
+ok 358 - sticky rice counts advance soaking separately and steams hydrated grains above the water
+  ---
+  duration_ms: 0.3127
+  ...
+# Subtest: miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+ok 359 - miso aubergine records soy and uses a labelled GF glaze only after the vegetable cooks
+  ---
+  duration_ms: 13.0136
+  ...
+# Subtest: named side flavours have real portions, cooking actions and removal of inedible infusions
+ok 360 - named side flavours have real portions, cooking actions and removal of inedible infusions
+  ---
+  duration_ms: 1.4578
+  ...
+# Subtest: oil divisions and cooked-rice forms survive servings and regional staple handling
+ok 361 - oil divisions and cooked-rice forms survive servings and regional staple handling
+  ---
+  duration_ms: 10.0665
+  ...
+# Subtest: long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+ok 362 - long secondary cooking is scheduled early, while cold sauces and salad dressings stay late
+  ---
+  duration_ms: 1.5272
+  ...
+# Subtest: prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+ok 363 - prepared dairy-free foods use explicit suitable labels and side objects do not leak mutations
+  ---
+  duration_ms: 2.7009
+  ...
+# (node:50548) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: expanded side catalogue
+    # Subtest: exposes ninety distinct sides and keeps combination maths honest
+    ok 1 - exposes ninety distinct sides and keeps combination maths honest
+      ---
+      duration_ms: 1.1799
+      ...
+    # Subtest: builds every side for balanced, gluten-free and dairy-free without inventing prices
+    ok 2 - builds every side for balanced, gluten-free and dairy-free without inventing prices
+      ---
+      duration_ms: 94.2684
+      ...
+    # Subtest: tags wheat and sesame sides clearly and substitutes under gluten-free
+    ok 3 - tags wheat and sesame sides clearly and substitutes under gluten-free
+      ---
+      duration_ms: 3.4375
+      ...
+    # Subtest: covers meal regions with preferred sides and keeps curated plates on known sides
+    ok 4 - covers meal regions with preferred sides and keeps curated plates on known sides
+      ---
+      duration_ms: 1.7463
+      ...
+    1..4
+ok 364 - expanded side catalogue
+  ---
+  duration_ms: 102.2421
+  type: 'suite'
+  ...
+# (node:66452) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+ok 365 - whole sorghum receives its producer's 50–60 minute tenderising window and enough boiling water
+  ---
+  duration_ms: 9.0924
+  ...
+# Subtest: short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+ok 366 - short grain windows identify cracked or pearled forms and preserve slower dietary substitutions
+  ---
+  duration_ms: 4.0696
+  ...
+# Subtest: soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+ok 367 - soft grain dishes give scaled starting liquid rather than a fixed pan of unspecified water
+  ---
+  duration_ms: 2.799
+  ...
+# Subtest: all ninety sides keep plausible four-person starch portions across form and diet variants
+ok 368 - all ninety sides keep plausible four-person starch portions across form and diet variants
+  ---
+  duration_ms: 29.7334
+  ...
+# Subtest: powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+ok 369 - powdered fresh-aromatic IDs receive brief spice blooming rather than fresh mincing and long frying
+  ---
+  duration_ms: 6.2787
+  ...
+# Subtest: powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+ok 370 - powder and flakes do not acquire imaginary chilli stems, while whole dried chillies retain preparation
+  ---
+  duration_ms: 1.935
+  ...
+# Subtest: counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+ok 371 - counted cloves and cinnamon quills are retrieved while cardamom seeds are ground and eaten
+  ---
+  duration_ms: 1.2792
+  ...
+# Subtest: implicit sauce water scales independently of whether supplied quantities were already scaled
+ok 372 - implicit sauce water scales independently of whether supplied quantities were already scaled
+  ---
+  duration_ms: 0.4129
+  ...
+# Subtest: a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+ok 373 - a delicate-only warm miso sauce establishes real liquid before borrowing a spoonful
+  ---
+  duration_ms: 0.8355
+  ...
+# (node:18384) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: substantive secondary side cooking starts with the accompaniment, before a quick main
+ok 374 - substantive secondary side cooking starts with the accompaniment, before a quick main
+  ---
+  duration_ms: 34.0701
+  ...
+# Subtest: simpler methods retain main cooking and the delicate finishing boundary
+ok 375 - simpler methods retain main cooking and the delicate finishing boundary
+  ---
+  duration_ms: 46.3102
+  ...
+# Subtest: long preparation and special side handling remain visible in full recipes
+ok 376 - long preparation and special side handling remain visible in full recipes
+  ---
+  duration_ms: 3.9273
+  ...
+# Subtest: regional rice names never rewrite rice miso or its measured glaze water
+ok 377 - regional rice names never rewrite rice miso or its measured glaze water
+  ---
+  duration_ms: 109.683
+  ...
+# Subtest: regional coconut rice counts its listed milk toward packet cooking liquid
+ok 378 - regional coconut rice counts its listed milk toward packet cooking liquid
+  ---
+  duration_ms: 3.2567
+  ...
+# (node:27972) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: smoke method allow / deny
+    # Subtest: offers smoked only on realistic mains
+    ok 1 - offers smoked only on realistic mains
+      ---
+      duration_ms: 1.8446
+      ...
+    # Subtest: forbids mince and steak cuts on smoked; allows brisket, ribs, belly
+    ok 2 - forbids mince and steak cuts on smoked; allows brisket, ribs, belly
+      ---
+      duration_ms: 2.3301
+      ...
+    # Subtest: lists smoke staple cuts without inventing mince smoking
+    ok 3 - lists smoke staple cuts without inventing mince smoking
+      ---
+      duration_ms: 0.1245
+      ...
+    1..3
+ok 379 - smoke method allow / deny
+  ---
+  duration_ms: 5.2764
+  type: 'suite'
+  ...
+# Subtest: smoked prep wording
+    # Subtest: defaults brisket for beef smoked and talks bark, rest, slice — not patties
+    ok 1 - defaults brisket for beef smoked and talks bark, rest, slice — not patties
+      ---
+      duration_ms: 11.0773
+      ...
+    # Subtest: smokes pork ribs and duck with realistic endpoints
+    ok 2 - smokes pork ribs and duck with realistic endpoints
+      ---
+      duration_ms: 4.3521
+      ...
+    # Subtest: keeps sauce separate and never asks to smoke shaped patties
+    ok 3 - keeps sauce separate and never asks to smoke shaped patties
+      ---
+      duration_ms: 1.2138
+      ...
+    1..3
+ok 380 - smoked prep wording
+  ---
+  duration_ms: 16.8731
+  type: 'suite'
+  ...
+# (node:41768) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: regional staples
+    # Subtest: covers every classic and meal region, and gluten-free staples do not list wheat
+    ok 1 - covers every classic and meal region, and gluten-free staples do not list wheat
+      ---
+      duration_ms: 2.0406
+      ...
+    # Subtest: specialises existing rice while keeping complete classic plates to their chosen starch
+    ok 2 - specialises existing rice while keeping complete classic plates to their chosen starch
+      ---
+      duration_ms: 32.9133
+      ...
+    # Subtest: names 100% teff injera without a wheat tag, and keeps gluten-free Indian plates wheat-free
+    ok 3 - names 100% teff injera without a wheat tag, and keeps gluten-free Indian plates wheat-free
+      ---
+      duration_ms: 3.1049
+      ...
+    # Subtest: maps plancha almonds to tree-nut and keeps every curated plate compatible
+    ok 4 - maps plancha almonds to tree-nut and keeps every curated plate compatible
+      ---
+      duration_ms: 1.1682
+      ...
+    1..4
+ok 381 - regional staples
+  ---
+  duration_ms: 40.5329
+  type: 'suite'
+  ...
+# (node:58408) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one cooking concern is visible immediately before any trending threshold
+ok 382 - one cooking concern is visible immediately before any trending threshold
+  ---
+  duration_ms: 29.321
+  ...
+# Subtest: empty and historical review states remain visible without inventing reports
+ok 383 - empty and historical review states remain visible without inventing reports
+  ---
+  duration_ms: 9.7038
+  ...
+1..383
+# tests 592
+# suites 46
+# pass 592
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 200365.2587

@@ -1,0 +1,31 @@
+{
+  "checkedAt": "2026-10-27T09:55:16.758Z",
+  "driver": "mysql2",
+  "outcomes": [
+    {
+      "name": "prepared parameters and concurrent unique-email transaction",
+      "passed": true
+    },
+    {
+      "name": "concurrent saved-kitchen compare-and-swap prevents lost updates",
+      "passed": true
+    },
+    {
+      "name": "session cap retains the newly-issued token with equal timestamps",
+      "passed": true
+    },
+    {
+      "name": "SQL-backed rate counters remain atomic under concurrent requests",
+      "passed": true
+    },
+    {
+      "name": "password update uses compare-and-swap and revokes all sessions",
+      "passed": true
+    },
+    {
+      "name": "revoke-all advances the generation and removes sessions",
+      "passed": true
+    }
+  ],
+  "passed": 6
+}

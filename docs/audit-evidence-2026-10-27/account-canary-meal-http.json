@@ -1,0 +1,564 @@
+{
+  "checkedAt": "2026-10-27T10:03:15.923Z",
+  "base": "http://127.0.0.1:8793/fusion",
+  "generatedMeals": 24,
+  "sampledIngredientLines": 55,
+  "batches": 10,
+  "allRowsValued": true,
+  "invalidRequestsRejected": 3,
+  "observedRows": 8,
+  "elapsedMs": 225,
+  "warnings": [
+    "Coles: Dried egg-free pasta — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Garlic — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Salt — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Rice vinegar — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Corn tortillas — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Avocado — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Lemon — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Brown onion — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Vegetable stock — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Fresh ginger — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Vegan soy sauce — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Tomatoes — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Ground cumin — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Garlic powder — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Lime — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Bone-in chicken thighs — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Olive oil — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Molasses — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Cucumber — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Dried oregano — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Smoked paprika — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Flat-leaf parsley — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Tomato passata — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Bay leaf — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Ground black pepper — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Tomato paste — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Fresh basil — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Beef brisket flat — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Spring onions — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Boneless salmon fillet — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Ground coriander — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Fresh coriander — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Apple cider vinegar — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Carrot — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Red onion — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Sweet paprika — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Red capsicum — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Thick beef sirloin steaks — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Sumac — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Vegetarian-rennet halloumi — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Red pepper — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Toasted sesame oil — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: King oyster mushrooms — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Chilli flakes — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Pure maple syrup — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Nutritional yeast — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Whole trout, gutted and scaled — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Ground turmeric — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Gluten-free gochujang — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Plain soy tempeh — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Cabbage — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Fresh lemongrass — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Aubergine — Coles is temporarily not returning readable prices. Open Coles directly, or retry later.",
+    "Coles: Cherry tomatoes — Coles is temporarily not returning readable prices. Open Coles directly, or retry later."
+  ],
+  "rows": [
+    {
+      "id": "item-ukikp9-dried-egg-free-pasta-g",
+      "name": "Dried egg-free pasta",
+      "amount": 80,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "dry-staple"
+    },
+    {
+      "id": "item-1gc4xzz-garlic-cloves",
+      "name": "Garlic",
+      "amount": 20.5,
+      "unit": "cloves",
+      "observedCents": null,
+      "planningCents": 360,
+      "profile": "garlic-cloves"
+    },
+    {
+      "id": "item-1tzd28q-salt-tsp",
+      "name": "Salt",
+      "amount": 3.875,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 200,
+      "profile": "salt"
+    },
+    {
+      "id": "item-1883rnn-rice-vinegar-tbsp",
+      "name": "Rice vinegar",
+      "amount": 0.25,
+      "unit": "tbsp",
+      "observedCents": 240,
+      "planningCents": 400,
+      "profile": "liquid-seasoning"
+    },
+    {
+      "id": "item-6xo5ci-corn-tortillas-each",
+      "name": "Corn tortillas",
+      "amount": 4,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 450,
+      "profile": "bread-pieces"
+    },
+    {
+      "id": "item-jlsv3v-avocado-each",
+      "name": "Avocado",
+      "amount": 0.5,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 180,
+      "profile": "avocado"
+    },
+    {
+      "id": "item-khk0ed-lemon-each",
+      "name": "Lemon",
+      "amount": 3.75,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 400,
+      "profile": "citrus"
+    },
+    {
+      "id": "item-jmob8r-brown-onion-each",
+      "name": "Brown onion",
+      "amount": 0.75,
+      "unit": "each",
+      "observedCents": 63,
+      "planningCents": 90,
+      "profile": "whole-vegetable"
+    },
+    {
+      "id": "item-1miclan-vegetable-stock-ml",
+      "name": "Vegetable stock",
+      "amount": 1050,
+      "unit": "ml",
+      "observedCents": null,
+      "planningCents": 500,
+      "profile": "ready-stock"
+    },
+    {
+      "id": "item-1fjfzok-fresh-ginger-g",
+      "name": "Fresh ginger",
+      "amount": 50,
+      "unit": "g",
+      "observedCents": 500,
+      "planningCents": 180,
+      "profile": "fresh-aromatics"
+    },
+    {
+      "id": "item-vr3xhl-vegan-soy-sauce-tbsp",
+      "name": "Vegan soy sauce",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "observedCents": null,
+      "planningCents": 400,
+      "profile": "liquid-seasoning"
+    },
+    {
+      "id": "item-1024xe8-tomatoes-each",
+      "name": "Tomatoes",
+      "amount": 2,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 180,
+      "profile": "whole-vegetable"
+    },
+    {
+      "id": "item-11voe0t-ground-cumin-tsp",
+      "name": "Ground cumin",
+      "amount": 2.875,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-nb4cb7-garlic-powder-tsp",
+      "name": "Garlic powder",
+      "amount": 1.625,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-145lxhl-lime-each",
+      "name": "Lime",
+      "amount": 1.25,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 200,
+      "profile": "citrus"
+    },
+    {
+      "id": "item-qpbtq-bone-in-chicken-thighs-g",
+      "name": "Bone-in chicken thighs",
+      "amount": 1250,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 2500,
+      "profile": "general-ingredient-allowance"
+    },
+    {
+      "id": "item-1hsl8s1-olive-oil-tbsp",
+      "name": "Olive oil",
+      "amount": 17.75,
+      "unit": "tbsp",
+      "observedCents": 880,
+      "planningCents": 850,
+      "profile": "cooking-oil"
+    },
+    {
+      "id": "item-1k9fxqb-molasses-tsp",
+      "name": "Molasses",
+      "amount": 1.5,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 700,
+      "profile": "liquid-seasoning"
+    },
+    {
+      "id": "item-1y42pe0-cucumber-g",
+      "name": "Cucumber",
+      "amount": 750,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 600,
+      "profile": "cucumber"
+    },
+    {
+      "id": "item-vcts6n-dried-oregano-tsp",
+      "name": "Dried oregano",
+      "amount": 4.625,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-1rrrdad-smoked-paprika-tsp",
+      "name": "Smoked paprika",
+      "amount": 0.875,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-1sawy0e-flat-leaf-parsley-g",
+      "name": "Flat-leaf parsley",
+      "amount": 117.5,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 1200,
+      "profile": "fresh-herbs"
+    },
+    {
+      "id": "item-1w8ck7x-tomato-passata-ml",
+      "name": "Tomato passata",
+      "amount": 500,
+      "unit": "ml",
+      "observedCents": null,
+      "planningCents": 220,
+      "profile": "tomato-passata"
+    },
+    {
+      "id": "item-176zwtu-bay-leaf-each",
+      "name": "Bay leaf",
+      "amount": 2,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 350,
+      "profile": "whole-dried-seasoning"
+    },
+    {
+      "id": "item-16v8jhg-ground-black-pepper-tsp",
+      "name": "Ground black pepper",
+      "amount": 4.25,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-1awnuih-tomato-paste-tbsp",
+      "name": "Tomato paste",
+      "amount": 0.5,
+      "unit": "tbsp",
+      "observedCents": null,
+      "planningCents": 450,
+      "profile": "specialty-paste"
+    },
+    {
+      "id": "item-1fjsz0h-fresh-basil-g",
+      "name": "Fresh basil",
+      "amount": 3.75,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "fresh-herbs"
+    },
+    {
+      "id": "item-1lofbrb-beef-brisket-flat-g",
+      "name": "Beef brisket flat",
+      "amount": 300,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 1250,
+      "profile": "beef"
+    },
+    {
+      "id": "item-14v4ch3-spring-onions-each",
+      "name": "Spring onions",
+      "amount": 1.5,
+      "unit": "each",
+      "observedCents": null,
+      "planningCents": 250,
+      "profile": "spring-onion-stalks"
+    },
+    {
+      "id": "item-1hv92mh-boneless-salmon-fillet-g",
+      "name": "Boneless salmon fillet",
+      "amount": 350,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 2000,
+      "profile": "seafood"
+    },
+    {
+      "id": "item-1dh3xpa-ground-coriander-tsp",
+      "name": "Ground coriander",
+      "amount": 0.75,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-pbyush-fresh-coriander-g",
+      "name": "Fresh coriander",
+      "amount": 7.5,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "fresh-herbs"
+    },
+    {
+      "id": "item-t2ky83-brown-onion-g",
+      "name": "Brown onion",
+      "amount": 450,
+      "unit": "g",
+      "observedCents": 400,
+      "planningCents": 200,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-1pfivn1-apple-cider-vinegar-tsp",
+      "name": "Apple cider vinegar",
+      "amount": 4.25,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 400,
+      "profile": "liquid-seasoning"
+    },
+    {
+      "id": "item-194ymxj-carrot-g",
+      "name": "Carrot",
+      "amount": 487.5,
+      "unit": "g",
+      "observedCents": 170,
+      "planningCents": 200,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-1betd3o-red-onion-g",
+      "name": "Red onion",
+      "amount": 187.5,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 200,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-15lx7jg-sweet-paprika-tsp",
+      "name": "Sweet paprika",
+      "amount": 1.5,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-1rf5b2a-red-capsicum-g",
+      "name": "Red capsicum",
+      "amount": 750,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 700,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-1gc4i5i-thick-beef-sirloin-steaks-g",
+      "name": "Thick beef sirloin steaks",
+      "amount": 1400,
+      "unit": "g",
+      "observedCents": 9000,
+      "planningCents": 3000,
+      "profile": "general-ingredient-allowance"
+    },
+    {
+      "id": "item-1e9m9mr-sumac-tsp",
+      "name": "Sumac",
+      "amount": 4,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-18jsecs-vegetarian-rennet-halloumi-g",
+      "name": "Vegetarian-rennet halloumi",
+      "amount": 900,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 2600,
+      "profile": "cheese"
+    },
+    {
+      "id": "item-1ds77yh-red-pepper-g",
+      "name": "Red pepper",
+      "amount": 500,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 350,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-cp4myq-toasted-sesame-oil-tsp",
+      "name": "Toasted sesame oil",
+      "amount": 0.25,
+      "unit": "tsp",
+      "observedCents": 1250,
+      "planningCents": 650,
+      "profile": "sesame-oil"
+    },
+    {
+      "id": "item-646kz8-king-oyster-mushrooms-g",
+      "name": "King oyster mushrooms",
+      "amount": 100,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 600,
+      "profile": "specialty-mushrooms"
+    },
+    {
+      "id": "item-1bf5o2h-chilli-flakes-tsp",
+      "name": "Chilli flakes",
+      "amount": 0.125,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-y420tq-pure-maple-syrup-tsp",
+      "name": "Pure maple syrup",
+      "amount": 0.5,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 700,
+      "profile": "liquid-seasoning"
+    },
+    {
+      "id": "item-vxb8o5-nutritional-yeast-g",
+      "name": "Nutritional yeast",
+      "amount": 12.5,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 650,
+      "profile": "nutritional-yeast"
+    },
+    {
+      "id": "item-1z0r7y9-whole-trout-gutted-and-scaled-g",
+      "name": "Whole trout, gutted and scaled",
+      "amount": 1050,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 3750,
+      "profile": "seafood"
+    },
+    {
+      "id": "item-1pw83eo-ground-turmeric-tsp",
+      "name": "Ground turmeric",
+      "amount": 0.875,
+      "unit": "tsp",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "pantry-spice"
+    },
+    {
+      "id": "item-1s5b10k-gluten-free-gochujang-tbsp",
+      "name": "Gluten-free gochujang",
+      "amount": 1.875,
+      "unit": "tbsp",
+      "observedCents": null,
+      "planningCents": 450,
+      "profile": "specialty-paste"
+    },
+    {
+      "id": "item-1gj9tx4-plain-soy-tempeh-g",
+      "name": "Plain soy tempeh",
+      "amount": 400,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 1300,
+      "profile": "plant-protein"
+    },
+    {
+      "id": "item-15r1nrl-cabbage-g",
+      "name": "Cabbage",
+      "amount": 312.5,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 200,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-nzkhi1-fresh-lemongrass-stalk",
+      "name": "Fresh lemongrass",
+      "amount": 1.25,
+      "unit": "stalk",
+      "observedCents": null,
+      "planningCents": 300,
+      "profile": "lemongrass-stalk"
+    },
+    {
+      "id": "item-12spl54-aubergine-g",
+      "name": "Aubergine",
+      "amount": 750,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 700,
+      "profile": "vegetables"
+    },
+    {
+      "id": "item-1cm6xan-cherry-tomatoes-g",
+      "name": "Cherry tomatoes",
+      "amount": 375,
+      "unit": "g",
+      "observedCents": null,
+      "planningCents": 350,
+      "profile": "vegetables"
+    }
+  ]
+}

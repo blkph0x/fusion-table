@@ -53,6 +53,11 @@ export function pantryKey(name: string): string {
   return name.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
+/** One food in one compatible measurement family. No density or culinary aliases are guessed. */
+export function pantryAmountKey(name: string, unit: string): string {
+  return `${pantryKey(name)}|${measure(unit).unit}`;
+}
+
 function round(value: number): number {
   return Math.round(value * 100) / 100;
 }
@@ -110,6 +115,31 @@ export function pantryOwnedIds(pantry: readonly Stock[], lines: readonly { id: s
     stock.onHand = round(Math.max(0, stock.onHand - needed));
   }
   return owned;
+}
+
+/**
+ * Apply an explicit checkbox declaration immediately, without consuming stock.
+ * A tick covers all checked uses of this food together; an untick clears this
+ * food/measurement family except other checked uses. A caller may restore a
+ * known partial amount when reversing a top-up made in this same interaction.
+ */
+export function declarePantryOwnership(pantry: readonly Stock[], lines: readonly UseLine[], changedId: string, restore?: { amount: number; unit: string }): Stock[] {
+  const next = normalisedPantry(pantry);
+  const changed = lines.find(item => item.id === changedId);
+  if (!changed || !Number.isFinite(changed.amount) || changed.amount <= 0) return next;
+  const target = measure(changed.unit), key = pantryKey(changed.name);
+  const id = `${key}|${target.unit}`;
+  const checked = groupedNeed(lines.filter(item => item.have)).get(id)?.amount || 0;
+  const existing = next.find(item => item.key === key && item.unit === target.unit);
+  let retained = 0;
+  if (restore && Number.isFinite(restore.amount) && restore.amount >= 0) {
+    const prior = measure(restore.unit);
+    if (prior.unit === target.unit) retained = restore.amount * prior.factor;
+  }
+  const onHand = round(changed.have ? Math.max(existing?.onHand || 0, checked) : Math.max(checked, retained));
+  if (existing) existing.onHand = onHand;
+  else if (changed.have || onHand > 0) next.push({ key, name: changed.name, unit: target.unit, onHand });
+  return next;
 }
 
 /**

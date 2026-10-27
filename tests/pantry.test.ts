@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { formatPantryQuantity, isConsumable, makeRecipe, pantryOnHand, pantryOwnedIds, prepareRecipe, rememberConsumables, weekNeeds, weekShortfalls } from "../lib/pantry.ts";
+import { declarePantryOwnership, formatPantryQuantity, isConsumable, makeRecipe, pantryOnHand, pantryOwnedIds, prepareRecipe, rememberConsumables, weekNeeds, weekShortfalls } from "../lib/pantry.ts";
 
 test("oils, butter and flour are pantry consumables, and a steak is not", () => {
   assert.equal(isConsumable("Extra virgin olive oil"), true);
@@ -170,4 +170,58 @@ test("counted ingredients have readable quantities without blank unit gaps", () 
   assert.equal(formatPantryQuantity(0.5, "  "), "0.5");
   const warnings = weekShortfalls([], [{ name: "Lemon", amount: 2, unit: "" }]);
   assert.deepEqual(warnings, ["Not enough Lemon for this week. Have 0, need 2."]);
+});
+
+test("checkbox ownership immediately covers a shopping shortfall without using up any ingredient", () => {
+  const original = [{ key: "halloumi", name: "Halloumi", unit: "g", onHand: 75 }];
+  const lines = [{ id: "cheese", name: "Halloumi", amount: 200, unit: "g", have: true }];
+  const owned = declarePantryOwnership(original, lines, "cheese");
+  assert.equal(pantryOnHand(owned, "Halloumi", "g"), 200);
+  assert.equal(weekNeeds(owned, lines).length, 0);
+  assert.equal(pantryOnHand(original, "Halloumi", "g"), 75);
+  const restored = declarePantryOwnership(owned, lines.map(line => ({ ...line, have: false })), "cheese", { amount: 75, unit: "g" });
+  assert.equal(pantryOnHand(restored, "Halloumi", "g"), 75);
+  assert.equal(weekNeeds(restored, lines)[0].amount, 125);
+});
+
+test("an explicit untick clears only its selected food and compatible measurement family", () => {
+  const original = [
+    { key: "legacy-key", name: "OLIVE-OIL", unit: "litres", onHand: 0.2 },
+    { key: "olive oil", name: "Olive oil", unit: "ml", onHand: 50 },
+    { key: "olive oil", name: "Olive oil", unit: "tbsp", onHand: 3 },
+    { key: "sesame oil", name: "Sesame oil", unit: "ml", onHand: 200 },
+  ];
+  const lines = [
+    { id: "main", name: "Olive oil", amount: 0.1, unit: "l", have: false },
+    { id: "side", name: "Olive oil", amount: 20, unit: "ml", have: true },
+  ];
+  const next = declarePantryOwnership(original, lines, "main");
+  assert.equal(pantryOnHand(next, "Olive oil", "ml"), 20);
+  assert.equal(pantryOnHand(next, "Olive oil", "tbsp"), 3);
+  assert.equal(pantryOnHand(next, "Sesame oil", "ml"), 200);
+  assert.equal(pantryOnHand(original, "Olive oil", "ml"), 250);
+});
+
+test("duplicate checked uses are declared once as their combined quantity", () => {
+  const lines = [
+    { id: "main", name: "Garlic", amount: 50, unit: "g", have: true },
+    { id: "side", name: "Garlic", amount: 0.07, unit: "kg", have: true },
+  ];
+  const first = declarePantryOwnership([], lines, "side");
+  const repeated = declarePantryOwnership(first, lines, "side");
+  assert.equal(pantryOnHand(repeated, "Garlic", "g"), 120);
+  assert.deepEqual(repeated, first);
+  const cleared = declarePantryOwnership(repeated, lines.map(line => ({ ...line, have: line.id !== "side" })), "side");
+  assert.equal(pantryOnHand(cleared, "Garlic", "g"), 50);
+  assert.equal(weekNeeds(cleared, lines)[0].amount, 70);
+});
+
+test("declarations cannot convert a partial weight into counts or change another similarly named food", () => {
+  const stock = [{ key: "garlic", name: "Garlic", unit: "g", onHand: 40 }, { key: "garlic powder", name: "Garlic powder", unit: "g", onHand: 90 }];
+  const next = declarePantryOwnership(stock, [{ id: "garlic", name: "Garlic", amount: 3, unit: "cloves", have: true }], "garlic");
+  assert.equal(pantryOnHand(next, "Garlic", "cloves"), 3);
+  assert.equal(pantryOnHand(next, "Garlic", "g"), 40);
+  assert.equal(pantryOnHand(next, "Garlic powder", "g"), 90);
+  const cleared = declarePantryOwnership(next, [{ id: "garlic", name: "Garlic", amount: 3, unit: "cloves", have: false }], "garlic", { amount: 100, unit: "g" });
+  assert.equal(pantryOnHand(cleared, "Garlic", "cloves"), 0);
 });
