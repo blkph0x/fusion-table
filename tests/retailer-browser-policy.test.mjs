@@ -8,9 +8,10 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
-import { retailerUrl, publicHttpsUrl, publicAddress, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate } from "../scripts/retailer-browser-policy.mjs";
+import { EventEmitter } from "node:events";
+import { retailerUrl, publicHttpsUrl, publicAddress, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery } from "../scripts/retailer-browser-policy.mjs";
 import { publicShopAddress } from "../lib/public-shop-reader.ts";
-import { startEgressProxy, startRetailerBrowser } from "../scripts/retailer-browser.mjs";
+import { startEgressProxy, startRetailerBrowser, watchPageNetwork, settleVerifiedIgaQuery } from "../scripts/retailer-browser.mjs";
 
 test("entry URLs are restricted to official Australian retailer hosts and public HTTPS resources",() => {
   for (const host of ["www.coles.com.au","coles.com.au","www.aldi.com.au","www.igashop.com.au","www.iga.com.au","www.woolworths.com.au"]) {
@@ -72,6 +73,33 @@ test("only the observed nearly-empty Coles NOINDEX response is classified as req
   assert.equal(colesEmptyBrowserGate({url:"https://www.aldi.com.au/results?q=rice",html,text:""}),false);
   assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html:"<body></body>",text:""}),false);
   assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html,text:"Full product search content ".repeat(20)}),false);
+});
+
+test("local shop homepages can be read to discover product links before they contain selling prices",() => {
+  const home = {text:"Feather and Bone Butchery. Browse our grass-fed meats and shop online.",html:'<main><h1>Feather and Bone</h1><a href="/collections/beef">Browse beef</a></main>'};
+  assert.equal(readablePriceContent(home),false); assert.equal(readableLocalDiscovery(home),true);
+  assert.equal(readableLocalDiscovery({text:"",html:"<main></main>"}),false);
+  assert.equal(readableLocalDiscovery({text:"Loading",html:"<main>Loading</main>"}),false);
+  assert.equal(pageAction({text:"Access denied. Please contact support."}),"needs-browser");
+});
+
+test("proven IGA query settlement waits for branch hydration and subsequent product-network completion",async () => {
+  const page = new EventEmitter(); let header = "Ashcroft's IGA",price = 650;
+  page.waitForFunction = async (_fn,expected) => { while (header !== expected) await new Promise(resolve => setTimeout(resolve,5)); };
+  page.locator = () => ({allTextContents:async () => [header]});
+  const network = watchPageNetwork(page), request = {resourceType:() => "fetch"};
+  page.emit("request",{resourceType:() => "fetch",url:() => "https://www.google.com/ads/background"});
+  const settled = settleVerifiedIgaQuery(page,"Lloyds IGA Newtown",() => network.quiet({timeoutMs:500,quietMs:30}));
+  setTimeout(() => { header = "Lloyds IGA Newtown"; page.emit("request",request); },10);
+  setTimeout(() => { price = 750; page.emit("requestfinished",request); },75);
+  assert.deepEqual(await settled,{ready:true}); assert.equal(price,750);
+});
+
+test("an unfinished branch fetch returns no ready result and does not mark a proven context as a wrong branch",async () => {
+  const page = new EventEmitter(); page.waitForFunction = async () => {};
+  page.locator = () => ({allTextContents:async () => ["Lloyds IGA Newtown"]});
+  const network = watchPageNetwork(page); page.emit("request",{resourceType:() => "fetch"});
+  assert.deepEqual(await settleVerifiedIgaQuery(page,"Lloyds IGA Newtown",() => network.quiet({timeoutMs:40,quietMs:10})),{ready:false,reason:"branch-prices-loading",wrongBranch:false});
 });
 
 test("IGA branch proof requires the same house, street name/type and postcode even if retailer names differ",() => {

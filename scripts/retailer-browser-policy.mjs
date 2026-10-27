@@ -90,6 +90,11 @@ export function readablePriceContent({text = "",html = ""}) {
     || /"@type"\s*:\s*"Product"/i.test(html) && /"price"\s*:/i.test(html);
 }
 
+/** A local homepage may be needed to discover its catalogue before any prices exist. */
+export function readableLocalDiscovery({text = "",html = ""}) {
+  return text.replace(/\s+/g," ").trim().length >= 25 && /<(?:a|main|article|section|h1)\b/i.test(html);
+}
+
 export function colesEmptyBrowserGate({url,text = "",html = ""}) {
   return retailerUrl(url).retailer === "coles" && text.trim().length < 100
     && [...html.matchAll(/<meta\b[^>]*>/gi)].some(match => /\bname=["']robots["']/i.test(match[0]) && /\bcontent=["'][^"']*noindex/i.test(match[0]));

@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { validateShopSearch } from "@/lib/locations";
 import { locationErrorResponse, searchShopsWithFresh } from "@/lib/location-providers";
+import { enrichShopWebsites } from "@/lib/shop-website-discovery";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,8 @@ export async function GET(request: Request) {
       shopProvider: settings.SHOP_DATA_PROVIDER,
       appOrigin: new URL(request.url).origin,
     });
-    return Response.json(result, { headers: { "Cache-Control": "private, no-store" } });
+    const shops = await enrichShopWebsites(result.shops, { appOrigin: new URL(request.url).origin }, request.signal).catch(() => result.shops);
+    return Response.json({ ...result, shops }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {
     return locationErrorResponse(error);
   }

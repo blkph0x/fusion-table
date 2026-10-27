@@ -6,7 +6,7 @@ import { existsSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import {
   PAGE_LIMIT, JOB_DEADLINE_MS, CACHE_TTL_MS, CHALLENGE_BACKOFF_MS,
-  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate,
+  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery,
 } from "./retailer-browser-policy.mjs";
 
 const loopback = address => address === "127.0.0.1" || address === "::ffff:127.0.0.1";
@@ -18,6 +18,55 @@ const normalized = value => String(value || "").normalize("NFKC").toLocaleLowerC
 async function igaHeaderMatches(page,name) {
   const labels = await page.locator('[data-test-id="header-store-select"]:visible strong').allTextContents();
   return labels.length > 0 && normalized(labels.at(-1)) === normalized(name);
+}
+
+/** Track new query requests rather than relying on an earlier document-idle event. */
+export function watchPageNetwork(page) {
+  const pending = new Set(); let lastActivity = Date.now();
+  page.on("request",request => {
+    if (request.resourceType() === "eventsource") return;
+    // Advertising/analytics requests do not publish the selected branch's prices.
+    // They still load normally; only the product-readiness timer ignores them.
+    if (typeof request.url === "function") {
+      const host = new URL(request.url()).hostname;
+      if (/(?:^|\.)(?:google\.com|google-analytics\.com|googletagmanager\.com|doubleclick\.net)$/.test(host)) return;
+    }
+    pending.add(request); lastActivity = Date.now();
+  });
+  const finished = request => { if (pending.delete(request)) lastActivity = Date.now(); };
+  page.on("requestfinished",finished); page.on("requestfailed",finished);
+  return {
+    quiet({timeoutMs = 5000,quietMs = 500} = {}) {
+      const started = Date.now();
+      return new Promise((resolve,reject) => {
+        let timer;
+        const cleanup = () => { clearTimeout(timer); page.removeListener("close",closed); };
+        const closed = () => { cleanup(); reject(new Error("The query page closed before its prices settled.")); };
+        const poll = () => {
+          const now = Date.now();
+          if (!pending.size && now-Math.max(lastActivity,started) >= quietMs) { cleanup(); resolve(); return; }
+          if (now-started >= timeoutMs) { cleanup(); reject(new Error("The branch product prices are still loading.")); return; }
+          timer = setTimeout(poll,25);
+        };
+        page.once("close",closed); poll();
+      });
+    },
+  };
+}
+
+export async function settleVerifiedIgaQuery(page,name,waitForQuiet) {
+  try {
+    await page.waitForFunction(expected => {
+      const labels = [...document.querySelectorAll('[data-test-id="header-store-select"] strong')]
+        .filter(node => node.getBoundingClientRect().height > 0).map(node => node.textContent);
+      const clean = value => String(value || "").normalize("NFKC").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+      return clean(labels.at(-1)) === clean(expected);
+    },name,{timeout:4000});
+  } catch { return {ready:false,reason:"selected-header-pending",wrongBranch:false}; }
+  try { await waitForQuiet(); }
+  catch { return {ready:false,reason:"branch-prices-loading",wrongBranch:false}; }
+  if (!await igaHeaderMatches(page,name)) return {ready:false,reason:"selected-header-changed",wrongBranch:true};
+  return {ready:true};
 }
 
 /** Only normal visible store-choice controls; uncertain branch identity fails closed. */
@@ -182,7 +231,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     const context = await instance.newContext({ javaScriptEnabled:true, serviceWorkers:"block", acceptDownloads:false,
       viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
     });
-    const counts = new WeakMap(); let expectedPages = 0;
+    const counts = new WeakMap(), networks = new WeakMap(); let expectedPages = 0;
     context.on("page",page => {
       if (expectedPages) { expectedPages--; return; }
       void page.close().catch(() => undefined);
@@ -199,9 +248,10 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
       } catch { await route.abort("blockedbyclient").catch(() => undefined); }
     });
     await context.routeWebSocket("**/*",socket => socket.close());
-    return {context,count:page => counts.get(page) || 0,close:() => context.close(),async newPage() {
+    return {context,count:page => counts.get(page) || 0,quiet:page => networks.get(page).quiet(),close:() => context.close(),async newPage() {
       expectedPages++;
       const page = await context.newPage();
+      networks.set(page,watchPageNetwork(page));
       page.setDefaultTimeout(5000); page.setDefaultNavigationTimeout(12_000);
       page.on("dialog",dialog => void dialog.dismiss());
       return page;
@@ -289,10 +339,13 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         if (action !== "ready") return controlled(final,"needs-browser","Open the retailer in your browser and complete its check, then choose your store. No automated challenge solving was attempted.",response?.status() || 403);
         const selectedStore = session.selectedStore;
         if (selectedStore) {
-          if (!await igaHeaderMatches(page,selectedStore.name)) {
-            lease.invalidate();
-            return controlled(final,"needs-store","The selected IGA branch could not be verified. Choose your store on IGA.",409);
+          const settled = await settleVerifiedIgaQuery(page,selectedStore.name,() => session.quiet(page));
+          if (!settled.ready) {
+            if (settled.wrongBranch) lease.invalidate();
+            return controlled(final,"unavailable","IGA is still confirming this branch and its product prices. Try this item again shortly.",503,{diagnostic:{stage:"settle-branch-query",reason:settled.reason}});
           }
+          snapshot = await visible(page);
+          if (pageAction(snapshot) !== "ready") return controlled(final,"needs-browser","Open IGA and complete its browser check before confirming prices.",403);
         }
         if ((response?.status() || 200) >= 400) return controlled(final,"unavailable","The retailer page is temporarily unavailable. Open its website to check this item.",response.status());
         const html = await page.evaluate(limit => {
@@ -313,7 +366,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
           return new TextEncoder().encode(output).length <= limit ? output : null;
         },PAGE_LIMIT);
         if (!html) return controlled(final,"unavailable","The retailer page exceeded the safe reading limit. Open it directly to check prices.",413);
-        if (!readablePriceContent({text:snapshot.text,html})) {
+        if (!readablePriceContent({text:snapshot.text,html}) && !(source === "local-shop" && readableLocalDiscovery({text:snapshot.text,html}))) {
           if (!source && colesEmptyBrowserGate({url:value,text:snapshot.text,html})) return controlled(final,"needs-browser","Coles did not display prices in this browser session; open Coles to continue.",403);
           return controlled(final,"unavailable","The retailer did not display readable product prices. Open its website to check this item.",503);
         }

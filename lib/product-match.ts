@@ -290,7 +290,7 @@ function meatPreparations(canonical: string, product?: CatalogueProduct): Set<Me
   const forms = new Set<MeatPreparation>();
   if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
   if (/\bsmoked\b/.test(canonical)) forms.add("smoked");
-  if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|kiev|cordon bleu)\b/.test(canonical)) forms.add("breaded");
+  if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|chipee|munchie|kiev|kyiv|cordon bleu)\b/.test(canonical)) forms.add("breaded");
   if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
   if (/\b(?:deli|sandwich|luncheon|cold cut)\b/.test(canonical)) forms.add("deli");
   if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned)\b/.test(canonical)) forms.add("cured");
