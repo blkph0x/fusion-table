@@ -20,6 +20,15 @@ async function igaHeaderMatches(page,name) {
   return labels.length > 0 && normalized(labels.at(-1)) === normalized(name);
 }
 
+export async function waitForIgaHeader(page,name,timeout = 3000) {
+  await page.waitForFunction(expected => {
+    const labels = [...document.querySelectorAll('[data-test-id="header-store-select"] strong')]
+      .filter(node => node.getBoundingClientRect().height > 0 && node.getBoundingClientRect().width > 0 && getComputedStyle(node).visibility !== "hidden").map(node => node.textContent);
+    const clean = value => String(value || "").normalize("NFKC").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+    return clean(labels.at(-1)) === clean(expected);
+  },name,{timeout});
+}
+
 /** Track new query requests rather than relying on an earlier document-idle event. */
 export function watchPageNetwork(page) {
   const pending = new Set(); let lastActivity = Date.now();
@@ -56,12 +65,7 @@ export function watchPageNetwork(page) {
 
 export async function settleVerifiedIgaQuery(page,name,waitForQuiet) {
   try {
-    await page.waitForFunction(expected => {
-      const labels = [...document.querySelectorAll('[data-test-id="header-store-select"] strong')]
-        .filter(node => node.getBoundingClientRect().height > 0).map(node => node.textContent);
-      const clean = value => String(value || "").normalize("NFKC").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
-      return clean(labels.at(-1)) === clean(expected);
-    },name,{timeout:4000});
+    await waitForIgaHeader(page,name,4000);
   } catch { return {ready:false,reason:"selected-header-pending",wrongBranch:false}; }
   try { await waitForQuiet(); }
   catch { return {ready:false,reason:"branch-prices-loading",wrongBranch:false}; }
@@ -139,11 +143,7 @@ export async function selectIgaStore(page,store,onDiagnostic = () => {}) {
     const retailerStoreId = await candidates.getAttribute("data-store-id");
     await candidates.getByRole("button",{name:"Select Store",exact:true}).click();
     stage = "wait-selected-store-header";
-    await page.waitForFunction(expected => {
-      const labels = [...document.querySelectorAll('[data-test-id="header-store-select"] strong')].map(node => node.textContent);
-      const clean = value => String(value || "").normalize("NFKC").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
-      return clean(labels.at(-1)) === clean(expected);
-    },selectedName,{timeout:3000});
+    await waitForIgaHeader(page,selectedName,3000);
     const selected = await igaHeaderMatches(page,selectedName);
     onDiagnostic({stage,reason:selected ? "verified" : "selected-header-not-matched",...(selected ? {selectedStore:{id:store.id,name:selectedName,address:selectedAddress,...(/^\d{1,24}$/.test(retailerStoreId || "") ? {retailerStoreId} : {})}} : {})});
     return selected;
