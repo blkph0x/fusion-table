@@ -3,6 +3,7 @@ import { lookup } from "node:dns/promises";
 import type { LookupAddress } from "node:dns";
 import { isIP, type LookupFunction } from "node:net";
 import { request } from "node:https";
+import { withDeadline } from "./abort-deadline.mjs";
 
 export interface PublicShopPage { html: string; url: string; status?: number }
 export type ShopPageReader = (url: string, signal?: AbortSignal) => Promise<PublicShopPage>;
@@ -60,7 +61,7 @@ export async function shopConnectionTarget(value: string, resolve: typeof lookup
 /** No cookies, browser identity spoofing, credentials or automatic challenge solving. */
 export async function readPublicShopPage(value: string, signal?: AbortSignal, deps: { lookup?: typeof lookup; request?: typeof request } = {}, hops = 0): Promise<PublicShopPage> {
   signal?.throwIfAborted();
-  const combined = AbortSignal.any([...(signal ? [signal] : []),AbortSignal.timeout(6500)]);
+  return withDeadline(6500,signal?[signal]:[],async combined=>{
   const target = await shopConnectionTarget(value,deps.lookup,combined);
   const response = await new Promise<{ status: number; location: string; html: string }>((resolve,reject) => {
     const req = (deps.request || request)(target.url, { method: "GET", lookup: target.pinnedLookup, agent: false, maxHeaderSize: 24_000, signal: combined,
@@ -80,7 +81,8 @@ export async function readPublicShopPage(value: string, signal?: AbortSignal, de
   if (response.location) {
     const next=publicShopUrl(new URL(response.location,target.url).toString());
     if (hops >= 2 || next.hostname.replace(/^www\./,"") !== target.url.hostname.replace(/^www\./,"")) throw new Error("The shop redirected outside its own public website.");
-    return readPublicShopPage(next.toString(),signal,deps,hops+1);
+    return readPublicShopPage(next.toString(),combined,deps,hops+1);
   }
   return {html:response.html,url:target.url.toString(),status:response.status};
+  });
 }

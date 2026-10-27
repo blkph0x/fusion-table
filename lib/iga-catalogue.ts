@@ -1,6 +1,7 @@
 import { cleanSearchQuery, type PriceQuote } from "./catalogue.ts";
 import { audToCents, catalogueSearchPhrases, isNonFoodCatalogueProduct, matchProducts, type CatalogueProduct } from "./product-match.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 import { retailerFailureStatus, shouldBackOffRetailer, type RetailerPageRenderer, type RetailerSelectedStore } from "./aldi-catalogue.ts";
 
 export interface IgaStoreContext { id: string; name: string; website: string; area: string; address?: string | null; lat?: number; lon?: number }
@@ -123,7 +124,7 @@ async function load(query: string, store: IgaStoreContext, fetchImpl: typeof fet
     try {
       const paused = backoffs.get(identity);
       if (paused && paused.until > Date.now()) throw Object.assign(new Error("IGA is temporarily not returning readable prices. Retry later."), { providerStatus: paused.status });
-      const page = await read(`${ORIGIN}/search?q=${encodeURIComponent(query)}`, fetchImpl, AbortSignal.any([sharedSignal, AbortSignal.timeout(renderer ? 32_000 : 15_000)]), renderer);
+      const page = await withDeadline(renderer ? 32_000 : 15_000, [sharedSignal], boundedSignal => read(`${ORIGIN}/search?q=${encodeURIComponent(query)}`, fetchImpl, boundedSignal, renderer));
       const products = parseIgaSearch(page.html, store, page.selectedStore); backoffs.delete(identity);
       return { products, fetchedAt: new Date().toISOString(), storeLabel: selectedStoreContext(store, page.selectedStore).name };
     } catch (error) {

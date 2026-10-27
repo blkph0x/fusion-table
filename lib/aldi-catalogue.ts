@@ -1,6 +1,7 @@
 import { cleanSearchQuery, type PriceQuote } from "./catalogue.ts";
 import { audToCents, catalogueSearchPhrases, isNonFoodCatalogueProduct, matchProducts, type CatalogueProduct } from "./product-match.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 
 /** Returned only after the browser matches a chooser card's street and postcode. */
 export interface RetailerSelectedStore { id: string; name: string; address: string; retailerStoreId?: string }
@@ -128,7 +129,7 @@ async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal
     try {
       const paused = backoffs.get(identity);
       if (paused && paused.until > Date.now()) throw Object.assign(new Error("ALDI is temporarily not returning readable prices. Retry later."), { providerStatus: paused.status });
-      const html = await read(`${ORIGIN}/results?q=${encodeURIComponent(query)}`, fetchImpl, AbortSignal.any([sharedSignal, AbortSignal.timeout(renderer ? 32_000 : 15_000)]), renderer);
+      const html = await withDeadline(renderer ? 32_000 : 15_000, [sharedSignal], boundedSignal => read(`${ORIGIN}/results?q=${encodeURIComponent(query)}`, fetchImpl, boundedSignal, renderer));
       const products = parseAldiSearch(html);
       backoffs.delete(identity);
       return { products, fetchedAt: new Date().toISOString() };

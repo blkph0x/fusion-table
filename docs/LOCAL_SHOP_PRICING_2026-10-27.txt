@@ -113,3 +113,7 @@ on that homepage require browser verification before any quote; search/product
 price evidence still comes from the real browser. Unreadable or blocked metadata
 falls back to one ordinary browser homepage. Informational market pages can exit
 without taking a browser slot.
+Local batch, shop, metadata, website-directory and public-page deadlines use
+retained AbortControllers with explicit timers. Scopes dispose those timers and
+parent listeners on success or failure; public-page redirects inherit the same
+page budget. This avoids composed native timeout signals being lost to Node GC.

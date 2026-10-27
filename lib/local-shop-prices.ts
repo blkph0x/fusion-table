@@ -4,6 +4,7 @@ import { canonicalizeProductText, isNonFoodCatalogueProduct, matchProducts, audT
 import { inferShoppingCategory, type ShoppingLine } from "./shopping.ts";
 import { publicShopUrl, readPublicShopPage, type PublicShopPage, type ShopPageReader, MAX_SHOP_PAGE_BYTES } from "./public-shop-reader.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
+import { createDeadline, withDeadline } from "./abort-deadline.mjs";
 
 export interface LocalShopContext { area: string; location: { lat: number; lon: number }; radiusKm: number; country?: string }
 export interface LocalShopQuote extends Omit<PriceQuote,"source"> {
@@ -155,7 +156,9 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
   for(const kind of ["produce","butcher"]){const first=candidates.find(shop=>(kind==="produce"?produceShop(shop):butcherShop(shop)));if(first)chosen.set(first.id,first);}
   for(const candidate of candidates){if(chosen.size>=3)break;chosen.set(candidate.id,candidate);}
   const shops=[...chosen.values()].sort((a,b)=>kilometres(context.location,a)-kilometres(context.location,b));
-  const batchSignal=AbortSignal.any([...(signal?[signal]:[]),AbortSignal.timeout(28_000)]);
+  const batch=createDeadline(28_000,signal?[signal]:[]);
+  try{
+  const batchSignal=batch.signal;
   async function checkShop(shop:Shop){
     const quotes:LocalShopQuote[]=[],warnings:string[]=[],checkedShops:CheckedLocalShop[]=[];
     const result={quotes,warnings,checkedShops};
@@ -168,14 +171,14 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
     const shopInfo={id:shop.id,name:shop.name,website:base.href,area:context.area,lat:shop.lat,lon:shop.lon};
     const key=JSON.stringify([shop.id,base.href,shop.lat,shop.lon,context.area,queries]);
     try{
-      const loaded=await cache.load(key,identity(reader),async shared=>{
-        const combined=AbortSignal.any([shared,AbortSignal.timeout(26_000)]),release=await shopSlot(combined);const searched:string[]=[];const found:CatalogueProduct[]=[];const seen=new Set<string>();const issues:Record<string,LocalFailure>={};
+      const loaded=await cache.load(key,identity(reader),async shared=>withDeadline(26_000,[shared],async combined=>{
+        const release=await shopSlot(combined);const searched:string[]=[];const found:CatalogueProduct[]=[];const seen=new Set<string>();const issues:Record<string,LocalFailure>={};
         async function read(url:string){combined.throwIfAborted();const page=await reader(url,combined);combined.throwIfAborted();if(page.status!==undefined&&(page.status<200||page.status>=300))throw new Error([401,403,429].includes(page.status)?"This shop requires a browser check.":"This shop did not return a public price page.");publicShopUrl(page.url);if(new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The shop redirected to a different website.");searched.push(page.url);for(const product of parseLocalShopProducts(page.html,page.url,now)){const key=JSON.stringify([product.url,product.name,product.priceCents,product.packageSize]);if(!seen.has(key)){seen.add(key);found.push(product);}}return page;}
         try{
           let metadata:PublicShopPage|null=null,homepageHasProducts=false;
           if(deps.render&&deps.discover){
             try{
-              const page=await deps.discover(base.href,combined);combined.throwIfAborted();
+              const page=await withDeadline(6500,[combined],metadataSignal=>deps.discover!(base.href,metadataSignal));combined.throwIfAborted();
               publicShopUrl(page.url);
               if(page.status!==undefined&&(page.status<200||page.status>=300)||new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The homepage metadata was unavailable.");
               // Discovery can identify an offer, but none of its prices or stock
@@ -202,7 +205,7 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
           }
           return {products:found,fetchedAt:new Date().toISOString(),searched,issues};
         }finally{release();}
-      },batchSignal);
+      }),batchSignal);
       for(const line of suitable){
         const matches=matchProducts(line.name,loaded.value.products).filter(match=>match.score>0);
         const issue=loaded.value.issues[line.name];if(issue)warnings.push(`${shop.name}: ${issue.message}`);
@@ -223,4 +226,5 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
   const jobs=new Map([...priority.values()].map(shop=>[shop.id,checkShop(shop)]));
   const results=await Promise.all(shops.map(shop=>jobs.get(shop.id)!));
   return {quotes:results.flatMap(result=>result.quotes),warnings:results.flatMap(result=>result.warnings),checkedShops:results.flatMap(result=>result.checkedShops)};
+  }finally{batch.dispose();}
 }

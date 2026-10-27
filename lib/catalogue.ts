@@ -1,5 +1,6 @@
 import { catalogueSearchPhrases, isNonFoodCatalogueProduct, matchProducts, audToCents, type CatalogueProduct, type ProductMatch } from "./product-match.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 
 export const CATALOGUE_LABEL = "Woolworths online catalogue. Not a confirmed price on the shelf at your local shop, and not a butcher or fruit-shop board.";
 const SEARCH_URL = "https://www.woolworths.com.au/apis/ui/Search/products";
@@ -261,9 +262,7 @@ async function loadCatalogue(query: string, fetchImpl: typeof fetch, signal?: Ab
     await acquireCatalogueSlot(sharedSignal);
     try {
     if ((providerBackoff.get(fetchImpl) ?? 0) > Date.now()) throw new Error("Woolworths is temporarily blocking price checks. Planning estimates remain available; retry later.");
-    const timeout = AbortSignal.timeout(12_000);
-    const combined = AbortSignal.any([sharedSignal, timeout]);
-    const payload = await readJson(`${SEARCH_URL}?searchTerm=${encodeURIComponent(query)}`, fetchImpl, combined, 2);
+    const payload = await withDeadline(12_000, [sharedSignal], boundedSignal => readJson(`${SEARCH_URL}?searchTerm=${encodeURIComponent(query)}`, fetchImpl, boundedSignal, 2));
     const parsed = parseWoolworthsSearch(payload);
     const stored: CachedCatalogue = { at: Date.now(), fetchedAt: new Date().toISOString(), ...parsed };
     return stored;

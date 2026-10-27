@@ -107,10 +107,24 @@ test("an UNKNOWN-stock strong name proof stops ALDI fallback phrases without cla
 });
 
 test("browser rendering has a 32-second budget while direct HTTP retains its shorter budget", async t => {
-  const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
-  t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
-  const renderer: RetailerPageRenderer = async url => ({ url, html: rice() });
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let browserSignal: AbortSignal | undefined, httpSignal: AbortSignal | undefined;
+  const renderer: RetailerPageRenderer = async (_url, signal) => { browserSignal = signal; return new Promise<never>(() => {}); };
+  const browserWork = lookupAldiQuery("jasmine rice", fetch, undefined, renderer);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(browserSignal);
+  t.mock.timers.tick(31_999); assert.equal(browserSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await browserWork).matches.length, 0); assert.equal(browserSignal.aborted, true);
+  const fetchImpl: typeof fetch = async (_url, init) => { httpSignal = init?.signal as AbortSignal; return new Promise<never>(() => {}); };
+  const httpWork = lookupAldiQuery("jasmine rice", fetchImpl);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(httpSignal);
+  t.mock.timers.tick(14_999); assert.equal(httpSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await httpWork).matches.length, 0); assert.equal(httpSignal.aborted, true);
+});
+
+test("finished ALDI reads dispose their retained deadline", async t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let completedSignal: AbortSignal | undefined;
+  const renderer: RetailerPageRenderer = async (url, signal) => { completedSignal = signal; return { url, html: rice() }; };
   await lookupAldiQuery("jasmine rice", fetch, undefined, renderer);
-  await lookupAldiQuery("jasmine rice", async () => new Response(rice()));
-  assert.deepEqual(budgets, [32_000, 15_000]);
+  assert.ok(completedSignal); t.mock.timers.tick(32_001); assert.equal(completedSignal.aborted, false);
 });

@@ -1,6 +1,7 @@
 import { cleanSearchQuery, type PriceQuote } from "./catalogue.ts";
 import { audToCents, catalogueSearchPhrases, isNonFoodCatalogueProduct, matchProducts, type CatalogueProduct } from "./product-match.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 import { retailerFailureStatus, shouldBackOffRetailer, type RetailerPageRenderer } from "./aldi-catalogue.ts";
 
 export const COLES_CATALOGUE_LABEL = "Coles online price guide. Choose your store on Coles to confirm local pricing and availability.";
@@ -198,9 +199,7 @@ async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal
     try {
       const paused = backoff.get(identity);
       if (paused && paused.until > Date.now()) throw Object.assign(new Error(paused.message), { providerStatus: paused.status });
-      const timeout = AbortSignal.timeout(renderer ? 32_000 : 12_000);
-      const combined = AbortSignal.any([sharedSignal, timeout]);
-      const html = await readHtml(`${SEARCH_URL}?q=${encodeURIComponent(query)}`, fetchImpl, combined, 1, renderer);
+      const html = await withDeadline(renderer ? 32_000 : 12_000, [sharedSignal], boundedSignal => readHtml(`${SEARCH_URL}?q=${encodeURIComponent(query)}`, fetchImpl, boundedSignal, 1, renderer));
       const snapshot = { products: parseColesSearch(html), fetchedAt: new Date().toISOString(), at: Date.now(), storeLabel: publishedStoreLabel(html) };
       backoff.delete(identity);
       return snapshot;

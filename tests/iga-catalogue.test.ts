@@ -84,11 +84,18 @@ test("local browser deadlines or an unselected branch do not globally suppress I
 });
 
 test("IGA gives ordinary browser selection and rendering 32 seconds", async t => {
-  const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
-  t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
-  const renderer: RetailerPageRenderer = async url => ({ url, html: header() + card(123456, "Jasmine Rice", "1kg", "3.20") });
-  await lookupIgaQuery("jasmine rice", fetch, undefined, renderer, store);
-  assert.deepEqual(budgets, [32_000]);
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let browserSignal: AbortSignal | undefined, httpSignal: AbortSignal | undefined;
+  const renderer: RetailerPageRenderer = async (_url, signal) => { browserSignal = signal; return new Promise<never>(() => {}); };
+  const browserWork = lookupIgaQuery("jasmine rice", fetch, undefined, renderer, store);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(browserSignal);
+  t.mock.timers.tick(31_999); assert.equal(browserSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await browserWork).matches.length, 0); assert.equal(browserSignal.aborted, true);
+  const fetchImpl: typeof fetch = async (_url, init) => { httpSignal = init?.signal as AbortSignal; return new Promise<never>(() => {}); };
+  const httpWork = lookupIgaQuery("jasmine rice", fetchImpl, undefined, undefined, store);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(httpSignal);
+  t.mock.timers.tick(14_999); assert.equal(httpSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await httpWork).matches.length, 0); assert.equal(httpSignal.aborted, true);
 });
 
 test("verified chooser metadata binds a canonical retailer name to the requested OSM shop", async () => {

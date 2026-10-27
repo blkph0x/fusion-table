@@ -4,6 +4,7 @@ import { connect } from "node:net";
 import { lookup } from "node:dns/promises";
 import { existsSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
+import { createDeadline } from "../lib/abort-deadline.mjs";
 import {
   PAGE_LIMIT, JOB_DEADLINE_MS, CACHE_TTL_MS, CHALLENGE_BACKOFF_MS,
   retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery,
@@ -282,12 +283,13 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     snapshot.text = snapshot.text.slice(0,80_000); return snapshot;
   };
   const proveStoreSession = async (instance,value,store,readerSignal) => {
-    const signal = AbortSignal.any([readerSignal,AbortSignal.timeout(JOB_DEADLINE_MS)]);
-    const session = await newSession(instance,value);
+    const deadline = createDeadline(JOB_DEADLINE_MS,[readerSignal]), signal = deadline.signal;
+    let session;
     let page,proven = false;
-    const abort = () => { void session.close().catch(() => undefined); };
+    const abort = () => { void session?.close().catch(() => undefined); };
     signal.addEventListener("abort",abort,{once:true});
     try {
+      signal.throwIfAborted(); session = await newSession(instance,value);
       signal.throwIfAborted(); page = await session.newPage();
       let response = await page.goto("https://www.igashop.com.au/",{waitUntil:"domcontentloaded"});
       await settle(page,undefined,true);
@@ -306,7 +308,8 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     } finally {
       signal.removeEventListener("abort",abort);
       await page?.close().catch(() => undefined);
-      if (!proven) await session.close().catch(() => undefined);
+      if (!proven) await session?.close().catch(() => undefined);
+      deadline.dispose();
     }
   };
   return {
@@ -407,7 +410,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
     let shared = pending.get(key);
     if (!shared || shared.signal.aborted) {
       const controller = new AbortController();
-      const signal = AbortSignal.any([controller.signal,AbortSignal.timeout(deadlineMs)]);
+      const deadline = createDeadline(deadlineMs,[controller.signal]), signal = deadline.signal;
       shared = {controller,signal,subscribers:new Set(),settled:false,task:null};
       const entry = shared;
       let expire;
@@ -434,6 +437,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
         return result;
       }).finally(() => {
         entry.settled = true; signal.removeEventListener("abort",expire);
+        deadline.dispose();
         if (pending.get(key) === entry) pending.delete(key);
       });
       pending.set(key,shared);

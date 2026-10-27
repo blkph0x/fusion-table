@@ -192,10 +192,11 @@ test("a slow market cannot starve a fast butcher and completed prices survive th
 });
 
 test("local batch and per-shop deadlines fit inside the overall price request while allowing a cold browser queue",async t=>{
- const deadlines:number[]=[],timeout=AbortSignal.timeout;
- t.mock.method(AbortSignal,"timeout",(milliseconds:number)=>{deadlines.push(milliseconds);return timeout(milliseconds);});
+ const deadlines:number[]=[],active=new Set<ReturnType<typeof setTimeout>>(),timeout=globalThis.setTimeout,clear=globalThis.clearTimeout;
+ t.mock.method(globalThis,"setTimeout",((...args:Parameters<typeof setTimeout>)=>{deadlines.push(Number(args[1]));const timer=timeout(...args);active.add(timer);return timer;}) as typeof setTimeout);
+ t.mock.method(globalThis,"clearTimeout",((timer:ReturnType<typeof setTimeout>)=>{active.delete(timer);clear(timer);}) as typeof clearTimeout);
  await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:"deadline-budget"})],context,{read:async url=>({url,html:fixture(product())})});
- assert.deepEqual(deadlines,[28_000,26_000]);assert.ok(deadlines[0]+6500<=35_000);
+ assert.deepEqual(deadlines,[28_000,26_000]);assert.ok(deadlines[0]+6500<=35_000);assert.equal(active.size,0,"successful local work must dispose every retained deadline");
 });
 
 test("provider concurrency stays bounded across independent nearby-price requests",async()=>{

@@ -2,6 +2,7 @@
 import { safeWebsite, shopKind, type Shop } from "./locations.ts";
 import { SharedPriceCache } from "./price-provider-cache.ts";
 import { publicShopUrl } from "./public-shop-reader.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 
 export interface ShopWebsiteDependencies { fetch?: typeof fetch; appOrigin?: string }
 type Tags={id:string;name:string;kind:Shop["kind"];lat?:number;lon?:number;website:string|null;address:string|null};
@@ -38,8 +39,8 @@ export async function enrichShopWebsites(shops:readonly Shop[],deps:ShopWebsiteD
   const selected=shops.filter(shop=>!shop.website&&relevant(shop)&&osmId(shop.id)).slice(0,12);
   if(!selected.length)return [...shops];
   const fetcher=deps.fetch||fetch,ids=[...new Set(selected.map(shop=>shop.id))].sort();
-  const loaded=await cache.load(JSON.stringify(ids),fetcher,async shared=>{
-    const combined=AbortSignal.any([shared,AbortSignal.timeout(6500)]),release=await slot(combined),output:Tags[]=[];
+  const loaded=await cache.load(JSON.stringify(ids),fetcher,async shared=>withDeadline(6500,[shared],async combined=>{
+    const release=await slot(combined),output:Tags[]=[];
     try{
       for(const type of ["node","way","relation"]){
         const numbers=ids.filter(id=>id.startsWith(type+"/")).map(id=>id.split("/")[1]);if(!numbers.length)continue;
@@ -56,7 +57,7 @@ export async function enrichShopWebsites(shops:readonly Shop[],deps:ShopWebsiteD
       }
       return output;
     }finally{release();}
-  },signal);
+  }),signal);
   const details=new Map(loaded.value.map(row=>[row.id,row]));
   return shops.map(shop=>{
     if(shop.website||!selected.some(row=>row.id===shop.id))return shop;

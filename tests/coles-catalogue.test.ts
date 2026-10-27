@@ -245,10 +245,16 @@ test("a local browser queue error cannot suppress unrelated Coles prices or retr
 });
 
 test("Coles waits for the browser worker's queue budget without extending direct HTTP", async t => {
-  const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
-  t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
-  const renderer: RetailerPageRenderer = async url => ({ url, html: renderedCard(1001, "Firm Tofu | 450g", "4.50") });
-  await lookupColesQuery("firm tofu", fetch, undefined, renderer);
-  await lookupColesQuery("firm tofu", async () => new Response(fixture("firm tofu")));
-  assert.deepEqual(budgets, [32_000, 12_000]);
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let browserSignal: AbortSignal | undefined, httpSignal: AbortSignal | undefined;
+  const renderer: RetailerPageRenderer = async (_url, signal) => { browserSignal = signal; return new Promise<never>(() => {}); };
+  const browserWork = lookupColesQuery("firm tofu", fetch, undefined, renderer);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(browserSignal);
+  t.mock.timers.tick(31_999); assert.equal(browserSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await browserWork).matches.length, 0); assert.equal(browserSignal.aborted, true);
+  const fetchImpl: typeof fetch = async (_url, init) => { httpSignal = init?.signal as AbortSignal; return new Promise<never>(() => {}); };
+  const httpWork = lookupColesQuery("firm tofu", fetchImpl);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(httpSignal);
+  t.mock.timers.tick(11_999); assert.equal(httpSignal.aborted, false);
+  t.mock.timers.tick(1); assert.equal((await httpWork).matches.length, 0); assert.equal(httpSignal.aborted, true);
 });

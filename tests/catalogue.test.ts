@@ -13,6 +13,17 @@ const wagyu: CatalogueProduct = { name: "Wagyu Beef Scotch Fillet", priceCents: 
 const ordinary: CatalogueProduct = { name: "Beef Scotch Fillet", priceCents: 2800, packageSize: "per kg", stockcode: "3", inStock: true, available: true };
 const angus: CatalogueProduct = { name: "Angus Beef Rump Steak", priceCents: 3200, packageSize: "per kg", stockcode: "4", inStock: true, available: true };
 
+it("the retained Woolworths deadline bounds even a non-cooperative HTTP request", async t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let requestSignal: AbortSignal | undefined;
+  const fetchImpl: typeof fetch = async (_url, init) => { requestSignal = init?.signal as AbortSignal; return new Promise<never>(() => {}); };
+  const work = lookupQuery("deadline rice", fetchImpl);
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(requestSignal);
+  t.mock.timers.tick(11_999); assert.equal(requestSignal.aborted, false);
+  t.mock.timers.tick(1); const result = await work;
+  assert.equal(requestSignal.aborted, true); assert.equal(result.matches.length, 0); assert.match(result.error || "", /took too long/);
+});
+
 describe("cuts stay optional", () => {
   it("keeps the method cut when none is chosen", () => {
     const meal = generateMeal(base);

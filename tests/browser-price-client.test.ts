@@ -4,6 +4,25 @@ import { browserPriceRenderer, BrowserPriceError, localShopPageRenderer } from "
 const endpoint = "http://127.0.0.1:6190/render";
 const pageUrl = "https://www.coles.com.au/search?q=rice";
 
+test("the retained browser-client deadline stops a non-cooperative loopback call at 30 seconds", async t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let requestSignal: AbortSignal | undefined;
+  const renderer = browserPriceRenderer(endpoint, async (_url, init) => { requestSignal = init?.signal as AbortSignal; return new Promise<never>(() => {}); })!;
+  const work = renderer(pageUrl);
+  const failure = assert.rejects(work, (error: unknown) => error instanceof Error && error.name === "TimeoutError");
+  await new Promise(resolve => setImmediate(resolve)); assert.ok(requestSignal);
+  t.mock.timers.tick(29_999); assert.equal(requestSignal.aborted, false);
+  t.mock.timers.tick(1); await failure; assert.equal(requestSignal.aborted, true);
+});
+
+test("successful browser-client responses dispose the deadline without later aborting", async t => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  let requestSignal: AbortSignal | undefined;
+  const renderer = browserPriceRenderer(endpoint, async (_url, init) => { requestSignal = init?.signal as AbortSignal; return Response.json({ html: "<html>Rice</html>", url: pageUrl, providerStatus: "ready" }); })!;
+  await renderer(pageUrl); assert.ok(requestSignal);
+  t.mock.timers.tick(30_001); assert.equal(requestSignal.aborted, false);
+});
+
 test("malformed gateway JSON and response shapes fail as typed provider errors", async () => {
   for (const body of ["not JSON", "null", "[]", "5", JSON.stringify({ html: "<html>Rice</html>", url: pageUrl, status: "403" }), JSON.stringify({ html: "<html>Rice</html>", url: "bad URL" })]) {
     const renderer = browserPriceRenderer(endpoint, async () => new Response(body))!;

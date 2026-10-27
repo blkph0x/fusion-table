@@ -1,4 +1,5 @@
 import { publicShopUrl } from "./public-shop-reader.ts";
+import { withDeadline } from "./abort-deadline.mjs";
 /** Private, anonymous browser renderer. No visitor cookies or account data cross this boundary. */
 export interface SelectedStoreProof { id: string; name: string; address: string; retailerStoreId?: string }
 export type RetailerPageRenderer = (url: string, signal?: AbortSignal) => Promise<{ html: string; url: string; status?: number; selectedStore?: SelectedStoreProof }>;
@@ -15,7 +16,8 @@ export function browserPriceRenderer(endpoint: string | undefined, fetchImpl: ty
     const page = new URL(url);
     if (source === "local-shop") publicShopUrl(url);
     else if (page.protocol !== "https:" || !["www.coles.com.au", "www.aldi.com.au", "www.igashop.com.au", "www.woolworths.com.au"].includes(page.hostname) || page.username || page.password || page.port) throw new BrowserPriceError("Only official Australian retailer pages can be checked.");
-    const response = await fetchImpl(address.href, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: page.href, ...(source === "local-shop" ? { source } : {}), ...(store && page.hostname === "www.igashop.com.au" ? { store } : {}) }), signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(30_000)]) : AbortSignal.timeout(30_000), redirect: "error" });
+    return withDeadline(30_000, [signal], async boundedSignal => {
+    const response = await fetchImpl(address.href, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: page.href, ...(source === "local-shop" ? { source } : {}), ...(store && page.hostname === "www.igashop.com.au" ? { store } : {}) }), signal: boundedSignal, redirect: "error" });
     const declared = Number(response.headers.get("content-length") || 0);
     if (declared > 4_000_000) { await response.body?.cancel().catch(() => undefined); throw new BrowserPriceError("The retailer browser response exceeded its limit."); }
     const reader = response.body?.getReader();
@@ -39,6 +41,7 @@ export function browserPriceRenderer(endpoint: string | undefined, fetchImpl: ty
       selectedStore = { id: store.id, name: proof.name.trim(), address: proof.address.trim(), ...(typeof proof.retailerStoreId === "string" ? { retailerStoreId: proof.retailerStoreId } : {}) };
     }
     return { html: data.html, url: data.url, status: typeof data.status === "number" ? data.status : 200, ...(selectedStore ? { selectedStore } : {}) };
+    });
   };
 }
 /** Call only for websites obtained from verified server-side nearby-shop discovery. */
