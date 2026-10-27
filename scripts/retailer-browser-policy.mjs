@@ -1,7 +1,7 @@
 import { isIP } from "node:net";
 
 export const PAGE_LIMIT = 3_000_000;
-export const JOB_DEADLINE_MS = 20_000;
+export const JOB_DEADLINE_MS = 28_000;
 export const CACHE_TTL_MS = 10 * 60_000;
 export const CHALLENGE_BACKOFF_MS = 2 * 60_000;
 const RETAILER_HOSTS = new Map([
@@ -212,25 +212,31 @@ export function requestKey(url,store,source) {
 /** Small bounded scheduler; queued work also observes its caller's deadline. */
 export function createScheduler({ concurrency = 2, maxQueue = 16 } = {}) {
   let active = 0;
-  const waiting = [];
+  const waiting = [], activeKeys = new Set();
   const drain = () => {
     while (active < concurrency && waiting.length) {
-      const job = waiting.shift();
+      const next = waiting.findIndex(job => !job.key || !activeKeys.has(job.key));
+      if (next < 0) break;
+      const [job] = waiting.splice(next,1);
       job.signal?.removeEventListener("abort",job.abort);
       if (job.signal?.aborted) { job.reject(job.signal.reason); continue; }
       active++;
-      Promise.resolve().then(job.run).then(job.resolve,job.reject).finally(() => { active--; drain(); });
+      if (job.key) activeKeys.add(job.key);
+      Promise.resolve().then(job.run).then(job.resolve,job.reject).finally(() => {
+        active--; if (job.key) activeKeys.delete(job.key); drain();
+      });
     }
   };
   return {
     get active() { return active; }, get queued() { return waiting.length; },
-    run(run, signal) {
+    run(run, signal, key = null) {
       signal?.throwIfAborted();
-      if (active >= concurrency && waiting.length >= maxQueue) return Promise.reject(Object.assign(new Error("Price checking is busy. Try again shortly."),{ status:429 }));
+      const canStart = active < concurrency && (!key || !activeKeys.has(key));
+      if (!canStart && waiting.length >= maxQueue) return Promise.reject(Object.assign(new Error("Price checking is busy. Try again shortly."),{ status:429 }));
       return new Promise((resolve,reject) => {
-        const job = { run,signal,resolve,reject,abort:() => {
+        const job = { run,signal,key,resolve,reject,abort:() => {
           const index = waiting.indexOf(job);
-          if (index >= 0) { waiting.splice(index,1); reject(signal.reason); }
+          if (index >= 0) { waiting.splice(index,1); reject(signal.reason); drain(); }
         } };
         signal?.addEventListener("abort",job.abort,{once:true});
         waiting.push(job); drain();

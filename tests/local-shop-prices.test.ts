@@ -168,6 +168,13 @@ test("a slow market cannot starve a fast butcher and completed prices survive th
  const result=await work;assert.deepEqual(result.checkedShops.map(shop=>shop.id),["slow-market","other-market","fast-butcher"]);assert.deepEqual(result.quotes.map(quote=>quote.shop.id),["slow-market","other-market","fast-butcher"]);assert.equal(result.quotes[2].status,"ready");assert.equal(result.quotes[2].matches[0].priceCents,1388);assert.equal(result.quotes[0].status,"unavailable");
 });
 
+test("local batch and per-shop deadlines fit inside the overall price request while allowing a cold browser queue",async t=>{
+ const deadlines:number[]=[],timeout=AbortSignal.timeout;
+ t.mock.method(AbortSignal,"timeout",(milliseconds:number)=>{deadlines.push(milliseconds);return timeout(milliseconds);});
+ await lookupLocalShopPrices([{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[shop({id:"deadline-budget"})],context,{read:async url=>({url,html:fixture(product())})});
+ assert.deepEqual(deadlines,[28_000,26_000]);assert.ok(deadlines[0]+6500<=35_000);
+});
+
 test("provider concurrency stays bounded across independent nearby-price requests",async()=>{
  let active=0,maximum=0;
  const read=async(url:string)=>{active++;maximum=Math.max(maximum,active);await new Promise(resolve=>setTimeout(resolve,8));active--;return {url,html:fixture(product())};};

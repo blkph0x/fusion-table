@@ -155,7 +155,7 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
   for(const kind of ["produce","butcher"]){const first=candidates.find(shop=>(kind==="produce"?produceShop(shop):butcherShop(shop)));if(first)chosen.set(first.id,first);}
   for(const candidate of candidates){if(chosen.size>=3)break;chosen.set(candidate.id,candidate);}
   const shops=[...chosen.values()].sort((a,b)=>kilometres(context.location,a)-kilometres(context.location,b));
-  const batchSignal=AbortSignal.any([...(signal?[signal]:[]),AbortSignal.timeout(20_000)]);
+  const batchSignal=AbortSignal.any([...(signal?[signal]:[]),AbortSignal.timeout(28_000)]);
   async function checkShop(shop:Shop){
     const quotes:LocalShopQuote[]=[],warnings:string[]=[],checkedShops:CheckedLocalShop[]=[];
     const result={quotes,warnings,checkedShops};
@@ -169,7 +169,7 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
     const key=JSON.stringify([shop.id,base.href,shop.lat,shop.lon,context.area,queries]);
     try{
       const loaded=await cache.load(key,identity(reader),async shared=>{
-        const combined=AbortSignal.any([shared,AbortSignal.timeout(18_000)]),release=await shopSlot(combined);const searched:string[]=[];const found:CatalogueProduct[]=[];const seen=new Set<string>();const issues:Record<string,LocalFailure>={};
+        const combined=AbortSignal.any([shared,AbortSignal.timeout(26_000)]),release=await shopSlot(combined);const searched:string[]=[];const found:CatalogueProduct[]=[];const seen=new Set<string>();const issues:Record<string,LocalFailure>={};
         async function read(url:string){combined.throwIfAborted();const page=await reader(url,combined);combined.throwIfAborted();if(page.status!==undefined&&(page.status<200||page.status>=300))throw new Error([401,403,429].includes(page.status)?"This shop requires a browser check.":"This shop did not return a public price page.");publicShopUrl(page.url);if(new URL(page.url).hostname.replace(/^www\./,"")!==base.hostname.replace(/^www\./,""))throw new Error("The shop redirected to a different website.");searched.push(page.url);for(const product of parseLocalShopProducts(page.html,page.url,now)){const key=JSON.stringify([product.url,product.name,product.priceCents,product.packageSize]);if(!seen.has(key)){seen.add(key);found.push(product);}}return page;}
         try{
           const home:PublicShopPage=await read(base.href),shopify=/Shopify|cdn\.shopify\.com|shopify-section/i.test(home.html);

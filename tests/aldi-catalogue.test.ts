@@ -106,11 +106,11 @@ test("an UNKNOWN-stock strong name proof stops ALDI fallback phrases without cla
   assert.equal(calls, 1); assert.equal(result.searched.length, 1);
 });
 
-test("browser rendering has a 28-second budget while direct HTTP retains its shorter budget", async t => {
+test("browser rendering has a 32-second budget while direct HTTP retains its shorter budget", async t => {
   const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
   t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
   const renderer: RetailerPageRenderer = async url => ({ url, html: rice() });
   await lookupAldiQuery("jasmine rice", fetch, undefined, renderer);
   await lookupAldiQuery("jasmine rice", async () => new Response(rice()));
-  assert.deepEqual(budgets, [28_000, 15_000]);
+  assert.deepEqual(budgets, [32_000, 15_000]);
 });

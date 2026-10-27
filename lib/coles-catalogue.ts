@@ -198,7 +198,7 @@ async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal
     try {
       const paused = backoff.get(identity);
       if (paused && paused.until > Date.now()) throw Object.assign(new Error(paused.message), { providerStatus: paused.status });
-      const timeout = AbortSignal.timeout(renderer ? 28_000 : 12_000);
+      const timeout = AbortSignal.timeout(renderer ? 32_000 : 12_000);
       const combined = AbortSignal.any([sharedSignal, timeout]);
       const html = await readHtml(`${SEARCH_URL}?q=${encodeURIComponent(query)}`, fetchImpl, combined, 1, renderer);
       const snapshot = { products: parseColesSearch(html), fetchedAt: new Date().toISOString(), at: Date.now(), storeLabel: publishedStoreLabel(html) };

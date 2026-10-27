@@ -185,6 +185,35 @@ test("scheduler enforces two active pages, bounded waiting, and removes cancelle
   release.forEach(resolve => resolve("done")); await Promise.all([first,second]);
 });
 
+test("a queued same-store IGA job leaves a browser slot available for a different shop",async () => {
+  const scheduler = createScheduler({concurrency:2,maxQueue:2}), started = [], releases = new Map();
+  const hold = name => () => new Promise(resolve => { started.push(name); releases.set(name,resolve); });
+  const first = scheduler.run(hold("first IGA"),undefined,"iga:verified-store");
+  const second = scheduler.run(hold("second IGA"),undefined,"iga:verified-store");
+  await Promise.resolve(); assert.equal(scheduler.active,1); assert.equal(scheduler.queued,1);
+  const local = scheduler.run(hold("local butcher"));
+  await Promise.resolve(); assert.deepEqual(started,["first IGA","local butcher"]);
+  assert.equal(scheduler.active,2); assert.equal(scheduler.queued,1);
+  releases.get("first IGA")(); await first;
+  await new Promise(resolve => setTimeout(resolve,0));
+  assert.deepEqual(started,["first IGA","local butcher","second IGA"]);
+  releases.get("second IGA")(); releases.get("local butcher")(); await Promise.all([second,local]);
+});
+
+test("key-blocked queues stay bounded, admit another shop into a free slot, and drain after cancellation",async () => {
+  const scheduler = createScheduler({concurrency:2,maxQueue:1}), controller = new AbortController(), waiting = new AbortController();
+  let nextStarted = false;
+  const first = scheduler.run(() => new Promise((_resolve,reject) => controller.signal.addEventListener("abort",() => reject(controller.signal.reason),{once:true})),controller.signal,"iga:one");
+  const cancelled = scheduler.run(async () => {},waiting.signal,"iga:one");
+  await assert.rejects(scheduler.run(async () => {},undefined,"iga:one"),/busy/);
+  const local = scheduler.run(async () => "local");
+  assert.equal(await local,"local"); assert.equal(scheduler.queued,1);
+  waiting.abort(new Error("queued closed")); await assert.rejects(cancelled,/queued closed/);
+  const next = scheduler.run(async () => { nextStarted = true; },undefined,"iga:one");
+  controller.abort(new Error("active closed")); await assert.rejects(first,/active closed/); await next;
+  assert.equal(nextStarted,true); assert.equal(scheduler.queued,0);
+});
+
 test("CONNECT proxy rejects private DNS before dialing and pins the accepted connection target",async t => {
   const echo = createTcpServer(socket => socket.pipe(socket));
   echo.listen(0,"127.0.0.1"); await once(echo,"listening");
@@ -244,6 +273,32 @@ test("HTTP service accepts server JSON only, deduplicates/cache results, and bac
   assert.equal((await post({url,store})).status,422);
   assert.equal((await post({url:"https://butcher.retailer.net/products",source:"local-shop"})).status,200);
   assert.equal(calls,5);
+});
+
+test("worker admission serializes one verified IGA store while a local-shop page starts immediately",async t => {
+  const started = [], releases = new Map();
+  const renderer = {configured:true,connected:true,close:async () => { for (const release of releases.values()) release(); },render:async url => {
+    started.push(url); await new Promise(resolve => releases.set(url,resolve));
+    return {html:"<div>Product $2.00</div>",url,status:200,providerStatus:"ready"};
+  }};
+  const worker = await startRetailerBrowser({port:0,renderer}); t.after(() => worker.close());
+  const base = `http://127.0.0.1:${worker.port}`;
+  const post = body => fetch(base+"/render",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(response => response.json());
+  const waitHealth = async predicate => {
+    for (let index = 0; index < 100; index++) { const health = await (await fetch(base+"/health")).json(); if (predicate(health)) return; await new Promise(resolve => setTimeout(resolve,5)); }
+    assert.fail("The keyed worker did not reach its expected admission state.");
+  };
+  const store = {id:"node/1",name:"Lloyds IGA",area:"Newtown 2042",address:"259 King Street, Newtown 2042"};
+  const firstUrl = "https://www.igashop.com.au/search?q=rice", secondUrl = "https://www.igashop.com.au/search?q=chicken", localUrl = "https://butcher.retailer.net/";
+  const first = post({url:firstUrl,store}), second = post({url:secondUrl,store});
+  await waitHealth(health => health.active === 1 && health.queued === 1);
+  const local = post({url:localUrl,source:"local-shop"});
+  await waitHealth(health => health.active === 2 && health.queued === 1);
+  assert.deepEqual(started,[firstUrl,localUrl]);
+  releases.get(firstUrl)(); await first;
+  await waitHealth(health => health.queued === 0);
+  assert.equal(started.at(-1),secondUrl);
+  releases.get(secondUrl)(); releases.get(localUrl)(); await Promise.all([second,local]);
 });
 
 test("queued ingredients recheck provider backoff after an earlier browser refusal",async t => {

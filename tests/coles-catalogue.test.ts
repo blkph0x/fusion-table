@@ -250,5 +250,5 @@ test("Coles waits for the browser worker's queue budget without extending direct
   const renderer: RetailerPageRenderer = async url => ({ url, html: renderedCard(1001, "Firm Tofu | 450g", "4.50") });
   await lookupColesQuery("firm tofu", fetch, undefined, renderer);
   await lookupColesQuery("firm tofu", async () => new Response(fixture("firm tofu")));
-  assert.deepEqual(budgets, [28_000, 12_000]);
+  assert.deepEqual(budgets, [32_000, 12_000]);
 });

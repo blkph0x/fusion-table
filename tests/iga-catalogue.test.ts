@@ -83,12 +83,12 @@ test("local browser deadlines or an unselected branch do not globally suppress I
   }
 });
 
-test("IGA gives ordinary browser selection and rendering 28 seconds", async t => {
+test("IGA gives ordinary browser selection and rendering 32 seconds", async t => {
   const budgets: number[] = [], originalTimeout = AbortSignal.timeout;
   t.mock.method(AbortSignal, "timeout", (milliseconds: number) => { budgets.push(milliseconds); return originalTimeout(milliseconds); });
   const renderer: RetailerPageRenderer = async url => ({ url, html: header() + card(123456, "Jasmine Rice", "1kg", "3.20") });
   await lookupIgaQuery("jasmine rice", fetch, undefined, renderer, store);
-  assert.deepEqual(budgets, [28_000]);
+  assert.deepEqual(budgets, [32_000]);
 });
 
 test("verified chooser metadata binds a canonical retailer name to the requested OSM shop", async () => {
