@@ -90,6 +90,13 @@ function sellingQuantity(value: string | null | undefined): SellingQuantity | nu
   return parsed ? { quantity: parsed, rate } : null;
 }
 
+/** Retailers use "each" for the saleable item, which can itself be a bunch.
+ * Preserve that explicit product form; individual stalks per bunch are unknown. */
+function productPackageSize(productName:string,packageSize:string|null|undefined):string|null {
+  if(!packageSize)return packageSize??null;
+  return /\bbunch(?:es)?\b/i.test(productName)&&/^(?:1\s*)?(?:each|ea|piece)\.?$/i.test(packageSize.trim())?"1 bunch":packageSize;
+}
+
 function unknownCost(reason: string): ShoppingCost {
   return { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason };
 }
@@ -121,7 +128,7 @@ export function consumedOfferCost(line: Pick<ShoppingLine, "amount" | "unit">, o
   if (line.amount === 0) return 0;
   const volume = line.unit === "tbsp" ? line.amount * 20 : line.unit === "tsp" ? line.amount * 5 : null;
   const needed = quantity(volume ?? line.amount, volume === null ? line.unit : "ml");
-  const selling = sellingQuantity(offer.packageSize);
+  const selling = sellingQuantity(productPackageSize(offer.productName,offer.packageSize));
   if (!needed || !selling || needed.family !== selling.quantity.family || !Number.isSafeInteger(offer.priceCents) || (offer.priceCents ?? 0) <= 0) return null;
   const cents = Math.max(1, Math.round(needed.amount * needed.factor / (selling.quantity.amount * selling.quantity.factor) * offer.priceCents!));
   return Number.isSafeInteger(cents) && cents <= 1_000_000_000 ? cents : null;
@@ -224,7 +231,8 @@ function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now:
     const suggestion = Boolean(match.reviewable || publishedGuide && match.nameReviewable) && simpleGrocerySuggestion(line, match.name);
     const preparedReason = "Retailer metadata identifies cooked rice. No dry-to-cooked weight conversion was guessed; choose a dry-rice pack for this quantity.";
     const reviewReason = preparedMismatch ? preparedReason : suggestion && !match.selected ? "Suggested for this quantity: the requested ingredient and food form match. Review the brand and packet before buying." : !sameForm ? "This product uses a different food form or wording. Review it before choosing; it is excluded from the suggested estimate." : match.reason;
-    const cost = comparable ? costShoppingQuantity(line.amount, line.unit, match.priceCents, match.packageSize) : unknownCost(preparedMismatch ? preparedReason : "Cooked or drained quantity is not established by this pack.");
+    const packageSize=productPackageSize(match.name,match.packageSize);
+    const cost = comparable ? costShoppingQuantity(line.amount, line.unit, match.priceCents, packageSize) : unknownCost(preparedMismatch ? preparedReason : "Cooked or drained quantity is not established by this pack.");
     return {
       id: [quote.source, shop?.id ?? "", shop ? areaKey(shop.area) : "", line.id, match.url ?? "", match.name, match.packageSize ?? ""].map(encodeURIComponent).join(":"),
       productName: match.name,
@@ -235,7 +243,7 @@ function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now:
       scope: shop ? "shop-online" : "chain-online",
       evidenceLabel: quote.label || `${retailerName} online price guide; confirm your chosen store.`,
       priceCents: match.priceCents,
-      packageSize: match.packageSize,
+      packageSize,
       stock: match.stock,
       fetchedAt: quote.fetchedAt,
       freshness: current,
@@ -270,7 +278,8 @@ function recordedOffers(line: ShoppingLine, quotes: readonly ItemQuote[], option
       if (!validDay(row.until)) current = "unknown";
       else if (row.until < localDay(now)) current = "stale";
     }
-    const cost = costShoppingQuantity(line.amount, line.unit, row.cents, row.packageSize);
+    const packageSize=productPackageSize(row.itemName,row.packageSize);
+    const cost = costShoppingQuantity(line.amount, line.unit, row.cents, packageSize);
     return {
       id: `recorded:${row.id}`,
       productName: row.itemName,
@@ -281,7 +290,7 @@ function recordedOffers(line: ShoppingLine, quotes: readonly ItemQuote[], option
       scope: knownShop ? "shop-recorded" : "area-recorded",
       evidenceLabel: `${row.label}${row.kind === "special" && row.until ? ` Ends ${row.until}.` : ""} Stock and the current shelf price are unconfirmed.`,
       priceCents: row.cents,
-      packageSize: row.packageSize ?? null,
+      packageSize,
       stock: "UNKNOWN",
       fetchedAt: row.at,
       freshness: current,
@@ -320,6 +329,9 @@ export function buildShoppingOffers(lines: readonly ShoppingLine[], catalogue: r
 export function isShoppingOfferSelectable(offer: ShoppingOffer): boolean {
   const online = offer.scope === "chain-online" || offer.scope === "shop-online";
   const publishedGuide = offer.source === "aldi-online-catalogue" || offer.source === "iga-online-catalogue" || offer.source === "local-shop-website";
+  const selling=sellingQuantity(productPackageSize(offer.productName,offer.packageSize));
+  // Old browser data may still contain a bunch costed as individual stalks.
+  if(selling?.quantity.family==="bunch"&&quantity(offer.cost.purchasedAmount??0,offer.cost.purchasedUnit??"")?.family!=="bunch")return false;
   return (offer.eligible || offer.reviewable) && offer.freshness === "current"
     && (!online || offer.stock === "IN_STOCK" || publishedGuide && offer.stock === "UNKNOWN")
     && offer.priceCents != null && Number.isSafeInteger(offer.priceCents) && offer.priceCents > 0

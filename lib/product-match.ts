@@ -54,14 +54,18 @@ const PROTEINS = ["chicken", "turkey", "beef", "lamb", "pork", "prawn", "salmon"
 export function isNonFoodCatalogueProduct(product: Pick<CatalogueProduct, "name" | "categories">): boolean {
   const name = product.name.slice(0, 500).toLowerCase().replace(/[^a-z0-9]+/g, " ");
   const petAccessory = /\b(?:dogs?|pupp(?:y|ies)|cats?|kittens?|pets?)\b.{0,64}\b(?:leads?|leashes?|collars?|harness(?:es)?|toys?|beds?|bowls?|treats?|food|kibble|litter|shampoo|grooming)\b/;
-  const kitchenTool = /\b(?:juicers?|squeezers?|citrus press|lemon press|garlic press|garlic crusher|tofu press|vegetable peeler|potato peeler|cheese grater|zester|knife sharpener|knife block|chopping board|cutting board|kitchen utensil|measuring cups?|measuring spoons?|baking trays?|baking tins?|muffin trays?|muffin tins?|food processor)\b/;
+  const kitchenTool = /\b(?:juicers?|squeezers?|slicers?|dicers?|spirali[sz]ers?|mandolines?|cutter gadgets?|vegetable cutters?|vegetable choppers?|food choppers?|citrus press|lemon press|garlic press|garlic crusher|tofu press|vegetable peeler|potato peeler|cheese grater|zester|knife sharpener|knife block|chopping board|cutting board|kitchen utensil|measuring cups?|measuring spoons?|baking trays?|baking tins?|muffin trays?|muffin tins?|food processor)\b/;
   const hardware = /\b(?:cordless drill|power drill|hammer drill|drill bits?|screwdrivers?|socket sets?|garden hoses?|garden stakes?|power tools?|wall plugs?|paint brushes?|spray paint|sandpaper|wood screws?|allen keys?|hex keys?|chicken wire|wire mesh)\b/;
   const household = /\b(?:dishwashing liquid|dishwasher (?:tablets?|capsules?|detergent)|laundry detergent|cleaning spray|surface cleaner|hand wash|body wash|scented candles?)\b/;
   if (petAccessory.test(name) || kitchenTool.test(name) || hardware.test(name) || household.test(name)) return true;
-  return (product.categories || []).slice(0, 12).some((value) => {
-    const category = value.slice(0, 160).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-    return /\b(?:pets|pet care|pet food|pet supplies|pet accessories|dog food|cat food|kitchenware|kitchen tools|kitchen dining|homeware|household cleaning|hardware|power tools|health beauty)\b/.test(category);
-  });
+  const categories = (product.categories || []).slice(0, 12).map(value => value.slice(0, 160).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim());
+  const plantingName = /\b(?:seedlings?|seed tapes?|seed mats?|seed raising kits?|grow kits?|growing kits?|planting seeds?|sowing seeds?|seeds? for (?:planting|sowing|growing))\b/;
+  const gardenCategory = categories.some(category => /^(?:garden|gardening|plants)$|\bgardening\b|\b(?:garden|planting|flower) seeds?\b|\bseeds? (?:and )?(?:bulbs?|seedlings?|plants?)\b|\b(?:lawn|home|outdoor) (?:and )?garden\b/.test(category));
+  // Seed names alone are food-compatible (sesame, coriander, pumpkin, etc.).
+  // Require planting instructions, a gardening department, or the observed
+  // horticultural-brand seed listing before treating them as planting supplies.
+  if (plantingName.test(name) || /\bseeds?\b/.test(name) && (/\byates\b/.test(name) || gardenCategory)) return true;
+  return categories.some(category => /\b(?:pets|pet care|pet food|pet supplies|pet accessories|dog food|cat food|kitchenware|kitchen tools|kitchen dining|homeware|household cleaning|hardware|power tools|health beauty)\b/.test(category));
 }
 
 type DietaryClaim = "vegan" | "vegetarian" | "gluten-free" | "dairy-free";
