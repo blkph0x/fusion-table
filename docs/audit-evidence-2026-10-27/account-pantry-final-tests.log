@@ -1,0 +1,272 @@
+(node:61856) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:47956) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: sign-in asks which kitchen to use before uploading any browser data
+ok 1 - sign-in asks which kitchen to use before uploading any browser data
+  ---
+  duration_ms: 58.1175
+  ...
+# Subtest: the production signup form validates password length and sends explicit persistent-session choice
+ok 2 - the production signup form validates password length and sends explicit persistent-session choice
+  ---
+  duration_ms: 5.1528
+  ...
+# Subtest: a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+ok 3 - a returning session opens cloud content, coalesces edits and signs out back to its separate guest kitchen
+  ---
+  duration_ms: 3.7907
+  ...
+# Subtest: conflicting changes require a choice and never overwrite the other device automatically
+ok 4 - conflicting changes require a choice and never overwrite the other device automatically
+  ---
+  duration_ms: 4.4709
+  ...
+# Subtest: failed automatic saves pause without a request storm and can be retried explicitly
+ok 5 - failed automatic saves pause without a request storm and can be retried explicitly
+  ---
+  duration_ms: 3.837
+  ...
+# Subtest: session expiry restores guest content instead of leaving a private account visible
+ok 6 - session expiry restores guest content instead of leaving a private account visible
+  ---
+  duration_ms: 2.4686
+  ...
+# Subtest: an offline account check leaves the guest kitchen usable without uploading it
+ok 7 - an offline account check leaves the guest kitchen usable without uploading it
+  ---
+  duration_ms: 1.8798
+  ...
+# Subtest: a tab left open checks the session deadline and clears expired private content without a keepalive loop
+ok 8 - a tab left open checks the session deadline and clears expired private content without a keepalive loop
+  ---
+  duration_ms: 2.191
+  ...
+# Subtest: an authenticated different browser must choose cloud or browser before either side changes
+ok 9 - an authenticated different browser must choose cloud or browser before either side changes
+  ---
+  duration_ms: 2.4397
+  ...
+# Subtest: the explicit conflict choice can keep the current kitchen against the newest version
+ok 10 - the explicit conflict choice can keep the current kitchen against the newest version
+  ---
+  duration_ms: 3.3655
+  ...
+# Subtest: signing out flushes the latest unscheduled edit and clears password form state
+ok 11 - signing out flushes the latest unscheduled edit and clears password form state
+  ---
+  duration_ms: 4.9247
+  ...
+# Subtest: the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+ok 12 - the account can save to SQL and restore its in-memory guest when all browser storage is blocked
+  ---
+  duration_ms: 3.5671
+  ...
+# Subtest: the production password form rotates credentials and clears its password inputs
+ok 13 - the production password form rotates credentials and clears its password inputs
+  ---
+  duration_ms: 2.9088
+  ...
+# (node:48256) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+ok 14 - all568 canonical authored ingredient/unit pairs have finite explicit planning allowances
+  ---
+  duration_ms: 29.0836
+  ...
+# Subtest: food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+ok 15 - food used and packs to buy stay distinct, including fractional packs and exact spoon volume
+  ---
+  duration_ms: 0.8738
+  ...
+# Subtest: special foods, counted produce and prepared foods get their own planning forms
+ok 16 - special foods, counted produce and prepared foods get their own planning forms
+  ---
+  duration_ms: 0.3085
+  ...
+# Subtest: saved seeded fresh finishes are recognized by exact food form despite specialty category
+ok 17 - saved seeded fresh finishes are recognized by exact food form despite specialty category
+  ---
+  duration_ms: 0.3018
+  ...
+# Subtest: invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+ok 18 - invalid/free-text quantities cannot produce NaN, invented dimensional conversions or nonfood costs
+  ---
+  duration_ms: 0.2911
+  ...
+# Subtest: observed compatible unit costs replace assumptions without making the pack price the food-used price
+ok 19 - observed compatible unit costs replace assumptions without making the pack price the food-used price
+  ---
+  duration_ms: 1.8383
+  ...
+# Subtest: API exposes fallback allowances separately and never counts invented live prices
+ok 20 - API exposes fallback allowances separately and never counts invented live prices
+  ---
+  duration_ms: 0.6319
+  ...
+# (node:65116) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: the production pantry checkbox immediately updates the same shortfall used by automatic recipe costs
+ok 21 - the production pantry checkbox immediately updates the same shortfall used by automatic recipe costs
+  ---
+  duration_ms: 5.137
+  ...
+# Subtest: reversing a new tick restores known partial stock and repeat toggles never inflate it
+ok 22 - reversing a new tick restores known partial stock and repeat toggles never inflate it
+  ---
+  duration_ms: 1.629
+  ...
+# Subtest: finished cooking consumes declarations once and undo restores them without changing a newer declaration
+ok 23 - finished cooking consumes declarations once and undo restores them without changing a newer declaration
+  ---
+  duration_ms: 2.2264
+  ...
+# Subtest: an external stock correction is preserved instead of restoring an obsolete checkbox baseline
+ok 24 - an external stock correction is preserved instead of restoring an obsolete checkbox baseline
+  ---
+  duration_ms: 1.3396
+  ...
+# Subtest: duplicate ingredient checkboxes retain the selected use and do not both claim the same stock
+ok 25 - duplicate ingredient checkboxes retain the selected use and do not both claim the same stock
+  ---
+  duration_ms: 1.5191
+  ...
+# Subtest: reversing several new duplicate-use declarations restores partial stock once
+ok 26 - reversing several new duplicate-use declarations restores partial stock once
+  ---
+  duration_ms: 1.3714
+  ...
+# (node:64276) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: oils, butter and flour are pantry consumables, and a steak is not
+ok 27 - oils, butter and flour are pantry consumables, and a steak is not
+  ---
+  duration_ms: 1.9483
+  ...
+# Subtest: making a meal uses what is on hand and shops only the shortfall
+ok 28 - making a meal uses what is on hand and shops only the shortfall
+  ---
+  duration_ms: 1.4324
+  ...
+# Subtest: a week plan warns before the pantry is used up
+ok 29 - a week plan warns before the pantry is used up
+  ---
+  duration_ms: 0.2132
+  ...
+# Subtest: flour left after a cook is marked low and is not given a price
+ok 30 - flour left after a cook is marked low and is not given a price
+  ---
+  duration_ms: 0.1971
+  ...
+# Subtest: a week records oil and flour on the pantry before they are bought
+ok 31 - a week records oil and flour on the pantry before they are bought
+  ---
+  duration_ms: 1.1303
+  ...
+# Subtest: a week shopping list is the shortfall only and has no price
+ok 32 - a week shopping list is the shortfall only and has no price
+  ---
+  duration_ms: 1.0477
+  ...
+# Subtest: preparing shopping repeatedly never consumes stock or mutates the original records
+ok 33 - preparing shopping repeatedly never consumes stock or mutates the original records
+  ---
+  duration_ms: 0.6576
+  ...
+# Subtest: saved metric quantities cover compatible recipe units and are deducted once
+ok 34 - saved metric quantities cover compatible recipe units and are deducted once
+  ---
+  duration_ms: 0.337
+  ...
+# Subtest: spoons, counts and mass are not guessed from other units
+ok 35 - spoons, counts and mass are not guessed from other units
+  ---
+  duration_ms: 0.5215
+  ...
+# Subtest: automatic ownership allocates pantry once across duplicate ingredient lines
+ok 36 - automatic ownership allocates pantry once across duplicate ingredient lines
+  ---
+  duration_ms: 0.7315
+  ...
+# Subtest: declared ownership and a cook aggregate duplicate requirements before deduction
+ok 37 - declared ownership and a cook aggregate duplicate requirements before deduction
+  ---
+  duration_ms: 0.2666
+  ...
+# Subtest: counted ingredients have readable quantities without blank unit gaps
+ok 38 - counted ingredients have readable quantities without blank unit gaps
+  ---
+  duration_ms: 0.1361
+  ...
+# Subtest: checkbox ownership immediately covers a shopping shortfall without using up any ingredient
+ok 39 - checkbox ownership immediately covers a shopping shortfall without using up any ingredient
+  ---
+  duration_ms: 0.2671
+  ...
+# Subtest: an explicit untick clears only its selected food and compatible measurement family
+ok 40 - an explicit untick clears only its selected food and compatible measurement family
+  ---
+  duration_ms: 0.164
+  ...
+# Subtest: duplicate checked uses are declared once as their combined quantity
+ok 41 - duplicate checked uses are declared once as their combined quantity
+  ---
+  duration_ms: 0.2667
+  ...
+# Subtest: declarations cannot convert a partial weight into counts or change another similarly named food
+ok 42 - declarations cannot convert a partial weight into counts or change another similarly named food
+  ---
+  duration_ms: 0.1635
+  ...
+# (node:53464) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+ok 43 - automatic pricing bounds batches and parallelism, retains order and excludes unknown costs
+  ---
+  duration_ms: 45.7969
+  ...
+# Subtest: one failed batch preserves other prices and never silently turns the failure into zero
+ok 44 - one failed batch preserves other prices and never silently turns the failure into zero
+  ---
+  duration_ms: 1.0549
+  ...
+# Subtest: stale or foreign response quantities cannot enter a new recipe estimate
+ok 45 - stale or foreign response quantities cannot enter a new recipe estimate
+  ---
+  duration_ms: 0.7556
+  ...
+# Subtest: shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+ok 46 - shared visit cache keeps reviewed shop selections bound to exact list, servings and area
+  ---
+  duration_ms: 0.2666
+  ...
+# Subtest: identical mounted views share one request and detached views cannot get late updates
+ok 47 - identical mounted views share one request and detached views cannot get late updates
+  ---
+  duration_ms: 2.5464
+  ...
+# Subtest: a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+ok 48 - a late automatic response cannot overwrite a reviewed choice or explicit exclusion in the same timestamp
+  ---
+  duration_ms: 7.6498
+  ...
+# Subtest: malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+ok 49 - malformed stored country values have an isolated unknown key instead of throwing or assuming Australia
+  ---
+  duration_ms: 0.4286
+  ...
+# Subtest: homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+ok 50 - homepage counts match the complete dynamic authored plan without claiming seeds as unique meals
+  ---
+  duration_ms: 8.5376
+  ...
+1..50
+# tests 50
+# suites 0
+# pass 50
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 831.1106

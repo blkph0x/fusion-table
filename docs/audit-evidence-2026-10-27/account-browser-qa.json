@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-27T10:14:12.036Z",
+  "accountSignup": true,
+  "explicitKitchenImport": true,
+  "accountSaveAndReopen": true,
+  "guestCookbookSeparated": true,
+  "webAndSqlRestartRetainedSessionAndSavedRecipe": true,
+  "mobile390NoHorizontalOverflow": true,
+  "phoneAccountTouchWidth": 44,
+  "pantryProof": {
+    "account": "Account: Browser test cook",
+    "coverage": "12 ingredients for 4 servings: 1 store guides and 11 planning estimates. Area: Newtown.",
+    "foodValue": "~A$13.00planning estimate · amount used",
+    "pageWidth": 1265,
+    "shopping": "A$45.30 estimated shopping",
+    "viewport": 1280
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-27T10:21:12Z",
+  "deployment": {
+    "releaseId": "20261027-100658",
+    "sourceManifestSha256": "d6067b47cc705817f5169a2e5fcd38b02c9919128079001f93173af52f3c1548",
+    "gitCommit": "85cdb9cd5d39359d4e7788f85103b7f6740cd4f0",
+    "version": "0.3.0",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "accounts-complete-shopping-estimates"
+  },
+  "verifiedSourceFiles": 379,
+  "services": {
+    "fusion-table.service": {
+      "ActiveState": "active",
+      "UnitFileState": "enabled",
+      "MainPID": "2595923",
+      "NRestarts": "0",
+      "WorkingDirectory": "/home/blkph0x/fusion-releases/20261027-100658"
+    },
+    "fusion-accounts-db.service": {
+      "ActiveState": "active",
+      "UnitFileState": "enabled",
+      "MainPID": "2588697",
+      "NRestarts": "0",
+      "WorkingDirectory": ""
+    },
+    "fusion-image-model.service": {
+      "ActiveState": "active",
+      "UnitFileState": "enabled",
+      "MainPID": "2506763",
+      "NRestarts": "0",
+      "WorkingDirectory": "/home/blkph0x/opt/sd"
+    },
+    "mariadb.service": {
+      "ActiveState": "active",
+      "UnitFileState": "enabled",
+      "MainPID": "1173",
+      "NRestarts": "0",
+      "WorkingDirectory": ""
+    }
+  },
+  "databasePort": 3307,
+  "databaseBind": "127.0.0.1",
+  "privateEnvironmentMode": "0600",
+  "runtimeGrants": [
+    "fusion_accounts\tDELETE",
+    "fusion_accounts\tINSERT",
+    "fusion_accounts\tSELECT",
+    "fusion_accounts\tUPDATE",
+    "fusion_accounts_test\tDELETE",
+    "fusion_accounts_test\tINSERT",
+    "fusion_accounts_test\tSELECT",
+    "fusion_accounts_test\tUPDATE"
+  ],
+  "apiTestAccountsRemoved": 6,
+  "browserTestAccountRemoved": true,
+  "productionAccountCount": 0,
+  "testAccountCount": 0,
+  "freeBytes": 1723404288,
+  "rollbackDirectory": "/home/blkph0x/fusion-deploy-backups/20261027-100658"
+}

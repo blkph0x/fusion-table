@@ -4,10 +4,10 @@ Updated 27 October 2026
 Deployment update: the quality pass, homepage/image fixes, local shopping
 workspace, regional quality corrections and ingredient-aware cooking methods
 are now live.
-Active release: /home/blkph0x/fusion-releases/20261027-075114, supervised by
+Active release: /home/blkph0x/fusion-releases/20261027-100658, supervised by
 fusion-table.service using the Node profile and /home/blkph0x/fusion-data.
 The original server checkout below is preserved for recovery, not the active
-runtime. See SCIENCE_QUALITY_DEPLOYMENT_2026-10-27.txt for the current verified release
+runtime. See ACCOUNTS_PRICING_RELEASE_2026-10-27.txt for the current verified release
 and rollback details. CULINARY_DEPLOYMENT_2026-10-27.txt,
 REGIONAL_DEPLOYMENT_2026-10-27.txt,
 SHOPPING_DEPLOYMENT_2026-10-26.txt and
@@ -17,7 +17,7 @@ Project map
 
 Website source: D:\fusion-table
 Website repository: https://github.com/blkph0x/fusion-table
-Working branch: cursor/fusion-overhaul-91e1
+Working branch: codex/accounts-pricing
 Source HEAD at inspection: 2d0cee19080190039d98b56a45f586e117d5820e
 Application-code baseline: 765cfea796d5374735f249c7e59ccadc4204ad96
 The difference between those two commits is the handoff document only.
@@ -121,3 +121,13 @@ Current quality/price/image update: exhaustive authored-catalogue evidence and e
 coverage are recorded in SCIENCE_QUALITY_AUDIT_2026-10-27.txt. Automatic recipe
 shopping costs retain explicit partial/unknown labels. Background pictures use the
 supervised local model and persistent bounded cache; no cloud key was added.
+
+Current website 0.3.0: optional SQL accounts, complete labelled ingredient budgets,
+per-serving Discover prices, first-visit shopping area prompt and immediate pantry
+shopping updates. Runtime code is commit 85cdb9cd5d39359d4e7788f85103b7f6740cd4f0,
+pushed to origin/codex/accounts-pricing. All 602 host tests and the public account,
+pricing, PDF and release checks passed. SQL is isolated on loopback3307; protected
+settings remain outside Git. See ACCOUNTS_PRICING_RELEASE_2026-10-27.txt.
+The inactive 20261027-042809 release retains source and archive, with rebuildable
+node_modules and dist removed to recover disk space. The prior active 075114
+release remains intact for rollback.

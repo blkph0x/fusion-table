@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-10-27T10:16:20.383Z",
+  "url": "https://gearsqueens.online/fusion",
+  "outcomes": [
+    {
+      "name": "guest mode is available and private state requires authentication",
+      "passed": true
+    },
+    {
+      "name": "strict origin, custom request header, JSON and fetch-site CSRF checks",
+      "passed": true
+    },
+    {
+      "name": "independent SQL accounts issue secure remembered or browser-only cookies",
+      "passed": true
+    },
+    {
+      "name": "private state, stale-version conflict and cross-tab account identity checks",
+      "passed": true
+    },
+    {
+      "name": "concurrent HTTP writes allow exactly one winner without lost updates",
+      "passed": true
+    },
+    {
+      "name": "login checks real password hashes and rotates opaque session tokens",
+      "passed": true
+    },
+    {
+      "name": "password change rotates current session and invalidates all old sessions",
+      "passed": true
+    },
+    {
+      "name": "logout, revoke-all and later sign-in preserve private saved kitchen",
+      "passed": true
+    }
+  ],
+  "passed": 8,
+  "testAccountsForExactSqlCleanup": [
+    {
+      "id": "ab6ad767-11c9-40f7-a83f-c9dfb8141cc9",
+      "email": "audit-a99693df-023b-4273-a3fb-6cf6e8b1345c-a@example.invalid"
+    },
+    {
+      "id": "422b513d-2ab2-47e2-ad86-bc924641bf5b",
+      "email": "audit-a99693df-023b-4273-a3fb-6cf6e8b1345c-b@example.invalid"
+    }
+  ]
+}

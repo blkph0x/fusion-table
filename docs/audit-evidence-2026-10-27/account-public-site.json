@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-27T10:16:17.725Z",
+  "deployment": {
+    "releaseId": "20261027-100658",
+    "sourceManifestSha256": "d6067b47cc705817f5169a2e5fcd38b02c9919128079001f93173af52f3c1548",
+    "gitCommit": "85cdb9cd5d39359d4e7788f85103b7f6740cd4f0",
+    "version": "0.3.0",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "accounts-complete-shopping-estimates"
+  },
+  "results": [
+    {
+      "name": "published release, version and Git commit match",
+      "passed": true
+    },
+    {
+      "name": "all ten homepage meals include recipe and per-serving prices",
+      "passed": true
+    },
+    {
+      "name": "SQL accounts available, anonymous responses private and uncached",
+      "passed": true
+    },
+    {
+      "name": "public cross-origin and missing-CSRF-header mutations rejected",
+      "passed": true
+    },
+    {
+      "name": "shared recipe renders ingredient values and shopping totals before any network price lookup",
+      "passed": true
+    },
+    {
+      "name": "recipe PDF still downloads successfully",
+      "passed": true
+    },
+    {
+      "name": "existing Android package remains available",
+      "passed": true
+    }
+  ],
+  "passed": 7
+}

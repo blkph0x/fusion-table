@@ -1,0 +1,137 @@
+FUSION TABLE 0.3.0: COMPLETE PRICING AND OPTIONAL ACCOUNTS
+Published and verified 27 October 2026 (Australia/Sydney)
+
+Live: https://gearsqueens.online/fusion/
+GitHub: https://github.com/blkph0x/fusion-table/tree/codex/accounts-pricing
+Runtime source commit: 85cdb9cd5d39359d4e7788f85103b7f6740cd4f0
+Release: 20261027-100658
+
+Delivered behaviour
+
+Every authored ingredient now has a displayed AUD value in What you will need.
+Compatible current retailer guides are used where available; the rest use
+explicitly labelled, versioned planning allowances. Per-ingredient values cover
+the quantity put into the recipe, including pantry food. The automatic shopping
+budget separately counts the packs or weighed amounts still to buy, with
+leftovers. It never promotes an allowance into a published retailer quote.
+
+All ten Discover meals (weekly pick, six shuffled suggestions, three classic
+remixes) have a recipe total, per-serving cost and actual serving count. Values
+render immediately before external lookups. Visitors without a saved location
+are prompted to choose a suburb/postcode, use precise location explicitly, or
+continue with labelled Australian planning estimates. No automatic precise
+location request is made. Non-Australian areas retain AUD allowances, not a
+claim of prices in their local currency.
+
+Pantry checkboxes immediately update the automatic shopping shortfall and the
+saved kitchen. They declare ownership without consuming stock. Reversing a new
+tick preserves known fractional quantities; repeated/duplicate uses do not
+inflate stock, and undoing a cook cannot overwrite newer pantry changes.
+The ingredient's food-used value remains visible when it is already owned.
+An actual browser check changed a 13-line A$58.30 shopping budget to 12 lines
+and A$45.30 after declaring the A$13 halloumi already owned.
+
+Optional accounts use the host's installed MariaDB software in an isolated,
+loopback-only instance on port 3307. The existing MariaDB on 3306 is unchanged.
+Guests keep browser data. Account kitchens are private SQL snapshots, restored
+only after confirmed authentication and an explicit choice to import the guest
+kitchen or use the account copy. Signed-in content does not overwrite the guest
+browser kitchen. Household settings, area, pantry, cookbook, shopping and week
+plan sync automatically with account-ID and version checks for competing tabs.
+Signing out restores the guest kitchen. Blocked browser storage has a tab-local
+fallback for account operation.
+
+Passwords use independently salted, bounded asynchronous scrypt. SQL stores
+hashed opaque session tokens, and HTTPS cookies use Secure, HttpOnly and
+SameSite=Lax with the /fusion/ path. Ordinary sessions have a 12-hour server
+limit; remembered sessions have 30-day absolute and 7-day inactivity limits.
+Password changes and sign-out on all devices revoke old sessions. SQL-backed
+attempt limits, strict same-origin mutation checks, bounded JSON and prepared
+queries are enabled. Email ownership verification and email password recovery
+are not configured; this is stated on signup. No such feature is claimed.
+
+Price gathering and defects fixed
+
+Provider caches now share duplicate work across meals, retain bounded 512-query
+results, cancel abandoned work, back off after blocked responses and cap streamed
+responses. Fixes include fresh onions matching onion gravy, reversed produce
+wording, missed one-litre bottle conversions, preparation suffixes polluting
+searches, and safe common-food brand matches. Legacy seeded produce gets a
+fresh-produce allowance even if its old category was specialty. Preserved foods,
+wrong food forms, ambiguous weighed prices and nonfood products remain excluded.
+
+Coles did not supply readable results during these checks; its limitation is
+shown and is not bypassed. On the production connection, 55 representative
+ingredient lines from 24 generated meals all had planning values; eight also
+had compatible observed store guides. This is complete budgeting coverage, not
+complete live local pricing, stock availability, or a guaranteed one-shop basket.
+Unsupported arbitrary custom units still need a manual quantity rather than a
+guessed conversion. Profile sizes, densities and yields are disclosed assumptions.
+
+Verification
+
+- All 602 application tests passed on the production Linux host, 46 suites.
+  Full typecheck passed. Lint has zero errors and one existing unused-variable
+  warning in location code. The earlier local 592-test suite and the final
+  changed-feature tests passed; the added pantry checks are included in the 602.
+- Six actual MariaDB transaction/parameter/concurrency checks passed in the
+  isolated test DB, including unique identities, session caps and atomic saves.
+- Eight complete HTTP account flows passed on the private build and again over
+  public HTTPS: signup, cookie flags, login, CSRF, private state, competing saves,
+  stale account identity, password changes, logout and revoke-all.
+- Seven public site checks passed: release/Git identity, all ten homepage prices,
+  account availability/cache protection, rejected forged mutations, shared recipe
+  values, PDF output and the existing Android download.
+- Pricing audit: all 568 canonical authored ingredient/unit pairs plus 8,810
+  generated meals and 149,954 ingredient lines; zero missing values or issues.
+  This covers all 4,250 classic/diet/region settings and 4,560 stratified meals
+  across 76 regions, 90 sides, five diets, methods and cuts, with rotated settings.
+  It is not a fresh exhaustive audit of every random seed or all free-text input.
+- Actual public pricing: 24 generated meals sampled into 55 ingredient lines,
+  ten request batches, every row valued, three invalid requests rejected.
+- Browser flows verified first-visit area prompt/search, explicit account import,
+  automatic cookbook saving, guest isolation on logout, saved account reopening,
+  and remembered session plus data surviving website and SQL service restarts.
+  All 13 ingredients on the displayed live recipe had values, with none missing.
+- A 390-pixel phone layout had no horizontal overflow and a 44-pixel account
+  control. The temporary viewport and private test tunnel were restored/closed.
+- Disposable API and browser accounts were removed by exact recorded identities.
+  Both private canaries were stopped; normal website, image and SQL services stay
+  enabled. Existing Android 1.5.7 download remains available; this is a web release.
+
+Deployment and recovery
+
+The source archive SHA-256 is
+57bcb1db4109d7592ca3ec60ea8aa1aa7906b43da483fd8298f5a76b2c9fd680
+Its 379-file source manifest SHA-256 is
+d6067b47cc705817f5169a2e5fcd38b02c9919128079001f93173af52f3c1548
+The public deployment.json independently reports this release and Git commit.
+All manifested host source files were rechecked after publishing.
+
+Runtime: /home/blkph0x/fusion-releases/20261027-100658
+Persistent recipe/price/image data: /home/blkph0x/fusion-data
+Account data: /var/lib/fusion-table-accounts
+Private settings: /etc/fusion-table/accounts.env (root-owned 0600)
+SQL service: fusion-accounts-db.service, bound only to 127.0.0.1:3307
+Rollback backup: /home/blkph0x/fusion-deploy-backups/20261027-100658
+The backup includes the former website unit and pre-cutover private SQL dump.
+The previous full release 20261027-075114 remains available for rollback.
+
+Generated dependencies/build output were removed from the inactive historical
+release 20261027-042809 after confirming no process used it and verifying its
+preserved source archive on both host and development drive. Its source and lock
+remain. This recovered roughly 945 MiB; the host had about 1.6 GiB free after the
+new release. No original project checkout, account/customer data or active release
+was removed. SQL credentials and session cookies are outside Git and the release.
+
+Evidence (docs/audit-evidence-2026-10-27)
+account-host-tests.log; account-host-sql.json; account-host-api.json;
+account-public-api.json; account-public-site.json; account-public-meal-http.json;
+account-pricing-coverage.json; account-price-sources.json; account-browser-qa.json;
+account-final-state.json; account-build-cleanup.json;
+account-public-home-prices.png; account-public-location-prompt.png;
+account-public-ingredient-prices.png.
+
+Implementation details: ACCOUNT_SECURITY_2026-10-27.txt and
+ACCOUNT_PRICING_BACKEND_2026-10-27.txt. Historical recipe science audits retain
+their original scope, source fingerprints and kitchen-testing limitations.
