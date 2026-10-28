@@ -10,7 +10,8 @@ import { pathToFileURL } from "node:url";
 import { setTimeout as pause } from "node:timers/promises";
 import { withDeadline } from "../lib/abort-deadline.mjs";
 import { getCut } from "../lib/cuts.ts";
-import { ingredientPreparationConflict } from "../lib/product-match.ts";
+import { ingredientPreparationConflict, isNonFoodCatalogueProduct } from "../lib/product-match.ts";
+import { freshHerbPackUnverified } from "../lib/fresh-herb-match.ts";
 import { costShoppingQuantity, ricePackPreparationUnverified } from "../lib/shopping-costs.ts";
 
 const positive = value => Number.isSafeInteger(value) && value > 0;
@@ -147,6 +148,8 @@ export function validatePriceResponse(lines, data, now = Date.now()) {
       if (coles && !offer.url) issues.push(`Coles eligible product lacks a provenance URL: ${input.name}`);
       if (offer.stock === "UNKNOWN") metrics.unknownStockGuides++;
       if (ingredientPreparationConflict(input.name, offer.productName)
+        || isNonFoodCatalogueProduct({ name: offer.productName })
+        || freshHerbPackUnverified(input.name, offer.productName, offer.packageSize)
         || ricePackPreparationUnverified(input.name, offer.productName)
         || !FINISHED.test(input.name) && FINISHED.test(offer.productName)
         || !POULTRY_SLICES.test(input.name) && POULTRY_SLICES.test(offer.productName)

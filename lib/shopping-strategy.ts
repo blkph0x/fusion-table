@@ -1,6 +1,6 @@
 import { distanceKm, MAX_RADIUS_KM, type Shop } from "./locations.ts";
 import { ingredientIdentityConflict, ingredientPreparationConflict, isNonFoodCatalogueProduct, matchProducts } from "./product-match.ts";
-import { costShoppingQuantity, isShoppingOfferSelectable, ricePackPreparationUnverified, summarizeShoppingCosts, type ShoppingCostLine, type ShoppingOffer } from "./shopping-costs.ts";
+import { costShoppingQuantity, isShoppingOfferSelectable, ricePackPreparationUnverified, shoppingHerbPackUnverified, summarizeShoppingCosts, type ShoppingCostLine, type ShoppingOffer } from "./shopping-costs.ts";
 import { normalizeShoppingLine, type ShoppingLine } from "./shopping.ts";
 
 export type ShoppingStrategyMode = "cheapest" | "woolworths" | "coles" | "aldi" | "iga";
@@ -104,7 +104,7 @@ function localAssignment(shop: Shop, kind: "butcher" | "produce"): ShoppingStrat
 }
 function safeOffer(line: ShoppingLine, offer: ShoppingOffer): boolean {
   if (!isShoppingOfferSelectable(offer) || isNonFoodCatalogueProduct({ name: offer.productName })) return false;
-  if (ingredientIdentityConflict(line.name, offer.productName) || ingredientPreparationConflict(line.name, offer.productName) || ricePackPreparationUnverified(line.name, offer.productName)) return false;
+  if (ingredientIdentityConflict(line.name, offer.productName) || ingredientPreparationConflict(line.name, offer.productName) || ricePackPreparationUnverified(line.name, offer.productName) || shoppingHerbPackUnverified(line.name, offer)) return false;
   const identity = matchProducts(line.name, [{ stockcode: null, name: offer.productName, priceCents: offer.priceCents, packageSize: offer.packageSize, inStock: offer.stock === "IN_STOCK", available: offer.stock === "IN_STOCK" }])[0];
   if (!identity || !(identity.selected || identity.reviewable || identity.nameReviewable)) return false;
   // Cached totals for an old amount must not masquerade as this line's cost.

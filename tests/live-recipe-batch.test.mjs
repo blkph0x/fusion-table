@@ -48,6 +48,22 @@ function dataFor(productName = "Fresh Ginger Punnet", packageSize = "100g") {
   return { providerStatuses: [{ id: "coles", status: "ready" }], lines: [{ ...line, planningEstimate: estimateIngredientCost(line), chosenOfferId: "offer", estimatedCents: 300, offers: [{ id: "offer", productName, priceCents: 300, packageSize, stock: "IN_STOCK", eligible: true, freshness: "current", fetchedAt: new Date(now).toISOString(), source: "coles-online-catalogue", scope: "chain-online", url: "https://www.coles.com.au/product/fresh-ginger", cost: { lineCents: 300 } }] }] };
 }
 
+test("captured turkey, kitchenware, mixed-carrot and ambiguous-herb failures fail the live audit", () => {
+  const captures = [
+    { name: "Turkey breast fillets", amount: 1800, unit: "g", product: "Luv-A-Duck Fresh Duck Breast Fillets", pack: "380g", price: 1550, total: 7750 },
+    { name: "Soft tortillas", amount: 14, unit: "each", product: "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)", pack: "1 each", price: 3093, total: 43302 },
+    { name: "Carrot", amount: 400, unit: "g", product: "Season's Pride Carrot, Sweet Corn & Broccoli", pack: "500g", price: 299, total: 299 },
+    { name: "Coriander leaves for the side", amount: 18.75, unit: "g", product: "MasterFoods Coriander Leaves", pack: "5g", price: 380, total: 1520 },
+  ];
+  for (const capture of captures) {
+    const input = { id: "capture", name: capture.name, amount: capture.amount, unit: capture.unit };
+    const data = dataFor(capture.product, capture.pack), row = data.lines[0];
+    Object.assign(row, input, { planningEstimate: estimateIngredientCost(input), estimatedCents: capture.total });
+    Object.assign(row.offers[0], { priceCents: capture.price, cost: { lineCents: capture.total } });
+    assert.ok(validatePriceResponse([input], data, now).issues.some(issue => issue.includes("Wrong food/preparation")), capture.name);
+  }
+});
+
 test("live price validation catches old cookie matches, wrong units, stock and stale source evidence", () => {
   const valid = validatePriceResponse([line], dataFor(), now);
   assert.deepEqual(valid.issues, []); assert.equal(valid.metrics.colesPricedMatches, 1); assert.equal(valid.metrics.colesSelectedGuides, 1);

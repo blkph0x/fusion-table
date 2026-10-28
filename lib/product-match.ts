@@ -6,6 +6,7 @@
 
 import { MEAT_CUTS } from "./cuts.ts";
 import { foldFoodWord } from "./food-words.ts";
+import { freshHerbPackUnverified } from "./fresh-herb-match.ts";
 
 export type StockFlag = "IN_STOCK" | "OUT_OF_STOCK" | "UNKNOWN";
 
@@ -48,16 +49,29 @@ const STOP = new Set([
   "per", "kg", "each", "approx", "selected", "product", "free", "range", "macro",
 ]);
 
-const PROTEINS = ["chicken", "turkey", "beef", "lamb", "pork", "prawn", "salmon", "tofu"] as const;
+// Named proteins remain different ingredients even when their cut words overlap.
+// The white-fish members are the authored aliases in meal-catalog.ts; the
+// regression suite checks that those aliases stay supported.
+const WHITE_FISH = new Set(["cod", "hoki", "barramundi", "haddock", "pollock", "hake", "basa"]);
+const FINFISH = new Set([...WHITE_FISH, "salmon", "tuna", "sardine", "trout", "mackerel", "snapper", "whiting", "flathead", "tilapia"]);
+const ANIMAL_PROTEINS = new Set(["chicken", "turkey", "beef", "lamb", "pork", "duck", "kangaroo", "veal", "goat", "venison", "mutton", "rabbit", "quail", "goose", ...FINFISH, "prawn", "crab", "lobster", "squid", "octopus", "scallop", "mussel", "oyster", "fish", "white-fish", "egg", "duck-egg", "quail-egg", "goose-egg"]);
+const PLANT_PROTEINS: readonly (readonly [string, RegExp])[] = [
+  ["tofu", /\btofu\b/], ["tempeh", /\btempeh\b/], ["chickpea", /\bchickpea\b/], ["lentil", /\blentil\b/],
+  ["butter-bean", /\bbutter ?bean\b/], ["black-bean", /\bblack bean\b/], ["kidney-bean", /\b(?:red )?kidney bean\b/],
+  ["jackfruit", /\bjackfruit\b/], ["mushroom", /\bmushroom\b/], ["eggplant", /\beggplant\b/],
+  ["cauliflower", /\bcauliflower\b/], ["pumpkin", /\b(?:pumpkin|butternut(?: squash)?)\b/],
+  ["sweet-potato", /\bsweet potato\b/], ["courgette", /\bcourgette\b/], ["broccoli", /\bbroccoli\b/],
+];
 
 /** Drop obvious non-food listings without treating a matching title as dietary evidence. */
 export function isNonFoodCatalogueProduct(product: Pick<CatalogueProduct, "name" | "categories">): boolean {
   const name = product.name.slice(0, 500).toLowerCase().replace(/[^a-z0-9]+/g, " ");
   const petAccessory = /\b(?:dogs?|pupp(?:y|ies)|cats?|kittens?|pets?)\b.{0,64}\b(?:leads?|leashes?|collars?|harness(?:es)?|toys?|beds?|bowls?|treats?|food|kibble|litter|shampoo|grooming)\b/;
   const kitchenTool = /\b(?:juicers?|squeezers?|slicers?|dicers?|spirali[sz]ers?|mandolines?|cutter gadgets?|vegetable cutters?|vegetable choppers?|food choppers?|citrus press|lemon press|garlic press|garlic crusher|tofu press|vegetable peeler|potato peeler|cheese grater|zester|knife sharpener|knife block|chopping board|cutting board|kitchen utensil|measuring cups?|measuring spoons?|baking trays?|baking tins?|muffin trays?|muffin tins?|food processor)\b/;
+  const servingTool = /\b(?:taco|tortilla|burrito|egg|toast|rib)\s+(?:holders?|stands?|racks?|warmers?)\b|\b(?:holders?|stands?|racks?)\s+for\s+(?:soft\s+or\s+hard\s+)?(?:tacos?|tortillas?|burritos?)\b|\b(?:stainless steel|steel|metal|silicone|ceramic|plastic)\b.{0,70}\b(?:holders?|racks?|baking trays?|serving trays?|moulds?|molds?|tongs?|spatulas?)\b/;
   const hardware = /\b(?:cordless drill|power drill|hammer drill|drill bits?|screwdrivers?|socket sets?|garden hoses?|garden stakes?|power tools?|wall plugs?|paint brushes?|spray paint|sandpaper|wood screws?|allen keys?|hex keys?|chicken wire|wire mesh)\b/;
   const household = /\b(?:dishwashing liquid|dishwasher (?:tablets?|capsules?|detergent)|laundry detergent|cleaning spray|surface cleaner|hand wash|body wash|scented candles?)\b/;
-  if (petAccessory.test(name) || kitchenTool.test(name) || hardware.test(name) || household.test(name)) return true;
+  if (petAccessory.test(name) || kitchenTool.test(name) || servingTool.test(name) || hardware.test(name) || household.test(name)) return true;
   const categories = (product.categories || []).slice(0, 12).map(value => value.slice(0, 160).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim());
   const plantingName = /\b(?:seedlings?|seed tapes?|seed mats?|seed raising kits?|grow kits?|growing kits?|planting seeds?|sowing seeds?|seeds? for (?:planting|sowing|growing))\b/;
   const gardenCategory = categories.some(category => /^(?:garden|gardening|plants)$|\bgardening\b|\b(?:garden|planting|flower) seeds?\b|\bseeds? (?:and )?(?:bulbs?|seedlings?|plants?)\b|\b(?:lawn|home|outdoor) (?:and )?garden\b/.test(category));
@@ -182,6 +196,9 @@ export function canonicalizeProductText(value: string): string {
     .replace(/\s+for the (?:side sauce|side|rice|corn)\s*$/g, "")
     .replace(/\bwagu\b/g, "wagyu")
     .replace(/\byoghurt\b/g, "yogurt")
+    .replace(/\bhaloumi\b/g, "halloumi")
+    .replace(/\bbean curd\b/g, "tofu")
+    .replace(/\bcalamari\b/g, "squid")
     .replace(/\bcilantro\b/g, "coriander")
     .replace(/\bshrimps?\b/g, "prawn")
     .replace(/\bgarbanzo(?: beans?)?\b/g, "chickpea")
@@ -193,6 +210,7 @@ export function canonicalizeProductText(value: string): string {
     .replace(/\s+/g, " ")
     .trim();
   text = text.split(" ").map(stem).join(" ");
+  text = text.replace(/\blima bean\b/g,"butter bean");
   if (!/\b(black pepper|white pepper|peppercorn)\b/.test(text)) {
     text = text.replace(/\bbell pepper\b/g, "capsicum");
     text = text.replace(/\b(red|green|yellow|orange) pepper\b/g, "$1 capsicum");
@@ -219,7 +237,11 @@ export function canonicalizeProductText(value: string): string {
 }
 
 function tokensOf(canonical: string): string[] {
-  return canonical.split(" ").filter((token) => token.length > 1 && !STOP.has(token));
+  const tokens = canonical.split(" ").filter((token) => token.length > 1 && !STOP.has(token));
+  // A generic fish request and an explicitly named finfish need one common
+  // scoring token; the identity guard still rejects different named species.
+  if ([...proteinsOf(canonical)].some(protein => FINFISH.has(protein)) && !tokens.includes("fish")) tokens.push("fish");
+  return tokens;
 }
 
 function familiesOf(canonical: string): Set<string> {
@@ -233,10 +255,50 @@ function familiesOf(canonical: string): Set<string> {
 
 function proteinsOf(canonical: string): Set<string> {
   const found = new Set<string>();
-  for (const protein of PROTEINS) {
-    if (new RegExp(`\\b${protein}\\b`).test(canonical)) found.add(protein);
+  const text = canonical.replace(/\bluv a duck\b/g," ").replace(/\bsquid(?: brand)?(?=\s+fish sauce\b)/g," ").replace(/\s+/g," ").trim();
+  const dairy = dairyIdentity(text);
+  const dairyFood = dairy && dairy.kind !== "butter-bean" && !/\b(?:meat|steak|mince|fillet|sausage|breast|thigh|drumstick|wing|chop|rib|cutlet|roast)\b/.test(text);
+  const eggs = /\begg\b/.test(text);
+  if (eggs) {
+    found.add(/\bduck\b/.test(text) ? "duck-egg" : /\bquail\b/.test(text) ? "quail-egg" : /\bgoose\b/.test(text) ? "goose-egg" : "egg");
   }
+  if (!dairyFood && !eggs) {
+    for (const protein of ANIMAL_PROTEINS) {
+      if (["fish", "white-fish", "egg", "duck-egg", "quail-egg", "goose-egg", "oyster"].includes(protein)) continue;
+      if (new RegExp(`\\b${protein}\\b`).test(text)) found.add(protein);
+    }
+    // "Oyster blade" is a beef cut and oyster mushrooms are fungi.
+    if (/\boyster\b(?!\s+(?:blade|mushroom)\b)/.test(text)) found.add("oyster");
+    if (![...found].some(protein => FINFISH.has(protein)) && /\bfish\b/.test(text)) found.add(/\bwhite fish\b/.test(text) ? "white-fish" : "fish");
+  }
+  for (const [protein,pattern] of PLANT_PROTEINS) if (pattern.test(text)) found.add(protein);
+  if (dairy?.kind === "cheese") found.add(/\bhalloumi\b/.test(text) ? "halloumi" : /\bpaneer\b/.test(text) ? "paneer" : "cheese");
   return found;
+}
+
+function acceptsProtein(wanted: string, offered: string): boolean {
+  return wanted === offered || wanted === "white-fish" && WHITE_FISH.has(offered) || wanted === "fish" && (offered === "white-fish" || FINFISH.has(offered));
+}
+function matchingProteins(wanted: Set<string>, seen: Set<string>): boolean {
+  return wanted.size > 0 && seen.size > 0 && [...wanted].every(w => [...seen].some(s => acceptsProtein(w,s))) && [...seen].every(s => [...wanted].some(w => acceptsProtein(w,s)));
+}
+function proteinIdentityConflict(wanted: string, seen: string): boolean {
+  const requested = proteinsOf(wanted), offered = proteinsOf(seen);
+  const raw = (text: string, proteins: Set<string>) => proteins.size > 0 && !ingredientFoodForms(text).size && !/\boil\b/.test(text);
+  // A protein-flavoured oil or stock is not a raw protein ingredient. Stock and
+  // sauce differences are also guarded by the existing food-form checks.
+  if (raw(wanted,requested) && /\boil\b/.test(seen) || raw(seen,offered) && /\boil\b/.test(wanted)) return true;
+  if (requested.size && offered.size) return !matchingProteins(requested,offered);
+  if (requested.size && !offered.size) {
+    // Preserve the supported Australian bare beef-cut aliases. Shared words
+    // such as "breast", "mince" or "fillet" cannot establish another species.
+    const bareBeef = requested.size === 1 && requested.has("beef") && [...familiesOf(wanted)].some(family => ["sirloin","scotch","oyster-blade"].includes(family) && familiesOf(seen).has(family));
+    return !bareBeef;
+  }
+  // Milk/cheese wording identifies a dairy ingredient, not the meat of the
+  // animal named on its label (for example goat milk versus goat meat).
+  if (dairyIdentity(wanted) && [...offered].some(protein => ANIMAL_PROTEINS.has(protein))) return true;
+  return false;
 }
 
 function breedOf(canonical: string): "ordinary" | "angus" | "wagyu" {
@@ -306,7 +368,8 @@ const FINISHED_FOOD_FORMS: readonly (readonly [string, RegExp])[] = [
 const RAW_PRODUCE_WORDS = new Set(["ginger", "garlic", "onion", "scallion", "shallot", "leek", "tomato", "potato", "carrot", "beetroot", "broccoli", "cauliflower", "cabbage", "capsicum", "courgette", "eggplant", "cucumber", "spinach", "lettuce", "lemon", "lime", "orange", "apple", "banana", "pear", "mushroom", "coriander", "parsley", "basil", "mint", "dill", "rosemary", "thyme", "sage", "chilli", "celery", "fennel", "asparagus"]);
 const PRODUCE_PREPARATIONS: readonly RegExp[] = [
   /\b(?:jarred|bottled|canned|tinned|preserved)\b/, /\bpickled\b/, /\b(?:candied|crystallised|crystalized)\b/,
-  /\b(?:ground|dried|dehydrated)\b/, /\b(?:cooked|roasted|grilled|baked|fried|caramelised|caramelized)\b/,
+  /\b(?:ground|dried|dehydrated)\b/, /\b(?:cooked|roast|roasted|grilled|baked|fried|steamed|caramelised|caramelized)\b/,
+  /\b(?:frozen|quicksteam|quick steam|steam fresh|ready to steam|microwave)\b/,
   /\bready cut\b/,
 ];
 
@@ -328,6 +391,8 @@ function dairyIdentity(value: string): {kind:string;plant:boolean;bases:Set<stri
 }
 function ingredientIdentityConflictCanonical(wanted: string, seen: string): boolean {
   const request=identityText(wanted), product=identityText(seen), offeredWords=new Set(product.split(" "));
+  if (isNonFoodCatalogueProduct({name:product})) return true;
+  if (proteinIdentityConflict(request,product)) return true;
   if (request.split(" ").some(word => FOOD_ANCHORS.has(word) && !offeredWords.has(word))) return true;
   // Sweet potato is a different ingredient, not a named variety of potato.
   if (/\bpotato\b/.test(request) && /\bpotato\b/.test(product) && /\bsweet\b/.test(request)!==/\bsweet\b/.test(product)) return true;
@@ -364,7 +429,7 @@ export function ingredientIdentityConflict(requested: string, offered: string): 
 function otherIngredientPreparationConflict(wanted: string, seen: string): boolean {
   // A flavour word inside a finished food is not the requested ingredient.
   // Group biscuit/cookie and naan/bread wording, while preserving explicit foods.
-  const produceRequest = wanted.split(" ").some(word => RAW_PRODUCE_WORDS.has(word));
+  const produceRequest = wanted.split(" ").some(word => RAW_PRODUCE_WORDS.has(word)) || /\b(?:corn|pumpkin|butternut|okra|kale|avocado|green bean|snow pea|sugar snap pea)\b/.test(wanted);
   // Curd also names tofu, risotto also names uncooked rice, and bake can be a
   // flour-brand word. These are finished-food evidence only for produce queries.
   for (const [kind, form] of FINISHED_FOOD_FORMS) {
@@ -376,7 +441,14 @@ function otherIngredientPreparationConflict(wanted: string, seen: string): boole
     && !FINISHED_FOOD_FORMS.some(([, form]) => form.test(wanted))
     && !/\b(?:seed|flake|stem ginger)\b/.test(wanted);
   if (!rawProduce) return false;
-  for (const preparation of PRODUCE_PREPARATIONS) if (preparation.test(seen) && !preparation.test(wanted)) return true;
+  for (const preparation of PRODUCE_PREPARATIONS) if (preparation.test(seen) !== preparation.test(wanted)) return true;
+  if (!/\b(?:mixed|mix|medley|vegetable|veggie|salad)\b/.test(wanted)) {
+    const produceNames = (value: string) => new Set(value.replace(/\bsweet potato\b/g,"sweetpotato").replace(/\bbutternut(?: squash)?\b/g,"pumpkin").split(" ").filter(word => RAW_PRODUCE_WORDS.has(word) || ["sweetpotato","corn","pea","bean","pumpkin","okra","kale","avocado"].includes(word)));
+    const requested = produceNames(wanted), offered = produceNames(seen);
+    // A 400 g carrot requirement cannot use 400 g of a carrot/corn/broccoli pack.
+    if (requested.size === 1 && [...offered].some(food => !requested.has(food))) return true;
+    if (requested.size === 1 && /\b(?:mixed vegetables?|vegetable mix|vegetable medley|mixed veggies|roast veggies|roast vegetables)\b/.test(seen)) return true;
+  }
   if (/\b(?:ginger|garlic)\b/.test(wanted)) {
     for (const preparation of [/\bcrushed\b/, /\bchopped\b/]) {
       if (preparation.test(seen) && !preparation.test(wanted) && !/\b(?:fresh|root|punnet|loose|bulb|clove)\b/.test(seen)) return true;
@@ -453,7 +525,7 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     const seenProteins = proteinsOf(seen);
     const seenBreed = breedOf(seen);
     const seenBone = boneStyle(seen);
-    if (wantedProteins.size && seenProteins.size && [...wantedProteins].some((protein) => !seenProteins.has(protein))) continue;
+    if (wantedProteins.size && seenProteins.size && !matchingProteins(wantedProteins,seenProteins)) continue;
     if (wantedProteins.size && !seenProteins.size && ![...wantedCuts].some((family) => seenCuts.has(family))) continue;
     if (cutsConflict(wantedCuts, seenCuts)) continue;
     if (wantedBreed !== "ordinary" && wantedBreed !== seenBreed) continue;
@@ -464,7 +536,7 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
 
     let score = overlap * 10;
     if (wantedTokens.length > 0 && overlap === wantedTokens.length) score += 15;
-    if (wantedProteins.size && [...wantedProteins].every((protein) => seenProteins.has(protein))) score += 25;
+    if (matchingProteins(wantedProteins,seenProteins)) score += 25;
     if (sharedCut) score += 30;
     if (wantedBreed !== "ordinary" && wantedBreed === seenBreed) score += 15;
     if (wantedBreed === "ordinary" && seenBreed === "ordinary") score += 5;
@@ -476,17 +548,21 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     if (boneMismatch) score -= 15;
 
     const priced = product.priceCents != null && product.priceCents > 0;
+    const freshHerbUnverified = freshHerbPackUnverified(query,product.name,product.packageSize);
     const claims = dietaryClaimsOf([product.name, ...(product.dietaryClaims || [])]);
     const missingClaims = [...requiredClaims].filter((claim) => !claims.has(claim) && !(claim === "vegetarian" && claims.has("vegan")));
     let selected = !premium && !boneMismatch && priced && overlap > 0;
+    if (freshHerbUnverified) selected = false;
     if (missingClaims.length) selected = false;
     if (wantedCuts.size > 0 && !sharedCut) selected = false;
-    if (wantedProteins.size > 0 && seenProteins.size > 0 && ![...wantedProteins].every((protein) => seenProteins.has(protein))) selected = false;
+    if (wantedProteins.size > 0 && seenProteins.size > 0 && !matchingProteins(wantedProteins,seenProteins)) selected = false;
     if (!(overlap === wantedTokens.length || sharedCut || score >= 40)) selected = false;
 
     const nameMatched = selected;
     selected &&= stock === "IN_STOCK";
-    const reason = premium
+    const reason = freshHerbUnverified
+      ? "This tiny herb pack does not establish fresh leaves. Its pack price is shown, but it cannot price the fresh herb quantity; choose an explicitly fresh bunch, punnet or pot."
+      : premium
       ? `${seenBreed === "wagyu" ? "Wagyu" : "Angus"} is another option. It was not selected for an ordinary cut.`
       : boneMismatch
         ? "The bone-in and boneless names do not agree, so this was not selected."
@@ -511,8 +587,8 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
       score,
       selected,
       nameMatched,
-      nameReviewable: priced && missingClaims.length === 0 && !boneMismatch && !premium && overlap > 0,
-      reviewable: stock === "IN_STOCK" && priced && missingClaims.length === 0 && !boneMismatch && overlap > 0,
+      nameReviewable: !freshHerbUnverified && priced && missingClaims.length === 0 && !boneMismatch && !premium && overlap > 0,
+      reviewable: !freshHerbUnverified && stock === "IN_STOCK" && priced && missingClaims.length === 0 && !boneMismatch && overlap > 0,
       ...(product.preparedForm ? { preparedForm: product.preparedForm } : {}),
       reason,
     });
