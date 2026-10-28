@@ -1,0 +1,96 @@
+COLES AUTOMATIC PRICE COLLECTION — 28 OCTOBER 2026
+
+The application now has a primary-source automatic Coles navigation-data reader.
+There is no third-party price feed, retailer login or price-entry requirement.
+
+What changed
+
+Coles' normal product-search route is /search/products?q=..., rather than the
+older /search?q=... entry. The normal public page publishes a Next.js deployment
+ID. Its own public navigation JSON contains the same product, selling-price,
+pack and availability fields. No deployment ID is hardcoded in application code.
+
+The host's ordinary headless browser and HTML requests returned a small browser
+barrier. An ordinary headed Chromium browser under Xvfb could read the public
+homepage with JavaScript and cookies enabled. The browser worker now retains one
+anonymous Coles cookie context for fifteen idle minutes. It reads the homepage
+to obtain deployment metadata and reloads once only when the visible page asks
+for a JavaScript/cookie refresh. It never solves a CAPTCHA, hides webdriver,
+changes the browser's identity, copies personal cookies or uses proxy rotation.
+
+Price requests use the published HTTPS navigation JSON on www.coles.com.au.
+The browser is needed to refresh deployment metadata, not to open every product
+search. A private /coles-build endpoint shares the worker's existing bounded
+Coles queue and browser-check backoff. It accepts loopback server requests only.
+
+Metadata and freshness
+
+An observation contains only version, buildId, observedAt and official sourceUrl.
+The Node application persists it as coles-build.json in FUSION_DATA_DIR, using
+atomic writes and mode 0600. It contains no price, account, cookie or credential.
+An old observation is a candidate URL only. Fresh, valid official product JSON
+must be returned before any price is quoted. Successful JSON renews the version
+observation; a 404 causes one shared version rediscovery and at most one request
+using a different version. An unchanged rejected version is not requested again.
+Late responses from a rejected version cannot supply prices or replace newer
+metadata. Product-price cache timestamps remain separate from version metadata.
+
+The adapter preserves selling prices, exact pack sizes and explicit availability.
+It never uses the comparison price, crossed-out price or a multi-buy total as the
+single-pack price. Explicit weighted-product metadata makes a pack approximate,
+even if the size label omitted that warning. Approximate packs do not receive an
+invented exact basket cost. Existing ingredient, preparation and non-food checks
+apply equally to this source and retained results.
+
+Coles prices are published online guides in the retailer's default context.
+They are not a verified quote from the visitor's nearest Coles branch. Coles says
+prices can vary by store and channel:
+https://www.coles.com.au/about/coles-app/special-terms
+
+Operational limits
+
+- Fixed minimum 1,500 ms between navigation-data requests, with shared caching.
+- Four adapter jobs and a sixteen-entry wait queue; cancelled waiting work is
+  removed and cannot reserve phantom future request slots.
+- Ten-minute product cache, thirty-minute shared version-discovery cache.
+- Twenty-four-second navigation budget inside a thirty-two-second adapter limit
+  and the existing thirty-five-second shopping API limit.
+- Three MB maximum product response and four KB browser metadata response.
+- Strict official HTTPS origin, validated version IDs and rejected redirects.
+- Retailer refusals stop further data queries. Retry-After is honoured for 429s;
+  ordinary browser barriers retain their existing two-minute worker backoff.
+
+If the publisher requires a human check or withdraws public data, the source
+reports that failure and the page retains labelled planning values. Successful
+responses are not manufactured from the barrier page or stale product snapshots.
+
+Host profile
+
+Keep the existing worker service's private loopback listener and hardening.
+To use its ordinary headed browser on a Linux host with Xvfb and xauth installed,
+apply this operator service override (adapt the verified installation path):
+
+[Service]
+Environment=RETAILER_BROWSER_HEADLESS=0
+ExecStart=
+ExecStart=/usr/bin/xvfb-run -a -s "-screen 0 1365x900x24 -nolisten tcp" /usr/bin/node /opt/fusion-retailer-browser/current/scripts/retailer-browser.mjs
+
+Xvfb starts in the same service/private temporary namespace; its display does not
+listen on TCP. The default renderer remains headless when the operator flag is
+absent. No public display port or personal browser profile is needed.
+
+The application already uses FUSION_BROWSER_PRICE_URL=http://127.0.0.1:8794/render.
+Its metadata URL is derived as http://127.0.0.1:8794/coles-build. Deploy the updated
+worker before the updated application. FUSION_DATA_DIR must remain writable by
+the application account. No new API key or retailer account is required.
+
+Verification
+
+The focused suite covers public JSON, canonical URLs, weighted packs, source
+provenance, shared discovery, version changes, unchanged rejected versions,
+24-hour idle metadata, late responses, cancellation, fixed pacing, Retry-After,
+body limits and deadlines. A real Chromium fixture proves one requested refresh
+and retention of anonymous cookies across separate query pages. Private endpoint
+tests cover origin rejection, browser-check backoff and response deadlines.
+The wider worker security, branch-hydration and forced-GC deadline tests also pass.
+Live deployment and many-meal checks are recorded by the release verification.

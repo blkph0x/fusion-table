@@ -8,9 +8,10 @@ Type=simple
 User=fusion-retailer
 Group=fusion-retailer
 WorkingDirectory=/opt/fusion-table
-ExecStart=/usr/bin/node /opt/fusion-table/scripts/retailer-browser.mjs
+ExecStart=/usr/bin/xvfb-run -a -s "-screen 0 1365x900x24 -nolisten tcp" /usr/bin/node /opt/fusion-table/scripts/retailer-browser.mjs
 Environment=NODE_ENV=production
 Environment=RETAILER_BROWSER_PORT=8794
+Environment=RETAILER_BROWSER_HEADLESS=0
 Environment=RETAILER_CHROMIUM_PATH=/usr/bin/chromium
 Environment=HOME=/var/lib/fusion-retailer-browser
 StateDirectory=fusion-retailer-browser

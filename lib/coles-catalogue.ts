@@ -5,13 +5,17 @@ import { withDeadline } from "./abort-deadline.mjs";
 import { retailerFailureStatus, shouldBackOffRetailer, type RetailerPageRenderer } from "./aldi-catalogue.ts";
 
 export const COLES_CATALOGUE_LABEL = "Coles online price guide. Choose your store on Coles to confirm local pricing and availability.";
-const SEARCH_URL = "https://www.coles.com.au/search";
+export const COLES_SEARCH_URL = "https://www.coles.com.au/search/products";
+const SEARCH_URL = COLES_SEARCH_URL;
 const MAX_BYTES = 3_000_000;
 const CACHE_MS = 10 * 60 * 1000;
 const MAX_CACHE = 512;
-type Snapshot = { products: CatalogueProduct[]; fetchedAt: string; at: number; storeLabel?: string };
+export type ColesCatalogueSnapshot = { products: CatalogueProduct[]; fetchedAt: string; at: number; storeLabel?: string; collectionMethod?: "browser" | "http" };
+export type ColesNavigationReader = (query: string, signal?: AbortSignal) => Promise<ColesCatalogueSnapshot>;
+type Snapshot = ColesCatalogueSnapshot;
 const catalogueCache = new SharedPriceCache<Snapshot>(MAX_CACHE, CACHE_MS);
 const browserCaches = new WeakMap<RetailerPageRenderer, SharedPriceCache<Snapshot>>();
+const navigationCaches = new WeakMap<ColesNavigationReader, SharedPriceCache<Snapshot>>();
 const backoff = new WeakMap<object, { until: number; message: string; status: NonNullable<PriceQuote["status"]> }>();
 let active = 0;
 const waiters: (() => void)[] = [];
@@ -34,6 +38,33 @@ function attributes(tag: string): Record<string, string> {
 function secureColesUrl(raw: string): string {
   const url = new URL(raw, "https://www.coles.com.au");
   if (url.origin !== "https://www.coles.com.au" || url.username || url.password) throw new Error("Coles redirected the search. Open Coles to check this item.");
+  return url.toString();
+}
+
+/** Deployment IDs are discovered from Coles' own public page or manifest link. */
+export function parseColesBuildId(html: string): string | null {
+  if (html.length > MAX_BYTES) return null;
+  const script = /<script\b[^>]*\bid=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script\s*>/i.exec(html);
+  if (script) {
+    try {
+      const id = record(JSON.parse(script[1]))?.buildId;
+      if (typeof id === "string" && /^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(id)) return id;
+    } catch { /* An unreadable page is not deployment evidence. */ }
+  }
+  for (const match of html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi)) {
+    try {
+      const url = new URL(match[1], "https://www.coles.com.au");
+      const id = /^\/_next\/static\/([A-Za-z0-9][A-Za-z0-9._-]{0,149})\/_buildManifest\.js$/.exec(url.pathname)?.[1];
+      if (url.origin === "https://www.coles.com.au" && !url.username && !url.password && !url.search && !url.hash && id) return id;
+    } catch { /* Ignore foreign or malformed script references. */ }
+  }
+  return null;
+}
+
+export function colesNavigationUrl(buildId: string, query: string): string {
+  if (!/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(buildId)) throw new Error("Coles' current catalogue version could not be established.");
+  const url = new URL(`https://www.coles.com.au/_next/data/${buildId}/search/products.json`);
+  url.searchParams.set("q", cleanSearchQuery(query));
   return url.toString();
 }
 
@@ -101,7 +132,18 @@ export function parseColesSearch(html: string): CatalogueProduct[] {
   if (!script) throw new Error("Coles did not publish readable product results. Open Coles to check this item.");
   let parsed: unknown;
   try { parsed = JSON.parse(script[1]); } catch { throw new Error("The Coles product results could not be read."); }
-  const root = record(parsed), props = record(root?.props), page = record(props?.pageProps), results = record(page?.searchResults);
+  const root = record(parsed), props = record(root?.props);
+  return parseColesProductData(record(props?.pageProps), html);
+}
+
+/** Same public product schema returned by Next.js client navigation. */
+export function parseColesNavigationData(payload: unknown): CatalogueProduct[] {
+  const root = record(payload);
+  return parseColesProductData(record(root?.pageProps), "");
+}
+
+function parseColesProductData(page: Record<string, unknown> | null, html: string): CatalogueProduct[] {
+  const results = record(page?.searchResults);
   if (!results || !Array.isArray(results.results)) throw new Error("Coles did not publish readable product results. Open Coles to check this item.");
   const products: CatalogueProduct[] = [];
   const seen = new Set<string>();
@@ -117,10 +159,13 @@ export function parseColesSearch(html: string): CatalogueProduct[] {
     const name = description || [brand, title].filter(Boolean).join(" ");
     const available = typeof row.availability === "boolean" ? row.availability : null;
     const quantity = typeof row.availableQuantity === "number" && Number.isFinite(row.availableQuantity) ? row.availableQuantity : null;
+    const unit = record(pricing?.unit);
+    let packageSize = text(row.size, 100) || null;
+    if (unit?.isWeighted === true && packageSize && !/approx|average|\bavg\b/i.test(packageSize)) packageSize = `approx. ${packageSize}`;
     const product: CatalogueProduct = {
       name,
       priceCents,
-      packageSize: text(row.size, 100) || null,
+      packageSize,
       stockcode: id,
       available,
       inStock: available === false ? false : quantity != null ? quantity > 0 : available,
@@ -187,11 +232,12 @@ async function readHtml(url: string, fetchImpl: typeof fetch, signal: AbortSigna
   return new TextDecoder().decode(output);
 }
 
-async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer): Promise<{ snapshot: Snapshot; cached: boolean }> {
+async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, navigation?: ColesNavigationReader): Promise<{ snapshot: Snapshot; cached: boolean }> {
   const key = query.toLocaleLowerCase("en-AU");
   let selectedCache = catalogueCache;
   if (renderer) { selectedCache = browserCaches.get(renderer) || new SharedPriceCache<Snapshot>(MAX_CACHE, CACHE_MS); browserCaches.set(renderer, selectedCache); }
-  const identity = renderer || fetchImpl;
+  if (navigation) { selectedCache = navigationCaches.get(navigation) || new SharedPriceCache<Snapshot>(MAX_CACHE, CACHE_MS); navigationCaches.set(navigation, selectedCache); }
+  const identity = navigation || renderer || fetchImpl;
   const result = await selectedCache.load(key, fetchImpl, async sharedSignal => {
     const before = backoff.get(identity);
     if (before && before.until > Date.now()) throw Object.assign(new Error(before.message), { providerStatus: before.status });
@@ -199,8 +245,13 @@ async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal
     try {
       const paused = backoff.get(identity);
       if (paused && paused.until > Date.now()) throw Object.assign(new Error(paused.message), { providerStatus: paused.status });
+      if (navigation) {
+        const snapshot = await withDeadline(32_000, [sharedSignal], boundedSignal => navigation(query, boundedSignal));
+        backoff.delete(identity);
+        return snapshot;
+      }
       const html = await withDeadline(renderer ? 32_000 : 12_000, [sharedSignal], boundedSignal => readHtml(`${SEARCH_URL}?q=${encodeURIComponent(query)}`, fetchImpl, boundedSignal, 1, renderer));
-      const snapshot = { products: parseColesSearch(html), fetchedAt: new Date().toISOString(), at: Date.now(), storeLabel: publishedStoreLabel(html) };
+      const snapshot = { products: parseColesSearch(html), fetchedAt: new Date().toISOString(), at: Date.now(), storeLabel: publishedStoreLabel(html), collectionMethod: renderer ? "browser" as const : "http" as const };
       backoff.delete(identity);
       return snapshot;
     } catch (error) {
@@ -214,20 +265,21 @@ async function load(query: string, fetchImpl: typeof fetch, signal?: AbortSignal
   return { snapshot: result.value, cached: result.cached };
 }
 
-export async function lookupColesQuery(raw: string, fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer): Promise<PriceQuote> {
+export async function lookupColesQuery(raw: string, fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, navigation?: ColesNavigationReader): Promise<PriceQuote> {
   const query = cleanSearchQuery(raw);
   const phrases = catalogueSearchPhrases(query).slice(0, 3);
   const products: CatalogueProduct[] = [];
   const seen = new Set<string>();
   const searched: string[] = [];
-  let fetchedAt: string | null = null, cached = true, lastError = "", storeLabel: string | undefined, failureStatus: NonNullable<PriceQuote["status"]> = "needs-browser";
+  let fetchedAt: string | null = null, cached = true, lastError = "", storeLabel: string | undefined, collectionMethod: "browser" | "http" = navigation ? "http" : renderer ? "browser" : "http", failureStatus: NonNullable<PriceQuote["status"]> = "needs-browser";
   for (const phrase of phrases) {
     if (signal?.aborted) break;
     searched.push(phrase);
     try {
-      const loaded = await load(phrase, fetchImpl, signal, renderer);
+      const loaded = await load(phrase, fetchImpl, signal, renderer, navigation);
       fetchedAt = loaded.snapshot.fetchedAt; cached &&= loaded.cached;
       storeLabel = loaded.snapshot.storeLabel;
+      collectionMethod = loaded.snapshot.collectionMethod || collectionMethod;
       for (const product of loaded.snapshot.products) {
         if (seen.has(product.stockcode || product.name)) continue;
         seen.add(product.stockcode || product.name); products.push(product);
@@ -241,10 +293,10 @@ export async function lookupColesQuery(raw: string, fetchImpl: typeof fetch = fe
       break;
     }
   }
-  return { query, source: "coles-online-catalogue", label: COLES_CATALOGUE_LABEL, retailerName: "Coles", scope: "chain-online", collectionMethod: renderer ? "browser" : "http", storeLabel, status: fetchedAt ? "ready" : failureStatus, fetchedAt, cached, fulfilmentStoreId: null, searched, matches: matchProducts(query, products), error: fetchedAt ? null : lastError || "Coles prices are unavailable for this item." };
+  return { query, source: "coles-online-catalogue", label: COLES_CATALOGUE_LABEL, retailerName: "Coles", scope: "chain-online", collectionMethod, storeLabel, status: fetchedAt ? "ready" : failureStatus, fetchedAt, cached, fulfilmentStoreId: null, searched, matches: matchProducts(query, products), error: fetchedAt ? null : lastError || "Coles prices are unavailable for this item." };
 }
 
-export async function lookupColesQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer): Promise<PriceQuote[]> {
+export async function lookupColesQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, navigation?: ColesNavigationReader): Promise<PriceQuote[]> {
   if (queries.length < 1 || queries.length > 16) throw new Error("Check between 1 and 16 items at a time.");
-  return Promise.all(queries.map((query) => lookupColesQuery(query, fetchImpl, signal, renderer)));
+  return Promise.all(queries.map((query) => lookupColesQuery(query, fetchImpl, signal, renderer, navigation)));
 }

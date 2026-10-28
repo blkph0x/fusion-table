@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { lookupColesQuery, parseColesSearch } from "../lib/coles-catalogue.ts";
+import { COLES_SEARCH_URL, colesNavigationUrl, lookupColesQuery, parseColesBuildId, parseColesNavigationData, parseColesSearch } from "../lib/coles-catalogue.ts";
 import type { RetailerPageRenderer } from "../lib/aldi-catalogue.ts";
 import { costShoppingQuantity } from "../lib/shopping-costs.ts";
 
@@ -24,6 +24,46 @@ function page(rows: unknown[], links = ""): string {
   return `${links}<script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps: { searchResults: { results: rows } } } })}</script>`;
 }
 function fixture(name: string): string { return page([product({ name, description: name })]); }
+
+test("Coles anonymous search uses its current canonical route", async () => {
+  let checked: URL | undefined;
+  const fetchImpl: typeof fetch = async input => { checked = new URL(String(input)); return new Response(fixture("Canonical fixture lentils")); };
+  await lookupColesQuery("Canonical fixture lentils", fetchImpl);
+  assert.equal(COLES_SEARCH_URL, "https://www.coles.com.au/search/products");
+  assert.equal(checked?.pathname, "/search/products");
+  assert.equal(checked?.searchParams.get("q"), "Canonical fixture lentils");
+});
+
+test("public Next.js navigation data uses the same current selling-price and availability parser", () => {
+  const data = { pageProps: { searchResults: { results: [
+    product({ id: 8703004, name: "Jasmine Rice", brand: "Coles", description: "COLES JASMINE RICE 1KG", size: "1kg", pricing: { now: 3.2, was: 9, unit: { isWeighted: false, price: .32 } } }),
+    product({ id: 9540299, name: "Jasmine Rice", brand: "Coles", description: "COLES JASMINE RICE 2KG", size: "2kg", pricing: { now: 5.5, was: 15, unit: { isWeighted: false } }, availability: false }),
+  ] } }, __N_SSP: true };
+  const rows = parseColesNavigationData(data);
+  assert.deepEqual(rows.map(row => [row.stockcode, row.priceCents, row.packageSize, row.inStock]), [["8703004", 320, "1kg", true], ["9540299", 550, "2kg", false]]);
+  assert.ok(rows.every(row => row.url?.startsWith(COLES_SEARCH_URL + "?q=")));
+  for (const value of [null, {}, { pageProps: { searchResults: { results: {} } } }, { notFound: true }]) assert.throws(() => parseColesNavigationData(value), /readable/);
+});
+
+test("weighted navigation products remain approximate when the size label omits that warning", () => {
+  const rows = parseColesNavigationData({ pageProps: { searchResults: { results: [product({ size: "500g", pricing: { now: 7.5, unit: { isWeighted: true } } })] } } });
+  assert.equal(rows[0].packageSize, "approx. 500g");
+  assert.equal(costShoppingQuantity(600, "g", rows[0].priceCents, rows[0].packageSize).lineCents, null);
+});
+
+test("build discovery reads only a validated public deployment ID and navigation URLs stay pinned to Coles", () => {
+  const build = "fixture.20261028-deployment";
+  assert.equal(parseColesBuildId(`<script id="__NEXT_DATA__">${JSON.stringify({ buildId: build })}</script>`), build);
+  assert.equal(parseColesBuildId(`<script src="/_next/static/${build}/_buildManifest.js"></script>`), build);
+  assert.equal(parseColesBuildId(`<script src="https://evil.example/_next/static/${build}/_buildManifest.js"></script>`), null);
+  assert.equal(parseColesBuildId('<script id="__NEXT_DATA__">{"buildId":"../../secret"}</script>'), null);
+  assert.equal(parseColesBuildId('<meta name="robots" content="noindex"><iframe></iframe>'), null);
+  const url = new URL(colesNavigationUrl(build, "jasmine rice & soy"));
+  assert.equal(url.origin, "https://www.coles.com.au");
+  assert.equal(url.pathname, `/_next/data/${build}/search/products.json`);
+  assert.equal(url.searchParams.get("q"), "jasmine rice & soy");
+  for (const bad of ["../bad", "https://evil.example", "id?token=secret", "id#fragment", ""]) assert.throws(() => colesNavigationUrl(bad, "rice"));
+});
 
 test("Coles reads public product fields and selling price, never comparison or crossed-out prices", () => {
   const rows = parseColesSearch(page([
@@ -78,7 +118,7 @@ test("public product links stay on Coles even when a matching href points elsewh
   const rows = parseColesSearch(page([product()], '<a href="https://evil.example/product/tofu-101">bad</a><a href="https://www.coles.com.au:8443/product/tofu-101">bad port</a>'));
   const url = new URL(rows[0].url!);
   assert.equal(url.origin, "https://www.coles.com.au");
-  assert.equal(url.pathname, "/search");
+  assert.equal(url.pathname, "/search/products");
 });
 
 test("Coles redirects cannot escape the official secure origin", async () => {

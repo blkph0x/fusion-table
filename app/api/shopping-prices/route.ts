@@ -1,6 +1,8 @@
 import { withAutomaticPrices } from "./automatic-offers";
 import { lookupQueries } from "@/lib/catalogue";
 import { lookupColesQueries } from "@/lib/coles-catalogue";
+import { createColesNavigationReader } from "@/lib/coles-navigation";
+import { dirname, join } from "node:path";
 import { lookupAldiQueries } from "@/lib/aldi-catalogue";
 import { lookupIgaQueries } from "@/lib/iga-catalogue";
 import { browserPriceRenderer, localShopPageRenderer } from "@/lib/browser-price-client";
@@ -20,6 +22,10 @@ const headers = { "Cache-Control": "private, no-store" };
 const limiter = new PostLimiter({ maxPerDevice: 80, maxTotal: 240 });
 const render = browserPriceRenderer(process.env.FUSION_BROWSER_PRICE_URL);
 const renderShop = localShopPageRenderer(process.env.FUSION_BROWSER_PRICE_URL);
+const colesNavigation = createColesNavigationReader({
+  file: process.env.FUSION_RUNTIME === "node" ? join(dirname(ledgerFile()), "coles-build.json") : undefined,
+  metadataUrl: process.env.FUSION_BROWSER_PRICE_URL ? new URL("/coles-build", process.env.FUSION_BROWSER_PRICE_URL).href : undefined,
+});
 
 export async function POST(request: Request) {
   try {
@@ -32,7 +38,7 @@ export async function POST(request: Request) {
       const nearbyShops = () => nearbySearch ??= input.location ? searchShopsWithFresh({ ...input.location, radiusKm: input.radiusKm ?? 5 }, { photonReverseUrl: process.env.PHOTON_REVERSE_API_URL, overpassUrl: process.env.OVERPASS_API_URL, shopProvider: process.env.SHOP_DATA_PROVIDER, appOrigin: new URL(request.url).origin }).then(result => enrichShopWebsites(result.shops, { appOrigin: new URL(request.url).origin }, signal).catch(() => result.shops)) : Promise.resolve([]);
       const result = await compareShopping(input, {
         woolworths: (queries, abort) => lookupQueries(queries, fetch, abort),
-        coles: (queries, abort) => lookupColesQueries(queries, fetch, abort, render),
+        coles: (queries, abort) => lookupColesQueries(queries, fetch, abort, render, colesNavigation),
         aldi: (queries, abort) => lookupAldiQueries(queries, fetch, abort, render),
         iga: async (queries, abort) => {
           const shops = input.location ? await nearbyShops().catch(() => []) : [];

@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "bytes": 13983613,
+  "sha256": "99c44a62cbab1295756c67415af9a7b043e356c1ac6a0a038e0ede1180617c7a",
+  "versionName": "1.5.8",
+  "versionCode": 15,
+  "contentType": "application/vnd.android.package-archive",
+  "matchesSignedBuild": true
+}
