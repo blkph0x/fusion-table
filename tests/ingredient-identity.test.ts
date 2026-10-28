@@ -101,3 +101,26 @@ test("explicit cooked chicken and unambiguously raw sliced cuts retain matching 
     assert.equal(matchProducts(name, [product(productName)])[0]?.selected, true, `${name} -> ${productName}`);
   }
 });
+
+// This exact ALDI product appeared as the chosen fresh-ginger quote in a real meal audit.
+test("compound bread titles cannot price raw ginger while requested finished foods remain valid", () => {
+  for (const name of ["CURATED COLLECTION Gluten Free Fig and Ginger Crispbread 150g", "Gingerbread Biscuits", "Ginger Shortbread"]) {
+    assert.equal(ingredientPreparationConflict("Fresh ginger", name), true, name);
+    const result = withAutomaticPrices({ lines: buildShoppingOffers([line("Fresh ginger")], [quote("Fresh ginger", name)], [], { area: "2042", now }) }).lines[0];
+    assert.equal(result.chosenOfferId, null);
+    assert.equal(result.offers.length, 0);
+  }
+  assert.equal(matchProducts("Gingerbread biscuits", [product("Brand Gingerbread Biscuits")])[0]?.selected, true);
+  assert.equal(matchProducts("Fresh ginger", [product("Fresh Ginger Root")])[0]?.selected, true);
+});
+
+// A frozen self-basting buffe was automatically selected for fillets in the live audit.
+test("whole-breast buffe cuts and self-basting preparations cannot price plain poultry fillets", () => {
+  for (const name of ["Ingham's Frozen Buffe Turkey Breast Self Basting", "Turkey Breast Crown", "Self Basting Turkey Breast Fillets"]) {
+    assert.equal(ingredientPreparationConflict("Turkey breast fillets", name), true, name);
+    assert.equal(matchProducts("Turkey breast fillets", [product(name)]).length, 0, name);
+    assert.equal(suggestAutomaticPrices([retained("Turkey breast fillets", name)])[0].chosenOfferId, null);
+  }
+  assert.equal(matchProducts("Turkey breast fillets", [product("Fresh Turkey Breast Fillets")])[0]?.selected, true);
+  assert.equal(ingredientPreparationConflict("Self basting turkey breast", "Brand Self Basting Turkey Breast"), false);
+});

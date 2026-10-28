@@ -1,13 +1,89 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {existsSync} from "node:fs";
+import {mkdtemp,mkdir,rm} from "node:fs/promises";
+import {tmpdir} from "node:os";
+import {join} from "node:path";
 import {createBrowserRenderer,startRetailerBrowser} from "../scripts/retailer-browser.mjs";
+import {readColesBrowserState} from "../lib/coles-browser-state.mjs";
 
 const executable=[process.env.RETAILER_CHROMIUM_PATH,"/usr/bin/chromium","C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"].find(path => path && existsSync(path));
 
+test("a fresh Coles context reuses only its own persisted first-party fixture session",{skip:!executable},async () => {
+  const directory=await mkdtemp(join(tmpdir(),"fusion-coles-state-")),file=join(directory,"state.json");
+  let generation=0,homes=0,queries=0,otherContexts=0;
+  const fixture=async context => {
+    const initial=await context.cookies();
+    if(generation===2) assert.ok(initial.some(cookie=>cookie.name==="coles-own-home"),"the second browser loads its own saved state before navigation");
+    await context.route("**/*",async route => {
+      const request=route.request(),url=new URL(request.url());
+      if(url.origin==="https://www.aldi.com.au") {
+        otherContexts++;assert.equal(initial.some(cookie=>cookie.domain.includes("coles.com.au")),false,"Coles state must not leak to another retailer context");
+        return route.fulfill({status:200,contentType:"text/html",body:'<!doctype html><h1>Other retailer</h1><p>$4.50</p>'});
+      }
+      if(url.origin!=="https://www.coles.com.au") return route.abort();
+      const cookie=(await request.allHeaders()).cookie || "";
+      if(url.pathname==="/") {
+        homes++;
+        if(generation===2) assert.match(cookie,/coles-own-home=ready/);
+        return route.fulfill({status:200,contentType:"text/html",body:'<!doctype html><h1>Coles fixture</h1><script id="__NEXT_DATA__" type="application/json">{"buildId":"fixture-own-state"}</script><script>document.cookie="coles-own-home=ready; Path=/; Secure; SameSite=Lax; Max-Age=3600";localStorage.setItem("fixture-own-origin","ready");</script>'});
+      }
+      if(url.pathname==="/search/products") {
+        queries++;assert.match(cookie,/coles-own-home=ready/);
+        if(generation===2) assert.match(cookie,/coles-own-product=ready/);
+        return route.fulfill({status:200,contentType:"text/html",body:'<!doctype html><section data-testid="product-tile"><h2>Jasmine rice</h2><span data-testid="product-pricing">$3.20</span></section><script>document.cookie="coles-own-product=ready; Path=/; Secure; SameSite=Lax; Max-Age=3600";</script>'});
+      }
+      return route.abort();
+    });
+  };
+  const signal=new AbortController().signal;
+  let renderer;
+  try {
+    generation=1;renderer=createBrowserRenderer({executablePath:executable,colesStateFile:file,onContext:fixture});
+    assert.equal((await renderer.colesBuild(signal)).buildId,"fixture-own-state");
+    assert.ok((await readColesBrowserState(file)).cookies.some(cookie=>cookie.name==="coles-own-home"));
+    assert.equal((await renderer.render("https://www.coles.com.au/search/products?q=rice",signal)).providerStatus,"ready");
+    assert.ok((await readColesBrowserState(file)).cookies.some(cookie=>cookie.name==="coles-own-product"),"a verified product page updates saved state");
+    await renderer.close();renderer=undefined;
+    generation=2;renderer=createBrowserRenderer({executablePath:executable,colesStateFile:file,onContext:fixture});
+    assert.equal((await renderer.render("https://www.coles.com.au/search/products?q=rice",signal)).providerStatus,"ready");
+    const state=await readColesBrowserState(file);
+    assert.ok(state.origins.some(origin=>origin.origin==="https://www.coles.com.au"&&origin.localStorage.some(item=>item.name==="fixture-own-origin")));
+    generation=3;
+    assert.equal((await renderer.render("https://www.aldi.com.au/search?q=fixture",signal)).providerStatus,"ready");
+    assert.equal(homes,2);assert.equal(queries,2);assert.equal(otherContexts,1);
+  } finally {await renderer?.close();await rm(directory,{recursive:true,force:true});}
+});
+
+test("an unverified browser-check page never persists its fixture cookies",{skip:!executable},async () => {
+  const directory=await mkdtemp(join(tmpdir(),"fusion-coles-refused-")),file=join(directory,"state.json");
+  const renderer=createBrowserRenderer({executablePath:executable,colesStateFile:file,onContext:async context=>{
+    await context.route("**/*",route=>route.fulfill({status:200,contentType:"text/html",body:'<!doctype html><h1>Verify you are human</h1><script>document.cookie="unverified-fixture=true; Path=/; Secure; Max-Age=3600";</script>'}));
+  }});
+  try {
+    await assert.rejects(renderer.colesBuild(new AbortController().signal),error=>error.providerStatus==="needs-browser");
+    assert.equal(await readColesBrowserState(file),undefined);assert.equal(existsSync(file),false);
+  } finally {await renderer.close();await rm(directory,{recursive:true,force:true});}
+});
+
+test("private state write failures do not discard verified Coles metadata or prices",{skip:!executable},async () => {
+  const directory=await mkdtemp(join(tmpdir(),"fusion-coles-write-failure-")),file=join(directory,"existing-directory");
+  await mkdir(file);
+  const renderer=createBrowserRenderer({executablePath:executable,colesStateFile:file,onContext:async context=>{
+    await context.route("**/*",route=>route.fulfill({status:200,contentType:"text/html",body:new URL(route.request().url()).pathname==="/"
+      ? '<!doctype html><h1>Coles fixture</h1><script id="__NEXT_DATA__" type="application/json">{"buildId":"fixture-no-state-write"}</script><script>document.cookie="coles-own-write-fixture=ready; Path=/; Secure; Max-Age=3600";</script>'
+      : '<!doctype html><section data-testid="product-tile"><h2>Rice</h2><span data-testid="product-pricing">$3.20</span></section>'}));
+  }});
+  try {
+    const signal=new AbortController().signal;
+    assert.equal((await renderer.colesBuild(signal)).buildId,"fixture-no-state-write");
+    assert.equal((await renderer.render("https://www.coles.com.au/search/products?q=rice",signal)).providerStatus,"ready");
+  } finally {await renderer.close();await rm(directory,{recursive:true,force:true});}
+});
+
 test("ordinary Coles bootstrap refreshes once when requested and retains anonymous cookies across queries",{skip:!executable},async () => {
   let contexts=0,homes=0,queries=0;
-  const renderer=createBrowserRenderer({executablePath:executable,onContext:async context => {
+  const renderer=createBrowserRenderer({executablePath:executable,colesStateFile:"",onContext:async context => {
     contexts++;
     await context.route("**/*",async route => {
       const request=route.request(),url=new URL(request.url());
@@ -38,7 +114,7 @@ test("ordinary Coles bootstrap refreshes once when requested and retains anonymo
 
 test("SSR build metadata waits for asynchronous cookie initialisation and retains its control tab",{skip:!executable},async () => {
   let homes=0,completed=0,current="fixture-current";
-  const renderer=createBrowserRenderer({executablePath:executable,onContext:async context => {
+  const renderer=createBrowserRenderer({executablePath:executable,colesStateFile:"",onContext:async context => {
     await context.route("**/*",async route => {
       const request=route.request(),url=new URL(request.url());
       if(url.origin!=="https://www.coles.com.au") return route.abort();

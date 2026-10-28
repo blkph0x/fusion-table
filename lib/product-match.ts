@@ -293,7 +293,7 @@ function ingredientFoodFormConflict(wanted: string, seen: string): boolean {
 const FINISHED_FOOD_FORMS: readonly (readonly [string, RegExp])[] = [
   ["biscuit", /\b(?:biscuit|cookie|biscotti)\b/],
   ["cake", /\b(?:cake|muffin|pastry|doughnut|donut|waffle|pancake)\b/],
-  ["bread", /\b(?:bread|naan|flatbread|bagel|baguette|bun|crouton|breadstick|wrap|tortilla)\b/],
+  ["bread", /\b(?:bread|crispbread|gingerbread|shortbread|naan|flatbread|bagel|baguette|bun|crouton|breadstick|wrap|tortilla)\b/],
   ["cracker", /\bcracker\b/], ["crisps", /\b(?:chip|crisp|crispy)\b/], ["snack", /\b(?:snack|popcorn)\b/],
   ["chutney", /\bchutney\b/], ["relish", /\brelish\b/], ["pesto", /\bpesto\b/], ["ketchup", /\bketchup\b/],
   ["jelly", /\bjelly\b/], ["curd", /\bcurd\b/], ["jam", /\b(?:jam|marmalade|conserve)\b/],
@@ -331,6 +331,7 @@ function ingredientIdentityConflictCanonical(wanted: string, seen: string): bool
   if (request.split(" ").some(word => FOOD_ANCHORS.has(word) && !offeredWords.has(word))) return true;
   // Sweet potato is a different ingredient, not a named variety of potato.
   if (/\bpotato\b/.test(request) && /\bpotato\b/.test(product) && /\bsweet\b/.test(request)!==/\bsweet\b/.test(product)) return true;
+  if (/\b(?:chicken|turkey)\b/.test(request) && /\bbreast\b/.test(request) && /\bfillet\b/.test(request) && /\b(?:buffe|buffet|crown)\b/.test(product) && !/\b(?:buffe|buffet|crown)\b/.test(request)) return true;
   const animalRequest=MEAT_WORDS.test(request) || /\begg\b/.test(request);
   const animalProduct=MEAT_WORDS.test(product) || /\begg\b/.test(product);
   if ((animalRequest || animalProduct) && PLANT_MEAT.test(request)!==PLANT_MEAT.test(product)) return true;
@@ -394,7 +395,7 @@ function meatPreparations(canonical: string, product?: Pick<CatalogueProduct,"ca
   if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
   if (/\bsmoked\b/.test(canonical)) forms.add("smoked");
   if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|chipee|munchie|kiev|kyiv|cordon bleu)\b/.test(canonical)) forms.add("breaded");
-  if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
+  if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|self basting|self basted|injected|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
   if (/\b(?:deli|sandwich|luncheon|cold cut)\b/.test(canonical)) forms.add("deli");
   if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned)\b/.test(canonical)) forms.add("cured");
   const poultry=/\b(?:chicken|turkey)\b/.test(canonical);

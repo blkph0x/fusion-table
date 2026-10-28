@@ -124,6 +124,26 @@ Its metadata URL is derived as http://127.0.0.1:8794/coles-build. Deploy the upd
 worker before the updated application. FUSION_DATA_DIR must remain writable by
 the application account. No new API key or retailer account is required.
 
+Optional anonymous browser continuity
+
+The worker can preserve its own anonymous Coles state between context expiry or
+service restarts with RETAILER_COLES_STATE_FILE. The supplied service stores it
+at /var/lib/fusion-retailer-browser/coles-state.json in its private state folder.
+The helper writes atomically with mode0600 and accepts state for seven days at
+most. It keeps only first-party Coles cookies and Coles homepage localStorage,
+strips obvious account/token fields, and never logs or serves that state. No
+personal browser profile or login is imported. Only a verified homepage or
+readable successful product page can update it; a failed save keeps real prices
+available without claiming persistence worked. A retailer can invalidate its
+own cookies sooner, so persistence does not guarantee future clearance.
+
+Set FUSION_COLES_PRICE_TRANSPORT=browser on the application to collect Coles
+prices through that actual JavaScript/cookie browser session. The existing
+normal HTML adapter then runs without the public navigation-JSON reader and
+does not retry a refusal through a different transport. Keep
+FUSION_BROWSER_PRICE_URL configured. A human check requires explicit user authorisation and a supervised browser
+action. The service itself never solves it or changes the browser's identity.
+
 Verification
 
 The focused suite covers public JSON, canonical URLs, weighted packs, source

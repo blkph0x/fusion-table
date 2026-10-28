@@ -22,7 +22,7 @@ const headers = { "Cache-Control": "private, no-store" };
 const limiter = new PostLimiter({ maxPerDevice: 80, maxTotal: 240 });
 const render = browserPriceRenderer(process.env.FUSION_BROWSER_PRICE_URL);
 const renderShop = localShopPageRenderer(process.env.FUSION_BROWSER_PRICE_URL);
-const colesNavigation = createColesNavigationReader({
+const colesNavigation = process.env.FUSION_COLES_PRICE_TRANSPORT === "browser" ? undefined : createColesNavigationReader({
   file: process.env.FUSION_RUNTIME === "node" ? join(dirname(ledgerFile()), "coles-build.json") : undefined,
   metadataUrl: process.env.FUSION_BROWSER_PRICE_URL ? new URL("/coles-build", process.env.FUSION_BROWSER_PRICE_URL).href : undefined,
 });

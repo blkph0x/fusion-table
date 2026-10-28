@@ -5,6 +5,7 @@ import { lookup } from "node:dns/promises";
 import { existsSync, realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { createDeadline } from "../lib/abort-deadline.mjs";
+import { readColesBrowserState, saveColesBrowserState } from "../lib/coles-browser-state.mjs";
 import {
   PAGE_LIMIT, JOB_DEADLINE_MS, CACHE_TTL_MS, CHALLENGE_BACKOFF_MS,
   retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery,
@@ -209,7 +210,7 @@ export async function startEgressProxy({ resolve = lookup, dial = connect } = {}
   };
 }
 
-export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", onContext } = {}) {
+export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", colesStateFile = process.env.RETAILER_COLES_STATE_FILE, onContext } = {}) {
   let browser, launching, proxy, closed = false;
   const storeSessions = createVerifiedStoreSessions();
   const colesSessions = createVerifiedStoreSessions({maxSessions:1,ttlMs:15 * 60_000});
@@ -233,8 +234,10 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
   };
   const newSession = async (instance,value,source) => {
     const isColes = !source && retailerUrl(value).retailer === "coles";
+    const storageState = isColes && colesStateFile ? await readColesBrowserState(colesStateFile).catch(() => undefined) : undefined;
     const context = await instance.newContext({ javaScriptEnabled:true, serviceWorkers:"block", acceptDownloads:false,
       viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
+      ...(storageState ? {storageState} : {}),
     });
     const counts = new WeakMap(), networks = new WeakMap(); let expectedPages = 0;
     context.on("page",page => {
@@ -262,6 +265,12 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
       page.on("dialog",dialog => void dialog.dismiss());
       return page;
     }};
+  };
+  const persistColesSession = async session => {
+    if (!colesStateFile) return;
+    try {
+      await saveColesBrowserState(colesStateFile,await session.context.storageState());
+    } catch { /* Private session persistence must never discard verified prices. */ }
   };
   const settle = async (page,source,allowStoreChooser = false,allowCatalogueMetadata = false) => {
     if (source === "local-shop") await page.waitForLoadState("networkidle",{timeout:2000}).catch(() => undefined);
@@ -342,6 +351,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
       if (typeof buildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(buildId)) throw Object.assign(new Error("Coles did not publish its catalogue version in this normal browser session."),{providerStatus:"needs-browser",status:403});
       signal.throwIfAborted();
       session.colesObservation = {version:1,buildId,observedAt:new Date().toISOString(),sourceUrl:"https://www.coles.com.au/"};
+      await persistColesSession(session);
       return session.colesObservation;
     } finally {
       signal.removeEventListener("abort",abort);
@@ -465,6 +475,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
           if (!source && colesEmptyBrowserGate({url:value,text:snapshot.text,html})) return controlled(final,"needs-browser","Coles did not display prices in this browser session; open Coles to continue.",403);
           return controlled(final,"unavailable","The retailer did not display readable product prices. Open its website to check this item.",503);
         }
+        if (!source && retailerUrl(value).retailer === "coles") await persistColesSession(session);
         return {html,url:navigationUrl(page.url(),value,source),status:response?.status() || 200,providerStatus:"ready",...(selectedStore ? {selectedStore} : {})};
       } catch (error) {
         if (lease && context && !context.browser()?.isConnected()) lease.invalidate();
