@@ -22,3 +22,24 @@ test("untruncated lists avoid an unnecessary second map request",async t=>{
  const provider=await freshProviders("short");let calls=0;t.mock.method(globalThis,"fetch",async()=>{calls++;return Response.json({features:[feature(1,"Known Butcher","butcher")]});});
  const result=await provider.searchShopsWithFresh({lat:-33.897,lon:151.18,radiusKm:5});assert.equal(calls,1);assert.equal(result.count,1);assert.equal(result.truncated,false);
 });
+
+test("a lagging map index is supplemented with only reviewed specialists inside the selected 2527 radius",async t=>{
+ t.mock.timers.enable({apis:["Date","setTimeout"],now:Date.parse("2026-10-28T12:00:00Z")});const provider=await freshProviders("2527-index-lag");let calls=0;
+ t.mock.method(globalThis,"fetch",async()=>{calls++;return Response.json({features:[]});});
+ const result=await provider.searchShopsWithFresh({lat:-34.5724579,lon:150.7744259,radiusKm:10});
+ assert.equal(calls,1);assert.equal(result.count,4);assert.equal(result.shops.filter(shop=>shop.kind==="butcher").length,3);assert.ok(result.shops.some(shop=>shop.kind==="produce"));assert.match(result.source,/reviewed specialist/);assert.match(result.notice,/No price or stock is implied/);
+});
+
+test("temporary map failure retains known local destinations without fabricating a complete nearby search",async t=>{
+ t.mock.timers.enable({apis:["Date","setTimeout"],now:Date.parse("2026-10-28T12:00:00Z")});const provider=await freshProviders("2527-map-offline");let calls=0;
+ t.mock.method(globalThis,"fetch",async()=>{calls++;return new Response("Unavailable",{status:400});});
+ const result=await provider.searchFreshShops({lat:-34.5724579,lon:150.7744259,radiusKm:10});
+ assert.equal(calls,1);assert.equal(result.count,4);assert.equal(result.matchedCountIsLowerBound,true);assert.equal(result.truncated,true);assert.match(result.notice,/Live map search is temporarily unavailable/);
+});
+
+test("map failures outside reviewed coverage remain errors and configuration problems are not masked",async t=>{
+ t.mock.timers.enable({apis:["Date","setTimeout"],now:Date.parse("2026-10-28T12:00:00Z")});const provider=await freshProviders("uncovered-map-offline");
+ t.mock.method(globalThis,"fetch",async()=>new Response("Unavailable",{status:400}));
+ await assert.rejects(provider.searchShopsWithFresh({lat:-33.897,lon:151.18,radiusKm:10}),{code:"provider_unavailable"});
+ await assert.rejects(provider.searchShopsWithFresh({lat:-34.5724579,lon:150.7744259,radiusKm:10},{shopProvider:"unknown"}),{code:"provider_configuration"});
+});

@@ -12,7 +12,9 @@ import { type LocationResult, type ShopResponse } from "@/lib/locations";
 import { fetchLocationResults, fetchNearbyShops } from "@/lib/location-client";
 import { KitchenDesk } from "@/components/kitchen-desk";
 import { rememberConsumables, weekNeeds, type ShopNeed, type Stock, type VerdictId } from "@/lib/pantry";
-import { rankShopsForList, type ShoppingLine } from "@/lib/shopping";
+import type { ShoppingLine } from "@/lib/shopping";
+import { shoppingListCsv } from "@/lib/shopping-export";
+import type { ShoppingStrategyResult } from "@/lib/shopping-strategy";
 import { normalizeShoppingList, readCustomShopping } from "@/lib/shopping-list";
 import { ShoppingHub } from "@/components/shopping-hub";
 import MealBuilder from "@/components/meal-builder";
@@ -441,6 +443,7 @@ setLocation(place); setLocationOpen(false);
     }, { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 });
   }
   function changeRadius(value: number) {
+    lastShopSearch.current = "";
     latestRadius.current = value; setRadius(value); shopRequest.current++; shopAbort.current?.abort();
     setShopsLoading(false); setShopData(null); setShopError("");
   }
@@ -689,11 +692,9 @@ setLocation(place); setLocationOpen(false);
     navigate("shops");
     if (!location) setLocationOpen(true);
   }
-  function exportShopping() {
-    const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
-    const ranked = rankShopsForList(shoppingLines, shopData?.shops || [], { radiusKm: radius });
-    const rows = ["Ingredient,Quantity,Nearby shop suggestions,Area", ...shoppingLines.map((line) => [line.name, amount(line.amount, line.unit), ranked.filter((entry) => entry.matchedIngredientIds.includes(line.id)).slice(0, 3).map((entry) => entry.shop.name).join("; ") || "Search nearby shops", location?.label || location?.name || "Area not set"].map(escape).join(","))];
-    downloadFile("fusion-table-shopping-list.csv", rows.join("\n"), "text/csv;charset=utf-8");
+  function exportShopping(selection?: ShoppingStrategyResult) {
+    const csv = shoppingListCsv(shoppingLines, { shops: shopData?.shops || [], radiusKm: radius, area: location?.label || location?.name, selection });
+    downloadFile("fusion-table-shopping-list.csv", csv, "text/csv;charset=utf-8");
   }
   function studio(compact = false) {
     const mealDislikes = dislikeText.split(/[,;\n]/).map((part) => part.trim()).filter(Boolean);

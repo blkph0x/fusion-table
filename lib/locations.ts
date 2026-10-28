@@ -33,6 +33,10 @@ export interface Shop {
   openingHours: string | null;
   osmUrl: string;
   inventoryStatus: "unverified";
+  /** Evidence for a small, reviewed directory supplement when a map index lags. */
+  listingSourceUrl?: string;
+  listingReviewedAt?: string;
+  locationAccuracy?: "mapped-shop" | "shopping-centre";
 }
 
 export interface ShopSearch {

@@ -1,0 +1,83 @@
+{
+  "checkedAt": "2026-10-28T07:17:44.478Z",
+  "area": "Albion Park NSW 2527 (suburb map centre)",
+  "radiusKm": 10,
+  "count": 33,
+  "source": "Photon / OpenStreetMap + reviewed specialist directories",
+  "partial": true,
+  "notice": "Supermarkets, grocers, butchers and markets only. Petrol stations are left out. Stock is not confirmed and no shelf price is included. Distances are straight-line. Nearby specialist listings checked against official shop directories on 2026-10-28 supplement map-index gaps. The Shellharbour Bush's listing uses an approximate shopping-centre location. No price or stock is implied.",
+  "specialists": [
+    {
+      "id": "node/14322459906",
+      "name": "Albion Park Village Meats",
+      "distanceKm": 0.19421761072876778,
+      "address": "Shop 7, Albion Park Village Shopping Centre, Albion Park NSW 2527",
+      "website": "https://apvm.com.au/",
+      "source": "https://apvm.com.au/contact",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "way/1312741960",
+      "name": "Shellharbour Meats & Smallgoods",
+      "distanceKm": 5.37333359349855,
+      "address": "152 New Lake Entrance Road, Oak Flats, Shellharbour City Centre, 2529",
+      "website": null,
+      "source": "https://www.openstreetmap.org/way/1312741960",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "verified/bushs-shellharbour",
+      "name": "Bush's Meats Shellharbour",
+      "distanceKm": 5.879028615493222,
+      "address": "Shop 17, Stockland Shellharbour, 211 Lake Entrance Road, Shellharbour NSW 2529 (shopping-centre location; approximate)",
+      "website": "https://bushsmeats.com.au/",
+      "source": "https://bushsmeats.com.au/pages/location",
+      "locationAccuracy": "shopping-centre"
+    },
+    {
+      "id": "node/8147844384",
+      "name": "Superior Meants",
+      "distanceKm": 8.489081619495995,
+      "address": "Addison Street, Shellharbour, 2529",
+      "website": null,
+      "source": "https://www.openstreetmap.org/node/8147844384",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "node/11245027814",
+      "name": "Bush's Meats Warilla",
+      "distanceKm": 8.501222493208573,
+      "address": "43-57 Shellharbour Road, Warilla, Wollongong, 2528",
+      "website": "https://bushsmeats.com.au/",
+      "source": "https://bushsmeats.com.au/pages/location",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "node/11245027815",
+      "name": "Mitchell's Market",
+      "distanceKm": 8.509208534700518,
+      "address": "45-57 Shellharbour Road, Warilla, Wollongong, 2528",
+      "website": "https://www.mitchellsmarket.com.au/",
+      "source": "https://home-co.com.au/warilla/mitchells-fresh-fruit/",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "node/12052335747",
+      "name": "Jamberoo Valley Meats",
+      "distanceKm": 8.613485876659356,
+      "address": "Allowrie Street, Jamberoo, 2533",
+      "website": null,
+      "source": "https://www.openstreetmap.org/node/12052335747",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "node/1702191963",
+      "name": "Lakeline Butchery",
+      "distanceKm": 8.70044431671076,
+      "address": "Lakeside Drive, Kanahooka, Wollongong, 2530",
+      "website": null,
+      "source": "https://www.openstreetmap.org/node/1702191963",
+      "locationAccuracy": "mapped-shop"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import {
   validateShopSearch, MAX_SHOPS,
   type LocationsResponse, type ShopResponse, type ShopSearch,
 } from "./locations.ts";
+import { supplementVerifiedSpecialists } from "./verified-specialists.ts";
 
 export interface LocationProviderConfig {
   photonUrl?: string;
@@ -246,21 +247,42 @@ export async function searchShops(input: ShopSearch, config: LocationProviderCon
  * supermarkets and bakeries when Photon's general result limit is reached. */
 export async function searchFreshShops(input:ShopSearch,config:LocationProviderConfig={}):Promise<ShopResponse>{
   validateShopSearch(input);
-  if((config.shopProvider||"photon")!=="photon")return searchShops(input,config);
-  return searchPhotonShops(input,config,true);
+  try {
+    if((config.shopProvider||"photon")!=="photon")return supplementVerifiedSpecialists(await searchShops(input,config));
+    return supplementVerifiedSpecialists(await searchPhotonShops(input,config,true));
+  } catch (error) { return reviewedSpecialistFallback(input, error); }
+}
+
+/** A map outage must not remove recently verified local destinations. This
+ * fallback does not make another upstream request or claim complete coverage. */
+function reviewedSpecialistFallback(input: ShopSearch, error: unknown): ShopResponse {
+  if (!(error instanceof LocationError) || !["provider_unavailable", "provider_timeout", "provider_rate_limited", "search_rate_limited", "provider_incomplete", "provider_response", "provider_response_limit"].includes(error.code)) throw error;
+  const result = supplementVerifiedSpecialists({
+    shops: [], count: 0, matchedCount: 0, sourceCount: 0,
+    matchedCountIsLowerBound: true, truncated: true,
+    radiusKm: input.radiusKm, location: { lat: input.lat, lon: input.lon },
+    distanceType: "straight-line", coverage: "limited-nearby", source: "Reviewed official shop directories",
+    attribution: ATTRIBUTION, attributionUrl: ATTRIBUTION_URL,
+    fetchedAt: new Date().toISOString(), osmTimestamp: null, cached: false,
+    notice: "Live map search is temporarily unavailable. Only recently reviewed specialist listings are shown; this is a partial nearby list. Retry later for other shops. Distances are straight-line.",
+  });
+  if (!result.shops.length) throw error;
+  return result;
 }
 
 /** Merge independent server-discovered identities, retaining honest partial-list
  * metadata. A failed supplemental query never removes the original shop list. */
 export async function searchShopsWithFresh(input:ShopSearch,config:LocationProviderConfig={}):Promise<ShopResponse>{
-  const broad=await searchShops(input,config);
-  if(broad.coverage!=="limited-nearby"||!broad.truncated)return broad;
+  let broad: ShopResponse;
+  try { broad=await searchShops(input,config); }
+  catch (error) { return reviewedSpecialistFallback(input,error); }
+  if(broad.coverage!=="limited-nearby"||!broad.truncated)return supplementVerifiedSpecialists(broad);
   try{
-    const fresh=await searchFreshShops(input,config),merged=new Map(broad.shops.map(shop=>[shop.id,shop]));
+    const fresh=await searchPhotonShops(input,config,true),merged=new Map(broad.shops.map(shop=>[shop.id,shop]));
     for(const shop of fresh.shops)merged.set(shop.id,shop);
     const all=[...merged.values()].sort((a,b)=>a.distanceKm-b.distanceKm||a.name.localeCompare(b.name)),shops=all.slice(0,MAX_SHOPS);
-    return {...broad,shops,count:shops.length,matchedCount:all.length,sourceCount:broad.sourceCount+fresh.sourceCount,matchedCountIsLowerBound:true,truncated:broad.truncated||fresh.truncated||all.length>MAX_SHOPS,source:"Photon / OpenStreetMap (general and fresh-food searches)",fetchedAt:fresh.fetchedAt>broad.fetchedAt?fresh.fetchedAt:broad.fetchedAt,cached:broad.cached&&fresh.cached,notice:"General and fresh-food ranked searches are combined by OpenStreetMap identity. This is still a partial nearby list; provider counts include overlapping queries. Prices and stock are unconfirmed. Distances are straight-line."};
-  }catch{return {...broad,notice:broad.notice+" The extra fresh-food search could not finish; this remains a partial nearby list."};}
+    return supplementVerifiedSpecialists({...broad,shops,count:shops.length,matchedCount:all.length,sourceCount:broad.sourceCount+fresh.sourceCount,matchedCountIsLowerBound:true,truncated:broad.truncated||fresh.truncated||all.length>MAX_SHOPS,source:"Photon / OpenStreetMap (general and fresh-food searches)",fetchedAt:fresh.fetchedAt>broad.fetchedAt?fresh.fetchedAt:broad.fetchedAt,cached:broad.cached&&fresh.cached,notice:"General and fresh-food ranked searches are combined by OpenStreetMap identity. This is still a partial nearby list; provider counts include overlapping queries. Prices and stock are unconfirmed. Distances are straight-line."});
+  }catch{return supplementVerifiedSpecialists({...broad,notice:broad.notice+" The extra fresh-food search could not finish; this remains a partial nearby list."});}
 }
 
 async function searchPhotonShops(input: ShopSearch, config: LocationProviderConfig, freshOnly=false): Promise<ShopResponse> {
