@@ -82,7 +82,9 @@ export function createColesBuildProvider(options: { fetchImpl?: typeof fetch; fi
     if (existing && existing.buildId !== request?.previousBuildId) return existing;
     let observed: ColesBuildObservation;
     if (metadataUrl) {
-      const response = await fetchImpl(metadataUrl, { signal, redirect: "error", headers: { Accept: "application/json" } });
+      const headers: Record<string,string> = { Accept: "application/json" };
+      if (request?.previousBuildId) { colesNavigationUrl(request.previousBuildId,"rice"); headers["X-Fusion-Coles-Previous-Build"] = request.previousBuildId; }
+      const response = await fetchImpl(metadataUrl, { signal, redirect: "error", headers });
       if (!response.ok) { await response.body?.cancel().catch(() => undefined); throw unavailable("Coles' normal browser session could not refresh the catalogue version.", response.status === 403 ? "needs-browser" : "unavailable"); }
       const reader = response.body?.getReader(); if (!reader) throw unavailable("Coles browser metadata was empty.");
       const chunks: Uint8Array[] = []; let size = 0;

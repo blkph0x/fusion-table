@@ -88,7 +88,7 @@ test("private normal-browser metadata is persisted atomically and a changed buil
   const root = await mkdtemp(path.join(tmpdir(),"fusion-coles-build-")), file = path.join(root,"coles-build.json");
   try {
     let calls = 0;
-    const provider = createColesBuildProvider({file,metadataUrl:"http://127.0.0.1:8794/coles-build",fetchImpl:async input => { calls++; assert.equal(String(input),"http://127.0.0.1:8794/coles-build"); return json(observation("fixture-new")); }});
+    const provider = createColesBuildProvider({file,metadataUrl:"http://127.0.0.1:8794/coles-build",fetchImpl:async (input,init) => { calls++; assert.equal(String(input),"http://127.0.0.1:8794/coles-build"); assert.equal(new Headers(init?.headers).get("X-Fusion-Coles-Previous-Build"),"fixture-old"); return json(observation("fixture-new")); }});
     await saveColesBuildFile(file,observation("fixture-old"));
     assert.equal((await provider(new AbortController().signal)).buildId,"fixture-old"); assert.equal(calls,0);
     assert.equal((await provider(new AbortController().signal,{previousBuildId:"fixture-old"})).buildId,"fixture-new");

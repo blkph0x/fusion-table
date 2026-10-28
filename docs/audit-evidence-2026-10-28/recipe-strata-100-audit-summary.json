@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "definition": "stratified-100-all-regions-and-sides-per-cooking-row-v1",
+  "status": "passed",
+  "startedAt": "2026-10-28T04:35:39.243Z",
+  "finishedAt": "2026-10-28T04:39:40.631Z",
+  "node": "v24.19.0",
+  "sourceFingerprint": "591ffcc6c702b986a28756d81a51d40be0c24d764f7761ef81e6c6775500f983",
+  "sourceDependencyFiles": 33,
+  "checkedUniqueRecipeCases": 94100,
+  "failedCases": 0,
+  "elapsedSeconds": 241.4,
+  "catalogue": {
+    "mains": 30,
+    "methods": 13,
+    "mainMethods": 266,
+    "chosenCutMethods": 641,
+    "cuts": 87,
+    "regions": 76,
+    "sides": 90,
+    "classics": 34,
+    "classicRegions": 25
+  },
+  "coverageDimensions": {
+    "main": {
+      "groups": 30,
+      "minimum": 300,
+      "maximum": 28200
+    },
+    "method": {
+      "groups": 13,
+      "minimum": 2000,
+      "maximum": 11500
+    },
+    "mainMethod": {
+      "groups": 266,
+      "minimum": 100,
+      "maximum": 4000
+    },
+    "cookingRow": {
+      "groups": 907,
+      "minimum": 100,
+      "maximum": 100
+    },
+    "region": {
+      "groups": 76,
+      "minimum": 1192,
+      "maximum": 1194
+    },
+    "side": {
+      "groups": 90,
+      "minimum": 1007,
+      "maximum": 1010
+    },
+    "diet": {
+      "groups": 5,
+      "minimum": 3260,
+      "maximum": 29152
+    },
+    "heat": {
+      "groups": 5,
+      "minimum": 18820,
+      "maximum": 18820
+    },
+    "servings": {
+      "groups": 12,
+      "minimum": 7840,
+      "maximum": 7844
+    },
+    "cut": {
+      "groups": 87,
+      "minimum": 300,
+      "maximum": 1200
+    },
+    "classic": {
+      "groups": 34,
+      "minimum": 100,
+      "maximum": 100
+    },
+    "classicRegion": {
+      "groups": 25,
+      "minimum": 136,
+      "maximum": 136
+    }
+  },
+  "perCookingRowProof": {
+    "definition": "all-regions-all-sides-per-cooking-row-v1",
+    "source": "591ffcc6c702b986a28756d81a51d40be0c24d764f7761ef81e6c6775500f983",
+    "samplesPerRow": 100,
+    "plannedUniqueInputs": 94100,
+    "defaultMainMethods": 266,
+    "chosenCutMethods": 641,
+    "cookingRows": 907,
+    "everyRowHasAll76Regions": 907,
+    "everyRowHasAll90Sides": 907,
+    "perRow": {
+      "uniqueInputs": {
+        "minimum": 100,
+        "maximum": 100
+      },
+      "regions": {
+        "minimum": 76,
+        "maximum": 76
+      },
+      "sides": {
+        "minimum": 90,
+        "maximum": 90
+      },
+      "distinctRegionSidePairs": {
+        "minimum": 100,
+        "maximum": 100
+      }
+    },
+    "failedRows": [],
+    "limits": "Each row covers all region choices and all side choices in 100 distinct rotating inputs. This is not every one of the 76*90=6840 region/side pairs for that row."
+  },
+  "servingScale": {
+    "plannedPairs": 907,
+    "checkedPairs": 907,
+    "failedPairs": 0
+  },
+  "shareRoundTrips": {
+    "checked": 50,
+    "failed": 0
+  },
+  "proofMethod": "For each of the 907 rows, enumerate all 100 planned inputs and count distinct regions, sides, input keys and region/side pairs. The strides 17 modulo 76 and 7 modulo 90 are coprime with their catalogue sizes, so 100 samples cover both complete cycles.",
+  "fullReportLocal": "work/recipe-100-audit/report.json",
+  "stableLiveWitness": "work/recipe-50-audit/live-50.json",
+  "stableLiveWitnessSha256": "9ed334a286e9efd7d5546e62c5168a345854bcf6cc83a0acca0c6183cbe31700",
+  "limits": [
+    "Content and arithmetic checks cannot establish taste, successful kitchen execution, actual doneness or packet contents.",
+    "Every default/chosen-cut cooking row receives the requested number of distinct rotating inputs; this is not fifty repetitions of every full Cartesian combination.",
+    "Regional side choices are explicit fusion inputs and do not count as accidental main-seasoning leakage.",
+    "A source change invalidates the run; rerun against the final frozen culinary source.",
+    "Each row covers all region choices and all side choices in 100 distinct rotating inputs. This is not every one of the 76*90=6840 region/side pairs for that row."
+  ]
+}

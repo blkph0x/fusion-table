@@ -15,13 +15,21 @@ barrier. An ordinary headed Chromium browser under Xvfb could read the public
 homepage with JavaScript and cookies enabled. The browser worker now retains one
 anonymous Coles cookie context for fifteen idle minutes. It reads the homepage
 to obtain deployment metadata and reloads once only when the visible page asks
-for a JavaScript/cookie refresh. It never solves a CAPTCHA, hides webdriver,
+for a JavaScript/cookie refresh. Ordinary version revalidation revisits the
+homepage when a rejected ID matches its current document. It never solves a CAPTCHA, hides webdriver,
 changes the browser's identity, copies personal cookies or uses proxy rotation.
 
 Price requests use the published HTTPS navigation JSON on www.coles.com.au.
 The browser is needed to refresh deployment metadata, not to open every product
 search. A private /coles-build endpoint shares the worker's existing bounded
 Coles queue and browser-check backoff. It accepts loopback server requests only.
+SSR build metadata is not considered proof that the cookie scripts have finished.
+The worker waits for the real page load and first-party network quiet, and retains
+one homepage control tab so delayed JavaScript can finish normally. An unchanged
+healthy control document can supply its version without opening another page.
+The backend supplies a validated previous-build header on 404 so a genuinely
+retired version causes normal homepage revalidation. The control tab closes after
+fifteen idle minutes; the private health response reports its retained-page count.
 
 Metadata and freshness
 
@@ -52,6 +60,8 @@ Operational limits
 - Fixed minimum 1,500 ms between navigation-data requests, with shared caching.
 - Four adapter jobs and a sixteen-entry wait queue; cancelled waiting work is
   removed and cannot reserve phantom future request slots.
+- Two active browser jobs plus at most one retained Coles control tab: at most
+  three browser pages overall. No additional unbounded background tabs are used.
 - Ten-minute product cache, thirty-minute shared version-discovery cache.
 - Twenty-four-second navigation budget inside a thirty-two-second adapter limit
   and the existing thirty-five-second shopping API limit.

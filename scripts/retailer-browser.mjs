@@ -31,14 +31,15 @@ export async function waitForIgaHeader(page,name,timeout = 3000) {
 }
 
 /** Track new query requests rather than relying on an earlier document-idle event. */
-export function watchPageNetwork(page) {
+export function watchPageNetwork(page,{origin} = {}) {
   const pending = new Set(); let lastActivity = Date.now();
   page.on("request",request => {
     if (request.resourceType() === "eventsource") return;
     // Advertising/analytics requests do not publish the selected branch's prices.
     // They still load normally; only the product-readiness timer ignores them.
     if (typeof request.url === "function") {
-      const host = new URL(request.url()).hostname;
+      const target = new URL(request.url()), host = target.hostname;
+      if (origin && target.origin !== origin) return;
       if (/(?:^|\.)(?:google\.com|google-analytics\.com|googletagmanager\.com|doubleclick\.net)$/.test(host)) return;
     }
     pending.add(request); lastActivity = Date.now();
@@ -212,6 +213,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
   let browser, launching, proxy, closed = false;
   const storeSessions = createVerifiedStoreSessions();
   const colesSessions = createVerifiedStoreSessions({maxSessions:1,ttlMs:15 * 60_000});
+  const colesControlPages = new Set();
   const getBrowser = async () => {
     if (closed) throw new Error("Browser reader is stopping.");
     if (browser?.isConnected()) return browser;
@@ -230,6 +232,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     return launching;
   };
   const newSession = async (instance,value,source) => {
+    const isColes = !source && retailerUrl(value).retailer === "coles";
     const context = await instance.newContext({ javaScriptEnabled:true, serviceWorkers:"block", acceptDownloads:false,
       viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
     });
@@ -251,10 +254,10 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     });
     await context.routeWebSocket("**/*",socket => socket.close());
     if (onContext) await onContext(context);
-    return {context,count:page => counts.get(page) || 0,quiet:page => networks.get(page).quiet(),close:() => context.close(),async newPage() {
+    return {context,count:page => counts.get(page) || 0,quiet:(page,options) => networks.get(page).quiet(options),close:() => context.close(),async newPage() {
       expectedPages++;
       const page = await context.newPage();
-      networks.set(page,watchPageNetwork(page));
+      networks.set(page,watchPageNetwork(page,isColes ? {origin:"https://www.coles.com.au"} : undefined));
       page.setDefaultTimeout(5000); page.setDefaultNavigationTimeout(12_000);
       page.on("dialog",dialog => void dialog.dismiss());
       return page;
@@ -295,28 +298,58 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     });
     signal.throwIfAborted(); session.nextColesNavigation = Date.now() + 1500;
   };
-  const readColesBuild = async (session,signal) => {
-    let page;
+  const readColesBuild = async (session,signal,previousBuildId) => {
+    let page = session.colesControlPage;
+    clearTimeout(session.colesControlIdleTimer);
     const abort = () => { void page?.close().catch(() => undefined); };
     signal.addEventListener("abort",abort,{once:true});
     try {
-      page = await session.newPage();
-      await paceColes(session,signal);
-      let response = await page.goto("https://www.coles.com.au/",{waitUntil:"domcontentloaded"});
+      if (!page || page.isClosed()) {
+        page = await session.newPage(); session.colesControlPage = page; colesControlPages.add(page);
+        const control = page;
+        page.once("close",() => { colesControlPages.delete(control); if (session.colesControlPage === control) { session.colesControlPage = undefined; clearTimeout(session.colesControlIdleTimer); } });
+      }
+      const reusable = session.colesObservation && Date.now() - (session.colesLastHomeNavigation || 0) < 10 * 60_000
+        && (!previousBuildId || session.colesObservation.buildId !== previousBuildId);
+      let response;
+      if (!reusable) {
+        await paceColes(session,signal);
+        response = await page.goto("https://www.coles.com.au/",{waitUntil:"domcontentloaded"});
+        session.colesLastHomeNavigation = Date.now();
+      }
       await settle(page,undefined,false,true);
       let snapshot = await visible(page), action = pageAction({...snapshot,status:response?.status() || 200});
       if (action === "refresh-once") {
         response = await page.reload({waitUntil:"domcontentloaded"}); await settle(page,undefined,false,true);
+        session.colesLastHomeNavigation = Date.now();
         snapshot = await visible(page); action = pageAction({...snapshot,status:response?.status() || 200});
       }
       if (action !== "ready") throw Object.assign(new Error("Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."),{providerStatus:"needs-browser",status:403});
       if ((response?.status() || 200) >= 400) throw new Error("Coles' normal homepage is temporarily unavailable.");
+      // SSR metadata can precede the scripts that finish the anonymous cookie
+      // session. Let the real load and first-party requests settle, and retain
+      // this one control tab so later JavaScript is not aborted after extraction.
+      try {
+        await page.waitForLoadState("load",{timeout:6000});
+        await session.quiet(page,{timeoutMs:6000,quietMs:500});
+      } catch {
+        signal.throwIfAborted();
+        throw new Error("Coles' homepage is still initialising JavaScript and cookies. Automatic prices will retry shortly.");
+      }
+      snapshot = await visible(page);
+      if (pageAction(snapshot) !== "ready") throw Object.assign(new Error("Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."),{providerStatus:"needs-browser",status:403});
       const buildId = await page.evaluate(() => { try { return JSON.parse(document.querySelector('script#__NEXT_DATA__')?.textContent || "{}").buildId || null; } catch { return null; } });
       if (typeof buildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(buildId)) throw Object.assign(new Error("Coles did not publish its catalogue version in this normal browser session."),{providerStatus:"needs-browser",status:403});
       signal.throwIfAborted();
       session.colesObservation = {version:1,buildId,observedAt:new Date().toISOString(),sourceUrl:"https://www.coles.com.au/"};
       return session.colesObservation;
-    } finally { signal.removeEventListener("abort",abort); await page?.close().catch(() => undefined); }
+    } finally {
+      signal.removeEventListener("abort",abort);
+      if (page && !page.isClosed() && session.colesControlPage === page) {
+        session.colesControlIdleTimer = setTimeout(() => { void page.close().catch(() => undefined); },15 * 60_000);
+        session.colesControlIdleTimer.unref?.();
+      }
+    }
   };
   const createColesSession = async (instance,value,readerSignal) => {
     let session, retained = false;
@@ -360,12 +393,13 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
   return {
     get configured() { return existsSync(executablePath); },
     get connected() { return !!browser?.isConnected(); },
-    async colesBuild(signal) {
+    get retainedControlPages() { return colesControlPages.size; },
+    async colesBuild(signal,previousBuildId) {
       signal.throwIfAborted();
       const instance = await getBrowser();
       const lease = await colesSessions.acquire("coles:anonymous",shared => createColesSession(instance,"https://www.coles.com.au/",shared),signal);
       try {
-        return await readColesBuild(lease.value,signal);
+        return await readColesBuild(lease.value,signal,previousBuildId);
       } finally { lease.release(); }
     },
     async render(value,signal,store,source) {
@@ -522,9 +556,11 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
     };
     if (!loopback(request.socket.remoteAddress) || request.headers.origin || request.headers["sec-fetch-site"] && request.headers["sec-fetch-site"] !== "none") { reply(403,{error:"Only local server requests are accepted."}); return; }
     if (request.method === "GET" && request.url === "/health") {
-      reply(200,{ok:true,browserConfigured:renderer.configured,browserConnected:renderer.connected,active:scheduler.active,queued:scheduler.queued,cachedPages:cache.size,backoffHosts:backoff.size,subscribers:[...pending.values()].reduce((sum,entry) => sum + entry.subscribers.size,0)}); return;
+      reply(200,{ok:true,browserConfigured:renderer.configured,browserConnected:renderer.connected,active:scheduler.active,queued:scheduler.queued,cachedPages:cache.size,backoffHosts:backoff.size,retainedControlPages:renderer.retainedControlPages || 0,subscribers:[...pending.values()].reduce((sum,entry) => sum + entry.subscribers.size,0)}); return;
     }
     if (request.method === "GET" && request.url === "/coles-build") {
+      const previousBuildId = request.headers["x-fusion-coles-previous-build"];
+      if (previousBuildId !== undefined && (typeof previousBuildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(previousBuildId))) { reply(422,{providerStatus:"unavailable",message:"Use a validated Coles deployment ID."}); return; }
       const blocked = backoff.get("coles");
       if (blocked?.until > Date.now()) { reply(403,{providerStatus:"needs-browser",message:blocked.result.message}); return; }
       if (typeof renderer.colesBuild !== "function") { reply(503,{providerStatus:"not-configured",message:"Coles browser metadata is not configured."}); return; }
@@ -533,7 +569,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
       response.once("close",detach);
       try {
         const cancelled = new Promise((_resolve,reject) => deadline.signal.addEventListener("abort",() => reject(deadline.signal.reason),{once:true}));
-        const task = scheduler.run(() => renderer.colesBuild(deadline.signal),deadline.signal,"retailer:coles");
+        const task = scheduler.run(() => renderer.colesBuild(deadline.signal,previousBuildId),deadline.signal,"retailer:coles");
         reply(200,await Promise.race([task,cancelled]));
       } catch (error) {
         if (error?.providerStatus === "needs-browser") backoff.set("coles",{result:controlled("https://www.coles.com.au/","needs-browser",safeMessage(error.message),403),until:Date.now()+CHALLENGE_BACKOFF_MS});

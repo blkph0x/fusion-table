@@ -1,39 +1,44 @@
 Fusion Table: stratified recipe plausibility audit
 Verified 28 October 2026 (Australia/Sydney)
 
-Completed run: 47050 positive recipe cases; no failed cases.
+Completed strongest run: 94,100 distinct positive recipe cases; no failed cases.
+The earlier 50-per-row run passed 47,050 cases and remains recorded separately.
 Additional serving-scale checks: 907 pairs at 1 and 12 servings; no failed pairs.
 Live/share witnesses: 50 exact rebuilds; no changed ingredients, quantities or methods.
 Source dependency fingerprint: 591ffcc6c702b986a28756d81a51d40be0c24d764f7761ef81e6c6775500f983
 
-Coverage measured on distinct inputs:
-- main: 30 groups; minimum 150, maximum 14100 cases per group.
-- cut: 87 groups; minimum 150, maximum 600 cases per group.
-- method: 13 groups; minimum 1000, maximum 5750 cases per group.
-- mainMethod: 266 groups; minimum 50, maximum 2000 cases per group.
-- cookingRow: 907 groups; minimum 50, maximum 50 cases per group.
-- region: 76 groups; minimum 596, maximum 598 cases per group.
-- side: 90 groups; minimum 503, maximum 505 cases per group.
-- classic: 34 groups; minimum 50, maximum 50 cases per group.
-- classicRegion: 25 groups; minimum 68, maximum 68 cases per group.
-- diet: 5 groups; minimum 1630, maximum 14577 cases per group.
-- heat: 5 groups; minimum 9410, maximum 9410 cases per group.
-- servings: 12 groups; minimum 3920, maximum 3922 cases per group.
+Coverage measured on distinct inputs in the 100-per-row run:
+- main: 30 groups; minimum 300, maximum 28200 cases per group.
+- cut: 87 groups; minimum 300, maximum 1200 cases per group.
+- method: 13 groups; minimum 2000, maximum 11500 cases per group.
+- mainMethod: 266 groups; minimum 100, maximum 4000 cases per group.
+- cookingRow: 907 groups; minimum 100, maximum 100 cases per group.
+- region: 76 groups; minimum 1192, maximum 1194 cases per group.
+- side: 90 groups; minimum 1007, maximum 1010 cases per group.
+- classic: 34 groups; minimum 100, maximum 100 cases per group.
+- classicRegion: 25 groups; minimum 136, maximum 136 cases per group.
+- diet: 5 groups; minimum 3260, maximum 29152 cases per group.
+- heat: 5 groups; minimum 18820, maximum 18820 cases per group.
+- servings: 12 groups; minimum 7840, maximum 7844 cases per group.
 
-The 907 cooking rows are 266 main/method defaults plus 641 compatible chosen-cut/method rows. Every row gets 50 rotating cases. Seeds, heat, servings, compatible diets, sides and cleaner-meal options vary deterministically. The additional 1,700 classic cases give every classic 50 cases. This is not fifty cases for every full Cartesian combination.
+The 907 cooking rows are 266 main/method defaults plus 641 compatible chosen-cut/method rows. Every row gets 100 distinct rotating cases and covers all 76 region choices and all 90 side choices. Measured per-row minimum and maximum region coverage are both 76; measured side coverage is 90 throughout. Coprime modular strides (17 modulo 76, and 7 modulo 90) cycle through every region and side. Seeds, heat, servings, compatible diets and cleaner-meal options also vary deterministically. The additional 3,400 classic cases give every classic 100 cases.
+
+Boundary: this covers every region choice and every side choice for each cooking row, not all 6,840 region/side pairs for every row. It is not fifty or one hundred repetitions of every full Cartesian combination.
 
 Concrete corrections found in manual review and regression work:
 - Smoked meat copied rest instructions from endpoint prose into cooking, stall and rest stages, with conflicting durations for ribs and turkey. Cooking instructions now retain endpoint/tenderness guidance while resting is one dedicated stage using its authored duration. The cook estimate includes that rest once.
 - A 180-minute smoke was split into 180-minute bark plus a minimum 60-minute finishing stage, despite a 180-minute total budget. Such cooks now partition 120 + 60 minutes; longer cooks retain 180 + remaining minutes.
 - The wider discovery share tests exposed legacy side IDs containing -veg- being mistaken for a vegetarian constraint. The share parser now reads flags only after the diet/heat/servings boundary. Fifty audit witnesses independently rebuild exact cooking content.
 
-Further review: all 1,705 expanded discovery cores generated and passed structure/portion/timing checks with no strong regional seasoning leaks. Five old repetitive main-and-side component combinations were passed to the discovery owner and normalized. Chosen cuts should be shown explicitly in the UI because a generic title such as roast turkey does not explain that turkey mince is formed into patties.
+Further review: all 1,705 expanded discovery cores generated and passed structure/portion/timing checks with no strong regional seasoning leaks. Five old repetitive main-and-side component combinations were passed to the discovery owner and normalized. Chosen cuts are now shown explicitly in recipe headers, shared recipes and PDFs because a generic title such as roast turkey does not explain that turkey mince is formed into patties.
 
 Reproduce on Node >=22.13:
 node --experimental-strip-types scripts/audit-recipe-strata.mjs
-node --experimental-strip-types scripts/audit-recipe-strata.mjs --run --report <absolute-path.json> --witness <absolute-path.json>
+node --experimental-strip-types scripts/audit-recipe-strata.mjs --samples 100 --run --report <absolute-path.json> --witness <absolute-path.json>
 
-Evidence: docs/audit-evidence-2026-10-28/recipe-strata-audit.json
+Evidence: docs/audit-evidence-2026-10-28/recipe-strata-100-audit-summary.json
+Earlier 50-per-row full report: docs/audit-evidence-2026-10-28/recipe-strata-audit.json
+Full 100-per-row report: work/recipe-100-audit/report.json
 The large 50-recipe witness corpus stays local under work/recipe-50-audit/live-50.json. It includes all 30 mains, 13 methods, 50 regions and 50 sides, including whole-bird, liver, brisket, shank and mince examples.
 
 Boundaries: these checks inspect recorded content, arithmetic, identity and instructions. They do not establish taste, actual successful cooking, actual doneness, packet contents, allergen cross-contact or clinical dietary suitability. Explicit cross-regional sides are allowed fusion inputs; they are separated from accidental main-seasoning leakage. Recipe time and texture remain estimates, with packet guidance, thermometer endpoints and tenderness checks prevailing.

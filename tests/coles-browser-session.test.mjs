@@ -36,6 +36,36 @@ test("ordinary Coles bootstrap refreshes once when requested and retains anonymo
   } finally {await renderer.close();}
 });
 
+test("SSR build metadata waits for asynchronous cookie initialisation and retains its control tab",{skip:!executable},async () => {
+  let homes=0,completed=0,current="fixture-current";
+  const renderer=createBrowserRenderer({executablePath:executable,onContext:async context => {
+    await context.route("**/*",async route => {
+      const request=route.request(),url=new URL(request.url());
+      if(url.origin!=="https://www.coles.com.au") return route.abort();
+      const cookie=(await request.allHeaders()).cookie || "";
+      if(url.pathname==="/bootstrap-cookie") {
+        await new Promise(resolve => setTimeout(resolve,750));
+        return route.fulfill({status:200,contentType:"application/json",body:'{"ready":true}'}).catch(() => undefined);
+      }
+      if(url.pathname==="/") {
+        homes++;
+        if(homes>1 && !cookie.includes("coles-async=ready")) return route.fulfill({status:200,contentType:"text/html",body:"<h1>Verify you are human</h1>"});
+        return route.fulfill({status:200,contentType:"text/html",body:`<!doctype html><h1>Coles homepage</h1><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({buildId:current})}</script>${homes===1 ? '<script>fetch("/bootstrap-cookie").then(r=>r.json()).then(()=>{document.cookie="coles-async=ready; Path=/; Secure; SameSite=Lax";});</script>' : ''}`});
+      }
+      return route.abort();
+    });
+    context.on("requestfinished",request => {if(new URL(request.url()).pathname==="/bootstrap-cookie")completed++;});
+  }});
+  try {
+    const signal=new AbortController().signal;
+    assert.equal((await renderer.colesBuild(signal)).buildId,"fixture-current");
+    assert.equal(completed,1);assert.equal(renderer.retainedControlPages,1);
+    assert.equal((await renderer.colesBuild(signal)).buildId,"fixture-current");assert.equal(homes,1);
+    current="fixture-next";
+    assert.equal((await renderer.colesBuild(signal,"fixture-current")).buildId,"fixture-next");assert.equal(homes,2);
+  } finally {await renderer.close();assert.equal(renderer.retainedControlPages,0);}
+});
+
 test("Coles metadata shares the bounded private scheduler and browser-check backoff",async () => {
   let calls=0;
   const renderer={configured:true,connected:false,async close(){},async colesBuild(){calls++;throw Object.assign(new Error("Verify you are human"),{providerStatus:"needs-browser",status:403});},async render(){throw new Error("A cached browser barrier must stop queued page checks.");}};
@@ -57,5 +87,16 @@ test("an uncooperative Coles metadata reader cannot outlive its explicit request
   try {
     const response=await fetch(`http://127.0.0.1:${worker.port}/coles-build`);
     assert.equal(response.status,504);assert.equal(aborted.aborted,true);assert.equal((await response.json()).providerStatus,"unavailable");
+  } finally {await worker.close();}
+});
+
+test("private metadata refresh forwards a validated previous deployment ID",async () => {
+  let previous,calls=0;
+  const renderer={configured:true,connected:false,async close(){},async colesBuild(_signal,value){calls++;previous=value;return {version:1,buildId:"fixture-current",observedAt:new Date().toISOString(),sourceUrl:"https://www.coles.com.au/"};},async render(){throw new Error("unused");}};
+  const worker=await startRetailerBrowser({port:0,renderer});
+  try {
+    const url=`http://127.0.0.1:${worker.port}/coles-build`;
+    assert.equal((await fetch(url,{headers:{"X-Fusion-Coles-Previous-Build":"fixture-old"}})).status,200);assert.equal(previous,"fixture-old");
+    assert.equal((await fetch(url,{headers:{"X-Fusion-Coles-Previous-Build":"../bad"}})).status,422);assert.equal(calls,1);
   } finally {await worker.close();}
 });
