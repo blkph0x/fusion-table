@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { plainProductFits, suggestAutomaticPrices } from "../app/api/shopping-prices/automatic-offers.ts";
-import { buildShoppingOffers, costShoppingQuantity, isShoppingOfferSelectable, type ShoppingCostLine, type ShoppingOffer } from "../lib/shopping-costs.ts";
+import { plainProductFits, suggestAutomaticPrices, withAutomaticPrices } from "../app/api/shopping-prices/automatic-offers.ts";
+import { applyShoppingOfferSelections, buildShoppingOffers, costShoppingQuantity, isShoppingOfferSelectable, type ShoppingCostLine, type ShoppingOffer } from "../lib/shopping-costs.ts";
 import { matchProducts } from "../lib/product-match.ts";
 import type { PriceQuote } from "../lib/catalogue.ts";
 const offer=(id:string,name:string,size:string,price=450):ShoppingOffer=>({id,productName:name,retailerId:"woolworths",shopId:null,shopName:"Woolworths online",source:"woolworths-online-catalogue",scope:"chain-online",evidenceLabel:"Online guide",priceCents:price,packageSize:size,stock:"IN_STOCK",fetchedAt:"2026-10-27T00:00:00Z",freshness:"current",match:"review",reviewable:true,reviewReason:"Brand tie",eligible:false,cost:costShoppingQuantity(200,"g",price,size),url:"https://www.woolworths.com.au/shop/productdetails/152608"});
@@ -45,6 +45,44 @@ test("a previously chosen offer cannot retain automatic selection when stale or 
   const candidate = { ...offer("old", "Woolworths Mushrooms Button Punnet", "200g"), eligible: true, ...patch };
   const original = { ...row("Mushrooms", [candidate]), chosenOfferId: candidate.id, estimatedCents: 450 };
   assert.equal(suggestAutomaticPrices([original])[0].chosenOfferId, null);
+ }
+});
+
+test("final automatic pricing compares newly eligible brand ties before restoring explicit user choices", () => {
+ const now = new Date("2026-10-28T04:58:45Z");
+ const line = { id: "chicken", name: "Chicken breast", amount: 600, unit: "g", category: "butcher" as const };
+ const product = (name: string, priceCents: number, packageSize: string) => ({ name, priceCents, packageSize, stockcode: name, inStock: true, available: true, url: `https://shop.example.test/${encodeURIComponent(name)}` });
+ const quote = (source: PriceQuote["source"], products: ReturnType<typeof product>[], extra: Partial<PriceQuote> = {}): PriceQuote => ({ query: line.name, source, label: "Online guide", fetchedAt: now.toISOString(), cached: false, fulfilmentStoreId: null, searched: [line.name], error: null, matches: matchProducts(line.name, products), ...extra });
+ const quotes = [
+  quote("woolworths-online-catalogue", [product("Macro Free Range Chicken Breast Fillets", 1170, "650g"), product("The Bare Bird Free Range Chicken Breast Fillets", 1350, "600g")]),
+  quote("local-shop-website", [product("Sommerlad heritage chicken breast", 2790, "500g")], { scope: "shop-website", shop: { id: "local-butcher", name: "Local butcher", website: "https://shop.example.test", area: "2042" } }),
+ ];
+ const before = buildShoppingOffers([line], quotes, [], { area: "2042", now });
+ const expensive = before[0].chosenOfferId;
+ assert.ok(expensive); assert.equal(before[0].estimatedCents, 5580, "the original matcher picks the sole unambiguous local row before brand ties are resolved");
+ assert.equal(before[0].offers.filter(offer => offer.eligible).length, 1);
+ const after = withAutomaticPrices({ lines: before });
+ const cheap = after.lines[0].offers.find(offer => offer.priceCents === 1170)!;
+ assert.equal(cheap.eligible, true); assert.equal(after.lines[0].chosenOfferId, cheap.id);
+ assert.equal(after.lines[0].estimatedCents, 1170); assert.equal(after.summary.knownSubtotalCents, 1170);
+ const reviewed = applyShoppingOfferSelections(after.lines, { chicken: expensive });
+ assert.equal(reviewed[0].chosenOfferId, expensive); assert.equal(reviewed[0].estimatedCents, 5580, "a person can explicitly restore the preferred butcher after the automatic estimate");
+ assert.equal(applyShoppingOfferSelections(after.lines, { chicken: null })[0].estimatedCents, null, "explicit exclusions remain respected");
+});
+
+test("pantry-covered quantities remain nothing-to-buy zero with or without catalogue offers", () => {
+ const now = new Date("2026-10-28T04:58:45Z");
+ const line = { id: "covered-mushrooms", name: "Mushrooms", amount: 0, unit: "g", category: "produce" as const };
+ const matches = matchProducts(line.name, [{ name: "Woolworths Mushrooms Button Punnet", priceCents: 450, packageSize: "200g", stockcode: "pantry", inStock: true, available: true }]);
+ const quote: PriceQuote = { query: line.name, source: "woolworths-online-catalogue", label: "Published guide", fetchedAt: now.toISOString(), cached: false, fulfilmentStoreId: null, searched: [line.name], error: null, matches };
+ for (const quotes of [[], [quote]]) {
+  const before = buildShoppingOffers([line], quotes, [], { area: "2042", now });
+  assert.equal(before[0].estimatedCents, 0);
+  const result = withAutomaticPrices({ lines: before });
+  assert.equal(result.lines[0].estimatedCents, 0); assert.equal(result.lines[0].chosenOfferId, null);
+  assert.match(result.lines[0].reason!, /Nothing to buy/);
+  assert.equal(result.summary.knownSubtotalCents, 0); assert.equal(result.summary.complete, true);
+  if (quotes.length) assert.equal(result.lines[0].offers[0].priceCents, 450, "the published pack price is still positive; the zero is only the covered shopping quantity");
  }
 });
 

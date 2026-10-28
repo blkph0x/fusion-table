@@ -11,7 +11,7 @@ import { setTimeout as pause } from "node:timers/promises";
 import { withDeadline } from "../lib/abort-deadline.mjs";
 import { getCut } from "../lib/cuts.ts";
 import { ingredientPreparationConflict } from "../lib/product-match.ts";
-import { costShoppingQuantity } from "../lib/shopping-costs.ts";
+import { costShoppingQuantity, ricePackPreparationUnverified } from "../lib/shopping-costs.ts";
 
 const positive = value => Number.isSafeInteger(value) && value > 0;
 const plain = value => String(value ?? "").normalize("NFKC").replace(/\s+/g, " ").trim();
@@ -107,12 +107,14 @@ export function selectPriceLines(witness) {
 }
 
 const FINISHED = /\b(?:cookies?|biscuits?|cakes?|muffins?|chocolate|cordial|crisps?|crackers?|chutney|relish|pesto|mayonnaise|aioli|hummus|dressing)\b/i;
-const COOKED = /\b(?:cooked|smoked|crumbed|breaded|battered|marinated|rotisserie|nuggets?|chipees?)\b/i;
+const COOKED = /\b(?:cooked|smoked|crumbed|breaded|battered|marinated|rotisserie|carved|shredded|nuggets?|chipees?)\b/i;
+const POULTRY_SLICES = /\b(?:chicken|turkey)\b.*\bslices\b|\bslices\b.*\b(?:chicken|turkey)\b/i;
 const PROTEIN = /\b(?:chicken|turkey|beef|lamb|pork|duck|fish|salmon|tuna|prawn|prawns|kangaroo)\b/i;
 
 export function validatePriceResponse(lines, data, now = Date.now()) {
   const issues = [], rows = Array.isArray(data?.lines) ? data.lines : [];
-  const metrics = { requestedLines: lines.length, planningLines: 0, selectedGuides: 0, eligibleOffers: 0, pricedOffers: 0, colesPricedMatches: 0, colesEligibleOffers: 0, colesSelectedGuides: 0, unknownStockGuides: 0, oldestEligibleSeconds: 0, colesStatus: "missing" };
+  const metrics = { requestedLines: lines.length, planningLines: 0, selectedGuides: 0, eligibleOffers: 0, pricedOffers: 0, colesPricedMatches: 0, colesEligibleOffers: 0, colesEligibleIngredientNames: [], colesSelectedGuides: 0, unknownStockGuides: 0, oldestEligibleSeconds: 0, colesStatus: "missing" };
+  const colesEligibleIngredients = new Set();
   if (rows.length !== lines.length || new Set(rows.map(row => row.id)).size !== lines.length) issues.push("Price response does not contain one row for every requested ingredient.");
   const statuses = Array.isArray(data?.providerStatuses) ? data.providerStatuses : [];
   metrics.colesStatus = statuses.find(status => status.id === "coles")?.status ?? "missing";
@@ -141,9 +143,13 @@ export function validatePriceResponse(lines, data, now = Date.now()) {
       if (!offer.eligible && offer.id !== row.chosenOfferId) continue;
       metrics.eligibleOffers++; if (coles) metrics.colesEligibleOffers++;
       if (offer.stock === "OUT_OF_STOCK") issues.push(`Out-of-stock product is eligible: ${input.name}`);
+      if (coles && offer.stock !== "IN_STOCK") issues.push(`Coles eligible product lacks confirmed online stock: ${input.name}`);
+      if (coles && !offer.url) issues.push(`Coles eligible product lacks a provenance URL: ${input.name}`);
       if (offer.stock === "UNKNOWN") metrics.unknownStockGuides++;
       if (ingredientPreparationConflict(input.name, offer.productName)
+        || ricePackPreparationUnverified(input.name, offer.productName)
         || !FINISHED.test(input.name) && FINISHED.test(offer.productName)
+        || !POULTRY_SLICES.test(input.name) && POULTRY_SLICES.test(offer.productName)
         || PROTEIN.test(input.name) && !COOKED.test(input.name) && !/stock|sauce|paste|broth/i.test(input.name) && COOKED.test(offer.productName)) issues.push(`Wrong food/preparation is eligible: ${input.name} / ${offer.productName}`);
       const quantity = /^(?:tbsp|tsp)$/.test(input.unit) && /(?:ml|litre|liter|\d\s*l\b)/i.test(offer.packageSize ?? "")
         ? { amount: input.amount * (input.unit === "tbsp" ? 20 : 5), unit: "ml" } : input;
@@ -154,12 +160,14 @@ export function validatePriceResponse(lines, data, now = Date.now()) {
       else metrics.oldestEligibleSeconds = Math.max(metrics.oldestEligibleSeconds, age);
       if (offer.source === "iga-online-catalogue" && (offer.scope !== "shop-online" || !offer.shopId || !offer.shopName)) issues.push(`IGA quote lacks verified-branch scope: ${input.name}`);
       if (coles && offer.scope !== "chain-online") issues.push(`Coles online guide claims an unsupported scope: ${input.name}`);
+      if (coles) colesEligibleIngredients.add(input.name);
     }
     if (selected) {
       metrics.selectedGuides++; if (selected.source === "coles-online-catalogue") metrics.colesSelectedGuides++;
       if (row.estimatedCents !== selected.cost?.lineCents) issues.push(`Selected total differs from the selected product: ${input.name}`);
     }
   }
+  metrics.colesEligibleIngredientNames = [...colesEligibleIngredients].sort();
   return { issues: [...new Set(issues)], metrics };
 }
 
@@ -191,7 +199,7 @@ function argumentsFor(argv) {
 
 export async function checkLiveRecipeBatch(argv = process.argv.slice(2)) {
   const options = argumentsFor(argv);
-  if (options["--help"]) { console.log("Node22+ --experimental-strip-types scripts/check-live-recipe-batch.mjs [--base https://gearsqueens.online/fusion] [--witness work/recipe-50-audit/live-50.json] [--report work/live-recipe-50-report.json] [--limit 1..50] [--prices] [--require-coles-ready]. --prices requires a positive Coles match somewhere; --require-coles-ready additionally requires a fully ready Coles batch."); return; }
+  if (options["--help"]) { console.log("Node22+ --experimental-strip-types scripts/check-live-recipe-batch.mjs [--base https://gearsqueens.online/fusion] [--witness work/recipe-50-audit/live-50.json] [--report work/live-recipe-50-report.json] [--limit 1..50] [--prices] [--require-coles-ready]. --prices checks six sampled ingredient lines per recipe and requires a usable eligible Coles offer somewhere; --require-coles-ready additionally requires a fully ready Coles batch."); return; }
   const base = normalizeAuditBase(options["--base"] ?? "https://gearsqueens.online/fusion");
   const reportPath = resolve(options["--report"] ?? "work/live-recipe-50-report.json"), failureRoot = `${reportPath}.failures`;
   const witnessBytes = await readFile(resolve(options["--witness"] ?? "work/recipe-50-audit/live-50.json"));
@@ -202,7 +210,8 @@ export async function checkLiveRecipeBatch(argv = process.argv.slice(2)) {
   const cases = witness.cases.slice(0, limit);
   for (const item of cases) if (!/^[A-Za-z0-9_-]{8,7500}$/.test(item.shareToken ?? "") || !item.expected?.title || !Array.isArray(item.expected.ingredients) || !item.expected.ingredients.length || !Number.isInteger(item.expected.servings)) throw new Error("Witness recipes are incomplete.");
   const began = Date.now(), device = `live-recipe-audit-${randomUUID()}`;
-  const summary = { status: "running", checkedAt: new Date().toISOString(), base, requestedCases: limit, priceChecksRequested: !!options["--prices"], witnessSha256: createHash("sha256").update(witnessBytes).digest("hex"), witnessSource: witness.source?.sha256 ?? null, deployment: null, htmlPassed: 0, pdfPassed: 0, pricesPassed: 0, priceLines: options["--prices"] ? cases.reduce((sum, item) => sum + selectPriceLines(item).length, 0) : 0, pricesSkipped: 0, planningLines: 0, selectedGuideLines: 0, colesPricedMatches: 0, colesEligibleOffers: 0, colesSelectedGuides: 0, colesReadyBatches: 0, colesStatuses: {}, oldestEligibleSeconds: 0, rateLimitRetries: 0, failures: [], cases: [] };
+  const summary = { status: "running", checkedAt: new Date().toISOString(), base, requestedCases: limit, priceChecksRequested: !!options["--prices"], witnessSha256: createHash("sha256").update(witnessBytes).digest("hex"), witnessSource: witness.source?.sha256 ?? null, deployment: null, htmlPassed: 0, pdfPassed: 0, pricesPassed: 0, priceLines: options["--prices"] ? cases.reduce((sum, item) => sum + selectPriceLines(item).length, 0) : 0, pricesSkipped: 0, planningLines: 0, selectedGuideLines: 0, colesPricedMatches: 0, colesEligibleOffers: 0, colesEligibleBatches: 0, colesEligibleUniqueIngredients: 0, colesEligibleIngredientNames: [], colesSelectedGuides: 0, colesReadyBatches: 0, colesStatuses: {}, oldestEligibleSeconds: 0, rateLimitRetries: 0, failures: [], cases: [] };
+  const colesEligibleIngredients = new Set();
   await mkdir(dirname(reportPath), { recursive: true });
   const save = () => writeFile(reportPath, JSON.stringify(summary, null, 2));
   const failure = async (index, stage, issues, response) => {
@@ -256,6 +265,10 @@ export async function checkLiveRecipeBatch(argv = process.argv.slice(2)) {
           summary.planningLines += validation.metrics.planningLines;
           summary.selectedGuideLines += validation.metrics.selectedGuides; summary.colesPricedMatches += validation.metrics.colesPricedMatches;
           summary.colesEligibleOffers += validation.metrics.colesEligibleOffers; summary.colesSelectedGuides += validation.metrics.colesSelectedGuides;
+          if (validation.metrics.colesEligibleOffers > 0) summary.colesEligibleBatches++;
+          for (const name of validation.metrics.colesEligibleIngredientNames) colesEligibleIngredients.add(name);
+          summary.colesEligibleIngredientNames = [...colesEligibleIngredients].sort();
+          summary.colesEligibleUniqueIngredients = colesEligibleIngredients.size;
           summary.oldestEligibleSeconds = Math.max(summary.oldestEligibleSeconds, validation.metrics.oldestEligibleSeconds);
           const state = validation.metrics.colesStatus;
           summary.colesStatuses[state] = (summary.colesStatuses[state] ?? 0) + 1;
@@ -268,7 +281,7 @@ export async function checkLiveRecipeBatch(argv = process.argv.slice(2)) {
       summary.cases.push(row); await save();
       console.log(JSON.stringify({ case: index + 1, of: limit, html: row.html, pdf: row.pdf, ...(row.prices ? { priceLines: row.prices.requestedLines, colesStatus: row.prices.colesStatus, colesPricedMatches: row.prices.colesPricedMatches } : {}) }));
     }
-    if (options["--prices"] && summary.colesPricedMatches === 0) summary.failures.push({ stage: "coles-coverage", issues: ["Coles returned no positively priced product matches across the recipe batch."] });
+    if (options["--prices"] && summary.colesEligibleOffers === 0) summary.failures.push({ stage: "coles-coverage", issues: ["Coles returned no usable eligible price offers across the recipe batch. Positive candidate prices alone do not establish automatic ingredient pricing."] });
     if (options["--require-coles-ready"] && summary.colesReadyBatches === 0) summary.failures.push({ stage: "coles-readiness", issues: ["No recipe batch returned a fully ready Coles provider."] });
     summary.status = summary.failures.length ? "failed" : "passed";
   } catch (error) { summary.status = "failed"; summary.failures.push({ stage: "startup", issues: [error.message ?? String(error)] }); }

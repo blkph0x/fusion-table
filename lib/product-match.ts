@@ -310,6 +310,45 @@ const PRODUCE_PREPARATIONS: readonly RegExp[] = [
   /\bready cut\b/,
 ];
 
+const PLANT_MEAT = /\b(?:plant based|plantbased|plant protein|vegan|vegetarian|meat free|meatfree|meatless|non meat)\b/;
+const PLANT_DAIRY = /\b(?:plant based|plantbased|vegan|dairy free|dairyfree|non dairy|plant (?:milk|cream|butter|cheese|yogurt))\b/;
+const FOOD_ANCHORS = new Set([...RAW_PRODUCE_WORDS,"rice","tofu","flour","pasta","noodle","miso","vinegar","oil","sugar","honey","stock","egg","bean","lentil","chickpea","oat","quinoa","couscous","bread","tortilla"]);
+const PLANT_BASES = new Set(["coconut","soy","oat","almond","cashew","macadamia","rice","pea","hemp","hazelnut","walnut","peanut","sesame","sunflower","pistachio","cocoa","cacao"]);
+const CHEESE_NAME = /\b(?:cheese|mozzarella|cheddar|parmesan|feta|halloumi|ricotta|mascarpone|paneer|provolone|pecorino|gruyere|bocconcini|brie|camembert|gouda|edam)\b/;
+function identityText(value: string): string {
+  return value.replace(/\b(?:scallion|green onion)\b/g,"spring onion").replace(/\bsoya\b/g,"soy").replace(/\bbean curd\b/g,"tofu").replace(/\b(?:broth|bouillon)\b/g,"stock");
+}
+function dairyIdentity(value: string): {kind:string;plant:boolean;bases:Set<string>} | null {
+  if (/\b(?:butter bean|butterbean)\b/.test(value)) return {kind:"butter-bean",plant:true,bases:new Set()};
+  if (/\bcream of tartar\b/.test(value)) return {kind:"cream-of-tartar",plant:true,bases:new Set()};
+  const kind = /\byogurt\b/.test(value) ? "yogurt" : CHEESE_NAME.test(value) ? "cheese" : /\bbutter\b/.test(value) ? "butter" : /\bbuttermilk\b/.test(value) ? "buttermilk" : /\bmilk\b/.test(value) ? "milk" : /\bcream\b/.test(value) ? "cream" : null;
+  if (!kind) return null;
+  const bases = new Set(value.split(" ").filter(word => PLANT_BASES.has(word)));
+  return {kind,plant:bases.size>0 || PLANT_DAIRY.test(value),bases};
+}
+function ingredientIdentityConflictCanonical(wanted: string, seen: string): boolean {
+  const request=identityText(wanted), product=identityText(seen), offeredWords=new Set(product.split(" "));
+  if (request.split(" ").some(word => FOOD_ANCHORS.has(word) && !offeredWords.has(word))) return true;
+  const animalRequest=MEAT_WORDS.test(request) || /\begg\b/.test(request);
+  const animalProduct=MEAT_WORDS.test(product) || /\begg\b/.test(product);
+  if ((animalRequest || animalProduct) && PLANT_MEAT.test(request)!==PLANT_MEAT.test(product)) return true;
+  const left=dairyIdentity(request),right=dairyIdentity(product);
+  if (!left || !right) return false;
+  if(left.kind!==right.kind || left.plant!==right.plant) return true;
+  if(left.plant) {
+    // A dairy-free butter spread is not a nut butter, and named plant bases
+    // remain distinct in both directions. Generic plant dairy can stay generic.
+    if(left.kind==="butter" && Boolean(left.bases.size)!==Boolean(right.bases.size)) return true;
+    if(left.bases.size && (left.bases.size!==right.bases.size || [...left.bases].some(base=>!right.bases.has(base)))) return true;
+  }
+  return false;
+}
+
+/** Identity, not an allergen certification: unrequested substitutes cannot price a food. */
+export function ingredientIdentityConflict(requested: string, offered: string): boolean {
+  return ingredientIdentityConflictCanonical(canonicalizeProductText(requested),canonicalizeProductText(offered));
+}
+
 function otherIngredientPreparationConflict(wanted: string, seen: string): boolean {
   // A flavour word inside a finished food is not the requested ingredient.
   // Group biscuit/cookie and naan/bread wording, while preserving explicit foods.
@@ -337,10 +376,10 @@ function otherIngredientPreparationConflict(wanted: string, seen: string): boole
 /** Shared by live matching and retained-offer checks; it never establishes stock. */
 export function ingredientPreparationConflict(requested: string, offered: string): boolean {
   const wanted = canonicalizeProductText(requested), seen = canonicalizeProductText(offered);
-  return ingredientFoodFormConflict(wanted, seen) || otherIngredientPreparationConflict(wanted, seen);
+  return ingredientIdentityConflictCanonical(wanted,seen) || ingredientFoodFormConflict(wanted, seen) || otherIngredientPreparationConflict(wanted, seen) || meatPreparationConflict(wanted,seen,{});
 }
 
-function meatPreparations(canonical: string, product?: CatalogueProduct): Set<MeatPreparation> {
+function meatPreparations(canonical: string, product?: Pick<CatalogueProduct,"categories">): Set<MeatPreparation> {
   const forms = new Set<MeatPreparation>();
   if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
   if (/\bsmoked\b/.test(canonical)) forms.add("smoked");
@@ -348,15 +387,18 @@ function meatPreparations(canonical: string, product?: CatalogueProduct): Set<Me
   if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
   if (/\b(?:deli|sandwich|luncheon|cold cut)\b/.test(canonical)) forms.add("deli");
   if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned)\b/.test(canonical)) forms.add("cured");
+  const poultry=/\b(?:chicken|turkey)\b/.test(canonical);
+  const explicitRaw=/\b(?:raw|uncooked|for cooking|for roasting|roasting joint|roast joint|roast cut)\b/.test(canonical);
+  if(poultry && !explicitRaw && /\b(?:carved|shredded|roast)\b/.test(canonical)) forms.add("cooked");
   // Thinly sliced poultry sold as a product is ambiguous with ready-to-eat deli
   // chicken. It is not proof of a raw breast ingredient. A query asking only for
   // slicing does not request a deli product; explicit deli wording is required.
-  if (product && /\b(?:chicken|turkey)\b/.test(canonical) && /\b(?:thinly sliced|shaved)\b/.test(canonical)) forms.add("deli");
+  if (poultry && !explicitRaw && /\b(?:thinly sliced|sliced|slice|shaved|carved|shredded)\b/.test(canonical) && (product || forms.has("cooked") || /\bdeli\b/.test(canonical))) { forms.add("deli");forms.add("cooked"); }
   if (product?.categories?.some(category => /^(?:deli meat|delicatessen meat|cold cut|smallgoods|sliced meat|shaved meat)s?$/.test(canonicalizeProductText(category)))) forms.add("deli");
   return forms;
 }
 
-function meatPreparationConflict(wanted: string, seen: string, product: CatalogueProduct): boolean {
+function meatPreparationConflict(wanted: string, seen: string, product?: Pick<CatalogueProduct,"categories">): boolean {
   if (!MEAT_WORDS.test(wanted) && !MEAT_WORDS.test(seen)) return false;
   // A protein word in a matched stock/sauce/paste describes its flavour or base,
   // not a request for raw meat. Roasted chicken stock is still chicken stock.
@@ -369,6 +411,7 @@ function meatPreparationConflict(wanted: string, seen: string, product: Catalogu
     requested.delete("cooked"); offered.delete("cooked");
     if (!requested.has("deli")) offered.delete("deli");
   }
+  if(requested.has("cooked") && offered.has("cooked") && !requested.has("deli")) offered.delete("deli");
   return [...requested].some(form => !offered.has(form)) || [...offered].some(form => !requested.has(form));
 }
 
@@ -386,6 +429,7 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
   for (const product of products) {
     if (!product.name.trim() || product.name.length > 500 || isNonFoodCatalogueProduct(product)) continue;
     const seen = canonicalizeProductText(product.name);
+    if (ingredientIdentityConflictCanonical(wanted,seen)) continue;
     if (ingredientFoodFormConflict(wanted, seen)) continue;
     if (otherIngredientPreparationConflict(wanted, seen)) continue;
     if (meatPreparationConflict(wanted, seen, product)) continue;

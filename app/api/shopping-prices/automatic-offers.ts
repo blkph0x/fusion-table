@@ -1,5 +1,5 @@
 import type { ShoppingCostLine, ShoppingOffer } from "../../../lib/shopping-costs.ts";
-import { costShoppingQuantity, summarizeShoppingCosts } from "../../../lib/shopping-costs.ts";
+import { costShoppingQuantity, ricePackPreparationUnverified, summarizeShoppingCosts } from "../../../lib/shopping-costs.ts";
 import { estimateIngredientCost } from "../../../lib/ingredient-estimates.ts";
 import { ingredientPreparationConflict } from "../../../lib/product-match.ts";
 const clean = (value: string) => value.toLowerCase().replace(/[\u2019']/g, "").replace(/[^a-z0-9]+/g, " ").trim();
@@ -37,7 +37,9 @@ function usableAvailability(offer: ShoppingOffer): boolean {
 }
 export function suggestAutomaticPrices(rows: readonly ShoppingCostLine[]): ShoppingCostLine[] {
   return rows.map(original => {
+    if (original.amount === 0) return { ...original, chosenOfferId: null, estimatedCents: 0, reason: "Nothing to buy for this line." };
     const offers = original.offers.map(offer => {
+      if (ricePackPreparationUnverified(original.name, offer.productName)) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "This rice pouch or cup does not establish dry-grain weight; no cooked-to-dry conversion was guessed." }, reviewReason: "Choose a pack explicitly sold as dry or uncooked rice for this quantity." };
       if (ingredientPreparationConflict(original.name, offer.productName)) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "This product is a different food or preparation, so it cannot price the requested ingredient." }, reviewReason: "A finished food or prepared condiment cannot substitute for this ingredient unless that form is requested." };
       if (nonFood.test(clean(offer.productName))) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "This is a non-food product, so it is excluded from the recipe estimate." }, reviewReason: "A garden, growing or personal-care product cannot substitute for this cooking ingredient." };
       if (uncertainRate(offer)) return { ...offer, eligible: false, reviewable: false, cost: { lineCents: null, packs: null, purchasedAmount: null, purchasedUnit: null, reason: "Loose-product price basis needs verification; the weight increment is not assumed to be the selling unit." }, reviewReason: "Check the retailer's actual per-kg or per-item price before costing this loose product." };
@@ -50,8 +52,10 @@ export function suggestAutomaticPrices(rows: readonly ShoppingCostLine[]): Shopp
       const suitable = plainProductFits(original.name, offer.productName) && offer.reviewable && offer.freshness === "current" && usableAvailability(offer) && cost.lineCents !== null && Number.isSafeInteger(cost.lineCents) && cost.lineCents > 0;
       return suitable ? { ...offer, cost, eligible: true, reviewReason: "Suggested plain product for this ingredient and food form. Review the brand, packet and dietary labels before buying." } : { ...offer, cost };
     });
-    const previous = offers.find(offer => offer.id === original.chosenOfferId && offer.eligible && offer.freshness === "current" && usableAvailability(offer) && Number.isSafeInteger(offer.cost.lineCents) && offer.cost.lineCents! > 0);
-    const suggested = previous || offers.filter(offer => offer.eligible && offer.freshness === "current" && usableAvailability(offer) && offer.cost.lineCents !== null).sort((a,b) => a.cost.lineCents! - b.cost.lineCents! || a.id.localeCompare(b.id))[0];
+    // The earlier choice was automatic, before plain-product brand ties were
+    // resolved. Recompare the final eligible offers; explicit user choices are
+    // restored separately by applyShoppingOfferSelections in the shopping UI.
+    const suggested = offers.filter(offer => offer.eligible && offer.freshness === "current" && usableAvailability(offer) && Number.isSafeInteger(offer.cost.lineCents) && offer.cost.lineCents! > 0).sort((a,b) => a.cost.lineCents! - b.cost.lineCents! || a.id.localeCompare(b.id))[0];
     return { ...original, offers, chosenOfferId: suggested?.id || null, estimatedCents: suggested?.cost.lineCents ?? null, reason: suggested?.match === "review" ? "Suggested product for costing; review the packet before buying." : suggested ? original.reason : "No verified quantity price yet. Review a product or record a local price." };
   });
 }

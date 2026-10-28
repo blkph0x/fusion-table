@@ -110,10 +110,9 @@ describe("smart catalogue matching", () => {
   it("does not automatically select an unlabelled product for an explicit dietary request", () => {
     const stocked = (name: string): CatalogueProduct => ({ name, priceCents: 500, packageSize: "pack", stockcode: name, inStock: true, available: true });
     for (const [query, name] of [
-      ["Vegan Thai red curry paste", "Thai Red Curry Paste With Shrimp"],
+      ["Vegan Thai red curry paste", "Thai Red Curry Paste"],
       ["Gluten-free white sandwich sliced bread", "White Sandwich Sliced Bread"],
       ["Gluten-free bread", "Plain Bread"],
-      ["Dairy-free Greek style natural yoghurt", "Greek Style Natural Yoghurt"],
       ["Vegetarian chicken style meat free strips", "Chicken Style Meat Free Strips"],
     ]) {
       const matches = matchProducts(query, [stocked(name)]);
@@ -121,6 +120,9 @@ describe("smart catalogue matching", () => {
       assert.equal(matches[0].selected, false, query);
       assert.match(matches[0].reason, /Verify the packet; not selected automatically/, query);
     }
+    // Explicit contradictions are different foods, not uncertain label claims.
+    assert.deepEqual(matchProducts("Vegan Thai red curry paste", [stocked("Thai Red Curry Paste With Shrimp")]), []);
+    assert.deepEqual(matchProducts("Dairy-free Greek style natural yoghurt", [stocked("Greek Style Natural Yoghurt")]), []);
     const labelled = matchProducts("Gluten-free bread", [stocked("Gluten Free Bread")]);
     assert.equal(labelled[0].selected, true);
     const notVegan = matchProducts("Vegan Thai red curry paste", [stocked("Not Vegan Thai Red Curry Paste")]);

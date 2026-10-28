@@ -1,7 +1,19 @@
 COLES AUTOMATIC PRICE COLLECTION — 28 OCTOBER 2026
 
-The application now has a primary-source automatic Coles navigation-data reader.
-There is no third-party price feed, retailer login or price-entry requirement.
+Current verified state
+
+Coles ingredient-price queries work automatically from fresh official navigation
+JSON after the reader is bootstrapped with a verified public deployment
+observation. Product prices are read again from Coles; no one enters individual
+product prices. The stored observation is runtime metadata, outside application
+code. There is no third-party price feed or retailer login in this path.
+
+Fully unattended version discovery and recovery are still limited on this host.
+Cold ordinary headed-browser checks with Chromium 142 and official Chrome 156
+both reached an explicit Imperva human-check/CAPTCHA page. Those challenges were
+not completed. A successful price query using a known, still-published version
+does not establish that a cold browser can discover the next version. The release
+verification must distinguish these two capabilities.
 
 What changed
 
@@ -11,17 +23,25 @@ ID. Its own public navigation JSON contains the same product, selling-price,
 pack and availability fields. No deployment ID is hardcoded in application code.
 
 The host's ordinary headless browser and HTML requests returned a small browser
-barrier. An ordinary headed Chromium browser under Xvfb could read the public
-homepage with JavaScript and cookies enabled. The browser worker now retains one
-anonymous Coles cookie context for fifteen idle minutes. It reads the homepage
-to obtain deployment metadata and reloads once only when the visible page asks
-for a JavaScript/cookie refresh. Ordinary version revalidation revisits the
-homepage when a rejected ID matches its current document. It never solves a CAPTCHA, hides webdriver,
-changes the browser's identity, copies personal cookies or uses proxy rotation.
+barrier. An earlier ordinary headed-browser observation could read public
+homepage metadata with JavaScript and cookies enabled. Subsequent cold checks
+reached the explicit human check described above, including with the newer
+browser. That earlier observation is evidence that the discovery path can work,
+not evidence of reliable unattended discovery on the current host.
+
+The browser worker retains one anonymous Coles cookie context for fifteen idle
+minutes. Its discovery path reads the homepage to obtain deployment metadata and
+reloads once only when the visible page asks for a JavaScript/cookie refresh.
+Ordinary version revalidation revisits the homepage when a rejected ID matches
+its current document. This path stops at a CAPTCHA or human check. It never
+solves a challenge, hides webdriver, changes the browser's identity, copies
+personal cookies or uses proxy rotation.
 
 Price requests use the published HTTPS navigation JSON on www.coles.com.au.
-The browser is needed to refresh deployment metadata, not to open every product
-search. A private /coles-build endpoint shares the worker's existing bounded
+Fresh price queries can use verified runtime deployment metadata without opening
+a browser for every product search. Browser discovery is the implemented recovery
+path when valid metadata is unavailable; the current human check can block it.
+A private /coles-build endpoint shares the worker's existing bounded
 Coles queue and browser-check backoff. It accepts loopback server requests only.
 SSR build metadata is not considered proof that the cookie scripts have finished.
 The worker waits for the real page load and first-party network quiet, and retains
@@ -36,12 +56,22 @@ Metadata and freshness
 An observation contains only version, buildId, observedAt and official sourceUrl.
 The Node application persists it as coles-build.json in FUSION_DATA_DIR, using
 atomic writes and mode 0600. It contains no price, account, cookie or credential.
+Host verification used a bootstrap from observed public Coles metadata, checked
+by fresh official JSON responses from the server. The observation is not
+a source-code constant, a fabricated version or a manually supplied price table.
 An old observation is a candidate URL only. Fresh, valid official product JSON
 must be returned before any price is quoted. Successful JSON renews the version
 observation; a 404 causes one shared version rediscovery and at most one request
 using a different version. An unchanged rejected version is not requested again.
 Late responses from a rejected version cannot supply prices or replace newer
 metadata. Product-price cache timestamps remain separate from version metadata.
+
+If Coles retires that version while the normal browser remains at a human check,
+new automatic Coles quotes cannot resume through this recovery path alone. The
+reader reports the blocked discovery and retains labelled planning estimates.
+Restoring service requires a valid new public deployment observation or another
+retailer-supported access path. Stale product snapshots must not be relabelled
+as newly observed prices, and observedAt must not be edited to invent freshness.
 
 The adapter preserves selling prices, exact pack sizes and explicit availability.
 It never uses the comparison price, crossed-out price or a multi-buy total as the
@@ -103,4 +133,12 @@ body limits and deadlines. A real Chromium fixture proves one requested refresh
 and retention of anonymous cookies across separate query pages. Private endpoint
 tests cover origin rejection, browser-check backoff and response deadlines.
 The wider worker security, branch-hydration and forced-GC deadline tests also pass.
-Live deployment and many-meal checks are recorded by the release verification.
+
+Live deployment and many-meal checks are recorded separately by release
+verification. Reports must state whether they tested fresh price JSON using a
+bootstrapped observation, a cold browser metadata discovery, or recovery after a
+retired version. Passing the first does not imply the latter two passed. Current
+cold-browser discovery/recovery is blocked by the human check; unit fixtures of
+version recovery demonstrate code behaviour rather than unattended live success.
+Final recipe, price-match and deployment counts belong in that release evidence
+once the actual runs are complete.

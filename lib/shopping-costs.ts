@@ -140,7 +140,7 @@ export function resolveIngredientPricing(line: ShoppingLine, row?: ShoppingCostL
   // recipe quantity. Larger rows belong to a previous quantity/serving choice.
   const matchingRow = row?.id === line.id && row.name === line.name && row.unit === line.unit && Number.isFinite(row.amount) && row.amount >= 0 && row.amount <= line.amount ? row : null;
   const planningEstimate = matchingRow?.amount === line.amount ? matchingRow.planningEstimate ?? estimateIngredientCost(line) : estimateIngredientCost(line);
-  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(line.name, offer.productName));
+  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(line.name, offer.productName) && !ricePackPreparationUnverified(line.name, offer.productName));
   const observedRecipeCents = chosen ? consumedOfferCost(line, chosen) : null;
   const observedPurchase = chosen && Number.isSafeInteger(matchingRow?.estimatedCents) && matchingRow!.estimatedCents! >= 0 && matchingRow!.estimatedCents! <= 1_000_000_000 ? matchingRow!.estimatedCents : null;
   const purchaseCents = observedPurchase ?? planningEstimate?.purchaseCents ?? null;
@@ -193,6 +193,17 @@ function foodWords(value: string): string[] {
   return canonicalizeProductText(value).split(" ").filter(word => word.length > 1 && !REQUEST_STOP.has(word) && !/^\d/.test(word));
 }
 
+/** A pouch/cup title alone does not establish dry-grain weight. Pack size is not evidence. */
+export function ricePackPreparationUnverified(requested: string, productName: string): boolean {
+  const wanted = foodWords(requested), seen = foodWords(productName);
+  if (!wanted.includes("rice") || !seen.includes("rice")) return false;
+  // These requests already describe a cooked food or another rice ingredient.
+  if (wanted.some(word => ["cooked", "steamed", "microwave", "microwavable", "ready", "instant", "flour", "noodle", "vermicelli", "cracker", "paper", "milk", "drink", "beverage", "syrup", "vinegar", "cake", "bran", "cereal", "porridge"].includes(word))) return false;
+  if (!seen.some(word => word === "pouch" || word === "cup")) return false;
+  return !seen.some(word => ["dry", "dried", "uncooked"].includes(word))
+    || seen.some(word => ["cooked", "steamed", "microwave", "microwavable", "ready", "instant"].includes(word));
+}
+
 function equivalentFoodForm(line: ShoppingLine, productName: string): boolean {
   const wanted = new Set(foodWords(line.name));
   const seen = new Set(foodWords(productName));
@@ -225,11 +236,12 @@ function catalogueOffers(line: ShoppingLine, quotes: readonly PriceQuote[], now:
   const publishedGuide = quote.source === "aldi-online-catalogue" || quote.source === "iga-online-catalogue" || quote.source === "local-shop-website";
   return quote.matches.slice(0, 6).filter(match => !ingredientPreparationConflict(line.name, match.name)).map((match): ShoppingOffer => {
     const current = freshness(quote.fetchedAt, now, 15 * 60_000);
-    const preparedMismatch = match.preparedForm === "cooked-rice" && !foodWords(line.name).includes("cooked");
+    const ambiguousRicePack = ricePackPreparationUnverified(line.name, match.name);
+    const preparedMismatch = match.preparedForm === "cooked-rice" && !foodWords(line.name).includes("cooked") || ambiguousRicePack;
     const comparable = comparableState(line, match.name) && !preparedMismatch;
     const sameForm = equivalentFoodForm(line, match.name) && !preparedMismatch;
     const suggestion = Boolean(match.reviewable || publishedGuide && match.nameReviewable) && simpleGrocerySuggestion(line, match.name);
-    const preparedReason = "Retailer metadata identifies cooked rice. No dry-to-cooked weight conversion was guessed; choose a dry-rice pack for this quantity.";
+    const preparedReason = ambiguousRicePack ? "This rice pouch or cup does not establish a dry-grain quantity. No dry-to-cooked weight conversion was guessed; choose a pack explicitly sold as dry or uncooked rice." : "Retailer metadata identifies cooked rice. No dry-to-cooked weight conversion was guessed; choose a dry-rice pack for this quantity.";
     const reviewReason = preparedMismatch ? preparedReason : suggestion && !match.selected ? "Suggested for this quantity: the requested ingredient and food form match. Review the brand and packet before buying." : !sameForm ? "This product uses a different food form or wording. Review it before choosing; it is excluded from the suggested estimate." : match.reason;
     const packageSize=productPackageSize(match.name,match.packageSize);
     const cost = comparable ? costShoppingQuantity(line.amount, line.unit, match.priceCents, packageSize) : unknownCost(preparedMismatch ? preparedReason : "Cooked or drained quantity is not established by this pack.");
@@ -343,7 +355,7 @@ export function applyShoppingOfferSelection(row: ShoppingCostLine, offerId: stri
   if (row.amount === 0) return row;
   if (offerId === null) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "No offer selected. This line is excluded from the estimate." };
   const chosen = row.offers.find(offer => offer.id === offerId);
-  if (!chosen || !isShoppingOfferSelectable(chosen) || ingredientPreparationConflict(row.name, chosen.productName)) return row;
+  if (!chosen || !isShoppingOfferSelectable(chosen) || ingredientPreparationConflict(row.name, chosen.productName) || ricePackPreparationUnverified(row.name, chosen.productName)) return row;
   return { ...row, chosenOfferId: chosen.id, estimatedCents: chosen.cost.lineCents, reason: chosen.match === "review" ? "You selected this product after reviewing the match. Verify the packet." : null };
 }
 
@@ -351,7 +363,7 @@ export function applyShoppingOfferSelections(rows: readonly ShoppingCostLine[], 
   return rows.map(row => {
     if (!Object.prototype.hasOwnProperty.call(selections, row.id)) return row;
     const selection = selections[row.id];
-    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(row.name, offer.productName))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
+    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferSelectable(offer) && !ingredientPreparationConflict(row.name, offer.productName) && !ricePackPreparationUnverified(row.name, offer.productName))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
     return applyShoppingOfferSelection(row, selection);
   });
 }

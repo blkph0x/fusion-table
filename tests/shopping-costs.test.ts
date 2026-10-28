@@ -3,7 +3,8 @@ import { test } from "node:test";
 import { parseWoolworthsSearch, type PriceQuote } from "../lib/catalogue.ts";
 import { itemKey, quoteItems, rememberPrice, type ItemQuote, type PriceLedger, type PriceMemory } from "../lib/price-memory.ts";
 import { matchProducts } from "../lib/product-match.ts";
-import { applyShoppingOfferSelection, applyShoppingOfferSelections, buildShoppingOffers, costShoppingQuantity, isShoppingOfferSelectable, summarizeShoppingCosts } from "../lib/shopping-costs.ts";
+import { applyShoppingOfferSelection, applyShoppingOfferSelections, buildShoppingOffers, costShoppingQuantity, isShoppingOfferSelectable, resolveIngredientPricing, summarizeShoppingCosts } from "../lib/shopping-costs.ts";
+import { withAutomaticPrices } from "../app/api/shopping-prices/automatic-offers.ts";
 
 const now = new Date("2026-10-26T10:00:00Z");
 const line = { id: "rice", name: "Jasmine rice", amount: 1200, unit: "g" };
@@ -303,6 +304,32 @@ test("a genuine dry 450g rice pack remains costable and explicitly cooked weight
   const matches = matchProducts(name, [{ ...dry, name: "Brand Cooked Jasmine Rice", preparedForm: "cooked-rice" }]);
   const cooked = buildShoppingOffers([{ ...line, name, amount: 450 }], [catalogue({ query: name, matches })], [], options)[0];
   assert.equal(cooked.estimatedCents, 275);
+});
+
+test("the bland IGA rice pouch title cannot price dry grain or survive as a retained choice", () => {
+  const input = { ...line, amount: 400 };
+  const products = [{ name: "SunRice Jasmine Rice Pouch", priceCents: 380, packageSize: "450g", stockcode: "57028", inStock: true, available: true, url: "https://www.igashop.com.au/product/sunrice-jasmine-rice-pouch-57028" }];
+  const quote = catalogue({ source: "iga-online-catalogue", scope: "selected-store", fulfilmentStoreId: "iga-1", shop: { id: "iga-1", name: "Verified IGA", website: "https://www.igashop.com.au", area: "2000" }, matches: matchProducts(input.name, products) });
+  const row = withAutomaticPrices({ lines: buildShoppingOffers([input], [quote], [], options) }).lines[0];
+  const pouch = row.offers[0];
+  assert.equal(pouch.priceCents, 380); assert.equal(pouch.eligible, false); assert.equal(pouch.reviewable, false);
+  assert.equal(pouch.cost.lineCents, null); assert.equal(isShoppingOfferSelectable(pouch), false); assert.equal(row.estimatedCents, null);
+  const old = { ...pouch, eligible: true, reviewable: true, cost: costShoppingQuantity(400, "g", 380, "450g") };
+  const retained = { ...row, offers: [old], chosenOfferId: old.id, estimatedCents: 380 };
+  assert.equal(withAutomaticPrices({ lines: [retained] }).lines[0].estimatedCents, null);
+  assert.equal(applyShoppingOfferSelections([retained], { [input.id]: old.id })[0].chosenOfferId, null);
+  assert.equal(resolveIngredientPricing(input, retained).source, "planning-guide");
+  const unselected = { ...retained, chosenOfferId: null, estimatedCents: null };
+  assert.equal(applyShoppingOfferSelection(unselected, old.id).chosenOfferId, null);
+});
+
+test("rice pouch safeguards preserve explicitly dry packs, arbitrary dry weights, and cooked requests", () => {
+  for (const [name, productName, size] of [["Jasmine rice", "Brand Jasmine Rice", "450g"], ["Jasmine rice", "Brand Dry Jasmine Rice Pouch", "450g"], ["Jasmine rice", "Brand Uncooked Jasmine Rice Cup", "250g"], ["Cooked Jasmine rice", "Brand Cooked Jasmine Rice Pouch", "450g"], ["Rice flour", "Brand Rice Flour Pouch", "500g"]]) {
+    const input = { ...line, name, amount: 200 };
+    const products = [{ name: productName, priceCents: 275, packageSize: size, stockcode: "dry-or-explicit-cooked", inStock: true, available: true }];
+    const row = withAutomaticPrices({ lines: buildShoppingOffers([input], [catalogue({ query: name, matches: matchProducts(name, products) })], [], options) }).lines[0];
+    assert.equal(row.estimatedCents, 275, `${name}: ${productName}`);
+  }
 });
 
 test("fresh produce cannot be automatically replaced by powder, paste or preserved products", () => {

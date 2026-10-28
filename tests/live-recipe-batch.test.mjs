@@ -51,6 +51,7 @@ function dataFor(productName = "Fresh Ginger Punnet", packageSize = "100g") {
 test("live price validation catches old cookie matches, wrong units, stock and stale source evidence", () => {
   const valid = validatePriceResponse([line], dataFor(), now);
   assert.deepEqual(valid.issues, []); assert.equal(valid.metrics.colesPricedMatches, 1); assert.equal(valid.metrics.colesSelectedGuides, 1);
+  assert.deepEqual(valid.metrics.colesEligibleIngredientNames, ["Fresh ginger"]);
   assert.ok(validatePriceResponse([line], dataFor("Stem Ginger Cookies"), now).issues.some(issue => issue.includes("Wrong food")));
   assert.ok(validatePriceResponse([line], dataFor("Fresh ginger", "100ml"), now).issues.some(issue => issue.includes("quantities")));
   const bad = dataFor(); bad.lines[0].offers[0].stock = "OUT_OF_STOCK"; bad.lines[0].offers[0].fetchedAt = new Date(now - 60 * 60_000).toISOString();
@@ -58,6 +59,10 @@ test("live price validation catches old cookie matches, wrong units, stock and s
   assert.ok(issues.some(issue => issue.includes("Out-of-stock"))); assert.ok(issues.some(issue => issue.includes("stale")));
   const zero = dataFor(); zero.lines[0].planningEstimate.recipeCents = 0;
   assert.ok(validatePriceResponse([line], zero, now).issues.some(issue => issue.includes("planning")));
+  const noEvidence = dataFor(); noEvidence.lines[0].offers[0].url = null; noEvidence.lines[0].offers[0].stock = "UNKNOWN";
+  const noEvidenceIssues = validatePriceResponse([line], noEvidence, now).issues;
+  assert.ok(noEvidenceIssues.some(issue => issue.includes("provenance")));
+  assert.ok(noEvidenceIssues.some(issue => issue.includes("confirmed online stock")));
 });
 
 test("missing exact retailer costs remain acceptable when positive planning estimates are clearly separate", () => {
@@ -66,9 +71,18 @@ test("missing exact retailer costs remain acceptable when positive planning esti
   assert.deepEqual(result.issues, []); assert.equal(result.metrics.selectedGuides, 0); assert.equal(result.metrics.planningLines, 1);
 });
 
+test("live price validation independently rejects captured cooked poultry wording for raw chicken", () => {
+ const raw = { ...line, id: "chicken", name: "Chicken breast", amount: 600 };
+ for (const product of ["COLES CHICKEN BREAST CARVED ROAST FREE RANGE 200G", "BERG Portuguese Style Chicken Breast Slices 150g", "BERG Shredded Chicken Breast 500g"]) {
+  const data = dataFor(product, "600g"); data.lines[0] = { ...data.lines[0], ...raw, planningEstimate: estimateIngredientCost(raw) };
+  assert.ok(validatePriceResponse([raw], data, now).issues.some(issue => issue.includes("Wrong food/preparation")), product);
+ }
+});
+
 test("one loopback batch checks HTML/PDF/prices without following image or authentication links", async () => {
   const directory = await mkdtemp(join(tmpdir(), "fusion-live-check-"));
   const requests = [];
+  let eligibleColes = true;
   const server = createServer(async (request, response) => {
     requests.push(request.url);
     if (request.url === "/fusion/deployment.json") { response.setHeader("Content-Type", "application/json"); response.end(JSON.stringify({ version: "test", releaseId: "test" })); }
@@ -77,7 +91,7 @@ test("one loopback batch checks HTML/PDF/prices without following image or authe
     else if (request.url === "/fusion/api/shopping-prices") {
       let raw = ""; for await (const chunk of request) raw += chunk;
       const body = JSON.parse(raw); assert.equal(body.localRecords, false); assert.equal(body.lines.length, 6);
-      const lines = body.lines.map((line, index) => ({ ...line, offers: index ? [] : [{ id: "main", productName: line.name, priceCents: 900, packageSize: "500g", stock: "IN_STOCK", eligible: true, freshness: "current", fetchedAt: new Date().toISOString(), source: "coles-online-catalogue", scope: "chain-online", url: "https://www.coles.com.au/product/chicken", cost: { lineCents: 900 } }], chosenOfferId: index ? null : "main", estimatedCents: index ? null : 900, planningEstimate: estimateIngredientCost(line) }));
+      const lines = body.lines.map((line, index) => ({ ...line, offers: index ? [] : [{ id: "main", productName: line.name, priceCents: 900, packageSize: "500g", stock: "IN_STOCK", eligible: eligibleColes, freshness: "current", fetchedAt: new Date().toISOString(), source: "coles-online-catalogue", scope: "chain-online", url: "https://www.coles.com.au/product/chicken", cost: { lineCents: 900 } }], chosenOfferId: index || !eligibleColes ? null : "main", estimatedCents: index || !eligibleColes ? null : 900, planningEstimate: estimateIngredientCost(line) }));
       response.setHeader("Content-Type", "application/json"); response.end(JSON.stringify({ lines, providerStatuses: [{ id: "coles", status: "ready" }] }));
     } else { response.statusCode = 500; response.end("Unexpected side effect"); }
   });
@@ -88,7 +102,14 @@ test("one loopback batch checks HTML/PDF/prices without following image or authe
     const result = await checkLiveRecipeBatch(["--base", `http://127.0.0.1:${server.address().port}/fusion`, "--witness", file, "--report", report, "--limit", "1", "--prices", "--require-coles-ready"]);
     assert.equal(result.status, "passed"); assert.equal(result.htmlPassed, 1); assert.equal(result.pdfPassed, 1); assert.equal(result.pricesPassed, 1);
     assert.equal(result.colesPricedMatches, 1); assert.equal(result.selectedGuideCoveragePercent, 16.67);
+    assert.equal(result.colesEligibleBatches, 1); assert.equal(result.colesEligibleUniqueIngredients, 1);
+    assert.deepEqual(result.colesEligibleIngredientNames, [selectPriceLines(witness)[0].name]);
     assert.equal(JSON.parse(await readFile(report, "utf8")).status, "passed");
+    eligibleColes = false;
+    const noUsable = await checkLiveRecipeBatch(["--base", `http://127.0.0.1:${server.address().port}/fusion`, "--witness", file, "--report", join(directory, "ineligible-report.json"), "--limit", "1", "--prices", "--require-coles-ready"]);
+    assert.equal(noUsable.colesPricedMatches, 1); assert.equal(noUsable.colesReadyBatches, 1);
+    assert.equal(noUsable.colesEligibleOffers, 0); assert.equal(noUsable.colesEligibleBatches, 0); assert.equal(noUsable.colesEligibleUniqueIngredients, 0);
+    assert.equal(noUsable.status, "failed"); assert.ok(noUsable.failures.some(issue => issue.stage === "coles-coverage"));
     assert.ok(requests.every(url => !url.includes("/api/plate") && !url.includes("/api/account") && !url.includes("/api/community")));
   } finally {
     server.closeAllConnections(); await new Promise(resolveClosed => server.close(resolveClosed));
