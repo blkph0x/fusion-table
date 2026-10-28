@@ -1,0 +1,1006 @@
+{
+  "checkedAt": "2026-10-28T10:05:30.127Z",
+  "status": "passed-independent-captured-food-and-quantity-review",
+  "proofType": "Offline independent review of a fresh staged-release capture, with original captured Peking offer used only as a negative retained/manual control.",
+  "deployment": {
+    "releaseId": "20261028-094057",
+    "version": "0.4.2",
+    "gitCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da"
+  },
+  "captureBase": "http://127.0.0.1:8793/fusion",
+  "publicDeploymentIndependentlyContacted": false,
+  "inputSha256": {
+    "work/expansion-audit/prepared-094057-targeted-prices-5.json": "745b26b4d555be7d769df8857d277249afdcce28ae67ea7fe34e68e14b593f33",
+    "work/expansion-audit/prepared-094057-targeted-prices-5.ndjson": "b30b0e48dfd3f804e0cbaff17e00149714a18d93d0b7760574fa0c1d0dab20bb",
+    "work/expansion-audit/targeted-prices-5.json": "b43fd43b4ad50ec592e64ca6342bfd2798f2ed6c419b803bd0b6632cc078e862",
+    "work/expansion-audit/targeted-prices-5.ndjson": "83e66a994f6dacbc015cc2a66acd947d758b3bea7e00eb71cf2ce0d67da45907"
+  },
+  "guardSourceSha256": "10efa4032eac10b57abbe21fd38ad2c46c92ef714b067b860db52bea769238b8",
+  "networkAttempts": 0,
+  "inputsUnchanged": true,
+  "originalReportStatusPreserved": "failed",
+  "originalReportFailuresPreserved": [
+    {
+      "stage": "coles-coverage",
+      "issues": [
+        "Coles returned no usable eligible price offers across the recipe batch. Positive candidate prices alone do not establish automatic ingredient pricing."
+      ]
+    }
+  ],
+  "htmlPassed": 5,
+  "pdfPassed": 5,
+  "originalPriceValidatorsPassed": 5,
+  "batches": 5,
+  "ingredientRows": 30,
+  "allCapturedOffersReviewed": 200,
+  "eligibleOffersReviewed": 34,
+  "selectedOffersReviewed": 8,
+  "selectedUnknownStockPublishedGuides": 5,
+  "noPickedOrEligibleSemanticFailures": true,
+  "noPickedOrEligibleQuantityFailures": true,
+  "independentPriceValidation": [
+    {
+      "batch": 1,
+      "issues": [],
+      "metrics": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 10,
+        "pricedOffers": 48,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 4,
+        "oldestEligibleSeconds": 33.764,
+        "colesStatus": "needs-browser"
+      }
+    },
+    {
+      "batch": 2,
+      "issues": [],
+      "metrics": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 0,
+        "eligibleOffers": 0,
+        "pricedOffers": 47,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 0,
+        "oldestEligibleSeconds": 0,
+        "colesStatus": "needs-browser"
+      }
+    },
+    {
+      "batch": 3,
+      "issues": [],
+      "metrics": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 10,
+        "pricedOffers": 39,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 4,
+        "oldestEligibleSeconds": 69.784,
+        "colesStatus": "needs-browser"
+      }
+    },
+    {
+      "batch": 4,
+      "issues": [],
+      "metrics": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 12,
+        "pricedOffers": 35,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 3,
+        "oldestEligibleSeconds": 72.037,
+        "colesStatus": "needs-browser"
+      }
+    },
+    {
+      "batch": 5,
+      "issues": [],
+      "metrics": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 2,
+        "pricedOffers": 29,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 0,
+        "oldestEligibleSeconds": 1.043,
+        "colesStatus": "needs-browser"
+      }
+    }
+  ],
+  "selected": [
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Lime juice",
+      "amount": 60,
+      "unit": "ml",
+      "productName": "COLWAY Lime Juice 250ml",
+      "packageSize": "250 ml",
+      "priceCents": 99,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 99,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 250,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Lime juice",
+      "amount": 75,
+      "unit": "ml",
+      "productName": "COLWAY Lime Juice 250ml",
+      "packageSize": "250 ml",
+      "priceCents": 99,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 99,
+        "neededBaseAmount": 75,
+        "purchasedBaseAmount": 250,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "The Odd Bunch Carrots",
+      "packageSize": "1.5kg",
+      "priceCents": 240,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 240,
+        "neededBaseAmount": 400,
+        "purchasedBaseAmount": 1500,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 5,
+      "requested": "Duck breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "packageSize": "380g",
+      "priceCents": 1550,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 5,
+        "expectedCents": 7750,
+        "neededBaseAmount": 1800,
+        "purchasedBaseAmount": 1900,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 5,
+      "requested": "Fresh ginger",
+      "amount": 45,
+      "unit": "g",
+      "productName": "Macro Organic Ginger Punnet",
+      "packageSize": "150g",
+      "priceCents": 690,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 690,
+        "neededBaseAmount": 45,
+        "purchasedBaseAmount": 150,
+        "family": "mass"
+      }
+    }
+  ],
+  "eligible": [
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2600,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2600,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "3.78L",
+      "priceCents": 4000,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4000,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 3780,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "Macro Organic Extra Virgin Olive Oil Mediterranean",
+      "packageSize": "500mL",
+      "priceCents": 880,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 880,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "Moro Organico Extra Virgin Olive Oil",
+      "packageSize": "500mL",
+      "priceCents": 1750,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1750,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "Moro Primero Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2700,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2700,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "Red Island Cold Pressed Olive Oil Extra Virgin",
+      "packageSize": "500mL",
+      "priceCents": 1300,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1300,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 3L",
+      "packageSize": "3 l",
+      "priceCents": 4499,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4499,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 3000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Olive oil",
+      "amount": 3,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 750ml",
+      "packageSize": "750 ml",
+      "priceCents": 1399,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1399,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 750,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 1,
+      "requested": "Lime juice",
+      "amount": 60,
+      "unit": "ml",
+      "productName": "COLWAY Lime Juice 250ml",
+      "packageSize": "250 ml",
+      "priceCents": 99,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 99,
+        "neededBaseAmount": 60,
+        "purchasedBaseAmount": 250,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2600,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2600,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "3.78L",
+      "priceCents": 4000,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4000,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 3780,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "Macro Organic Extra Virgin Olive Oil Mediterranean",
+      "packageSize": "500mL",
+      "priceCents": 880,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 880,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "Moro Organico Extra Virgin Olive Oil",
+      "packageSize": "500mL",
+      "priceCents": 1750,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1750,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "Moro Primero Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2700,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2700,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "Red Island Cold Pressed Olive Oil Extra Virgin",
+      "packageSize": "500mL",
+      "priceCents": 1300,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1300,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 3L",
+      "packageSize": "3 l",
+      "priceCents": 4499,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4499,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 3000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Olive oil",
+      "amount": 1.25,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 750ml",
+      "packageSize": "750 ml",
+      "priceCents": 1399,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1399,
+        "neededBaseAmount": 25,
+        "purchasedBaseAmount": 750,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 3,
+      "requested": "Lime juice",
+      "amount": 75,
+      "unit": "ml",
+      "productName": "COLWAY Lime Juice 250ml",
+      "packageSize": "250 ml",
+      "priceCents": 99,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 99,
+        "neededBaseAmount": 75,
+        "purchasedBaseAmount": 250,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "Macro Organic Carrots",
+      "packageSize": "750g",
+      "priceCents": 460,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 460,
+        "neededBaseAmount": 400,
+        "purchasedBaseAmount": 750,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "The Odd Bunch Carrots",
+      "packageSize": "1.5kg",
+      "priceCents": 240,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 240,
+        "neededBaseAmount": 400,
+        "purchasedBaseAmount": 1500,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "Woolworths Australian Grown Carrots",
+      "packageSize": "1kg",
+      "priceCents": 250,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 250,
+        "neededBaseAmount": 400,
+        "purchasedBaseAmount": 1000,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2600,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2600,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "La Gina Extra Virgin Olive Oil",
+      "packageSize": "3.78L",
+      "priceCents": 4000,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4000,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 3780,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "Macro Organic Extra Virgin Olive Oil Mediterranean",
+      "packageSize": "500mL",
+      "priceCents": 880,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 880,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "Moro Organico Extra Virgin Olive Oil",
+      "packageSize": "500mL",
+      "priceCents": 1750,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1750,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "Moro Primero Extra Virgin Olive Oil",
+      "packageSize": "1L",
+      "priceCents": 2700,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 2700,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 1000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "Red Island Cold Pressed Olive Oil Extra Virgin",
+      "packageSize": "500mL",
+      "priceCents": 1300,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1300,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "packageSize": "500 ml",
+      "priceCents": 799,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 799,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 500,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 3L",
+      "packageSize": "3 l",
+      "priceCents": 4499,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 4499,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 3000,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 4,
+      "requested": "Olive oil",
+      "amount": 6,
+      "unit": "tbsp",
+      "productName": "THE OLIVE TREE Australian Extra Virgin Olive Oil 750ml",
+      "packageSize": "750 ml",
+      "priceCents": 1399,
+      "source": "aldi-online-catalogue",
+      "scope": "chain-online",
+      "stock": "UNKNOWN",
+      "selected": false,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 1399,
+        "neededBaseAmount": 120,
+        "purchasedBaseAmount": 750,
+        "family": "volume"
+      }
+    },
+    {
+      "batch": 5,
+      "requested": "Duck breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "packageSize": "380g",
+      "priceCents": 1550,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 5,
+        "expectedCents": 7750,
+        "neededBaseAmount": 1800,
+        "purchasedBaseAmount": 1900,
+        "family": "mass"
+      }
+    },
+    {
+      "batch": 5,
+      "requested": "Fresh ginger",
+      "amount": 45,
+      "unit": "g",
+      "productName": "Macro Organic Ginger Punnet",
+      "packageSize": "150g",
+      "priceCents": 690,
+      "source": "woolworths-online-catalogue",
+      "scope": "chain-online",
+      "stock": "IN_STOCK",
+      "selected": true,
+      "quantity": {
+        "expectedPacks": 1,
+        "expectedCents": 690,
+        "neededBaseAmount": 45,
+        "purchasedBaseAmount": 150,
+        "family": "mass"
+      }
+    }
+  ],
+  "duckCorrection": {
+    "requested": "Duck breast fillets",
+    "amount": 1800,
+    "unit": "g",
+    "originalPreparedProductName": "LUV-A-DUCK Peking Duck Breast 380g",
+    "preparedProductPresentInFreshCapture": false,
+    "originalPreparedProductRejectedByCurrentHardGuard": true,
+    "originalPreparedProductRejectedByExplicitRetainedSelection": true,
+    "validFreshProduct": "Luv-A-Duck Fresh Duck Breast Fillets",
+    "freshProductEligibleAndSelected": true,
+    "freshProductPacks": 5,
+    "purchasedGrams": 1900,
+    "totalCents": 7750
+  },
+  "findings": [
+    "All 34 eligible offers and all 8 selected guides describe the requested plain foods and have independently consistent whole-pack calculations.",
+    "Fresh duck breast is selected for the raw duck recipe; five 380 g packs supply 1,900 g for the requested 1,800 g at A$77.50.",
+    "The original prepared Peking duck no longer appears in the fresh capture and its unmodified original offer is rejected by both the current hard guard and explicit retained/manual selection.",
+    "Three olive-oil selections and two lime-juice selections are ALDI published guides with UNKNOWN stock, not verified local shelf availability.",
+    "Unpriced ingredients remain null for observed totals; all 30 rows retain positive labelled planning allowances.",
+    "The capture remains FAILED solely because Coles produced no eligible price coverage; zero ready Coles batches were reported."
+  ],
+  "limits": [
+    "This capture was taken against the private staged release URL recorded in its original report. The review did not contact staging, the public deployment, retailers, or the private Coles worker.",
+    "Only six sampled shopping lines per recipe are represented, not the complete recipe shopping lists or all possible meals.",
+    "Absence of Peking duck in the fresh response alone does not establish why a provider omitted it; the original captured offer separately demonstrates the current hard rejection.",
+    "Rejected or review-only candidates are not treated as automatic selections; ambiguous brands, food labels, and local availability still need packet/store verification.",
+    "Historical source ages were validated at each response capture time, not refreshed by this offline review."
+  ]
+}

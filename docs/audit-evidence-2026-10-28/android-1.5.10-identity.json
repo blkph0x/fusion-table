@@ -1,0 +1,38 @@
+{
+  "version": "1.5.10",
+  "versionCode": 17,
+  "applicationId": "au.mealplanner",
+  "sha256": "09c6e412459e47505529618a92438ef5b073d7793cd9e77e883d4e510e77666c",
+  "bytes": 13991989,
+  "signerCertificateSha256": "62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6",
+  "sameSignerAsPrevious": true,
+  "signatureSchemeV2Verified": true,
+  "zipVerified": true,
+  "catalogueSha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab",
+  "catalogueBytes": 77475274,
+  "catalogueUnchangedFrom159": true,
+  "tests": {
+    "tests": 181,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sourceFingerprint": "4654361fbcd5e887e88332da24a7c0da399a377eab5c1f37369743ec2bff8e89",
+  "sourceFiles": 83,
+  "deviceInstallationTested": false,
+  "publishingPerformed": true,
+  "previous159Preserved": true,
+  "verifiedAt": "2026-10-28T08:08:45.266605+00:00",
+  "buildLog": "android-1.5.10-build.log",
+  "sourceManifest": "android-1.5.10-source.json",
+  "unitResults": "android-1.5.10-unit-results.zip",
+  "localCopies": [
+    "D:\\MealPlannerAU\\app\\build\\outputs\\apk\\release\\app-release.apk",
+    "D:\\MealPlannerAU\\dist\\MealPlannerAU.apk",
+    "D:\\MealPlannerAU\\dist\\MealPlannerAU-1.5.10-code17.apk"
+  ],
+  "publicDownloadVerifiedAt": "2026-10-28T08:18:23.804054+00:00",
+  "publicDownloadProof": "android-1.5.10-public-download.json",
+  "publicDownloadMatchesSignedBuild": true,
+  "sourceHandoff": "android-1.5.10-source-handoff.zip"
+}

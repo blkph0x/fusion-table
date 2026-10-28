@@ -1,0 +1,300 @@
+{
+  "proofType": "Frontend rejection of captured unsafe upstream/cached shopping rows. All API calls and images are intercepted; no live supplier, local-shop, account or image-generation proof.",
+  "startedAt": "2026-10-28T10:02:09.160Z",
+  "base": "https://gearsqueens.online/fusion",
+  "sourceCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da",
+  "sourceVersion": "0.4.2",
+  "fixtureNote": "Captured product identities, prices, pack quantities and eligibility are retained in negative fixtures, including actual reviewable-but-not-eligible pet-food rows. Timestamps are refreshed only to avoid testing staleness, and every unsafe candidate is deliberately injected as chosen. Rice, valid manual-brand review and positive name controls are synthetic, explicitly labelled fixtures; positive controls deliberately enable eligibility.",
+  "fixtureCases": [
+    {
+      "issue": "Explicit turkey request automatically selected duck breast fillets.",
+      "sourceCapture": "work/expansion-audit/public-50-species-mismatch.json",
+      "ingredient": "Turkey breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "packageSize": "380g",
+      "inheritedEligible": true,
+      "injectedChosen": true,
+      "costCents": 7750
+    },
+    {
+      "issue": "nonfood-taco-holder",
+      "sourceCapture": "work/expansion-audit/public-50-additional-mismatches.json",
+      "ingredient": "Soft tortillas",
+      "amount": 14,
+      "unit": "",
+      "productName": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+      "packageSize": "1EA",
+      "inheritedEligible": true,
+      "injectedChosen": true,
+      "costCents": 43302
+    },
+    {
+      "issue": "single-produce-mixed-vegetables",
+      "sourceCapture": "work/expansion-audit/public-50-additional-mismatches.json",
+      "ingredient": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g",
+      "packageSize": "450 g",
+      "inheritedEligible": true,
+      "injectedChosen": true,
+      "costCents": 299
+    },
+    {
+      "issue": "fresh-coriander-dried-herb-risk",
+      "sourceCapture": "work/expansion-audit/public-50-additional-mismatches.json",
+      "ingredient": "Coriander leaves for the side",
+      "amount": 18.75,
+      "unit": "g",
+      "productName": "MasterFoods Coriander Leaves",
+      "packageSize": "5g",
+      "inheritedEligible": true,
+      "injectedChosen": true,
+      "costCents": 1520
+    },
+    {
+      "issue": "named-prepared-duck",
+      "sourceCapture": "work/expansion-audit/targeted-peking-duck-capture.json",
+      "ingredient": "Duck breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "LUV-A-DUCK Peking Duck Breast 380g",
+      "packageSize": "380 g",
+      "inheritedEligible": true,
+      "injectedChosen": true,
+      "costCents": 6495
+    },
+    {
+      "issue": "explicit-dog-food",
+      "sourceCapture": "work/expansion-audit/manual-capture-semantic-review.json",
+      "ingredient": "Lamb shanks",
+      "amount": 1050,
+      "unit": "g",
+      "productName": "JULIUS GOLD Dog Meaty Bites Lamb 1kg",
+      "packageSize": "1 kg",
+      "inheritedEligible": false,
+      "injectedChosen": true,
+      "costCents": 1098
+    },
+    {
+      "issue": "explicit-cat-food",
+      "sourceCapture": "work/expansion-audit/manual-capture-semantic-review.json",
+      "ingredient": "Kangaroo steaks",
+      "amount": 1350,
+      "unit": "g",
+      "productName": "CACHET Premium Kangaroo Chunks for Cats 5 Single Serves 450g",
+      "packageSize": "450 g",
+      "inheritedEligible": false,
+      "injectedChosen": true,
+      "costCents": 1647
+    }
+  ],
+  "checks": [
+    "Actual static deployment identity checked before loading the fixture page",
+    "fresh fixture response: 7 unsafe chosen rows stay unknown in assignments/subtotal/vendor coverage; valid rice alone remains A$3.00",
+    "same-context retained cache: 7 unsafe chosen rows stay unknown in assignments/subtotal/vendor coverage; valid rice alone remains A$3.00",
+    "Unsafe retained cache is rejected again without a second price request",
+    "390px mobile viewport has no horizontal overflow",
+    "A valid branded review-only turkey product can be explicitly selected; its cost enters both the chosen subtotal and vendor coverage",
+    "Equivalent positive product-name/form controls price all 8 rows; original five-row subtotal remains 53171c within the expanded controls"
+  ],
+  "apiRequests": {
+    "/api/plate": 14,
+    "/api/account": 1,
+    "/api/community": 1,
+    "/api/shops": 1,
+    "/api/shopping-prices": 6
+  },
+  "blockedExternal": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "localManualHelper": {
+    "scope": "Local source helper fixture only, separate from browser deployment proof",
+    "rejectedRetainedManualCases": 7,
+    "premiumReviewPreserved": true,
+    "passed": true
+  },
+  "browserVersion": "156.0.4314.42",
+  "deploymentHttpStatus": 200,
+  "deployment": {
+    "releaseId": "20261028-094057",
+    "sourceManifestSha256": "66e25911d2c74be2f87cc493e118a828bd8d834cd4abce2268105341d829074c",
+    "gitCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da",
+    "version": "0.4.2",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "ingredient-matching-hardening"
+  },
+  "initial": {
+    "basket": "Your chosen shops · 1 of 8 items priced\nA$3.00\n\n7 items have an unknown price. This is the known subtotal, not the full basket total.\n\nUnknown prices are not counted as $0, and planning allowances are not substituted. Online guides do not confirm local shelf prices or stock. Last check: 28 Oct 2026, 9:02 pm.",
+    "assignments": [
+      {
+        "ingredient": "Turkey breast fillets",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Soft tortillas",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Carrot",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Coriander leaves for the side",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Duck breast fillets",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Lamb shanks",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Kangaroo steaks",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      }
+    ],
+    "vendors": [
+      {
+        "name": "Woolworths online",
+        "coverage": "1 / 8 items priced",
+        "cost": "A$3.00"
+      },
+      {
+        "name": "Coles online",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "IGA",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "ALDI",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      }
+    ]
+  },
+  "cached": {
+    "basket": "Your chosen shops · 1 of 8 items priced\nA$3.00\n\n7 items have an unknown price. This is the known subtotal, not the full basket total.\n\nUnknown prices are not counted as $0, and planning allowances are not substituted. Online guides do not confirm local shelf prices or stock. Last check: 28 Oct 2026, 9:02 pm.",
+    "assignments": [
+      {
+        "ingredient": "Turkey breast fillets",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Soft tortillas",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Carrot",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Coriander leaves for the side",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Duck breast fillets",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Lamb shanks",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      },
+      {
+        "ingredient": "Kangaroo steaks",
+        "assignment": "On your shopping list\nShop not priced yet\nPrice unknown\nNot listed in the subtotal\n\nNo eligible price is available for this item. Price unknown; it is not counted as $0."
+      }
+    ],
+    "vendors": [
+      {
+        "name": "Woolworths online",
+        "coverage": "1 / 8 items priced",
+        "cost": "A$3.00"
+      },
+      {
+        "name": "Coles online",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "IGA",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "ALDI",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      }
+    ]
+  },
+  "manualReview": {
+    "ingredient": "Turkey breast fillets",
+    "assignment": "On your shopping list\nWoolworths online\nA$77.50\nEstimated packs to buy\n\nYou chose this product within your selected shops. Confirm the packet, stock and final price.",
+    "basket": "Your chosen shops · 2 of 8 items priced\nA$80.50\n\n6 items have an unknown price. This is the known subtotal, not the full basket total.\n\nUnknown prices are not counted as $0, and planning allowances are not substituted. Online guides do not confirm local shelf prices or stock. Last check: 28 Oct 2026, 9:02 pm.",
+    "vendors": [
+      {
+        "name": "Woolworths online",
+        "coverage": "2 / 8 items priced",
+        "cost": "A$80.50"
+      },
+      {
+        "name": "Coles online",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "IGA",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "ALDI",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      }
+    ]
+  },
+  "positiveControls": {
+    "basket": "Your chosen shops · 8 of 8 items priced\nA$624.11\n\nEstimated packs to buy from your chosen shops.\n\nUnknown prices are not counted as $0, and planning allowances are not substituted. Online guides do not confirm local shelf prices or stock. Last check: 28 Oct 2026, 9:02 pm.",
+    "vendors": [
+      {
+        "name": "Woolworths online",
+        "coverage": "3 / 8 items priced",
+        "cost": "A$513.52"
+      },
+      {
+        "name": "Coles online",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "IGA",
+        "coverage": "0 / 8 items priced",
+        "cost": "Not priced"
+      },
+      {
+        "name": "ALDI",
+        "coverage": "4 / 8 items priced",
+        "cost": "A$95.39"
+      },
+      {
+        "name": "Lloyds IGA Newtown",
+        "coverage": "1 / 8 items priced",
+        "cost": "A$15.20"
+      }
+    ],
+    "originalFiveRowSubtotalCents": 53171,
+    "expandedSubtotalCents": 62411
+  },
+  "status": "passed"
+}

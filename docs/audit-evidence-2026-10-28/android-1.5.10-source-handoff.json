@@ -1,0 +1,17 @@
+{
+  "archive": "android-1.5.10-source-handoff.zip",
+  "bytes": 27036,
+  "sha256": "1c4951151f7a5ee6570c08d7c65fd7c944be8705b51a27c3e4a49188ae4b6a45",
+  "sourceFingerprint": "4654361fbcd5e887e88332da24a7c0da399a377eab5c1f37369743ec2bff8e89",
+  "sourceFilesIncluded": [
+    "app/build.gradle.kts",
+    "app/src/main/java/au/mealplanner/domain/shopping/Catalogue.kt",
+    "app/src/test/java/au/mealplanner/domain/CatalogueIdentityTest.kt"
+  ],
+  "manifest": "SOURCE-MANIFEST-83.json",
+  "manifestEntries": 83,
+  "zipVerified": true,
+  "signingMaterialIncluded": false,
+  "unrelatedNativeSourceIncluded": false,
+  "recipeAssetIncluded": false
+}

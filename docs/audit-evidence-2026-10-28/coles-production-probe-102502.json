@@ -1,0 +1,14 @@
+{
+  "label": "production-reader-102502",
+  "at": "2026-10-28T10:30:02.646Z",
+  "seconds": 8.585,
+  "status": 200,
+  "providerStatus": "needs-browser",
+  "cached": false,
+  "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+  "products": 0,
+  "positiveMatches": 0,
+  "selectedMatches": 0,
+  "samples": [],
+  "message": "Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."
+}

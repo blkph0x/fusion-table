@@ -1,0 +1,867 @@
+{
+  "checkedAt": "2026-10-28T08:04:35.567359+00:00",
+  "status": "issues-found-not-a-safe-pass",
+  "capture": "work/expansion-audit/public-50-20261028-continued.ndjson",
+  "captureSha256": "6a70fdddb8685f1deffbbef55c38bd0f49a0b9752f00a5c90d95b9758760094e",
+  "baselineDeployment": {
+    "releaseId": "20261028-072139",
+    "version": "0.4.0",
+    "gitCommit": "55545f12d8a91277c2d19ceafd81125b4d1e7b45"
+  },
+  "reviewedBatches": 50,
+  "reviewedIngredientRows": 300,
+  "uniqueRequestedIngredientNames": 139,
+  "allCapturedOffers": 2985,
+  "eligibleOffersInspected": 483,
+  "selectedLinesInspected": 102,
+  "uniqueEligibleIdentityPackSourcePairsInspected": 77,
+  "eligibleOfferSources": {
+    "woolworths-online-catalogue": 294,
+    "aldi-online-catalogue": 139,
+    "iga-online-catalogue": 50
+  },
+  "selectedOfferSources": {
+    "woolworths-online-catalogue": 35,
+    "aldi-online-catalogue": 66,
+    "iga-online-catalogue": 1
+  },
+  "method": "Incremental independent semantic inspection of every selected and eligible request/product/pack/source identity as all fifty captured batches completed; no additional retailer requests or product-source edits.",
+  "issues": [
+    {
+      "id": "explicit-animal-species-mismatch",
+      "classification": "confirmed-incorrect-automatic-selection",
+      "description": "A turkey breast request selected duck breast. A shared breast/fillet cut does not establish animal species.",
+      "evidence": {
+        "batch": 4,
+        "requested": "Turkey breast fillets",
+        "amount": 1800,
+        "unit": "g",
+        "offers": [
+          {
+            "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+            "packageSize": "380g",
+            "source": "woolworths-online-catalogue",
+            "eligible": true,
+            "selected": true,
+            "packPriceCents": 1550,
+            "purchaseCents": 7750
+          }
+        ]
+      }
+    },
+    {
+      "id": "food-query-selected-kitchenware",
+      "classification": "confirmed-incorrect-automatic-selection",
+      "description": "Soft tortillas selected stainless steel taco holders, a non-food kitchen accessory.",
+      "evidence": {
+        "batch": 16,
+        "requested": "Soft tortillas",
+        "amount": 14,
+        "unit": "",
+        "offers": [
+          {
+            "productName": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+            "packageSize": "1EA",
+            "source": "woolworths-online-catalogue",
+            "eligible": true,
+            "selected": true,
+            "packPriceCents": 3093,
+            "purchaseCents": 43302
+          }
+        ]
+      }
+    },
+    {
+      "id": "single-produce-mixed-vegetable-alternatives",
+      "classification": "confirmed-incorrect-eligible-alternatives",
+      "description": "The selected plain carrot pack is correct, but mixed vegetable and roast vegetable packs were eligible alternatives for a single raw carrot ingredient.",
+      "evidence": {
+        "batch": 19,
+        "requested": "Carrot",
+        "amount": 400,
+        "unit": "g",
+        "offers": [
+          {
+            "productName": "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g",
+            "packageSize": "450 g",
+            "source": "aldi-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 299,
+            "purchaseCents": 299
+          },
+          {
+            "productName": "MARKET FARE Peas, Carrots & Super Sweet Corn 1kg",
+            "packageSize": "1 kg",
+            "source": "aldi-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 329,
+            "purchaseCents": 329
+          },
+          {
+            "productName": "MARKET FARE Quicksteam Vegetables Carrot, Broccoli & Cauliflower 3 Pack 450g",
+            "packageSize": "450 g",
+            "source": "aldi-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 299,
+            "purchaseCents": 299
+          },
+          {
+            "productName": "Birds Eye Country Harvest Carrot Cauliflower Beans & Broccoli",
+            "packageSize": "500g",
+            "source": "iga-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 485,
+            "purchaseCents": 485
+          },
+          {
+            "productName": "Birds Eye Country Harvest Peas Corn & Carrot",
+            "packageSize": "1kg",
+            "source": "iga-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 650,
+            "purchaseCents": 650
+          },
+          {
+            "productName": "Birds Eye Deli Roast Veggies Potato Pumpkin Onion Carrot",
+            "packageSize": "600g",
+            "source": "iga-online-catalogue",
+            "eligible": true,
+            "selected": false,
+            "packPriceCents": 755,
+            "purchaseCents": 755
+          }
+        ]
+      },
+      "correctSelection": "Carrots 1kg, ALDI online, 209 cents for the requested purchase quantity"
+    },
+    {
+      "id": "fresh-herb-versus-dried-small-pack",
+      "classification": "requires-product-form-verification",
+      "description": "Fresh side-leaf intent selected a MasterFoods 5g herb product. This is a strong dried-herb risk; the captured offer omits department/preparation metadata, so the independent capture alone does not establish its processing form.",
+      "evidence": {
+        "batch": 18,
+        "requested": "Coriander leaves for the side",
+        "amount": 18.75,
+        "unit": "g",
+        "offers": [
+          {
+            "productName": "MasterFoods Coriander Leaves",
+            "packageSize": "5g",
+            "source": "iga-online-catalogue",
+            "eligible": true,
+            "selected": true,
+            "packPriceCents": 380,
+            "purchaseCents": 1520
+          }
+        ]
+      }
+    }
+  ],
+  "noAdditionalIssuesFoundInBatches44Through50": true,
+  "positiveControls": [
+    {
+      "batch": 20,
+      "requested": "Raw peeled, deveined prawns",
+      "amount": 300,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Ocean Chef Peeled Tail Off & Deveined Raw Prawns",
+          "packageSize": "500g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 1200,
+          "purchaseCents": 1200
+        }
+      ]
+    },
+    {
+      "batch": 21,
+      "requested": "Raw peeled, deveined prawns",
+      "amount": 600,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Ocean Chef Peeled Tail Off & Deveined Raw Prawns",
+          "packageSize": "500g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 1200,
+          "purchaseCents": 2400
+        }
+      ]
+    },
+    {
+      "batch": 22,
+      "requested": "Plain firm tofu",
+      "amount": 600,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Evergreen Original Tofu Regular Firm",
+          "packageSize": "900g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 500,
+          "purchaseCents": 500
+        }
+      ]
+    },
+    {
+      "batch": 23,
+      "requested": "Plain firm tofu",
+      "amount": 1800,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Evergreen Original Tofu Regular Firm",
+          "packageSize": "900g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 500,
+          "purchaseCents": 1000
+        }
+      ]
+    },
+    {
+      "batch": 23,
+      "requested": "Paratha",
+      "amount": 12,
+      "unit": "",
+      "offers": [
+        {
+          "productName": "Spring Home Paratha Plain Roti",
+          "packageSize": "5 pack",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 295,
+          "purchaseCents": 885
+        },
+        {
+          "productName": "Kawan Plain Roti Paratha",
+          "packageSize": "5 Pack",
+          "source": "iga-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 499,
+          "purchaseCents": 1497
+        }
+      ]
+    },
+    {
+      "batch": 34,
+      "requested": "Vegan kimchi",
+      "amount": 100,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "The Kimchi Company Vegan",
+          "packageSize": "500g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 950,
+          "purchaseCents": 950
+        }
+      ]
+    },
+    {
+      "batch": 35,
+      "requested": "Cherry tomatoes",
+      "amount": 62.5,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Woolworths Cherry Tomatoes Punnet",
+          "packageSize": "250g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 250,
+          "purchaseCents": 250
+        }
+      ]
+    },
+    {
+      "batch": 36,
+      "requested": "Mushrooms",
+      "amount": 1800,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Woolworths Mushroom Sliced",
+          "packageSize": "500g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 700,
+          "purchaseCents": 2800
+        },
+        {
+          "productName": "Woolworths Mushrooms Button Punnet",
+          "packageSize": "200g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 450,
+          "purchaseCents": 4050
+        },
+        {
+          "productName": "Woolworths Mushrooms Cups Punnet",
+          "packageSize": "500g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 700,
+          "purchaseCents": 2800
+        },
+        {
+          "productName": "White Cup Mushrooms 200g",
+          "packageSize": "200 g",
+          "source": "aldi-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 349,
+          "purchaseCents": 3141
+        },
+        {
+          "productName": "White Cup Mushrooms 500g",
+          "packageSize": "500 g",
+          "source": "aldi-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 629,
+          "purchaseCents": 2516
+        },
+        {
+          "productName": "White Flat Mushrooms 375g",
+          "packageSize": "375 g",
+          "source": "aldi-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 499,
+          "purchaseCents": 2495
+        },
+        {
+          "productName": "White Sliced Mushrooms 200g",
+          "packageSize": "200 g",
+          "source": "aldi-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 349,
+          "purchaseCents": 3141
+        },
+        {
+          "productName": "White Sliced Mushrooms 500g",
+          "packageSize": "500 g",
+          "source": "aldi-online-catalogue",
+          "eligible": true,
+          "selected": false,
+          "packPriceCents": 629,
+          "purchaseCents": 2516
+        }
+      ]
+    },
+    {
+      "batch": 43,
+      "requested": "Duck breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "offers": [
+        {
+          "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+          "packageSize": "380g",
+          "source": "woolworths-online-catalogue",
+          "eligible": true,
+          "selected": true,
+          "packPriceCents": 1550,
+          "purchaseCents": 7750
+        }
+      ]
+    }
+  ],
+  "identityPackSourcePairs": [
+    {
+      "requested": "Arborio rice",
+      "product": "IMPERIAL GRAIN Arborio Rice 1kg",
+      "pack": "1 kg",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Alishaan Super Basmati Rice",
+      "pack": "5kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Community Co Basmati Rice",
+      "pack": "1kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "IMPERIAL GRAIN Basmati Rice 1kg",
+      "pack": "1 kg",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Katoomba Exotic Basmati Rice",
+      "pack": "5kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Riviana Basmati Rice",
+      "pack": "5kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Woolworths Basmati Rice",
+      "pack": "1kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Woolworths Basmati Rice",
+      "pack": "2kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Basmati rice",
+      "product": "Woolworths Basmati Rice",
+      "pack": "5kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Birds Eye Country Harvest Carrot Cauliflower Beans & Broccoli",
+      "pack": "500g",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Birds Eye Country Harvest Peas Corn & Carrot",
+      "pack": "1kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Birds Eye Deli Roast Veggies Potato Pumpkin Onion Carrot",
+      "pack": "600g",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Carrots 1kg",
+      "pack": "1 kg",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g",
+      "pack": "450 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "MARKET FARE Peas, Carrots & Super Sweet Corn 1kg",
+      "pack": "1 kg",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "MARKET FARE Quicksteam Vegetables Carrot, Broccoli & Cauliflower 3 Pack 450g",
+      "pack": "450 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Macro Organic Carrots",
+      "pack": "750g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "The Odd Bunch Carrots",
+      "pack": "1.5kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Carrot",
+      "product": "Woolworths Australian Grown Carrots",
+      "pack": "1kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Cherry tomatoes",
+      "product": "Woolworths Cherry Tomatoes Punnet",
+      "pack": "250g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Chicken breast fillets",
+      "product": "Macro Free Range Chicken Breast Fillets",
+      "pack": "650g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Chicken breast fillets",
+      "product": "The Bare Bird Free Range Chicken Breast Fillets",
+      "pack": "600g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Chicken breast fillets",
+      "product": "Woolworths RSPCA Approved Chicken Breast Fillets",
+      "pack": "650g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Chicken livers",
+      "product": "Woolworths RSPCA Approved Chicken Livers",
+      "pack": "500g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Coriander leaves for the side",
+      "product": "MasterFoods Coriander Leaves",
+      "pack": "5g",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Duck breast fillets",
+      "product": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "pack": "380g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Fresh ginger",
+      "product": "Macro Organic Ginger Punnet",
+      "pack": "150g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "Community Co Fragrant Thai Jasmine Rice",
+      "pack": "1kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "IMPERIAL GRAIN Jasmine Rice 1kg",
+      "pack": "1 kg",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "Nice Rice Jasmine Rice",
+      "pack": "1kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "SunRice Jasmine Fragrant Rice",
+      "pack": "2kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "SunRice Jasmine Fragrant Rice",
+      "pack": "5kg",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "Sunrice Jasmine Fragrant Rice",
+      "pack": "5kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "Sunrice Jasmine Rice",
+      "pack": "2kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Jasmine rice",
+      "product": "Sunrice Rice Jasmine",
+      "pack": "1kg",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Lemon juice",
+      "product": "Black & Gold Lemon Juice",
+      "pack": "250mL",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Lemon juice",
+      "product": "COLWAY Lemon Juice 250ml",
+      "pack": "250 ml",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Lime juice",
+      "product": "COLWAY Lime Juice 250ml",
+      "pack": "250 ml",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "White Cup Mushrooms 200g",
+      "pack": "200 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "White Cup Mushrooms 500g",
+      "pack": "500 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "White Flat Mushrooms 375g",
+      "pack": "375 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "White Sliced Mushrooms 200g",
+      "pack": "200 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "White Sliced Mushrooms 500g",
+      "pack": "500 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "Woolworths Mushroom Sliced",
+      "pack": "500g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "Woolworths Mushrooms Button Punnet",
+      "pack": "200g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Mushrooms",
+      "product": "Woolworths Mushrooms Cups Punnet",
+      "pack": "500g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Bertolli Extra Virgin Olive Oil Originale",
+      "pack": "1.5L",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Bertolli Extra Virgin Olive Oil Originale",
+      "pack": "750mL",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Cobram Estate Extra Virgin Olive Oil",
+      "pack": "750mL",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "La Gina Extra Virgin Olive Oil",
+      "pack": "1L",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "La Gina Extra Virgin Olive Oil",
+      "pack": "3.78L",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Macro Organic Extra Virgin Olive Oil Mediterranean",
+      "pack": "500mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Moro Organico Extra Virgin Olive Oil",
+      "pack": "500mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Moro Primero Extra Virgin Olive Oil",
+      "pack": "1L",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "OH SO NATURAL ORGANIC Organic Extra Virgin Olive Oil 500ml",
+      "pack": "500 ml",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "Red Island Cold Pressed Olive Oil Extra Virgin",
+      "pack": "500mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "THE OLIVE TREE Australian Extra Virgin Olive Oil 3L",
+      "pack": "3 l",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Olive oil",
+      "product": "THE OLIVE TREE Australian Extra Virgin Olive Oil 750ml",
+      "pack": "750 ml",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Paratha",
+      "product": "Kawan Plain Roti Paratha",
+      "pack": "5 Pack",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Paratha",
+      "product": "Spring Home Paratha Plain Roti",
+      "pack": "5 pack",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Plain firm tofu",
+      "product": "Evergreen Original Tofu Regular Firm",
+      "pack": "900g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Plain yoghurt",
+      "product": "YOGURI Greek Style Strained Yogurt Plain 900g",
+      "pack": "900 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Raw peeled, deveined prawns",
+      "product": "Ocean Chef Peeled Tail Off & Deveined Raw Prawns",
+      "pack": "500g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Rice vinegar",
+      "product": "Amoy White Rice Wine Vinegar",
+      "pack": "250mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Rice vinegar",
+      "product": "Lantern Alley Rice Wine Vinegar",
+      "pack": "300mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Rice vinegar",
+      "product": "Mr Chen's Rice Wine Vinegar",
+      "pack": "250mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Rice vinegar",
+      "product": "Obento Japanese Rice Wine Vinegar",
+      "pack": "250mL",
+      "source": "iga-online-catalogue"
+    },
+    {
+      "requested": "Soft tortillas",
+      "product": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+      "pack": "1EA",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Soy sauce",
+      "product": "Fountain Soy Sauce",
+      "pack": "250mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Soy sauce",
+      "product": "Kikkoman Soy Sauce",
+      "pack": "150mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Soy sauce",
+      "product": "Kikkoman Soy Sauce Soy",
+      "pack": "1L",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Soy sauce",
+      "product": "Kikkoman Soy Sauce Soy",
+      "pack": "250mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Soy sauce",
+      "product": "Kikkoman Soy Sauce Soy",
+      "pack": "600mL",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Toasted sesame oil",
+      "product": "Carwari Organic Cold Pressed Toasted Sesame Oil 250ml",
+      "pack": "250ML",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Turkey breast fillets",
+      "product": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "pack": "380g",
+      "source": "woolworths-online-catalogue"
+    },
+    {
+      "requested": "Turkey mince",
+      "product": "BROAD OAK FARMS Turkey Mince 500g",
+      "pack": "500 g",
+      "source": "aldi-online-catalogue"
+    },
+    {
+      "requested": "Vegan kimchi",
+      "product": "The Kimchi Company Vegan",
+      "pack": "500g",
+      "source": "woolworths-online-catalogue"
+    }
+  ],
+  "limits": [
+    "This baseline contains confirmed mismatches and must not be described as a safe pricing pass.",
+    "The original runtime checker loaded earlier guards. Its fifty price-response passes do not cancel the independent semantic failures or its two failed Coles gates.",
+    "Only six sampled ingredients per recipe are captured, not every ingredient in all possible recipes.",
+    "102 of 300 sampled rows had selected observed online guides; other rows retain honest planning estimates or unknown costs. This is not complete live-price coverage.",
+    "No eligible Coles offers were observed in this capture. Provider availability is separate from food-identity correctness.",
+    "Online guide values do not establish the price or stock on a visitor branch shelf.",
+    "The review does not independently authenticate retailer HTML, inspect hidden ineligible candidates as possible selections, or establish kitchen performance.",
+    "A corrected-source replay and subsequent fresh public checks are separate evidence; this report preserves the original baseline findings."
+  ]
+}

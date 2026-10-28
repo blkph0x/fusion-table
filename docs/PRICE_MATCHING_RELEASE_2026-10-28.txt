@@ -1,0 +1,105 @@
+FUSION TABLE PRICE MATCHING RELEASE — 28 OCTOBER 2026
+
+Website version 0.4.2 is live at https://gearsqueens.online/fusion/.
+Release: 20261028-094057. Application source:
+870e16f5e1fac70889e21d56a19c7fdfcf2d17da.
+
+The website and Android pricing safeguards are released. Reliable unattended
+Coles prices are still not established, and the broader Coles goal is unfinished.
+
+What changed
+
+Shared checks now reject incompatible food identities, cuts, skin/bone states,
+prepared meals, meat recipe-base packets, pet food and serving tools. Those
+checks also protect retained browser prices and explicit product review; a
+previously saved or reviewed candidate cannot bypass a hard food mismatch.
+
+All thirty authored main identities were checked against twelve existing strong
+preparation/style markers. Unrequested smoked, marinated, pickled or named-style
+products are excluded. Explicitly requested matching styles, legitimate raw cuts,
+Pekin duck breed wording, ordinary canned/cooked legumes and premium brand
+review remain supported. The recipe-generator source was not changed by this
+pricing release.
+
+Shopping choices remain cheapest per item, one supermarket, and current-area
+butcher/fruit-shop destinations. A chosen local shop without a usable quote keeps
+its assignment and an unknown price. That item is omitted from the known subtotal;
+another seller's price or a planning allowance is not substituted for that shop.
+
+Verification and its limits
+
+- The final website release passed 930 Linux tests, with no failures or skips,
+  plus TypeScript and fourteen host account/SQL checks.
+- Fifty staged and fifty public recipe pages/PDFs passed. The public fifty-page
+  run did not include price checks.
+- The deployed browser fixture rejected seven unsafe injected/cached candidates
+  and preserved valid product/brand-review controls and the mobile layout.
+  All API/image responses were intercepted: these are interface tests, not live
+  supplier, account or image-generation coverage. Positive price controls were
+  synthetic and are not published shop quotes.
+- Five fresh staged recipe-price cases returned thirty sampled ingredient rows.
+  Independent review found no selected/eligible food or quantity errors among
+  200 offers, including 34 eligible offers and eight selected online guides.
+  The overall run remains FAILED because it returned no eligible Coles offers.
+- The earlier full fifty-batch capture exposed real mismatches. Corrected-source
+  offline replays reject them and retain valid controls. They preserve the old
+  prices/timestamps and do not establish new prices or fresh supplier coverage.
+
+A full fresh public fifty-recipe price run on this final safety release remains
+unpassed. No claim is made that every ingredient has an observed shop price,
+that all shop stock is confirmed, or that structural checks establish taste.
+
+Android
+
+Android 1.5.11, version code 18, is published at:
+https://gearsqueens.online/downloads/MealPlannerAU.apk
+
+Its clean offline build passed all 190 unit tests, with no errors, failures or
+skips. The signed APK is 13,995,853 bytes with SHA-256:
+f22a15bf62edf4207b781a29faf4a8b43f43d1683f907db918b7327b45e9cb03.
+The signer is unchanged. All 83 source-manifest files were checked; only the
+version, shopping matcher and matcher test file changed from 1.5.10. The
+77,475,274-byte recipe asset is unchanged. A source handoff ZIP is included.
+No physical-device installation was tested, and this release does not add the
+website's store-selection interface or automatic Coles transport to Android.
+
+Coles: actual browser continuity failed
+
+The latest, third expressly approved human check was accepted in the isolated
+ordinary JavaScript/cookie browser. Before idle, the 09:47:07 UTC uncached search
+returned 23 products and six positively priced name matches. These are not six
+eligible selected ingredient quotes.
+
+The after-idle response at 10:03:51 UTC was unavailable and returned no products.
+The responses were 1004.008 seconds apart. The worker PID remained 3400390, with
+zero service restarts and one retained control page. The after-idle response did
+not establish a CAPTCHA; a later normal homepage visit at about 10:14 UTC visibly
+presented another check. No fourth check was completed.
+
+After an actual cold restart to PID 3426287, the 10:23:57 UTC uncached response
+required a browser check and returned zero products. The earlier 10:22:29 attempt
+occurred before that restart and is explicitly excluded from restart evidence.
+Browser state remains private; only permission/owner/size metadata is recorded.
+
+A separate browser-worker diagnostic update, release 20261028-102502, passed
+66 Linux fixture tests and is installed in production as PID 3431462. Its
+executing source files match the independently tested worker files. The actual
+uncached production probe at 10:30:02 UTC still required a browser check and
+returned zero products. The diagnostic reports protection-frame failures without
+weakening the browser's security policy. It does not establish Coles clearance,
+bypass a check or make the unfinished automatic-price goal complete.
+
+Temporary test services and the owned viewer tunnel are stopped, and temporary
+viewer passwords were removed locally and on the server. Cleanup checked 26
+exact test-database fixture accounts, deleted six and left zero matching fixtures.
+Production users were untouched. Anonymous Coles state, sources and rollback
+backups were preserved.
+
+Evidence
+
+Current handoff: audit-evidence-2026-10-28/price-matching-release-094057.json.
+It links the exact public-page, browser-fixture, staged-price and independent
+review receipts, the compressed staged offer capture, and Android identity/source
+records. Source-input hashes bind the actual idle/cold browser responses. Earlier
+snapshots and their failed results remain historical evidence; they were not
+rewritten to claim this release or a successful supplier-coverage result.

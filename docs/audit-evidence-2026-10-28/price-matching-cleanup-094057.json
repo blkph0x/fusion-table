@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-28T10:34:05.6897182Z",
+  "testDatabase": "fusion_accounts_test",
+  "exactFixtureAccountsChecked": 26,
+  "fixtureAccountsDeleted": 6,
+  "remainingMatchingFixtures": 0,
+  "productionUsersTouched": false,
+  "temporaryCanariesActive": 0,
+  "ownViewerTunnelPid": 72140,
+  "ownViewerTunnelStopped": true,
+  "localViewerPortListening": false,
+  "localViewerPasswordRemoved": true,
+  "serverViewerPasswordRemoved": true,
+  "anonymousColesStatePreserved": true,
+  "sourcesAndRollbackBackupsPreserved": true,
+  "source": "Verified root SQL-cleanup response, empty systemd canary list, process identity and local listening-port check."
+}

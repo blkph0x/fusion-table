@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-10-28T10:31:12.210592+00:00",
+  "status": "passed-operational-release-only",
+  "deployment": {
+    "releaseId": "20261028-094057",
+    "sourceManifestSha256": "66e25911d2c74be2f87cc493e118a828bd8d834cd4abce2268105341d829074c",
+    "gitCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da",
+    "version": "0.4.2",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "ingredient-matching-hardening"
+  },
+  "appIdentity": {
+    "releaseId": "20261028-094057",
+    "sourceCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da",
+    "sourceManifestSha256": "66e25911d2c74be2f87cc493e118a828bd8d834cd4abce2268105341d829074c",
+    "bundledWorkerHashes": {
+      "scripts/retailer-browser.mjs": "f188ac36fae419923d99ac361bb2044ea85b146faeeaa61ab1f7bbf7c5dec8fb",
+      "scripts/retailer-browser-policy.mjs": "5bbbba973dcb67124c047523b7eb3edba4d950c24d576687652883b440e86cf4",
+      "scripts/retailer-browser.service": "fddafa8184e3ba7961cd21134f2ac65cd7ce6121b15943c5f21833a7d640ba1a",
+      "lib/abort-deadline.mjs": "ac603040d5e0fe0a2adedcd4ba869a56b92d8477fea83aaa126c2dabfefd81c3",
+      "lib/coles-browser-state.mjs": "f8eefb88419b66b1b3b17b58d8fa1026f02a1e1164e84554480539f26cf1bd8f"
+    },
+    "bundledWorkerRole": "inactive source bundled with the independently versioned web app"
+  },
+  "workerEvidence": {
+    "releaseId": "20261028-102502",
+    "runtimeDirectory": "/opt/fusion-retailer-browser/releases/20261028-102502",
+    "qaDirectory": "/home/blkph0x/fusion-worker-audits/20261028-102502",
+    "sourceReference": "independent worker QA snapshot, not the web app bundled worker",
+    "sourceHashes": {
+      "scripts/retailer-browser.mjs": "220fb1842c916b637722c1ecfc9bb9d6d00bd07f493825e7dd72e63e14dbab32",
+      "scripts/retailer-browser-policy.mjs": "5bbbba973dcb67124c047523b7eb3edba4d950c24d576687652883b440e86cf4",
+      "scripts/retailer-browser.service": "fddafa8184e3ba7961cd21134f2ac65cd7ce6121b15943c5f21833a7d640ba1a",
+      "lib/abort-deadline.mjs": "ac603040d5e0fe0a2adedcd4ba869a56b92d8477fea83aaa126c2dabfefd81c3",
+      "lib/coles-browser-state.mjs": "f8eefb88419b66b1b3b17b58d8fa1026f02a1e1164e84554480539f26cf1bd8f"
+    },
+    "qaSourceHashes": {
+      "scripts/retailer-browser.mjs": "220fb1842c916b637722c1ecfc9bb9d6d00bd07f493825e7dd72e63e14dbab32",
+      "scripts/retailer-browser-policy.mjs": "5bbbba973dcb67124c047523b7eb3edba4d950c24d576687652883b440e86cf4",
+      "scripts/retailer-browser.service": "fddafa8184e3ba7961cd21134f2ac65cd7ce6121b15943c5f21833a7d640ba1a",
+      "lib/abort-deadline.mjs": "ac603040d5e0fe0a2adedcd4ba869a56b92d8477fea83aaa126c2dabfefd81c3",
+      "lib/coles-browser-state.mjs": "f8eefb88419b66b1b3b17b58d8fa1026f02a1e1164e84554480539f26cf1bd8f"
+    },
+    "testsPassed": 66,
+    "testsFailed": 0,
+    "testsSkipped": 0,
+    "qaLogSha256": "cfc00a94548855bbd2eb688a2b12985d0adc6999db6ab91f320a21c898a9c197",
+    "qaTestFiles": [
+      "abort-deadline.test.mjs",
+      "coles-browser-state.test.mjs",
+      "coles-browser-session.test.mjs",
+      "coles-query-lifecycle.test.mjs",
+      "coles-session-lifetime.test.mjs",
+      "retailer-browser-hydration.test.mjs",
+      "retailer-browser-policy.test.mjs",
+      "retailer-browser-watchdog.test.mjs",
+      "coles-blocked-frame.test.mjs"
+    ]
+  },
+  "installedWorker": {
+    "unit": "fusion-retailer-browser.service",
+    "workerRelease": "20261028-102502",
+    "runtimeDirectory": "/opt/fusion-retailer-browser/releases/20261028-102502",
+    "mainPid": 3431462
+  },
+  "services": {
+    "fusion-table.service": {
+      "ActiveState": "active",
+      "MainPID": "3414397",
+      "NRestarts": "0",
+      "WorkingDirectory": "/home/blkph0x/fusion-releases/20261028-094057"
+    },
+    "fusion-retailer-browser.service": {
+      "ActiveState": "active",
+      "MainPID": "3431462",
+      "NRestarts": "0",
+      "WorkingDirectory": "/opt/fusion-retailer-browser/current"
+    },
+    "fusion-accounts-canary-20261028-094057.service": {
+      "ActiveState": "inactive",
+      "MainPID": "0",
+      "NRestarts": "0",
+      "WorkingDirectory": ""
+    },
+    "fusion-retailer-canary-20261028-091423.service": {
+      "ActiveState": "inactive",
+      "MainPID": "0",
+      "NRestarts": "0",
+      "WorkingDirectory": ""
+    }
+  },
+  "accountReadOnlyAvailability": true,
+  "scope": "Published source/runtime identity and operational service health. No assertion of automatic Coles clearance."
+}

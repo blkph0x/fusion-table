@@ -1,0 +1,220 @@
+{
+  "checkedAt": "2026-10-28T09:22:14.298352+00:00",
+  "status": "staged-only; fixture QA passed; live browser check pending; no idle/cold/automatic access proof",
+  "workerRelease": "20261028-091423",
+  "sourceCommit": "3c63fec39773bb8dbc59b92005808737b8f97fa6",
+  "sourceBindingScope": "Five executing worker source files and eight worker QA test files separately verified against this commit. Full QA dependency bytes are bound by the QA archive hash; it is not a clean whole-tree snapshot of this commit.",
+  "runtimeArchive": {
+    "path": "work/shopping-deploy/fusion-retailer-20261028-091423.tar.gz",
+    "sha256": "1c9495b2ef51ec4f523e4263d9cb94efbdbed9cd1d7a64a8cdb61f5116dba505",
+    "members": 151,
+    "bytes": 3113878,
+    "serverDirectory": "/opt/fusion-retailer-browser/releases/20261028-091423",
+    "contentsScope": "Five worker source files and playwright-core dependency files; the four QA WIP app files below are absent.",
+    "playwrightCoreVersion": "1.64.1"
+  },
+  "qaArchive": {
+    "path": "work/shopping-strategy/worker-qa-20261028-091423.tar.gz",
+    "sha256": "90f0ec221182c12f2f31f33491933b4893527a55ff4546c80048e17aa2864514",
+    "members": 151,
+    "bytes": 474940,
+    "serverDirectory": "/home/blkph0x/fusion-worker-audits/20261028-091423",
+    "workerTestFiles": [
+      "tests/abort-deadline.test.mjs",
+      "tests/coles-browser-state.test.mjs",
+      "tests/coles-browser-session.test.mjs",
+      "tests/coles-query-lifecycle.test.mjs",
+      "tests/coles-session-lifetime.test.mjs",
+      "tests/retailer-browser-hydration.test.mjs",
+      "tests/retailer-browser-policy.test.mjs",
+      "tests/retailer-browser-watchdog.test.mjs"
+    ],
+    "wholeArchiveCleanGitSnapshot": false,
+    "fullArchiveGitComparison": {
+      "exactBytes": 78,
+      "checkoutLineEndingsOnly": 69,
+      "differentContent": 4,
+      "untracked": 0
+    },
+    "additionalWipAppOrDependencyFiles": {
+      "package.json": "23758bcd9b05e731bc997d843570cc30f93901c964de46aecf792ce0cf63c855",
+      "lib/product-match.ts": "22074f660ee51ea208e1647e4b59a80e4bd36cf7b6b33190621bae844f3db75d",
+      "lib/shopping-strategy.ts": "b9edb91eb010221fc685dfd74052bb34388a40355ef0c8c826897c9aaf06b908",
+      "scripts/check-live-recipe-batch.mjs": "4190899f171458a325b238880f335622dfa2a262d476a0d621dd397220254f48"
+    },
+    "qualification": "These four additional QA inputs differ from the source commit and may be imported by QA tests. QA results describe the exact archived dependency bytes, not an assumed clean checkout. Future full app tests must cover the final app source."
+  },
+  "runtimeSourcesMatchQASnapshot": true,
+  "sourceBindings": {
+    "scripts/retailer-browser.mjs": {
+      "archiveSha256": "f188ac36fae419923d99ac361bb2044ea85b146faeeaa61ab1f7bbf7c5dec8fb",
+      "gitBlobSha256": "f188ac36fae419923d99ac361bb2044ea85b146faeeaa61ab1f7bbf7c5dec8fb",
+      "gitBinding": "exact bytes"
+    },
+    "scripts/retailer-browser-policy.mjs": {
+      "archiveSha256": "5bbbba973dcb67124c047523b7eb3edba4d950c24d576687652883b440e86cf4",
+      "gitBlobSha256": "5bbbba973dcb67124c047523b7eb3edba4d950c24d576687652883b440e86cf4",
+      "gitBinding": "exact bytes"
+    },
+    "scripts/retailer-browser.service": {
+      "archiveSha256": "fddafa8184e3ba7961cd21134f2ac65cd7ce6121b15943c5f21833a7d640ba1a",
+      "gitBlobSha256": "aba70c72a8fd652d207b7e136b5f2439401d18c348230c0c999d37b03da0fd24",
+      "gitBinding": "checkout line endings only; LF-normalized bytes equal"
+    },
+    "lib/abort-deadline.mjs": {
+      "archiveSha256": "ac603040d5e0fe0a2adedcd4ba869a56b92d8477fea83aaa126c2dabfefd81c3",
+      "gitBlobSha256": "ac603040d5e0fe0a2adedcd4ba869a56b92d8477fea83aaa126c2dabfefd81c3",
+      "gitBinding": "exact bytes"
+    },
+    "lib/coles-browser-state.mjs": {
+      "archiveSha256": "f8eefb88419b66b1b3b17b58d8fa1026f02a1e1164e84554480539f26cf1bd8f",
+      "gitBlobSha256": "f8eefb88419b66b1b3b17b58d8fa1026f02a1e1164e84554480539f26cf1bd8f",
+      "gitBinding": "exact bytes"
+    },
+    "tests/abort-deadline.test.mjs": {
+      "archiveSha256": "4f3cdf9653dcf09523429f0c9d483f424b57b4c2f4c6fe1068367de36792b133",
+      "gitBlobSha256": "4f3cdf9653dcf09523429f0c9d483f424b57b4c2f4c6fe1068367de36792b133",
+      "gitBinding": "exact bytes"
+    },
+    "tests/coles-browser-state.test.mjs": {
+      "archiveSha256": "51732cc550cc86414f39597ac516866de55a462a0c86915011026c9da3acc95a",
+      "gitBlobSha256": "51732cc550cc86414f39597ac516866de55a462a0c86915011026c9da3acc95a",
+      "gitBinding": "exact bytes"
+    },
+    "tests/coles-browser-session.test.mjs": {
+      "archiveSha256": "cd43069b0e3674348a31bd3691d6c78a1677934e8acc5fa6554bdf53ca80b98b",
+      "gitBlobSha256": "cd43069b0e3674348a31bd3691d6c78a1677934e8acc5fa6554bdf53ca80b98b",
+      "gitBinding": "exact bytes"
+    },
+    "tests/coles-query-lifecycle.test.mjs": {
+      "archiveSha256": "a05b4a28e66e9e8d53ea64efe6dfac2496e1e58d881a16063e282fd47902151b",
+      "gitBlobSha256": "a05b4a28e66e9e8d53ea64efe6dfac2496e1e58d881a16063e282fd47902151b",
+      "gitBinding": "exact bytes"
+    },
+    "tests/coles-session-lifetime.test.mjs": {
+      "archiveSha256": "596460b49272546253c1fe1e96c78fef6de766a4ca7f064bc122d6e84d07d979",
+      "gitBlobSha256": "596460b49272546253c1fe1e96c78fef6de766a4ca7f064bc122d6e84d07d979",
+      "gitBinding": "exact bytes"
+    },
+    "tests/retailer-browser-hydration.test.mjs": {
+      "archiveSha256": "d9e52a042b988cd63b45825114b8d6a522cfec5659437b543ff6af82cffc87d8",
+      "gitBlobSha256": "d9e52a042b988cd63b45825114b8d6a522cfec5659437b543ff6af82cffc87d8",
+      "gitBinding": "exact bytes"
+    },
+    "tests/retailer-browser-policy.test.mjs": {
+      "archiveSha256": "31e816870e6a4f412d36c68b71b46eb1f81d3ab6a5bdbd5d098cc2aeb9d87722",
+      "gitBlobSha256": "31e816870e6a4f412d36c68b71b46eb1f81d3ab6a5bdbd5d098cc2aeb9d87722",
+      "gitBinding": "exact bytes"
+    },
+    "tests/retailer-browser-watchdog.test.mjs": {
+      "archiveSha256": "e67b32bb59d1adc632780a462f749384806eca115e7d639cca664ee0b0d11dc1",
+      "gitBlobSha256": "e67b32bb59d1adc632780a462f749384806eca115e7d639cca664ee0b0d11dc1",
+      "gitBinding": "exact bytes"
+    }
+  },
+  "linuxQA": {
+    "tests": 63,
+    "pass": 63,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "todo": 0,
+    "log": {
+      "path": "work/shopping-strategy/worker-091423-linux-tests.log",
+      "sha256": "3a178d96a3cc3e2fb6e26c1f3d13aeae401eb39004daf26dbf589d7431dacaa7"
+    },
+    "serverLog": "/home/blkph0x/fusion-worker-audits/20261028-091423/tests.log",
+    "evidence": "Actual server test log downloaded by the root agent and independently parsed locally; this agent performed no download.",
+    "scope": "Eight-file worker fixture suite. Tests do not establish live retailer clearance."
+  },
+  "firstIsolatedLiveProbe": {
+    "receipt": {
+      "path": "work/coles-auto/isolated-091423-before-approval.json",
+      "sha256": "bbd19734b40dee89245b2f1eb1cc3d0ab553ccebd7a0a924456e81ec1d521f4f"
+    },
+    "serverReceipt": "/home/blkph0x/fusion-releases/20261028-082209/coles-browser-isolated-before-approval.json",
+    "result": {
+      "label": "isolated-before-approval",
+      "at": "2026-10-28T09:16:35.525Z",
+      "seconds": 7.648,
+      "status": 200,
+      "providerStatus": "needs-browser",
+      "cached": false,
+      "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+      "products": 0,
+      "positiveMatches": 0,
+      "selectedMatches": 0,
+      "samples": [],
+      "message": "Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."
+    },
+    "classification": "Uncached response requires a browser check and returned no products or positive prices. It cannot satisfy a successful price, idle, cold-restart or unattended recovery gate."
+  },
+  "earlierActualIdleFailure": {
+    "workerRelease": "20261028-073046",
+    "elapsedSeconds": 990.224,
+    "before": {
+      "path": "work/coles-auto/first-real-idle-before.json",
+      "sha256": "9362ab062ff742715c11f165f954327bbabe58de7f8a61fcddb370b2c7f8d1e0"
+    },
+    "after": {
+      "path": "work/coles-auto/first-real-idle-after.json",
+      "sha256": "fa8139c93d7fbc17efbf495f3e81e93205853b94e3edf7031675acfdfd7a32ed"
+    },
+    "beforeHealth": {
+      "path": "work/coles-auto/first-real-idle-before-health.json",
+      "sha256": "109b3998df6a53768c67c44e70b70d3367778e6f267efe5600e47ec54dacd89f"
+    },
+    "afterHealth": {
+      "path": "work/coles-auto/first-real-idle-after-health.json",
+      "sha256": "587384f6937a8bb76b1b241aa3c301e0fa178fe232fa7273a138636207263a72"
+    },
+    "beforeResult": {
+      "at": "2026-10-28T08:11:24.801Z",
+      "status": 200,
+      "providerStatus": "ready",
+      "positiveMatches": 6
+    },
+    "afterResult": {
+      "at": "2026-10-28T08:27:55.025Z",
+      "status": 200,
+      "providerStatus": "needs-browser",
+      "positiveMatches": 0,
+      "cached": false
+    },
+    "samePid": true,
+    "systemdRestarts": "0",
+    "assetBlockingDiagnostic": {
+      "path": "work/coles-auto/idle-diagnostic-client-blocked.png",
+      "sha256": "6360e3467a8aae29b3e87659f17101fe3fb7d945cb733fe4b5f51a9eaf6862bb"
+    },
+    "qualification": "This earlier real idle interval failed. Visible same-origin assets were blocked by the local client. The then-reader returned needs-browser without evidence of a new visible human check; do not attribute that failure to a publisher CAPTCHA."
+  },
+  "isolation": {
+    "privateStateDirectory": "/var/lib/fusion-retailer-browser-canary-20261028-091423",
+    "privateStateFile": "/var/lib/fusion-retailer-browser-canary-20261028-091423/coles-state.json",
+    "productionStateFile": "/var/lib/fusion-retailer-browser/coles-state.json",
+    "configuration": {
+      "path": "work/coles-auto/start-continuity-worker.sh",
+      "sha256": "b948f8dd217cae582c5a441eeef18db40a09b8f82c233e21f82171a4f608bcdc"
+    },
+    "productionStateCopiedOrMergedByTheseHelpers": false,
+    "causalityCaveat": "A shared path was a real future overwrite risk, but root metadata showed savedAt08:11:24 and39cookies unchanged before the09:00 check. No observed post-approval overwrite is claimed."
+  },
+  "proofStatus": {
+    "fixtureWorkerQA": "passed",
+    "privateStage": "root-reported staged",
+    "realSixteenMinuteIdleOn091423": "unverified",
+    "coldRestartAfterSuccessfulIdleOn091423": "unverified",
+    "automaticColesAccess": "unverified",
+    "productionCutover": "not performed by this agent",
+    "productionFreshPriceProbe": "unverified"
+  },
+  "remainingRequirements": [
+    "Obtain any new human-check authorization at action time; this receipt is not authorization and this agent solved no challenge.",
+    "Preserve actual >=960-second idle, unchanged PID/no restart, idle scheduler/control-page checks, uncached ready200 positive prices, and a new-process cold restart on the same isolated worker.",
+    "Preserve all existing live account, recipe-price, eligible-Coles-offer and source-coverage gates; fixture success cannot replace them.",
+    "Isolated canary success alone does not validate production using its older state. Root must stop both writers, back up production state, atomically promote only the validated canary snapshot with fusion-retailer ownership and0600 mode, install/restart, then obtain a fresh actual8794 price probe. These helpers do not copy or promote browser state.",
+    "Keep earlier080617 and085054 receipts and archives intact; new isolation cannot retroactively approve earlier attempts."
+  ],
+  "secretsIncluded": false
+}

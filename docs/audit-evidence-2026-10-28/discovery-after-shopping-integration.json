@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "shuffles": 50,
+  "recipesChecked": 300,
+  "uniqueCoresSeen": 293,
+  "pool": {
+    "previousCores": 120,
+    "cores": 1705,
+    "mains": 30,
+    "methods": 13,
+    "regions": 76,
+    "sides": 90
+  },
+  "expansion": 14.208333333333334,
+  "sampledCoverage": {
+    "mains": 30,
+    "methods": 13,
+    "regions": 76,
+    "sides": 77
+  },
+  "recentCoreLimit": 120,
+  "noRecentCoreRepeats": true,
+  "exactShareRoundTrips": 300,
+  "regionalMarkerLeaks": 0,
+  "sameWeeklyPickThroughout": true,
+  "selectionMilliseconds": {
+    "cold": 75.87600000000003,
+    "averageWarm": 8.34189183673469,
+    "p95": 14.031600000000026,
+    "maximum": 75.87600000000003
+  },
+  "measuredHeapMegabytes": {
+    "minimum": 14.039566040039062,
+    "maximum": 22.408851623535156
+  },
+  "elapsedMilliseconds": 720.5699,
+  "sourceHashes": {
+    "lib/discover-pool.ts": "deef55a143d544bf11cfec9600385f9a80efa90c701dbcbfbf8342da4bb687da",
+    "lib/home-suggestions.ts": "57f9c1ed619bee704ad0c210289d006fb4dc18bb518835fb20433a5d3dfa996b",
+    "lib/meal-of-week.ts": "ae98f5c80c61d9f73cb834a6ba91c9f0240534c08cc52260ce83cd54aa125c0d",
+    "lib/share-recipe.ts": "c0c423fe4e570970336f156dde0986f3bc9728117609ba6d32791b3cfef9ff45",
+    "app/page.tsx": "ebed052c3d43e7938585acd557a77fae509df8e325340c73c8e7d7ac027c8587"
+  },
+  "limitation": "Structural, selection and identity checks do not establish taste, nutritional adequacy or kitchen performance."
+}

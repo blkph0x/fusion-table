@@ -1,0 +1,15 @@
+{
+  "url": "https://gearsqueens.online/downloads/MealPlannerAU.apk",
+  "finalUrl": "https://gearsqueens.online/downloads/MealPlannerAU.apk",
+  "checkedAt": "2026-10-28T08:18:23.804054+00:00",
+  "status": 200,
+  "bytes": 13991989,
+  "sha256": "09c6e412459e47505529618a92438ef5b073d7793cd9e77e883d4e510e77666c",
+  "version": "1.5.10",
+  "versionCode": 17,
+  "downloadMatchesVerifiedSignedBuild": true,
+  "verification": "Independent streamed HTTPS download of the exact public URL; no browser or private worker calls.",
+  "contentLength": 13991989,
+  "cacheControl": "no-cache",
+  "contentType": "application/vnd.android.package-archive"
+}

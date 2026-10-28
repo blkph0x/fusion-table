@@ -1,0 +1,510 @@
+{
+  "checkedAt": "2026-10-28T08:49:02.685Z",
+  "status": "passed-captured-offer-safety-replay",
+  "proofType": "Offline safety predicates over historical captured offers; not full API reconstruction and not a fresh supplier quote.",
+  "capture": "work/expansion-audit/public-50-20261028-continued.ndjson",
+  "captureSha256": "6a70fdddb8685f1deffbbef55c38bd0f49a0b9752f00a5c90d95b9758760094e",
+  "originalBaselineDeployment": {
+    "releaseId": "20261028-072139",
+    "version": "0.4.0",
+    "gitCommit": "55545f12d8a91277c2d19ceafd81125b4d1e7b45"
+  },
+  "guardSourceSha256": {
+    "lib/product-match.ts": "f37461f1eda9cd146ba3a0dccb348b70f0e4e933d83700972c4b964c71855060",
+    "lib/fresh-herb-match.ts": "0aad5edd5b9b889e7421a4df53299c769e1c1330903d8d799ba30fc2ec24292b",
+    "lib/shopping-costs.ts": "f5636a937c249152968ccd76b44f63b480e174a2543c9ead403ed48c8257db17",
+    "lib/food-words.ts": "0976e3e031114580444c784a1c5535cacde4e872d24f9b4b99c6b8c940db67e1",
+    "lib/cuts.ts": "2da72b7c2c7393c728f71395fdbde5681575fd942ba79fbb4fb7a4f3df3355df",
+    "lib/price-memory.ts": "d481cb51d24badaf7b85ce8a01bdd832ff01bc76ee4081203cdaedac8e3b0c53",
+    "lib/ingredient-estimates.ts": "efa5d36c4c25e79113fdd4057a85e35b9069b42d3ed286cd9f043627c85e4344"
+  },
+  "networkAttempts": 0,
+  "batches": 50,
+  "ingredientRows": 300,
+  "allOffersEvaluated": 2985,
+  "previousEligible": 483,
+  "previousEligibleRetained": 474,
+  "previousEligibleRejected": 9,
+  "previousSelected": 102,
+  "previousSelectedRetained": 99,
+  "previousSelectedRejected": 3,
+  "rejectedByCounts": {
+    "captured-offer-not-selectable-under-current-guard": 1381,
+    "unverified-rice-pack-preparation": 59,
+    "ingredient-preparation-conflict": 254,
+    "ingredient-identity-conflict": 100,
+    "unverified-fresh-herb-pack": 19,
+    "non-food-product": 2
+  },
+  "knownFailureGroups": [
+    {
+      "id": "explicit-animal-species-mismatch",
+      "originalClassification": "confirmed-incorrect-automatic-selection",
+      "batch": 4,
+      "requested": "Turkey breast fillets",
+      "allRejected": true,
+      "offers": [
+        {
+          "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+          "source": "woolworths-online-catalogue",
+          "previousSelected": true,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-identity-conflict",
+            "ingredient-preparation-conflict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "food-query-selected-kitchenware",
+      "originalClassification": "confirmed-incorrect-automatic-selection",
+      "batch": 16,
+      "requested": "Soft tortillas",
+      "allRejected": true,
+      "offers": [
+        {
+          "productName": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+          "source": "woolworths-online-catalogue",
+          "previousSelected": true,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "non-food-product",
+            "ingredient-identity-conflict",
+            "ingredient-preparation-conflict",
+            "captured-offer-not-selectable-under-current-guard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "single-produce-mixed-vegetable-alternatives",
+      "originalClassification": "confirmed-incorrect-eligible-alternatives",
+      "batch": 19,
+      "requested": "Carrot",
+      "allRejected": true,
+      "offers": [
+        {
+          "productName": "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g",
+          "source": "aldi-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        },
+        {
+          "productName": "MARKET FARE Peas, Carrots & Super Sweet Corn 1kg",
+          "source": "aldi-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        },
+        {
+          "productName": "MARKET FARE Quicksteam Vegetables Carrot, Broccoli & Cauliflower 3 Pack 450g",
+          "source": "aldi-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        },
+        {
+          "productName": "Birds Eye Country Harvest Carrot Cauliflower Beans & Broccoli",
+          "source": "iga-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        },
+        {
+          "productName": "Birds Eye Country Harvest Peas Corn & Carrot",
+          "source": "iga-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        },
+        {
+          "productName": "Birds Eye Deli Roast Veggies Potato Pumpkin Onion Carrot",
+          "source": "iga-online-catalogue",
+          "previousSelected": false,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "ingredient-preparation-conflict"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fresh-herb-versus-dried-small-pack",
+      "originalClassification": "requires-product-form-verification",
+      "batch": 18,
+      "requested": "Coriander leaves for the side",
+      "allRejected": true,
+      "offers": [
+        {
+          "productName": "MasterFoods Coriander Leaves",
+          "source": "iga-online-catalogue",
+          "previousSelected": true,
+          "passesCapturedOfferSafety": false,
+          "rejectedBy": [
+            "unverified-fresh-herb-pack"
+          ]
+        }
+      ]
+    }
+  ],
+  "positiveControls": [
+    {
+      "batch": 20,
+      "requested": "Raw peeled, deveined prawns",
+      "productName": "Ocean Chef Peeled Tail Off & Deveined Raw Prawns",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 21,
+      "requested": "Raw peeled, deveined prawns",
+      "productName": "Ocean Chef Peeled Tail Off & Deveined Raw Prawns",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 22,
+      "requested": "Plain firm tofu",
+      "productName": "Evergreen Original Tofu Regular Firm",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 23,
+      "requested": "Plain firm tofu",
+      "productName": "Evergreen Original Tofu Regular Firm",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 23,
+      "requested": "Paratha",
+      "productName": "Spring Home Paratha Plain Roti",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 34,
+      "requested": "Vegan kimchi",
+      "productName": "The Kimchi Company Vegan",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 35,
+      "requested": "Cherry tomatoes",
+      "productName": "Woolworths Cherry Tomatoes Punnet",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 36,
+      "requested": "Mushrooms",
+      "productName": "White Flat Mushrooms 375g",
+      "source": "aldi-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 43,
+      "requested": "Duck breast fillets",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 1,
+      "requested": "Chicken breast fillets",
+      "productName": "Woolworths RSPCA Approved Chicken Breast Fillets",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 1,
+      "requested": "Fresh ginger",
+      "productName": "Macro Organic Ginger Punnet",
+      "source": "woolworths-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "productName": "Carrots 1kg",
+      "source": "aldi-online-catalogue",
+      "passesCapturedOfferSafety": true,
+      "rejectedBy": []
+    }
+  ],
+  "rejectedPreviousEligible": [
+    {
+      "batch": 4,
+      "requested": "Turkey breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "packageSize": "380g",
+      "source": "woolworths-online-catalogue",
+      "shopName": "Woolworths online",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 1550,
+      "capturedPurchaseCents": 7750,
+      "capturedFetchedAt": "2026-10-28T07:40:38.078Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-identity-conflict",
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 16,
+      "requested": "Soft tortillas",
+      "amount": 14,
+      "unit": "",
+      "productName": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+      "packageSize": "1EA",
+      "source": "woolworths-online-catalogue",
+      "shopName": "Woolworths online",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 3093,
+      "capturedPurchaseCents": 43302,
+      "capturedFetchedAt": "2026-10-28T07:46:20.008Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "non-food-product",
+        "ingredient-identity-conflict",
+        "ingredient-preparation-conflict",
+        "captured-offer-not-selectable-under-current-guard"
+      ]
+    },
+    {
+      "batch": 18,
+      "requested": "Coriander leaves for the side",
+      "amount": 18.75,
+      "unit": "g",
+      "productName": "MasterFoods Coriander Leaves",
+      "packageSize": "5g",
+      "source": "iga-online-catalogue",
+      "shopName": "Lloyds IGA Newtown",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 380,
+      "capturedPurchaseCents": 1520,
+      "capturedFetchedAt": "2026-10-28T07:47:45.810Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "unverified-fresh-herb-pack"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g",
+      "packageSize": "450 g",
+      "source": "aldi-online-catalogue",
+      "shopName": "ALDI online",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 299,
+      "capturedPurchaseCents": 299,
+      "capturedFetchedAt": "2026-10-28T07:48:15.412Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "MARKET FARE Peas, Carrots & Super Sweet Corn 1kg",
+      "packageSize": "1 kg",
+      "source": "aldi-online-catalogue",
+      "shopName": "ALDI online",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 329,
+      "capturedPurchaseCents": 329,
+      "capturedFetchedAt": "2026-10-28T07:48:15.412Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "MARKET FARE Quicksteam Vegetables Carrot, Broccoli & Cauliflower 3 Pack 450g",
+      "packageSize": "450 g",
+      "source": "aldi-online-catalogue",
+      "shopName": "ALDI online",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 299,
+      "capturedPurchaseCents": 299,
+      "capturedFetchedAt": "2026-10-28T07:48:15.412Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "Birds Eye Country Harvest Carrot Cauliflower Beans & Broccoli",
+      "packageSize": "500g",
+      "source": "iga-online-catalogue",
+      "shopName": "Lloyds IGA Newtown",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 485,
+      "capturedPurchaseCents": 485,
+      "capturedFetchedAt": "2026-10-28T07:48:41.620Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "Birds Eye Country Harvest Peas Corn & Carrot",
+      "packageSize": "1kg",
+      "source": "iga-online-catalogue",
+      "shopName": "Lloyds IGA Newtown",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 650,
+      "capturedPurchaseCents": 650,
+      "capturedFetchedAt": "2026-10-28T07:48:41.620Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 19,
+      "requested": "Carrot",
+      "amount": 400,
+      "unit": "g",
+      "productName": "Birds Eye Deli Roast Veggies Potato Pumpkin Onion Carrot",
+      "packageSize": "600g",
+      "source": "iga-online-catalogue",
+      "shopName": "Lloyds IGA Newtown",
+      "previousEligible": true,
+      "previousSelected": false,
+      "capturedPriceCents": 755,
+      "capturedPurchaseCents": 755,
+      "capturedFetchedAt": "2026-10-28T07:48:41.620Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-preparation-conflict"
+      ]
+    }
+  ],
+  "rejectedPreviousSelected": [
+    {
+      "batch": 4,
+      "requested": "Turkey breast fillets",
+      "amount": 1800,
+      "unit": "g",
+      "productName": "Luv-A-Duck Fresh Duck Breast Fillets",
+      "packageSize": "380g",
+      "source": "woolworths-online-catalogue",
+      "shopName": "Woolworths online",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 1550,
+      "capturedPurchaseCents": 7750,
+      "capturedFetchedAt": "2026-10-28T07:40:38.078Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "ingredient-identity-conflict",
+        "ingredient-preparation-conflict"
+      ]
+    },
+    {
+      "batch": 16,
+      "requested": "Soft tortillas",
+      "amount": 14,
+      "unit": "",
+      "productName": "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)",
+      "packageSize": "1EA",
+      "source": "woolworths-online-catalogue",
+      "shopName": "Woolworths online",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 3093,
+      "capturedPurchaseCents": 43302,
+      "capturedFetchedAt": "2026-10-28T07:46:20.008Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "non-food-product",
+        "ingredient-identity-conflict",
+        "ingredient-preparation-conflict",
+        "captured-offer-not-selectable-under-current-guard"
+      ]
+    },
+    {
+      "batch": 18,
+      "requested": "Coriander leaves for the side",
+      "amount": 18.75,
+      "unit": "g",
+      "productName": "MasterFoods Coriander Leaves",
+      "packageSize": "5g",
+      "source": "iga-online-catalogue",
+      "shopName": "Lloyds IGA Newtown",
+      "previousEligible": true,
+      "previousSelected": true,
+      "capturedPriceCents": 380,
+      "capturedPurchaseCents": 1520,
+      "capturedFetchedAt": "2026-10-28T07:47:45.810Z",
+      "passesCapturedOfferSafety": false,
+      "rejectedBy": [
+        "unverified-fresh-herb-pack"
+      ]
+    }
+  ],
+  "captureUnchanged": true,
+  "priceOrFetchedAtValuesRewritten": false,
+  "limits": [
+    "Historical eligible/selected flags are input evidence only. Passing a safety predicate does not create new eligibility, stock evidence, freshness, prices or selections.",
+    "This replay evaluates food identity, preparation, known non-food titles, small unverified fresh-herb packs, ambiguous rice packaging and existing captured selectability only.",
+    "It does not reconstruct catalogue batches, brand ambiguity, provider status, current prices, browser clearance, nearby shop assignments or full shopping API behaviour.",
+    "All price and fetchedAt fields in rejected-offer receipts are copied verbatim from the original capture. No price timestamps are renewed.",
+    "The fresh-herb group is rejected because fresh-leaf form is unverified, not because the original capture independently proved the product was dried.",
+    "Fresh public tests after deployment are still required."
+  ]
+}

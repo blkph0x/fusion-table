@@ -1,0 +1,176 @@
+{
+  "status": "failed",
+  "checkedAt": "2026-10-28T09:56:11.420Z",
+  "base": "http://127.0.0.1:8793/fusion",
+  "requestedCases": 5,
+  "priceChecksRequested": true,
+  "witnessSha256": "13776a3137902d49f29565acd99617b86609d15d17e25fc94db7a88132ef25a4",
+  "witnessSource": "591ffcc6c702b986a28756d81a51d40be0c24d764f7761ef81e6c6775500f983",
+  "deployment": {
+    "releaseId": "20261028-094057",
+    "version": "0.4.2",
+    "gitCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da"
+  },
+  "htmlPassed": 5,
+  "pdfPassed": 5,
+  "pricesPassed": 5,
+  "priceLines": 30,
+  "pricesSkipped": 0,
+  "planningLines": 30,
+  "selectedGuideLines": 8,
+  "colesPricedMatches": 0,
+  "colesEligibleOffers": 0,
+  "colesEligibleBatches": 0,
+  "colesEligibleUniqueIngredients": 0,
+  "colesEligibleIngredientNames": [],
+  "colesSelectedGuides": 0,
+  "colesReadyBatches": 0,
+  "colesStatuses": {
+    "needs-browser": 5
+  },
+  "oldestEligibleSeconds": 72.039,
+  "rateLimitRetries": 0,
+  "failures": [
+    {
+      "stage": "coles-coverage",
+      "issues": [
+        "Coles returned no usable eligible price offers across the recipe batch. Positive candidate prices alone do not establish automatic ingredient pricing."
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "case": 1,
+      "recipeId": "meal-turkey-baked-home-kitchen-avocado-tomato-rice-dairy-free-medium-12-turkey-breast-clean-sat-3164367647",
+      "main": "turkey",
+      "cut": "turkey-breast",
+      "method": "baked",
+      "region": "home-kitchen",
+      "side": "avocado-tomato-rice",
+      "html": true,
+      "pdf": true,
+      "prices": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 10,
+        "pricedOffers": 48,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 4,
+        "oldestEligibleSeconds": 33.768,
+        "colesStatus": "needs-browser",
+        "seconds": 35.108
+      }
+    },
+    {
+      "case": 2,
+      "recipeId": "meal-salmon-poached-filipino-tortilla-salsa-balanced-medium-7-clean-sat-2888525512",
+      "main": "salmon",
+      "cut": null,
+      "method": "poached",
+      "region": "filipino",
+      "side": "tortilla-salsa",
+      "html": true,
+      "pdf": true,
+      "prices": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 0,
+        "eligibleOffers": 0,
+        "pricedOffers": 47,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 0,
+        "oldestEligibleSeconds": 0,
+        "colesStatus": "needs-browser",
+        "seconds": 33.191
+      }
+    },
+    {
+      "case": 3,
+      "recipeId": "meal-white-fish-baked-peruvian-papaya-salad-side-gluten-free-hot-5-clean-sat-3665078586",
+      "main": "white-fish",
+      "cut": null,
+      "method": "baked",
+      "region": "peruvian",
+      "side": "papaya-salad-side",
+      "html": true,
+      "pdf": true,
+      "prices": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 10,
+        "pricedOffers": 39,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 4,
+        "oldestEligibleSeconds": 69.787,
+        "colesStatus": "needs-browser",
+        "seconds": 0.669
+      }
+    },
+    {
+      "case": 4,
+      "recipeId": "meal-white-fish-curry-tunisian-potato-slaw-gluten-free-mild-8-clean-sat-4012340661",
+      "main": "white-fish",
+      "cut": null,
+      "method": "curry",
+      "region": "tunisian",
+      "side": "potato-slaw",
+      "html": true,
+      "pdf": true,
+      "prices": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 12,
+        "pricedOffers": 35,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 3,
+        "oldestEligibleSeconds": 72.039,
+        "colesStatus": "needs-browser",
+        "seconds": 1.202
+      }
+    },
+    {
+      "case": 5,
+      "recipeId": "meal-duck-poached-chettinad-xinjiang-bread-salad-dairy-free-medium-12-clean-sat-3320926935",
+      "main": "duck",
+      "cut": null,
+      "method": "poached",
+      "region": "chettinad",
+      "side": "xinjiang-bread-salad",
+      "html": true,
+      "pdf": true,
+      "prices": {
+        "requestedLines": 6,
+        "planningLines": 6,
+        "selectedGuides": 2,
+        "eligibleOffers": 2,
+        "pricedOffers": 29,
+        "colesPricedMatches": 0,
+        "colesEligibleOffers": 0,
+        "colesEligibleIngredientNames": [],
+        "colesSelectedGuides": 0,
+        "unknownStockGuides": 0,
+        "oldestEligibleSeconds": 1.045,
+        "colesStatus": "needs-browser",
+        "seconds": 1.471
+      }
+    }
+  ],
+  "elapsedSeconds": 76.01,
+  "selectedGuideCoveragePercent": 26.67,
+  "colesSelectedGuideCoveragePercent": 0
+}

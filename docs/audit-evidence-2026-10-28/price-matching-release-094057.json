@@ -1,0 +1,256 @@
+{
+  "checkedAt": "2026-10-28T10:34:38.470953+00:00",
+  "status": "website-and-native-pricing-safety-released; automatic-Coles-goal-not-achieved",
+  "website": {
+    "url": "https://gearsqueens.online/fusion/",
+    "version": "0.4.2",
+    "releaseId": "20261028-094057",
+    "gitCommit": "870e16f5e1fac70889e21d56a19c7fdfcf2d17da",
+    "sourceManifestSha256": "66e25911d2c74be2f87cc493e118a828bd8d834cd4abce2268105341d829074c",
+    "linuxTests": {
+      "tests": 930,
+      "pass": 930,
+      "fail": 0,
+      "skipped": 0
+    },
+    "typecheck": "passed; root verified exit status",
+    "hostAccountChecks": 14,
+    "hostAccountEvidence": "Root verified release-host HTTP and SQL check receipts.",
+    "stagedHtmlPassed": 50,
+    "stagedPdfPassed": 50,
+    "stagedPageEvidence": "Root verified release-host receipt.",
+    "publicHtmlPassed": 50,
+    "publicPdfPassed": 50,
+    "publicPageProof": "price-matching-public-pages-50-094057.json",
+    "publicPageRunIncludedPrices": false,
+    "operationalProof": "price-matching-operational-release-094057.json"
+  },
+  "changes": [
+    "Shared hard food-identity, cut, bone, skin and preparation guards reject unsafe fresh, retained and explicit-review selections.",
+    "Raw ingredients cannot use prepared Peking duck, braised meat, recipe-base packets, pet food, serving tools or other captured incompatible foods.",
+    "All thirty authored mains keep twelve explicit strong-preparation/style markers distinct; explicit matching styles, raw cuts, named breeds and legitimate premium/brand review remain supported.",
+    "Unpriced selected shops remain assigned with unknown prices, excluded from known subtotals. Other-shop prices and planning allowances are not substituted for a chosen unpriced shop."
+  ],
+  "browserFixture": {
+    "status": "passed",
+    "proof": "price-matching-public-ui-fixture-094057.json",
+    "unsafeCandidateControlsRejected": 7,
+    "checksPassed": 7,
+    "validPositiveNameControlsPriced": 8,
+    "validExplicitBrandReviewPreserved": true,
+    "liveSupplierOrImageGenerationEvidence": false,
+    "scope": "Real deployed frontend; all API/image responses intercepted. Negative fixtures deliberately inject unsafe candidates as chosen and refresh fixture timestamps to avoid testing staleness. Positive controls are synthetic, not observed quotes."
+  },
+  "freshStagedPriceCases": {
+    "reportStatusPreserved": "failed",
+    "proof": "price-matching-staged-prices-5-094057.json",
+    "independentReview": "price-matching-staged-prices-5-independent-094057.json",
+    "capturedOffers": "price-matching-staged-prices-5-offers-094057.ndjson.gz",
+    "recipes": 5,
+    "sampledIngredientRows": 30,
+    "selectedPublishedGuideRows": 8,
+    "eligibleOffersReviewed": 34,
+    "allCapturedOffersReviewed": 200,
+    "selectedOrEligibleFoodAndQuantityFailures": 0,
+    "colesEligibleOffers": 0,
+    "failedGate": "Coles coverage",
+    "limit": "Safety/quantity review passed; this does not turn the failed supplier-coverage run into an overall pass. Base was a private staged app, not the public website."
+  },
+  "android": {
+    "version": "1.5.11",
+    "versionCode": 18,
+    "published": true,
+    "publicDownloadProof": "android-1.5.11-public-download.json",
+    "tests": {
+      "tests": 190,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apkBytes": 13995853,
+    "apkSha256": "f22a15bf62edf4207b781a29faf4a8b43f43d1683f907db918b7327b45e9cb03",
+    "signerCertificateSha256": "62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6",
+    "sourceFingerprint": "c37deed12530d59185c6124dff7c21788f599cdd85ae026d42e0714f47bdf324",
+    "sourceFiles": 83,
+    "sourceHandoff": "android-1.5.11-source-handoff.zip",
+    "onlyThreeAuthorizedFilesChangedFrom1510": true,
+    "catalogueUnchanged": true,
+    "catalogueBytes": 77475274,
+    "catalogueSha256": "d394be122e0f12a616c9bf97a18416230c3a0e98a0f64d54a75ea689597eeaab",
+    "physicalDeviceInstallationTested": false,
+    "nativeStoreSelectionUiAdded": false,
+    "newAutomaticColesTransportAdded": false
+  },
+  "colesActualContinuity": {
+    "workerRelease": "20261028-091423",
+    "latestExpresslyApprovedCheckNumber": 3,
+    "latestCheckAccepted": true,
+    "fourthCheckAttempted": false,
+    "automaticSolvingEnabled": false,
+    "beforeIdle": {
+      "label": "before-idle",
+      "at": "2026-10-28T09:47:07.426Z",
+      "seconds": 18.228,
+      "status": 200,
+      "providerStatus": "ready",
+      "cached": false,
+      "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+      "products": 23,
+      "positiveMatches": 6,
+      "selectedMatches": 0,
+      "samples": [
+        {
+          "name": "Coles Jasmine Rice",
+          "priceCents": 320,
+          "packageSize": "1kg",
+          "stock": "IN_STOCK",
+          "selected": false
+        },
+        {
+          "name": "Coles Jasmine Rice",
+          "priceCents": 550,
+          "packageSize": "2kg",
+          "stock": "IN_STOCK",
+          "selected": false
+        },
+        {
+          "name": "Coles Jasmine Rice",
+          "priceCents": 1350,
+          "packageSize": "5kg",
+          "stock": "IN_STOCK",
+          "selected": false
+        },
+        {
+          "name": "Coles Microwave Jasmine Rice",
+          "priceCents": 165,
+          "packageSize": "250g",
+          "stock": "IN_STOCK",
+          "selected": false
+        }
+      ],
+      "message": null
+    },
+    "afterIdle": {
+      "label": "after-idle",
+      "at": "2026-10-28T10:03:51.434Z",
+      "seconds": 10.673,
+      "status": 200,
+      "providerStatus": "unavailable",
+      "cached": false,
+      "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+      "products": 0,
+      "positiveMatches": 0,
+      "selectedMatches": 0,
+      "samples": [],
+      "message": "Coles' query page has not finished loading readable product prices. No human check was established; try this item again shortly."
+    },
+    "responseIntervalSeconds": 1004.008,
+    "minimumGapBeforeAfterQueryStartedSeconds": 993.335,
+    "sameProcessAcrossIdle": true,
+    "idleProcessPid": 3400390,
+    "systemdRestartsAcrossIdle": 0,
+    "retainedControlPagesBefore": 1,
+    "retainedControlPagesAfter": 1,
+    "afterIdleWasAnEstablishedCaptcha": false,
+    "normalHomepageLaterDisplayedAnotherCaptcha": {
+      "observation": "Root supervised ordinary-browser observation at approximately10:14UTC; no fourth challenge was solved."
+    },
+    "actualColdRestart": {
+      "newProcessPid": 3426287,
+      "runtimeUnit": "fusion-retailer-canary-20261028-091423.service",
+      "runtimeWorkerRelease": "20261028-091423",
+      "result": {
+        "label": "third-after-restart",
+        "at": "2026-10-28T10:23:57.650Z",
+        "seconds": 7.975,
+        "status": 200,
+        "providerStatus": "needs-browser",
+        "cached": false,
+        "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+        "products": 0,
+        "positiveMatches": 0,
+        "selectedMatches": 0,
+        "samples": [],
+        "message": "Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."
+      }
+    },
+    "excludedAttempt": {
+      "file": "work/coles-auto/third-restart-invalid-pre-restart-attempt.json",
+      "reason": "Its10:22:29response was recorded before the actual new process; it is not cold-restart evidence."
+    },
+    "privateStateMetadataOnly": true,
+    "cookieValuesIncluded": false,
+    "automaticAccessEstablished": false,
+    "goalAchieved": false
+  },
+  "retailerWorker": {
+    "productionRelease": "20261028-102502",
+    "productionPid": 3431462,
+    "productionInstall": "verified-active-with-source-and-QA-binding",
+    "diagnosticLinuxQA": {
+      "tests": 66,
+      "pass": 66,
+      "fail": 0,
+      "skipped": 0
+    },
+    "sourceHashesMatchExecutingQA": true,
+    "operationalProof": "price-matching-operational-release-094057.json",
+    "actualProductionProbe": {
+      "label": "production-reader-102502",
+      "at": "2026-10-28T10:30:02.646Z",
+      "seconds": 8.585,
+      "status": 200,
+      "providerStatus": "needs-browser",
+      "cached": false,
+      "url": "https://www.coles.com.au/search/products?q=Jasmine%20rice",
+      "products": 0,
+      "positiveMatches": 0,
+      "selectedMatches": 0,
+      "samples": [],
+      "message": "Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."
+    },
+    "productionProbeProof": "coles-production-probe-102502.json",
+    "scope": "Protection-frame diagnostic reporting; passing fixtures does not establish retailer clearance or readable prices."
+  },
+  "cleanup": {
+    "status": "verified-complete",
+    "proof": "price-matching-cleanup-094057.json",
+    "stagedAppAndContinuityWorkerCanariesStopped": true,
+    "activeTemporaryCanaries": 0,
+    "exactTestFixtureAccountsChecked": 26,
+    "testFixtureAccountsDeleted": 6,
+    "remainingMatchingFixtures": 0,
+    "productionUsersTouched": false,
+    "ownViewerTunnelStopped": true,
+    "localViewerPortListening": false,
+    "localAndServerViewerPasswordsRemoved": true,
+    "anonymousColesStatePreserved": true,
+    "sourcesAndRollbackBackupsPreserved": true
+  },
+  "remaining": [
+    "Reliable unattended Coles price coverage and its corresponding goal are not achieved.",
+    "A full fresh public fifty-recipe pricing run on the final safety release remains unpassed. Fifty public recipe pages/PDFs did pass separately.",
+    "The earlier original fifty-batch capture contained confirmed unsafe matches. Offline corrected-guard replays preserve those failures as historical evidence; they are not new supplier quotes.",
+    "No fourth CAPTCHA is authorized or completed by these receipts."
+  ],
+  "evidenceOrigin": "Local receipts independently read; root supplied the verified account/staged-page exit statuses and supervised normal-browser observation. No network or private worker requests were made to prepare this handoff.",
+  "inputSha256": {
+    "work/expansion-audit/prepared-094057-public-pages-50.json": "b44560c5c6109a6f5ef52799b4fe746510602071a8b81ba494b8cfb24ac4511b",
+    "work/cached-offer-ui/public-094057/report.json": "ede8df620e599d34895c8d1053e019f0387eb04bf70d71d879a4d46985e904b1",
+    "work/expansion-audit/prepared-094057-targeted-prices-5.json": "745b26b4d555be7d769df8857d277249afdcce28ae67ea7fe34e68e14b593f33",
+    "work/expansion-audit/prepared-094057-targeted-independent-review.json": "22d9c2fa4f93bcaf2632bdaf67160296013720ffcc0afaf911c456551ff8f367",
+    "work/expansion-audit/prepared-094057-final-operational-release.json": "e6fffdfc605ce97c0bf7eb70172eb9a552bca1caedf53b6be45ea68da84e8242",
+    "work/coles-auto/production-reader-102502.json": "3763f5b389fb6a8cf67d6f11e3add17bb4ae04ab43715e40700a98aa9eb0100e",
+    "work/expansion-audit/prepared-094057-cleanup.json": "f25c0b38ab79f59498b6d87d5afde579d23c35718ddac55808aee043e1831f40",
+    "work\\expansion-audit\\prepared-094057-targeted-prices-5.ndjson": "b30b0e48dfd3f804e0cbaff17e00149714a18d93d0b7760574fa0c1d0dab20bb",
+    "work/expansion-audit/prepared-094057-server-tests.log": "6028715464018154970c77d9d546b09a01929bc0909c16418d4ce93441bbc166",
+    "work/expansion-audit/prepared-094057-server-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "work/coles-auto/third-idle-before.json": "5152703864c5615e957bd379f5b5551021eea4fe3cb72bd66aeb01f5190b155e",
+    "work/coles-auto/third-idle-after.json": "fd20a321ba1ea8b5c45c85bb8654b46efe7d1352ed375d9a4cf53fae0ddbbbee",
+    "work/coles-auto/third-idle-before-health.json": "69809fd12f8126e2dcd807db1982518f4be2165b9c4c64a3e889c5311e1b1843",
+    "work/coles-auto/third-idle-after-health.json": "599714ba026c0e8df5ec8e8c73fe284931d31e62d870e90d06ebd7fd4dd3bfc9",
+    "work/coles-auto/third-cold-after.json": "fc72fb917fe279572d1b2fbb05f39764b12baa5dcb82e16b06c5ca300f75758f",
+    "work/coles-auto/third-cold-runtime.json": "be6394a86b1221a0518227693542cf62a6ea3921abacae1a89f74c16f1efbe6e",
+    "work/shopping-strategy/worker-102502-linux-tests.log": "cfc00a94548855bbd2eb688a2b12985d0adc6999db6ab91f320a21c898a9c197"
+  }
+}
