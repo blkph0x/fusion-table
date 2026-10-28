@@ -509,8 +509,37 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
   };
 }
 
-export async function startRetailerBrowser({ port = Number(process.env.RETAILER_BROWSER_PORT || 8794), renderer = createBrowserRenderer(), deadlineMs = JOB_DEADLINE_MS } = {}) {
+const stopStalledWorker = () => {
+  console.error("Retailer browser cancellation did not finish; stopping this worker for supervisor restart.");
+  process.exit(1);
+};
+
+export async function startRetailerBrowser({ port = Number(process.env.RETAILER_BROWSER_PORT || 8794), renderer = createBrowserRenderer(), deadlineMs = JOB_DEADLINE_MS, stalledJobGraceMs = 5000, onStalledJob = stopStalledWorker } = {}) {
+  if (!Number.isSafeInteger(stalledJobGraceMs) || stalledJobGraceMs < 0 || stalledJobGraceMs > 30_000) throw new RangeError("Use a browser cancellation grace between zero and thirty seconds.");
   const scheduler = createScheduler(), cache = new Map(), pending = new Map(), backoff = new Map();
+  let restartRequired = false;
+  // An HTTP timeout is not proof that Playwright has released its browser page.
+  // Keep the concurrency slot occupied until real cleanup settles. A wedged CDP
+  // operation must stop the owned worker, rather than accumulate ghost pages or
+  // permanently consume every slot. systemd restarts its whole control group.
+  const watchBrowserJob = (operation,signal,kind) => async () => {
+    signal.throwIfAborted();
+    if (restartRequired) throw Object.assign(new Error("The browser worker is restarting after incomplete cancellation."),{status:503});
+    let complete = false, timer;
+    const aborted = () => {
+      timer = setTimeout(() => {
+        if (complete || restartRequired) return;
+        restartRequired = true;
+        for (const entry of pending.values()) entry.controller.abort(new DOMException("The browser worker requires restart.","AbortError"));
+        onStalledJob({kind,graceMs:stalledJobGraceMs});
+      },stalledJobGraceMs);
+      timer.unref?.();
+    };
+    signal.addEventListener("abort",aborted,{once:true});
+    if (signal.aborted) aborted();
+    try { signal.throwIfAborted(); return await operation(); }
+    finally { complete = true; clearTimeout(timer); signal.removeEventListener("abort",aborted); }
+  };
   const run = async (value,store,source,subscriberSignal) => {
     subscriberSignal?.throwIfAborted();
     const {url,retailer} = renderTarget(value,source);
@@ -532,7 +561,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
         expire = () => resolve(controlled(url,"unavailable","The browser price check timed out. Try again shortly or open the retailer directly.",504));
         signal.addEventListener("abort",expire,{once:true});
       });
-      const scheduled = scheduler.run(async () => {
+      const scheduled = scheduler.run(watchBrowserJob(async () => {
         // Another queued ingredient may already have encountered this retailer's gate.
         const recent = backoff.get(retailer);
         if (recent?.until > Date.now()) return {...recent.result,url,cached:true,retryAfterSeconds:Math.ceil((recent.until-Date.now())/1000)};
@@ -542,7 +571,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
           while (backoff.size > 128) backoff.delete(backoff.keys().next().value);
         }
         return result;
-      },signal,!source && retailer === "coles" ? "retailer:coles" : store && !source && retailer === "iga" ? `iga:${verifiedStoreKey(store)}` : null);
+      },signal,"render"),signal,!source && retailer === "coles" ? "retailer:coles" : store && !source && retailer === "iga" ? `iga:${verifiedStoreKey(store)}` : null);
       shared.task = Promise.race([scheduled,timeout]).then(result => {
         if (!signal.aborted && result.providerStatus === "ready" && Buffer.byteLength(result.html || "") <= PAGE_LIMIT) {
           cache.delete(key); cache.set(key,{result,at:Date.now()});
@@ -577,8 +606,9 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
     };
     if (!loopback(request.socket.remoteAddress) || request.headers.origin || request.headers["sec-fetch-site"] && request.headers["sec-fetch-site"] !== "none") { reply(403,{error:"Only local server requests are accepted."}); return; }
     if (request.method === "GET" && request.url === "/health") {
-      reply(200,{ok:true,browserConfigured:renderer.configured,browserConnected:renderer.connected,active:scheduler.active,queued:scheduler.queued,cachedPages:cache.size,backoffHosts:backoff.size,retainedControlPages:renderer.retainedControlPages || 0,subscribers:[...pending.values()].reduce((sum,entry) => sum + entry.subscribers.size,0)}); return;
+      reply(restartRequired ? 503 : 200,{ok:!restartRequired,restartRequired,browserConfigured:renderer.configured,browserConnected:renderer.connected,active:scheduler.active,queued:scheduler.queued,cachedPages:cache.size,backoffHosts:backoff.size,retainedControlPages:renderer.retainedControlPages || 0,subscribers:[...pending.values()].reduce((sum,entry) => sum + entry.subscribers.size,0)}); return;
     }
+    if (restartRequired) { reply(503,{providerStatus:"unavailable",message:"The browser worker is restarting after incomplete cancellation. Try again shortly."}); return; }
     if (request.method === "GET" && request.url === "/coles-build") {
       const previousBuildId = request.headers["x-fusion-coles-previous-build"];
       if (previousBuildId !== undefined && (typeof previousBuildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(previousBuildId))) { reply(422,{providerStatus:"unavailable",message:"Use a validated Coles deployment ID."}); return; }
@@ -590,7 +620,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
       response.once("close",detach);
       try {
         const cancelled = new Promise((_resolve,reject) => deadline.signal.addEventListener("abort",() => reject(deadline.signal.reason),{once:true}));
-        const task = scheduler.run(() => renderer.colesBuild(deadline.signal,previousBuildId),deadline.signal,"retailer:coles");
+        const task = scheduler.run(watchBrowserJob(() => renderer.colesBuild(deadline.signal,previousBuildId),deadline.signal,"coles-build"),deadline.signal,"retailer:coles");
         reply(200,await Promise.race([task,cancelled]));
       } catch (error) {
         if (error?.providerStatus === "needs-browser") backoff.set("coles",{result:controlled("https://www.coles.com.au/","needs-browser",safeMessage(error.message),403),until:Date.now()+CHALLENGE_BACKOFF_MS});

@@ -28,6 +28,7 @@ TasksMax=256
 MemoryMax=1536M
 Restart=on-failure
 RestartSec=5
+KillMode=control-group
 TimeoutStopSec=25
 
 [Install]
