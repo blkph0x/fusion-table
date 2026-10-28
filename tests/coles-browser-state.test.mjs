@@ -3,6 +3,8 @@ import { test } from "node:test";
 import { chmod, lstat, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { readColesBrowserState, saveColesBrowserState } from "../lib/coles-browser-state.mjs";
 
 const cookie = (extra = {}) => ({ name: "anonymous_bot_cookie", value: "fixture-only", domain: ".coles.com.au", path: "/", expires: -1, httpOnly: true, secure: true, sameSite: "Lax", ...extra });
@@ -63,6 +65,28 @@ test("oversized sanitized writes preserve the previous complete state and concur
   assert.deepEqual(await Promise.all(Array.from({ length: 6 }, (_, index) => saveColesBrowserState(file, state({ cookies: [cookie({ value: `state-${index}` })] })))), Array(6).fill(true));
   assert.equal((await readColesBrowserState(file)).cookies[0].value, "state-5");
   assert.deepEqual(await readdir(directory), ["state.json"]);
+}));
+
+test("separate service state roots retain independent complete snapshots across concurrent processes", async () => workspace(async (_file, directory) => {
+  const production = path.join(directory, "production", "coles-state.json");
+  const canary = path.join(directory, "canary-20261028-085054", "coles-state.json");
+  const moduleUrl = new URL("../lib/coles-browser-state.mjs", import.meta.url).href;
+  const child = promisify(execFile);
+  const persist = async (filename, value) => {
+    const source = `import { saveColesBrowserState } from ${JSON.stringify(moduleUrl)};\nconst [file,state]=process.argv.slice(1);\nif(!await saveColesBrowserState(file,JSON.parse(state)))process.exitCode=1;`;
+    const result = await child(process.execPath, ["--input-type=module", "--eval", source, filename, JSON.stringify(state({ cookies: [cookie({ value })] }))], { windowsHide: true, timeout: 10_000 });
+    assert.equal(result.stdout, ""); assert.equal(result.stderr, "");
+  };
+  await Promise.all([persist(production, "production-fixture"), persist(canary, "canary-fixture")]);
+  assert.equal((await readColesBrowserState(production)).cookies[0].value, "production-fixture");
+  assert.equal((await readColesBrowserState(canary)).cookies[0].value, "canary-fixture");
+  const originalCanary = await readFile(canary);
+  await persist(production, "production-replacement");
+  assert.deepEqual(await readFile(canary), originalCanary, "production replacement cannot alter a separate canary snapshot");
+  assert.equal((await readColesBrowserState(production)).cookies[0].value, "production-replacement");
+  if (process.platform !== "win32") {
+    for (const filename of [production, canary]) assert.equal((await lstat(filename)).mode & 0o777, 0o600);
+  }
 }));
 
 test("symlink destinations cannot be read or replaced", async t => workspace(async (file, directory) => {
