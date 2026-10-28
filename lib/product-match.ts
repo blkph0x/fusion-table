@@ -329,12 +329,22 @@ function dairyIdentity(value: string): {kind:string;plant:boolean;bases:Set<stri
 function ingredientIdentityConflictCanonical(wanted: string, seen: string): boolean {
   const request=identityText(wanted), product=identityText(seen), offeredWords=new Set(product.split(" "));
   if (request.split(" ").some(word => FOOD_ANCHORS.has(word) && !offeredWords.has(word))) return true;
+  // Sweet potato is a different ingredient, not a named variety of potato.
+  if (/\bpotato\b/.test(request) && /\bpotato\b/.test(product) && /\bsweet\b/.test(request)!==/\bsweet\b/.test(product)) return true;
   const animalRequest=MEAT_WORDS.test(request) || /\begg\b/.test(request);
   const animalProduct=MEAT_WORDS.test(product) || /\begg\b/.test(product);
   if ((animalRequest || animalProduct) && PLANT_MEAT.test(request)!==PLANT_MEAT.test(product)) return true;
   const left=dairyIdentity(request),right=dairyIdentity(product);
   if (!left || !right) return false;
   if(left.kind!==right.kind || left.plant!==right.plant) return true;
+  if (left.kind === "butter") {
+    // A compound butter is not a plain cooking butter. Keep explicitly named
+    // garlic/herb butters usable without adding those flavours to plain butter.
+    for (const flavour of ["garlic", "herb"]) {
+      const marker = new RegExp(`\\b${flavour}\\b`);
+      if (marker.test(request) !== marker.test(product)) return true;
+    }
+  }
   if(left.plant) {
     // A dairy-free butter spread is not a nut butter, and named plant bases
     // remain distinct in both directions. Generic plant dairy can stay generic.

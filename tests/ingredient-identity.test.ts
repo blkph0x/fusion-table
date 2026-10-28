@@ -19,6 +19,8 @@ const identityConflicts = [
   ["Vegan beef mince", "Australian Beef Mince"], ["Coconut milk", "Full Cream Milk"], ["Peanut butter", "Unsalted Butter"],
   ["Coconut milk", "Soy Milk"], ["Almond butter", "Peanut Butter"], ["Dairy free butter", "Almond Butter"],
   ["Brown onion", "IMPERIAL GRAIN Brown Rice 1kg"], ["Brown onion", "IMPERIAL GRAIN Brown Rice Microwave Pouch 250g"],
+  ["Potato", "Sweet Potato"], ["Potatoes", "Gold Sweet Potatoes"], ["Sweet potato", "Washed Potatoes"],
+  ["Butter", "Garlic Butter"], ["Unsalted butter", "Unsalted Garlic Butter"], ["Butter", "Herb Butter"],
 ] as const;
 
 test("food identity conflicts cannot enter automatic or reviewable catalogue prices", () => {
@@ -56,6 +58,9 @@ test("ordinary foods, explicit substitutes and reversed produce labels remain us
     ["Soy yogurt", "Plain Soy Yogurt"], ["Dairy free butter", "Dairy Free Butter Spread"],
     ["Brown onion", "Onion Brown"], ["Zucchini", "Courgette"], ["Fresh coriander", "Fresh Cilantro"],
     ["Chicken stock", "Roasted Chicken Broth"], ["Whole chicken", "Whole Chicken For Roasting"], ["Beef chuck roast", "Beef Chuck Roast"],
+    ["Potato", "Washed Potatoes"], ["Potatoes", "Coles White Potatoes"], ["Sweet potato", "Gold Sweet Potatoes"],
+    ["Butter", "Coles Butter"], ["Unsalted butter", "Coles Unsalted Butter"],
+    ["Garlic butter", "Coles Garlic Butter"], ["Herb butter", "Herb Butter"], ["Garlic herb butter", "Garlic And Herb Butter"],
   ]) {
     assert.equal(ingredientPreparationConflict(name, productName), false, `${name} -> ${productName}`);
     const matches = matchProducts(name, [product(productName)]);
