@@ -157,8 +157,8 @@ test("Coles metadata shares the bounded private scheduler and browser-check back
 });
 
 test("an uncooperative Coles metadata reader cannot outlive its explicit request budget",async () => {
-  let aborted;
-  const renderer={configured:true,connected:false,async close(){},async colesBuild(signal){aborted=signal;return new Promise(() => {});},async render(){throw new Error("unused");}};
+  let aborted,finish;
+  const renderer={configured:true,connected:false,async close(){finish?.({});},async colesBuild(signal){aborted=signal;return new Promise(resolve => {finish=resolve;});},async render(){throw new Error("unused");}};
   const worker=await startRetailerBrowser({port:0,renderer,deadlineMs:30});
   try {
     const response=await fetch(`http://127.0.0.1:${worker.port}/coles-build`);

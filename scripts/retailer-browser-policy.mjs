@@ -4,6 +4,19 @@ export const PAGE_LIMIT = 3_000_000;
 export const JOB_DEADLINE_MS = 28_000;
 export const CACHE_TTL_MS = 10 * 60_000;
 export const CHALLENGE_BACKOFF_MS = 2 * 60_000;
+
+/** One finite allowance per intentional worker navigation. Publisher redirects,
+ * frames and background scripts consume it; none can reset their own budget. */
+export function createPageRequestBudget(limit = 512) {
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 4096) throw new RangeError("Use a finite page request limit.");
+  const counts = new WeakMap();
+  return {
+    begin(page) { counts.set(page,0); },
+    take(page) { const count = Math.min(limit+1,(counts.get(page) || 0)+1); counts.set(page,count); return count <= limit; },
+    count(page) { return counts.get(page) || 0; },
+    exhausted(page) { return (counts.get(page) || 0) > limit; },
+  };
+}
 const RETAILER_HOSTS = new Map([
   ["coles.com.au", "coles"], ["aldi.com.au", "aldi"],
   ["igashop.com.au", "iga"], ["iga.com.au", "iga"],
@@ -95,6 +108,7 @@ export function readableLocalDiscovery({text = "",html = ""}) {
   return text.replace(/\s+/g," ").trim().length >= 25 && /<(?:a|main|article|section|h1)\b/i.test(html);
 }
 
+/** A blank NOINDEX placeholder is not evidence of an explicit human challenge. */
 export function colesEmptyBrowserGate({url,text = "",html = ""}) {
   return retailerUrl(url).retailer === "coles" && text.trim().length < 100
     && [...html.matchAll(/<meta\b[^>]*>/gi)].some(match => /\bname=["']robots["']/i.test(match[0]) && /\bcontent=["'][^"']*noindex/i.test(match[0]));

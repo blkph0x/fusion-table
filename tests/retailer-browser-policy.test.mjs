@@ -67,7 +67,7 @@ test("an empty or instruction-only retailer page cannot be reported as ready pri
   assert.equal(readablePriceContent({html:'<script type="application/ld+json">{"@type":"Product","offers":{"price":"12.50"}}</script>'}),true);
 });
 
-test("only the observed nearly-empty Coles NOINDEX response is classified as requiring a browser visit",() => {
+test("the observed nearly-empty Coles NOINDEX placeholder is recognized without proving a human challenge",() => {
   const html = '<html><meta name="ROBOTS" content="NOINDEX"><body></body></html>';
   assert.equal(colesEmptyBrowserGate({url:"https://www.coles.com.au/search?q=rice",html,text:""}),true);
   assert.equal(colesEmptyBrowserGate({url:"https://www.aldi.com.au/results?q=rice",html,text:""}),false);

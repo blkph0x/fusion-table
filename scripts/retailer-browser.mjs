@@ -8,7 +8,7 @@ import { createDeadline } from "../lib/abort-deadline.mjs";
 import { readColesBrowserState, saveColesBrowserState } from "../lib/coles-browser-state.mjs";
 import {
   PAGE_LIMIT, JOB_DEADLINE_MS, CACHE_TTL_MS, CHALLENGE_BACKOFF_MS,
-  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery,
+  retailerUrl, publicHttpsUrl, pinnedPublicTarget, pageAction, createScheduler, storeContext, requestKey, renderTarget, navigationUrl, readablePriceContent, addressProof, sameStoreAddress, createVerifiedStoreSessions, verifiedStoreKey, colesEmptyBrowserGate, readableLocalDiscovery, createPageRequestBudget,
 } from "./retailer-browser-policy.mjs";
 
 const loopback = address => address === "127.0.0.1" || address === "::ffff:127.0.0.1";
@@ -57,6 +57,7 @@ export function watchPageNetwork(page,{origin} = {}) {
   const finished = request => { if (pending.delete(request)) lastActivity = Date.now(); };
   page.on("requestfinished",finished); page.on("requestfailed",finished);
   return {
+    reset() { pending.clear(); lastActivity = Date.now(); },
     quiet({timeoutMs = 5000,quietMs = 500} = {}) {
       const started = Date.now();
       return new Promise((resolve,reject) => {
@@ -73,6 +74,29 @@ export function watchPageNetwork(page,{origin} = {}) {
       });
     },
   };
+}
+
+/** A normal query can hydrate after the initial four-second generic page wait.
+ * Wait for priced content or explicit instructions, then for first-party query
+ * traffic to settle. An empty placeholder is uncertainty, not a human check. */
+export async function settleColesQuery(page,waitForQuiet,signal,{timeoutMs = 10_000} = {}) {
+  signal.throwIfAborted();
+  try {
+    await page.waitForFunction(() => {
+      const text = document.body?.innerText || "", title = document.title;
+      const cards = [...document.querySelectorAll('[id^="product-tile-"],[data-product-card="true"],section[data-testid="product-tile"],[data-testid="product-card"]')];
+      return cards.some(card => card.getBoundingClientRect().height > 0 && /\$\s*\d/.test(card.textContent || ""))
+        || /\b(?:no|0) (?:products|results)|couldn.t find any/i.test(text)
+        || /captcha|verify.*human|access denied|checking your browser|refresh.*(?:cookies|javascript)|(?:cookies|javascript).*refresh/i.test(`${title}\n${text}`);
+    },undefined,{timeout:timeoutMs});
+  } catch { signal.throwIfAborted(); return {settled:false,reason:"query-content-loading"}; }
+  const snapshot = await page.evaluate(() => ({text:document.body?.innerText || "",title:document.title}));
+  const action = pageAction(snapshot);
+  if (action !== "ready") return {settled:false,reason:action};
+  try { await waitForQuiet(); }
+  catch { signal.throwIfAborted(); return {settled:false,reason:"query-network-loading"}; }
+  signal.throwIfAborted();
+  return {settled:true};
 }
 
 export async function settleVerifiedIgaQuery(page,name,waitForQuiet) {
@@ -219,7 +243,7 @@ export async function startEgressProxy({ resolve = lookup, dial = connect } = {}
   };
 }
 
-export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", colesStateFile = process.env.RETAILER_COLES_STATE_FILE, colesSessionHours = process.env.RETAILER_COLES_SESSION_HOURS, colesLifecycleClock = {now:Date.now,schedule:setTimeout,cancel:clearTimeout}, onContext } = {}) {
+export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", colesStateFile = process.env.RETAILER_COLES_STATE_FILE, colesSessionHours = process.env.RETAILER_COLES_SESSION_HOURS, colesLifecycleClock = {now:Date.now,schedule:setTimeout,cancel:clearTimeout}, onContext, continueRequest = route => route.continue() } = {}) {
   let browser, launching, proxy, closed = false;
   const storeSessions = createVerifiedStoreSessions();
   const colesLifetime = colesSessionLifetimeMs(colesStateFile,colesSessionHours);
@@ -249,7 +273,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
       viewport:{width:1365,height:900}, locale:"en-AU", timezoneId:"Australia/Sydney",
       ...(storageState ? {storageState} : {}),
     });
-    const counts = new WeakMap(), networks = new WeakMap(); let expectedPages = 0;
+    const budget = createPageRequestBudget(MAX_PAGE_REQUESTS), networks = new WeakMap(); let expectedPages = 0;
     context.on("page",page => {
       if (expectedPages) { expectedPages--; return; }
       void page.close().catch(() => undefined);
@@ -258,16 +282,15 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
       try {
         const request = route.request();
         publicHttpsUrl(request.url());
-        const frame = request.frame(), page = frame.page(), count = (counts.get(page) || 0)+1;
-        counts.set(page,count);
-        if (count > MAX_PAGE_REQUESTS) throw new Error("Request limit reached.");
+        const frame = request.frame(), page = frame.page();
+        if (!budget.take(page)) throw new Error("Request limit reached.");
         if (request.isNavigationRequest() && frame === page.mainFrame()) navigationUrl(request.url(),value,source);
-        await route.continue();
+        await continueRequest(route);
       } catch { await route.abort("blockedbyclient").catch(() => undefined); }
     });
     await context.routeWebSocket("**/*",socket => socket.close());
     if (onContext) await onContext(context);
-    return {context,count:page => counts.get(page) || 0,quiet:(page,options) => networks.get(page).quiet(options),close:() => context.close(),async newPage() {
+    return {context,count:page => budget.count(page),beginNavigation(page) { budget.begin(page); networks.get(page)?.reset(); },quiet:(page,options) => networks.get(page).quiet(options),close:() => context.close(),async newPage() {
       expectedPages++;
       const page = await context.newPage();
       networks.set(page,watchPageNetwork(page,isColes ? {origin:"https://www.coles.com.au"} : undefined));
@@ -317,26 +340,44 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     });
     signal.throwIfAborted(); session.nextColesNavigation = Date.now() + 1500;
   };
-  const readColesBuild = async (session,signal,previousBuildId) => {
+  const colesControlPage = async session => {
     let page = session.colesControlPage;
     colesLifecycleClock.cancel(session.colesControlIdleTimer);
+    if (!page || page.isClosed()) {
+      page = await session.newPage(); session.colesControlPage = page; colesControlPages.add(page);
+      const control = page;
+      page.once("close",() => { colesControlPages.delete(control); if (session.colesControlPage === control) { session.colesControlPage = undefined; colesLifecycleClock.cancel(session.colesControlIdleTimer); } });
+    }
+    return page;
+  };
+  const retainColesPage = (session,page) => {
+    colesLifecycleClock.cancel(session.colesControlIdleTimer);
+    if (page && !page.isClosed() && session.colesControlPage === page) {
+      session.colesControlIdleTimer = colesLifecycleClock.schedule(() => { void page.close().catch(() => undefined); },colesLifetime);
+      session.colesControlIdleTimer.unref?.();
+    }
+  };
+  const requestLimit = (session,page,stage) => session.count(page) > MAX_PAGE_REQUESTS
+    ? {stage,reason:"network-request-limit",limit:MAX_PAGE_REQUESTS,observedRequests:session.count(page)} : null;
+  const requestLimitFailure = diagnostic => Object.assign(new Error("This browser page exhausted its bounded network-request allowance. No human check was established; retry the page normally."),{providerStatus:"unavailable",status:503,diagnostic});
+  const readColesBuild = async (session,signal,previousBuildId) => {
+    const page = await colesControlPage(session);
     const abort = () => { void page?.close().catch(() => undefined); };
     signal.addEventListener("abort",abort,{once:true});
     try {
-      if (!page || page.isClosed()) {
-        page = await session.newPage(); session.colesControlPage = page; colesControlPages.add(page);
-        const control = page;
-        page.once("close",() => { colesControlPages.delete(control); if (session.colesControlPage === control) { session.colesControlPage = undefined; colesLifecycleClock.cancel(session.colesControlIdleTimer); } });
-      }
-      const reusable = session.colesObservation && Date.now() - (session.colesLastHomeNavigation || 0) < 10 * 60_000
+      const reusable = page.url() === "https://www.coles.com.au/" && !requestLimit(session,page,"coles-home")
+        && session.colesObservation && Date.now() - (session.colesLastHomeNavigation || 0) < 10 * 60_000
         && (!previousBuildId || session.colesObservation.buildId !== previousBuildId);
       let response;
       if (!reusable) {
         await paceColes(session,signal);
+        session.beginNavigation(page);
         response = await page.goto("https://www.coles.com.au/",{waitUntil:"domcontentloaded"});
         session.colesLastHomeNavigation = Date.now();
       }
       await settle(page,undefined,false,true);
+      const limited = requestLimit(session,page,"coles-home");
+      if (limited) throw requestLimitFailure(limited);
       let snapshot = await visible(page), action = pageAction({...snapshot,status:response?.status() || 200});
       if (action === "refresh-once") {
         response = await page.reload({waitUntil:"domcontentloaded"}); await settle(page,undefined,false,true);
@@ -356,19 +397,23 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         throw new Error("Coles' homepage is still initialising JavaScript and cookies. Automatic prices will retry shortly.");
       }
       snapshot = await visible(page);
+      const exhausted = requestLimit(session,page,"coles-home");
+      if (exhausted) throw requestLimitFailure(exhausted);
       if (pageAction(snapshot) !== "ready") throw Object.assign(new Error("Coles requires a browser check before its catalogue version is available. No automated challenge solving was attempted."),{providerStatus:"needs-browser",status:403});
       const buildId = await page.evaluate(() => { try { return JSON.parse(document.querySelector('script#__NEXT_DATA__')?.textContent || "{}").buildId || null; } catch { return null; } });
-      if (typeof buildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(buildId)) throw Object.assign(new Error("Coles did not publish its catalogue version in this normal browser session."),{providerStatus:"needs-browser",status:403});
+      if (typeof buildId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9._-]{0,149}$/.test(buildId)) throw Object.assign(new Error("Coles did not publish its catalogue version in this normal browser session. No explicit human check was established."),{providerStatus:"unavailable",status:503,diagnostic:{stage:"coles-home",reason:"missing-catalogue-metadata"}});
       signal.throwIfAborted();
       session.colesObservation = {version:1,buildId,observedAt:new Date().toISOString(),sourceUrl:"https://www.coles.com.au/"};
       await persistColesSession(session);
       return session.colesObservation;
+    } catch (error) {
+      const limited = requestLimit(session,page,"coles-home");
+      if (limited) throw requestLimitFailure(limited);
+      throw error;
     } finally {
       signal.removeEventListener("abort",abort);
-      if (page && !page.isClosed() && session.colesControlPage === page) {
-        session.colesControlIdleTimer = colesLifecycleClock.schedule(() => { void page.close().catch(() => undefined); },colesLifetime);
-        session.colesControlIdleTimer.unref?.();
-      }
+      if (signal.aborted) await page.close().catch(() => undefined);
+      else retainColesPage(session,page);
     }
   };
   const createColesSession = async (instance,value,readerSignal) => {
@@ -424,7 +469,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     },
     async render(value,signal,store,source) {
       signal.throwIfAborted();
-      let context, page, session, lease;
+      let context, page, session, lease, retainedColes = false;
       const abort = () => { void (lease ? page?.close() : context?.close())?.catch(() => undefined); };
       signal.addEventListener("abort",abort,{once:true});
       try {
@@ -433,25 +478,33 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         if (!source && retailerUrl(value).retailer === "coles") {
           lease = await colesSessions.acquire("coles:anonymous",shared => createColesSession(instance,value,shared),signal);
           session = lease.value;
-          if (!session.colesObservation || Date.now() - Date.parse(session.colesObservation.observedAt) > 30 * 60_000) await readColesBuild(session,signal);
+          if (!session.colesObservation || !session.colesControlPage || session.colesControlPage.isClosed() || Date.now() - Date.parse(session.colesObservation.observedAt) > 30 * 60_000) await readColesBuild(session,signal);
+          retainedColes = true;
         } else if (store && !source && retailerUrl(value).retailer === "iga") {
           lease = await storeSessions.acquire(verifiedStoreKey(store),sharedSignal => proveStoreSession(instance,value,store,sharedSignal),signal);
           session = lease.value;
         } else session = await newSession(instance,value,source);
         context = session.context;
-        signal.throwIfAborted(); page = await session.newPage();
-        if (!source && retailerUrl(value).retailer === "coles") await paceColes(session,signal);
+        signal.throwIfAborted(); page = retainedColes ? await colesControlPage(session) : await session.newPage();
+        if (retainedColes) { await paceColes(session,signal); session.beginNavigation(page); }
         let response = await page.goto(value,{waitUntil:"domcontentloaded"});
-        await settle(page,source);
+        let colesSettlement;
+        if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal);
+        else await settle(page,source);
         let snapshot = await visible(page);
         let action = pageAction({...snapshot,status:response?.status() || 200});
         if (action === "refresh-once") {
           response = await page.reload({waitUntil:"domcontentloaded"});
-          await settle(page,source); snapshot = await visible(page);
+          if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal);
+          else await settle(page,source);
+          snapshot = await visible(page);
           action = pageAction({...snapshot,status:response?.status() || 200});
         }
         const final = navigationUrl(page.url(),value,source);
+        const limited = requestLimit(session,page,retainedColes ? "coles-query" : "query");
+        if (limited) return controlled(final,"unavailable","This browser page exhausted its bounded network-request allowance. No human check was established; retry the page normally.",503,{diagnostic:limited});
         if (action !== "ready") return controlled(final,"needs-browser","Open the retailer in your browser and complete its check, then choose your store. No automated challenge solving was attempted.",response?.status() || 403);
+        if (retainedColes && !colesSettlement?.settled) return controlled(final,"unavailable","Coles' query page has not finished loading readable product prices. No human check was established; try this item again shortly.",503,{diagnostic:{stage:"coles-query",reason:colesSettlement?.reason || "query-content-loading"}});
         const selectedStore = session.selectedStore;
         if (selectedStore) {
           const settled = await settleVerifiedIgaQuery(page,selectedStore.name,() => session.quiet(page));
@@ -482,19 +535,25 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         },PAGE_LIMIT);
         if (!html) return controlled(final,"unavailable","The retailer page exceeded the safe reading limit. Open it directly to check prices.",413);
         if (!readablePriceContent({text:snapshot.text,html}) && !(source === "local-shop" && readableLocalDiscovery({text:snapshot.text,html}))) {
-          if (!source && colesEmptyBrowserGate({url:value,text:snapshot.text,html})) return controlled(final,"needs-browser","Coles did not display prices in this browser session; open Coles to continue.",403);
+          if (!source && colesEmptyBrowserGate({url:value,text:snapshot.text,html})) return controlled(final,"unavailable","Coles returned an empty page without readable prices. No explicit human check was established; try the item again shortly.",503,{diagnostic:{stage:"coles-query",reason:"empty-page"}});
           return controlled(final,"unavailable","The retailer did not display readable product prices. Open its website to check this item.",503);
         }
         if (!source && retailerUrl(value).retailer === "coles") await persistColesSession(session);
         return {html,url:navigationUrl(page.url(),value,source),status:response?.status() || 200,providerStatus:"ready",...(selectedStore ? {selectedStore} : {})};
       } catch (error) {
+        const limited = session && page && requestLimit(session,page,retainedColes ? "coles-query" : "query");
+        if (limited) return controlled(value,"unavailable",requestLimitFailure(limited).message,503,{diagnostic:limited});
         if (lease && context && !context.browser()?.isConnected()) lease.invalidate();
         if (signal.aborted) return controlled(value,"unavailable","The browser price check timed out. Try again shortly or open the retailer directly.",504);
         const status = ["not-configured","needs-browser","needs-store"].includes(error?.providerStatus) ? error.providerStatus : "unavailable";
         return controlled(value,status,status !== "unavailable" ? error.message : "The retailer could not be read in the browser. Open its website to check this item.",error?.status || 503,error?.diagnostic ? {diagnostic:error.diagnostic} : {});
       } finally {
         signal.removeEventListener("abort",abort);
-        if (lease) { await page?.close().catch(() => undefined); lease.release(); }
+        if (lease) {
+          if (retainedColes && !signal.aborted) retainColesPage(session,page);
+          else await page?.close().catch(() => undefined);
+          lease.release();
+        }
         else await context?.close().catch(() => undefined);
       }
     },
@@ -624,7 +683,7 @@ export async function startRetailerBrowser({ port = Number(process.env.RETAILER_
         reply(200,await Promise.race([task,cancelled]));
       } catch (error) {
         if (error?.providerStatus === "needs-browser") backoff.set("coles",{result:controlled("https://www.coles.com.au/","needs-browser",safeMessage(error.message),403),until:Date.now()+CHALLENGE_BACKOFF_MS});
-        reply(error?.status || (deadline.signal.aborted ? 504 : 503),{providerStatus:error?.providerStatus || "unavailable",message:safeMessage(error?.message)});
+        reply(error?.status || (deadline.signal.aborted ? 504 : 503),{providerStatus:error?.providerStatus || "unavailable",message:safeMessage(error?.message),...(error?.diagnostic ? {diagnostic:error.diagnostic} : {})});
       } finally { deadline.dispose(); response.removeListener("close",detach); }
       return;
     }
