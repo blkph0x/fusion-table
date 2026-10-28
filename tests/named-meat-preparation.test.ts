@@ -64,7 +64,7 @@ test("ordinary raw brands, Pekin breed, BBQ cuts and roasting directions remain 
 
 test("fresh catalogue construction and cached automatic/manual/shop-strategy paths reject the actual prepared offer", () => {
   const products = [item(peking), item(fresh, 1550)];
-  const quote: PriceQuote = { query: line.name, source: "aldi-online-catalogue", label: "Published online guide", fetchedAt: now.toISOString(), cached: false, fulfilmentStoreId: null, searched: [line.name], matches: matchProducts(line.name, products) };
+  const quote: PriceQuote = { query: line.name, source: "aldi-online-catalogue", label: "Published online guide", fetchedAt: now.toISOString(), cached: false, fulfilmentStoreId: null, searched: [line.name], matches: matchProducts(line.name, products), error: null };
   const built = withAutomaticPrices({ lines: buildShoppingOffers([line], [quote], [], { area: "2042", now }) }).lines[0];
   assert.equal(built.offers.find(offer => offer.id === built.chosenOfferId)?.productName, fresh);
   assert.equal(built.estimatedCents, 7750);
