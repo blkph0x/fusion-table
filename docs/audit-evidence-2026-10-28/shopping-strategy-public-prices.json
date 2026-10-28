@@ -1,0 +1,322 @@
+{
+  "status": "passed",
+  "checkedAt": "2026-10-28T07:35:27.696Z",
+  "deployment": {
+    "releaseId": "20261028-072139",
+    "sourceManifestSha256": "ba9b3f633cc72292ba2c33714c5668d7e9379fb1e3f6238a4814c0e197ab747d",
+    "gitCommit": "55545f12d8a91277c2d19ceafd81125b4d1e7b45",
+    "version": "0.4.0",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "shopping-store-choice-local-specialists"
+  },
+  "scope": "Actual nearby listings and one three-ingredient live price request; all six shopping policies applied to those actual offers. This does not establish unattended Coles access or full recipe price coverage.",
+  "nearby": [
+    {
+      "id": "node/14322459906",
+      "name": "Albion Park Village Meats",
+      "distanceKm": 0,
+      "address": "Shop 7, Albion Park Village Shopping Centre, Albion Park NSW 2527",
+      "listingSourceUrl": "https://apvm.com.au/contact",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "verified/bushs-shellharbour",
+      "name": "Bush's Meats Shellharbour",
+      "distanceKm": 5.976249767429861,
+      "address": "Shop 17, Stockland Shellharbour, 211 Lake Entrance Road, Shellharbour NSW 2529 (shopping-centre location; approximate)",
+      "listingSourceUrl": "https://bushsmeats.com.au/pages/location",
+      "locationAccuracy": "shopping-centre"
+    },
+    {
+      "id": "node/11245027814",
+      "name": "Bush's Meats Warilla",
+      "distanceKm": 8.62888684205184,
+      "address": "43-57 Shellharbour Road, Warilla, Wollongong, 2528",
+      "listingSourceUrl": "https://bushsmeats.com.au/pages/location",
+      "locationAccuracy": "mapped-shop"
+    },
+    {
+      "id": "node/11245027815",
+      "name": "Mitchell's Market",
+      "distanceKm": 8.63662135116818,
+      "address": "45-57 Shellharbour Road, Warilla, Wollongong, 2528",
+      "listingSourceUrl": "https://home-co.com.au/warilla/mitchells-fresh-fruit/",
+      "locationAccuracy": "mapped-shop"
+    }
+  ],
+  "providerStatuses": [
+    {
+      "id": "woolworths",
+      "name": "Woolworths",
+      "url": "https://www.woolworths.com.au/",
+      "status": "ready",
+      "message": "Published online price guide. Confirm the selected store, availability and final price on the retailer."
+    },
+    {
+      "id": "coles",
+      "name": "Coles",
+      "url": "https://www.coles.com.au/",
+      "status": "needs-browser",
+      "message": "Coles did not display prices in this browser session; open Coles to continue."
+    },
+    {
+      "id": "aldi",
+      "name": "ALDI",
+      "url": "https://www.aldi.com.au/results",
+      "status": "ready",
+      "message": "Published online price guide. Confirm the selected store, availability and final price on the retailer."
+    },
+    {
+      "id": "iga",
+      "name": "IGA",
+      "url": "https://www.igashop.com.au/",
+      "status": "needs-store",
+      "message": "Open IGA and select the exact nearby store to confirm its prices."
+    },
+    {
+      "id": "local:node/14322459906",
+      "name": "Albion Park Village Meats",
+      "shopId": "node/14322459906",
+      "shopName": "Albion Park Village Meats",
+      "url": "https://apvm.com.au/",
+      "status": "unavailable",
+      "message": "No matching published product price was readable. Open this shop's website to check."
+    },
+    {
+      "id": "local:verified/bushs-shellharbour",
+      "name": "Bush's Meats Shellharbour",
+      "shopId": "verified/bushs-shellharbour",
+      "shopName": "Bush's Meats Shellharbour",
+      "url": "https://bushsmeats.com.au/",
+      "status": "ready",
+      "message": "Published shop website price; confirm branch, collection/delivery area and current stock with the shop."
+    },
+    {
+      "id": "local:node/11245027815",
+      "name": "Mitchell's Market",
+      "shopId": "node/11245027815",
+      "shopName": "Mitchell's Market",
+      "url": "https://www.mitchellsmarket.com.au/",
+      "status": "unavailable",
+      "message": "No matching published product price was readable. Open this shop's website to check."
+    }
+  ],
+  "strategies": [
+    {
+      "mode": "cheapest",
+      "summary": {
+        "knownSubtotalCents": 1469,
+        "pricedLines": 2,
+        "totalLines": 3,
+        "unpricedLines": 1,
+        "complete": false,
+        "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+      },
+      "rows": [
+        {
+          "name": "Chicken breast",
+          "shop": "Woolworths online",
+          "state": "priced",
+          "cents": 1170,
+          "product": "Macro Free Range Chicken Breast Fillets",
+          "source": "woolworths-online-catalogue"
+        },
+        {
+          "name": "Tomatoes",
+          "shop": null,
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Jasmine rice",
+          "shop": "ALDI online",
+          "state": "priced",
+          "cents": 299,
+          "product": "IMPERIAL GRAIN Jasmine Rice 1kg",
+          "source": "aldi-online-catalogue"
+        }
+      ]
+    },
+    {
+      "mode": "woolworths",
+      "summary": {
+        "knownSubtotalCents": 1485,
+        "pricedLines": 2,
+        "totalLines": 3,
+        "unpricedLines": 1,
+        "complete": false,
+        "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+      },
+      "rows": [
+        {
+          "name": "Chicken breast",
+          "shop": "Woolworths online",
+          "state": "priced",
+          "cents": 1170,
+          "product": "Macro Free Range Chicken Breast Fillets",
+          "source": "woolworths-online-catalogue"
+        },
+        {
+          "name": "Tomatoes",
+          "shop": "Woolworths",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Jasmine rice",
+          "shop": "Woolworths online",
+          "state": "priced",
+          "cents": 315,
+          "product": "Sunrice Rice Jasmine",
+          "source": "woolworths-online-catalogue"
+        }
+      ]
+    },
+    {
+      "mode": "coles",
+      "summary": {
+        "knownSubtotalCents": null,
+        "pricedLines": 0,
+        "totalLines": 3,
+        "unpricedLines": 3,
+        "complete": false,
+        "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+      },
+      "rows": [
+        {
+          "name": "Chicken breast",
+          "shop": "Coles",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Tomatoes",
+          "shop": "Coles",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Jasmine rice",
+          "shop": "Coles",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        }
+      ]
+    },
+    {
+      "mode": "aldi",
+      "summary": {
+        "knownSubtotalCents": 299,
+        "pricedLines": 1,
+        "totalLines": 3,
+        "unpricedLines": 2,
+        "complete": false,
+        "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+      },
+      "rows": [
+        {
+          "name": "Chicken breast",
+          "shop": "ALDI",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Tomatoes",
+          "shop": "ALDI",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Jasmine rice",
+          "shop": "ALDI online",
+          "state": "priced",
+          "cents": 299,
+          "product": "IMPERIAL GRAIN Jasmine Rice 1kg",
+          "source": "aldi-online-catalogue"
+        }
+      ]
+    },
+    {
+      "mode": "iga",
+      "summary": {
+        "knownSubtotalCents": null,
+        "pricedLines": 0,
+        "totalLines": 3,
+        "unpricedLines": 3,
+        "complete": false,
+        "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+      },
+      "rows": [
+        {
+          "name": "Chicken breast",
+          "shop": "IGA",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Tomatoes",
+          "shop": "IGA",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        },
+        {
+          "name": "Jasmine rice",
+          "shop": "IGA",
+          "state": "unknown",
+          "cents": null,
+          "product": null,
+          "source": null
+        }
+      ]
+    }
+  ],
+  "specialists": {
+    "summary": {
+      "knownSubtotalCents": 315,
+      "pricedLines": 1,
+      "totalLines": 3,
+      "unpricedLines": 2,
+      "complete": false,
+      "label": "Partial estimate for priced quantities only. Missing prices are excluded; this is not a full basket total."
+    },
+    "rows": [
+      {
+        "name": "Chicken breast",
+        "shop": "Albion Park Village Meats",
+        "state": "unknown",
+        "cents": null
+      },
+      {
+        "name": "Tomatoes",
+        "shop": "Mitchell's Market",
+        "state": "unknown",
+        "cents": null
+      },
+      {
+        "name": "Jasmine rice",
+        "shop": "Woolworths online",
+        "state": "priced",
+        "cents": 315
+      }
+    ]
+  }
+}

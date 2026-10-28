@@ -1,12 +1,16 @@
 COLES AUTOMATIC PRICE COLLECTION — 28 OCTOBER 2026
 
-Current staged state
+Current deployed state — checked 07:36 UTC
 
-Website candidate 20261028-062432 and browser candidate 20261028-062434 use
-FUSION_COLES_PRICE_TRANSPORT=browser: ordinary public Coles pages with JavaScript
-and cookies enabled. They are staged privately; the public website still runs
-version 0.3.3, release 20261027-130643. Current release status and remaining gates
-are recorded in audit-evidence-2026-10-28/staged-062432-readiness.json.
+Website 0.4.0 release 20261028-072139 and browser release 20261028-073046 are live.
+They use FUSION_COLES_PRICE_TRANSPORT=browser: ordinary public Coles pages with
+JavaScript and cookies enabled. The website release adds shop choices and local
+specialist assignments, including honest unknown prices. Its separate release
+gate does not claim that unattended Coles clearance or full meal-price coverage
+has passed. The browser also contains recovery for a raw operation that remains
+stuck after its request was cancelled. Coles currently reports needs-browser.
+Current evidence is in audit-evidence-2026-10-28/shopping-strategy-release.json.
+The earlier private 062432/062434 candidates have been superseded and stopped.
 
 Earlier verified continuity, followed by another challenge
 
@@ -19,10 +23,12 @@ seventeen minutes of idle time, Coles requested another human check. That
 earlier restart result does not prove continuity on the current candidate.
 
 The current worker increases the locally retained context lifetime from fifteen
-minutes to a bounded eight hours when private state is configured. A real
-sixteen-minute idle test, current-worker cold restart, ten staged meal-price
-batches, production cutover and fifty public meal checks remain outstanding.
-Permission for one additional human check is pending; it has not been completed.
+minutes to a bounded eight hours when private state is configured. Actual
+sixteen-minute cleared-session continuity, clearance after a current-worker cold
+restart, ten fully verified Coles meal-price batches and the fifty-recipe live
+price run remain outstanding. Website cutover and fifty public page/PDF checks
+passed separately. Permission for one additional human check is pending; it has
+not been completed.
 
 The browser-mode search URL does not contain a pinned deployment ID. Normal
 site-version changes therefore do not require manual version entry. Coles can

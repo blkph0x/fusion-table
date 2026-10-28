@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-10-28T07:36:06Z",
+  "status": "deployed-and-verified",
+  "website": {
+    "url": "https://gearsqueens.online/fusion/?view=shops",
+    "version": "0.4.0",
+    "release": "20261028-072139",
+    "sourceCommit": "55545f12d8a91277c2d19ceafd81125b4d1e7b45",
+    "sourceManifestSha256": "ba9b3f633cc72292ba2c33714c5668d7e9379fb1e3f6238a4814c0e197ab747d",
+    "archiveSha256": "41481487853e14fec868ccd65ce8c1226f50ac7755fda270779d859b229dc997",
+    "serverTestsPassed": 884,
+    "serverTestsFailed": 0,
+    "serverTestsSkipped": 0,
+    "accountHttpChecksPassed": 8,
+    "sqlChecksPassed": 6
+  },
+  "priceBrowser": {
+    "release": "20261028-073046",
+    "sourceCommit": "9e70306",
+    "archiveSha256": "4e7cf6e7d2a4c85a36958dc9a7a08e89d809d09e74243c05ae0054cc9855d992",
+    "linuxTestsPassed": 52,
+    "linuxTestsFailed": 0,
+    "linuxTestsSkipped": 0,
+    "fix": "A cancelled operation keeps its concurrency slot until cleanup finishes. After five seconds of stalled cleanup, this owned worker exits for its supervisor to restart the whole process group. Normal retailer refusals remain bounded failures.",
+    "finalHealth": { "ok": true, "restartRequired": false, "active": 0, "queued": 0, "subscribers": 0, "serviceRestartsSinceInstallation": 0 }
+  },
+  "features": {
+    "modes": ["cheapest per item", "Woolworths only", "Coles only", "ALDI only", "IGA only"],
+    "specialists": "Current-area butcher and fresh produce destinations can override the supermarket choice, with an unknown price when no usable offer exists.",
+    "unknowns": "Excluded from the known subtotal, never replaced with a planning allowance or another shop's price.",
+    "export": "Chosen shop, product evidence, quantity and explicit unknown-price state are retained in CSV.",
+    "preferences": "Bounded browser storage, separately per area; branch and radius eligibility are checked again.",
+    "radiusRace": "Changing the radius away and back before the search debounce no longer leaves the shop list empty."
+  },
+  "publicVerification": {
+    "recipePagesPassed": 50,
+    "recipePdfsPassed": 50,
+    "pageProof": "shopping-strategy-public-pages-50.json",
+    "fixtureBrowserChecksPassed": 11,
+    "fixtureProof": "shopping-strategy-public-ui-fixture.json",
+    "fixtureLimit": "All API and image responses were intercepted. This verifies the deployed selection interface, export, persistence and mobile layout, not supplier latency or coverage.",
+    "realPriceProof": "shopping-strategy-public-prices.json",
+    "realPriceRequestIngredients": 3,
+    "realPricePolicyChecks": 6,
+    "realPriceResult": "Woolworths and ALDI supplied usable guides. The chosen APVM chicken and Mitchell's tomatoes remained assigned with unknown prices; Woolworths rice remained separately priced.",
+    "fullFiftyRecipeLivePriceRunCompleted": false
+  },
+  "localDiscovery": {
+    "postcode": "2527",
+    "testedRadiusKm": 10,
+    "verifiedExamples": ["Albion Park Village Meats", "Bush's Meats Shellharbour", "Bush's Meats Warilla", "Mitchell's Market"],
+    "proof": "specialists-2527-discovery.json",
+    "limits": "Normal map discovery remains partial. Four reviewed directory entries supplement map-index gaps and expire after ninety days. Shellharbour's shopping-centre position is visibly approximate and includes a conservative 500 m radius margin. Stock and product availability are not inferred."
+  },
+  "cleanup": { "newExactFixtureAccountsDeletedFromTestDatabase": 2, "remainingMatchingFixtureAccounts": 0, "productionAccountDataUntouched": true, "temporaryAppAndBrowserCanariesStopped": true, "rollbackPreserved": true },
+  "remainingBroaderGoal": "Automatic Coles access still requires the pending additional human-check approval. Actual sixteen-minute idle continuity, current-worker clearance after restart, and the full fifty-recipe live price coverage run remain unverified. No additional CAPTCHA was solved. Native Android store-selection UI was not changed by this website release."
+}

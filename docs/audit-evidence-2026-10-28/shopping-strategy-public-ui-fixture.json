@@ -1,0 +1,45 @@
+{
+  "proofType": "Fixture-isolated shopping strategy UI. All APIs and images intercepted, no supplier lookup or real location discovery.",
+  "startedAt": "2026-10-28T07:34:11.295Z",
+  "checks": [
+    "Cheapest uses different stores per item and quantity subtotal A$15.00",
+    "Woolworths-only constrains all three lines; subtotal A$20.00",
+    "ALDI-only constrains all three lines; subtotal A$18.00",
+    "Coles-only missing prices stay unknown without supermarket fallback",
+    "Specialists assign unpriced butcher and priced produce; known subtotal A$7.00 excludes unknown chicken",
+    "CSV export includes assigned specialist and explicit unknown price",
+    "Reload restores same-area policy and exact chosen butcher",
+    "Radius shrink invalidates distant chosen butcher without silently substituting nearest",
+    "Nearby shop detail directly assigns butcher without requiring a price",
+    "390px mobile viewport has no horizontal overflow",
+    "New area starts with its own strategy and clears previous specialist assignment"
+  ],
+  "apiRequests": {
+    "/api/plate": 28,
+    "/api/account": 2,
+    "/api/community": 2,
+    "/api/shops": 4,
+    "/api/shopping-prices": 2,
+    "/api/locations": 1
+  },
+  "blockedExternal": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "base": "https://gearsqueens.online/fusion",
+  "outputDir": "D:\\fusion-table\\work\\shopping-strategy-ui-public-072139",
+  "deploymentHttpStatus": 200,
+  "deployment": {
+    "releaseId": "20261028-072139",
+    "sourceManifestSha256": "ba9b3f633cc72292ba2c33714c5668d7e9379fb1e3f6238a4814c0e197ab747d",
+    "gitCommit": "55545f12d8a91277c2d19ceafd81125b4d1e7b45",
+    "version": "0.4.0",
+    "runtime": "node",
+    "basePath": "/fusion",
+    "feature": "shopping-store-choice-local-specialists"
+  },
+  "export": {
+    "filename": "fusion-table-shopping-list.csv",
+    "containsAssignedUnpricedShop": true
+  },
+  "status": "passed"
+}
