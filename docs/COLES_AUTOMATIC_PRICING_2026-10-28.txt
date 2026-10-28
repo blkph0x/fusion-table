@@ -1,13 +1,28 @@
 COLES AUTOMATIC PRICE COLLECTION — 28 OCTOBER 2026
 
-Current verified state
+Current staged state
 
-The host uses FUSION_COLES_PRICE_TRANSPORT=browser: ordinary public Coles pages
-with JavaScript and cookies enabled. One expressly approved human check was
-completed in the dedicated anonymous service browser. Real product searches
-returned23 products and six positively priced rice matches both before and after
-a full service restart, without another human check. The saved state remained
-private0600 and is not a personal browser profile or retailer login.
+Website candidate 20261028-062432 and browser candidate 20261028-062434 use
+FUSION_COLES_PRICE_TRANSPORT=browser: ordinary public Coles pages with JavaScript
+and cookies enabled. They are staged privately; the public website still runs
+version 0.3.3, release 20261027-130643. Current release status and remaining gates
+are recorded in audit-evidence-2026-10-28/staged-062432-readiness.json.
+
+Earlier verified continuity, followed by another challenge
+
+One expressly approved human check was completed on browser release
+20261028-053553. Real product searches returned 23 products and six positively
+priced rice matches before and after a full service restart, without another
+human check during that restart test. The saved state remained private0600 and
+is not a personal browser profile or retailer login. After approximately
+seventeen minutes of idle time, Coles requested another human check. That
+earlier restart result does not prove continuity on the current candidate.
+
+The current worker increases the locally retained context lifetime from fifteen
+minutes to a bounded eight hours when private state is configured. A real
+sixteen-minute idle test, current-worker cold restart, ten staged meal-price
+batches, production cutover and fifty public meal checks remain outstanding.
+Permission for one additional human check is pending; it has not been completed.
 
 The browser-mode search URL does not contain a pinned deployment ID. Normal
 site-version changes therefore do not require manual version entry. Coles can
