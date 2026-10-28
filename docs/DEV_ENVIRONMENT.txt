@@ -1,26 +1,26 @@
 FUSION TABLE — VERIFIED DEVELOPMENT ENVIRONMENT
-Updated 27 October 2026
+Updated 28 October 2026
 
-Deployment update: the quality pass, homepage/image fixes, local shopping
-workspace, regional quality corrections and ingredient-aware cooking methods
-are now live.
-Active release: /home/blkph0x/fusion-releases/20261027-100658, supervised by
-fusion-table.service using the Node profile and /home/blkph0x/fusion-data.
-The original server checkout below is preserved for recovery, not the active
-runtime. See ACCOUNTS_PRICING_RELEASE_2026-10-27.txt for the current verified release
-and rollback details. CULINARY_DEPLOYMENT_2026-10-27.txt,
-REGIONAL_DEPLOYMENT_2026-10-27.txt,
-SHOPPING_DEPLOYMENT_2026-10-26.txt and
-DEPLOYMENT_2026-10-26.txt record the earlier deployments.
+Current public identity: https://gearsqueens.online/fusion/deployment.json
+The named system service fusion-table.service serves the Node application on
+127.0.0.1:8792 with persistent data under /home/blkph0x/fusion-data. Read the
+service WorkingDirectory for the active release; historical release paths in
+older audit records are not current deployment pointers.
+
+fusion-retailer-browser.service provides the private retailer renderer on
+127.0.0.1:8794. The 0.4.0 profile runs ordinary Chromium under Xvfb, with JavaScript
+and cookies, a private display (no TCP listener), and its existing network and
+service protections. Coles version discovery uses /coles-build; prices come
+from the retailer's public navigation JSON. See COLES_AUTOMATIC_PRICING_2026-10-28.txt.
+
 
 Project map
 
 Website source: D:\fusion-table
 Website repository: https://github.com/blkph0x/fusion-table
 Working branch: codex/accounts-pricing
-Source HEAD at inspection: 2d0cee19080190039d98b56a45f586e117d5820e
-Application-code baseline: 765cfea796d5374735f249c7e59ccadc4204ad96
-The difference between those two commits is the handoff document only.
+Source HEAD: use git rev-parse HEAD. The deployed source commit and release
+manifest are recorded in public deployment.json; a local branch can be ahead.
 
 Public website: https://gearsqueens.online/fusion/
 Server source: /home/blkph0x/src/fusion-table
@@ -38,11 +38,12 @@ Android source: D:\MealPlannerAU
 Android branch: cursor/fusion-overhaul-91e1
 Android HEAD: c29b83d (no Git remote configured)
 Public download: https://gearsqueens.online/downloads/MealPlannerAU.apk
-Actual public binary: 1.5.7, versionCode 14, 13,982,261 bytes.
-SHA-256: 1234b32675b4fd67aadfce3d89db7243eb06cb4deb06f7a52d0463f6d91af7ef
-Same signer as prior releases. Signed release and 154 unit tests passed.
+Actual public binary: 1.5.8, versionCode 15, 13,983,613 bytes.
+SHA-256: 99c44a62cbab1295756c67415af9a7b043e356c1ac6a0a038e0ede1180617c7a
+Same signer as prior releases. Signed release and 157 unit tests passed.
 Matches app/build/outputs/apk/release/app-release.apk and dist/MealPlannerAU.apk.
-See SCIENCE_QUALITY_DEPLOYMENT_2026-10-27.txt for current scope, evidence and rollback.
+See audit-evidence-2026-10-28/android-1.5.8-identity.json for current binary
+identity; older deployment records describe historical scope and rollback.
 No physical device was connected; existing emulator image path could not boot.
 
 Local preview matching production URL paths
