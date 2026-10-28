@@ -10,6 +10,7 @@ import { PLATES, type PlateSpec } from "./plates.ts";
 import { mealName } from "./meal-name.ts";
 import type { MealRecipe } from "./meal-types.ts";
 import type { RecipeIngredient } from "./recipe-types.ts";
+import type { MealInput } from "./meal-types.ts";
 
 const QUICK_METHODS = new Set(["stir-fried", "pan-fried", "grilled", "steamed", "poached", "air-fried"]);
 const SLOW_METHODS = new Set(["braised", "smoked", "curry"]);
@@ -141,7 +142,7 @@ export function weekSeed(date = new Date()): number {
  * Pick meal of the week from curated plates.
  * Scores every plate (or a shuffled sample), returns the best that clears a floor.
  */
-export function pickMealOfWeek(options?: {
+export function pickMealOfWeek(options?: Pick<MealInput, "diet" | "spiceHeat" | "pantry" | "clean" | "cookPace" | "avoidAllergens" | "dislikes"> & {
   plates?: readonly PlateSpec[];
   seed?: number;
   servings?: number;
@@ -165,7 +166,9 @@ export function pickMealOfWeek(options?: {
         regionId: plate.regionId,
         sideId: plate.sideId,
         servings: options?.servings ?? 4,
-        spiceHeat: "medium",
+        diet: options?.diet, spiceHeat: options?.spiceHeat ?? "medium",
+        pantry: options?.pantry, clean: options?.clean, cookPace: options?.cookPace,
+        avoidAllergens: options?.avoidAllergens, dislikes: options?.dislikes,
       });
       const score = scoreMealOfWeek(recipe);
       const title = mealName({
@@ -182,6 +185,7 @@ export function pickMealOfWeek(options?: {
     }
   }
   if (!best) {
+    if (options?.diet || options?.avoidAllergens?.length || options?.dislikes?.length) throw new Error("No weekly plate matched the recorded household filters.");
     const plate = PLATES[0];
     const recipe = generateMeal({
       mainId: plate.mainId,

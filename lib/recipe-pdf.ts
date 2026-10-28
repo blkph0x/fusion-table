@@ -1,6 +1,7 @@
 import { COOK_PACE_LABELS } from "./cook-pace.ts";
 import type { Recipe } from "./recipe-types.ts";
 import { canonAllergen } from "./staples.ts";
+import { chosenCutLabel } from "./chosen-cut-label.ts";
 
 type Font = "regular" | "bold";
 type Line = { text: string; size: number; font: Font; indent?: number };
@@ -69,11 +70,13 @@ const heading = (text: string): Block => ({ lines: paragraph(text, 13, "bold"), 
 /** A complete cooking copy; Windows and Linux builds need no native PDF library. */
 export function recipePdf(recipe: Recipe): Uint8Array {
   const allergens = [...new Set([...recipe.allergens, ...recipe.ingredients.flatMap((item) => item.allergens)].map(canonAllergen))].sort();
+  const cutLabel = chosenCutLabel(recipe);
   const blocks: Block[] = [
     { lines: paragraph(recipe.title, 18, "bold"), after: 8, withNext: true },
     { lines: paragraph("Template-generated - not kitchen-tested. Check the packet.", 9.5), after: 7 },
     { lines: paragraph(`${recipe.servings} servings · about ${recipe.totalMinutes} minutes · ${recipe.diet} · ${recipe.spiceHeat}${recipe.cookPace ? ` · ${COOK_PACE_LABELS[recipe.cookPace]}` : ""}`, 10.5), after: 7 },
     { lines: paragraph(recipe.description, 10.5), after: 5 },
+    ...(cutLabel ? [{ lines: paragraph(`Chosen cut: ${cutLabel}`, 10.5), after: 5, together: true }] : []),
     heading("Equipment"),
     { lines: paragraph(recipe.equipment.join(" · "), 10.5), after: 5, together: true },
     { lines: paragraph(`Recorded allergens: ${allergens.length ? allergens.join(", ") : "none listed in this template"}. Check product labels and prevent cross-contact.`, 10), after: 5, together: true },

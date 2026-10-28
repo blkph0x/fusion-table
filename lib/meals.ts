@@ -54,6 +54,18 @@ interface MainPlan {
   prepMinutes?: number;
   prepEquipment?: string[];
 }
+
+/** Smoke plans include resting in endpoint prose. Keep that handling stage out
+ * of the preceding cooking/stall instructions and count its duration once. */
+function smokeFinishPlan(endpoint: string, fallbackMinutes: number, fixedRest?: number): { endpoint: string; restMinutes: number; restLabel: string } {
+  const rest = endpoint.match(/\bRest\s+(\d+)(?:[–-](\d+))?\s+minutes?\b/i);
+  const low = rest ? Number(rest[1]) : fallbackMinutes;
+  const high = rest?.[2] ? Number(rest[2]) : low;
+  const restMinutes = fixedRest ?? Math.ceil((low + high) / 2);
+  const restLabel = fixedRest !== undefined ? `${fixedRest} minutes` : rest ? `${rest[1]}${rest[2] ? `–${rest[2]}` : ""} minutes` : `${fallbackMinutes} minutes`;
+  const cookingEndpoint = endpoint.split(/(?<=[.!?])\s+/).filter(sentence => !/^Rest\b/i.test(sentence.trim())).join(" ").trim();
+  return { endpoint: cookingEndpoint, restMinutes, restLabel };
+}
 type SidePlan = ReturnType<typeof buildSidePlan>;
 
 const DIET_IDS: readonly DietId[] = ["balanced", "vegetarian", "vegan", "gluten-free", "dairy-free"];
@@ -389,6 +401,8 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     ? stirFryBatches(mainId, plan.ingredient.amount, servings, chosen?.form === "mince") : null;
   if (stirBatches) plan.minutes = stirBatches.minutes;
   const wholeBird = chosen && wholeBirdPortion(chosen, servings);
+  const smokeFinish = methodId === "smoked" && main.category === "meat"
+    ? smokeFinishPlan(plan.endpoint, plan.minutes >= 180 && !["chicken", "turkey", "duck"].includes(mainId) ? 25 : 12, wholeBird?.restMinutes) : null;
   const slowOven = chosen?.form === "slow" && ["baked", "roasted"].includes(methodId);
   const rawProfile = withoutDislikes(
     regionalProfile(regionId, glutenFree, spiceHeat, input.seed, input.softenIngredients, clean),
@@ -537,28 +551,30 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
     equipment.add("Food thermometer");
     const poultrySmoke = ["chicken", "turkey", "duck"].includes(mainId);
     const longJoint = plan.minutes >= 180 && !poultrySmoke && main.category === "meat";
+    const initialSmokeMinutes = longJoint ? Math.min(180, plan.minutes - 60) : plan.minutes;
     if (longJoint) equipment.add("Lidded roasting dish or butcher paper rated for cooking");
     const plantSmoke = main.category === "plant";
+    const cookingEndpoint = smokeFinish?.endpoint ?? plan.endpoint;
     steps.push({
       title: "Start the hot smoke",
       detail: plantSmoke
         ? `Stabilise an outdoor smoker or covered barbecue at 120–140°C with an indirect zone (no flames under the food). Put the prepared ${main.name.toLowerCase()} in the indirect zone. Hot-smoke for about ${range} minutes, checking early if pieces are thin. ${plan.endpoint} Keep the regional sauce separate so sugars do not burn on the grate.`
-        : `Use the smoker outdoors only. Stabilise the cooking chamber at ${poultrySmoke ? "150–160°C" : "120–140°C"} and monitor grate temperature with a separate probe. Put the prepared ${main.name.toLowerCase()} in the indirect zone with a centre probe. ${longJoint ? "Smoke for the first 2–3 hours until the surface has developed a dry bark; keep the cooker steadily hot." : `Hot-smoke for about ${range} minutes total, checking early if pieces are thin. ${plan.endpoint}`} Never burn wood or a smoking tray in an ordinary indoor oven.`,
-      minutes: longJoint ? Math.min(180, plan.minutes) : plan.minutes,
+        : `Use the smoker outdoors only. Stabilise the cooking chamber at ${poultrySmoke ? "150–160°C" : "120–140°C"} and monitor grate temperature with a separate probe. Put the prepared ${main.name.toLowerCase()} in the indirect zone with a centre probe. ${longJoint ? `Smoke for about ${initialSmokeMinutes} minutes until the surface has developed a dry bark; keep the cooker steadily hot. The following finishing stage is part of the same total smoke time, not an extra full cook.` : `Hot-smoke for about ${range} minutes total, checking early if pieces are thin. ${cookingEndpoint}`} Never burn wood or a smoking tray in an ordinary indoor oven.`,
+      minutes: initialSmokeMinutes,
     });
     if (longJoint && !plantSmoke) {
       steps.push({
         title: "Manage the stall and finish",
-        detail: `When the surface is set and the centre stalls (often around 70–75°C), wrap the joint with a splash of hot water in a tightly covered roasting dish or butcher paper. Continue at 130–140°C until ${plan.endpoint} Total smoke time is about ${range} minutes for this piece; thicker joints need longer. ${deferSides ? `During the final ${side.minutes} minutes, prepare the sides so they finish near service. ` : ""}`,
-        minutes: Math.max(60, plan.minutes - 180),
+        detail: `When the surface is set and the centre stalls (often around 70–75°C), wrap the joint with a splash of hot water in a tightly covered roasting dish or butcher paper. Continue at 130–140°C. ${cookingEndpoint} Total smoke time is about ${range} minutes for this piece; thicker joints need longer. ${deferSides ? `During the final ${side.minutes} minutes, prepare the sides so they finish near service. ` : ""}`,
+        minutes: plan.minutes - initialSmokeMinutes,
       });
     }
     steps.push({
       title: main.category === "meat" ? "Rest, then slice or pull" : "Lift the smoked main carefully",
       detail: main.category !== "meat"
         ? `Lift the ${main.name.toLowerCase()} carefully, keeping ${main.category === "seafood" ? "the fish or seafood pieces" : "the pieces"} intact. ${plan.endpoint} Finish the sauce and plate with the selected side; no long meat-style rest or pulling is needed.`
-        : `Rest the smoked ${main.name.toLowerCase()} ${wholeBird ? `${wholeBird.restMinutes} minutes` : longJoint ? "20–30 minutes" : "10–15 minutes"} loosely covered. Then slice across the grain, pull apart, or portion between bones as the cut allows. ${plan.endpoint} Offer the regional sauce separately so any bark stays intact.`,
-      minutes: main.category === "meat" ? wholeBird ? wholeBird.restMinutes : longJoint ? 25 : 12 : 1,
+        : `Rest the smoked ${main.name.toLowerCase()} ${smokeFinish!.restLabel} loosely covered. Then slice across the grain, pull apart, or portion between bones as the cut allows. ${cookingEndpoint} Offer the regional sauce separately so any bark stays intact.`,
+      minutes: smokeFinish?.restMinutes ?? 1,
     });
   } else if (methodId === "stir-fried") {
     equipment.add("Wok or large frying pan");
@@ -645,7 +661,7 @@ export function generateMeal(rawInput: MealInput): MealRecipe {
   const allergens = [...new Set(recipeIngredients.flatMap((entry) => entry.allergens))].sort();
   // Patty prep includes any plant precook/cooling and a separate 15-minute chill.
   const prepMinutes = (methodId === "patties" ? main.category === "plant" ? 45 : 35 : methodId === "schnitzel" ? 25 : methodId === "smoked" ? 25 : 15) + (stirCoating?.restMinutes ?? 0) + regionalPrepMinutes + (plan.prepMinutes ?? 0) + (side.prepMinutes ?? 0);
-  const smokeRestMinutes = smoking ? main.category === "meat" ? wholeBird ? wholeBird.restMinutes : plan.minutes >= 180 && !["chicken", "turkey", "duck"].includes(mainId) ? 25 : 12 : 1 : wholeBird?.restMinutes ?? 0;
+  const smokeRestMinutes = smoking ? smokeFinish?.restMinutes ?? 1 : wholeBird?.restMinutes ?? 0;
   const cookMinutes = (conflictingOven ? sideWindow + Math.max(0, 15 - (wholeBird?.restMinutes ?? 0)) : 0) + Math.max(conflictingOven ? 0 : sideWindow, plan.minutes + smokeRestMinutes + (integrated && mainId === "eggs" ? 12 : 0) + sauceBaseMinutes + Math.max(1, Math.ceil(regionalCooking.finishMinutes)) + (searBraise ? 8 : 0) + 3) + (servings > 6 && ["schnitzel", "pan-fried", "air-fried", "grilled", "patties"].includes(methodId) ? plan.minutes : 0);
   const mainName = `${main.name} ${methodId === "schnitzel" ? "schnitzel" : methodId === "patties" ? "patties" : `· ${method.name.toLowerCase()}`}`;
   // Dish title stays on the main (not the butcher shopping name); cut stays on the ingredient line.

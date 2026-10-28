@@ -1,0 +1,61 @@
+FUSION TABLE — BROADER DISCOVERY AND REPEAT CONTROL
+28 October 2026
+
+Discover now draws from 1,705 distinct main/method/regional-flavour choices,
+compared with the previous 120 curated choices: a 14.2-fold expansion. Changing
+only a side is not counted as another main dish. The bounded discovery catalogue
+covers all 30 mains, 13 cooking methods, 76 regional profiles and 90 authored sides.
+This is a varied selection from the supported recipe engine, not a claim that
+all possible combinations have been kitchen-tested.
+
+New choices use supported main/method pairs and the existing authored regional
+side affinities. The discovery side selector avoids duplicating the main with
+hummus, lentil salad, aubergine dip or similar sides when another matching side
+exists. Five such inherited discovery entries were improved. Strong regional
+markers remain within their authored cuisine families.
+
+Each six-card shuffle spreads mains, food categories, methods and regions. Recent
+core dishes are remembered in browser storage, bounded to 120 entries across
+visits. Older compatible dishes may return after that window or when strict
+household filters leave a smaller pool; the page explains that fallback. Browser
+storage being blocked does not stop discovery.
+
+Diet, servings, heat, clean preferences, allergies and hard dislikes are applied
+before a card is shown. Hard exclusions are not relaxed to fill six slots. A weekly
+hero that fails the household filters is hidden. The weekly choice remains stable
+for the same week and household settings; shuffling does not rescore it repeatedly.
+Displayed cards, share links and opened recipes retain the same cooking identity.
+
+The new share-roundtrip tests found an existing defect: a side id containing
+"-veg-", such as roast-veg-tray or barley-veg, could be mistaken for a vegetarian
+constraint. That broke chicken and seafood recipe links. Legacy constraint flags
+are now inferred only from the suffix after diet/heat/servings; real legacy flags
+still rebuild correctly.
+
+Android uses its existing offline catalogue, without increasing its 77 MB asset.
+Its planner and replacement bench now compare core dishes without the side id.
+Planning again prefers other prior-week core dishes where alternatives exist;
+locks, recorded filters and exact-recipe cooked-feedback rules remain intact.
+The replacement bench also uses the shuffle seed instead of returning the same
+alphabetic spread. AppRepository supplies the previous unlocked meals to that
+selection process while preserving locked recipe snapshots.
+
+Validation
+- scripts/audit-discovery-diversity.mjs checks 50 shuffles / 300 recipes offline.
+- The measured run saw 293 distinct cores, all 30 mains, all 13 methods and all
+  76 regional profiles, with no repeats inside the 120-core recent window.
+- All 300 card/share cooking identities matched; no strong-marker leaks occurred.
+- Selection averaged approximately 7–10 ms warm across measured runs, with
+  approximately 11–18 ms p95 on the development computer. Process heap was
+  approximately 13–23 MB. This is not a
+  phone or production latency guarantee.
+- Focused website tests cover pool size, per-batch diversity, twenty no-repeat
+  shuffles, hard filters, corrupted history, exact opening, and legacy share flags.
+- Three native DiscoverCoreVarietyTest regressions passed. Full website/Android
+  release checks and public browser verification are performed during deployment.
+
+Re-run locally with Node 22.13 or later:
+node --experimental-strip-types scripts/audit-discovery-diversity.mjs
+
+Structural and selection checks do not establish taste, nutrition or kitchen
+performance. Recipes remain template-generated and not kitchen-tested.

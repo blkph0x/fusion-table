@@ -7,6 +7,7 @@ import { COOK_PACE_LABELS } from "@/lib/cook-pace";
 import { publicPath } from "@/lib/public-path";
 import { PLATE_IMAGE_VERSION } from "@/lib/plate-version";
 import { decodeShare, recipeFromShare } from "@/lib/share-recipe";
+import { chosenCutLabel } from "@/lib/chosen-cut-label";
 
 async function origin(): Promise<string> {
   const headerList = await headers();
@@ -52,6 +53,7 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
   }
   const plate = `${publicPath("/api/plate")}?t=${encodeURIComponent(token)}&v=${PLATE_IMAGE_VERSION}`;
   const pdf = `${publicPath("/api/recipe-pdf")}?t=${encodeURIComponent(token)}`;
+  const cutLabel = chosenCutLabel(recipe);
   return <main className="page-width inner-page shared-recipe">
     <p className="eyebrow">FUSION TABLE · SHARED RECIPE</p>
     <h1>{recipe.title}</h1>
@@ -62,6 +64,7 @@ export default async function SharedRecipe({ params }: { params: Promise<{ token
       <figcaption>Generated inspiration image. Missing pictures prepare in the background and appear automatically when ready. Follow the ingredient list and method.</figcaption>
     </figure>
     <p className="recipe-meta">{recipe.servings} servings · about {recipe.totalMinutes} minutes · {recipe.diet} · {recipe.spiceHeat}{recipe.cookPace ? ` · ${COOK_PACE_LABELS[recipe.cookPace]}` : ""}</p>
+    {cutLabel && <p className="recipe-meta">Chosen cut: {cutLabel}</p>}
     <div className="recipe-actions">
       <a className="button primary" href={pdf}>Save PDF</a>
       <a className="button secondary" href={publicPath(`/?r=${encodeURIComponent(token)}`)}>Open in the planner</a>

@@ -145,7 +145,7 @@ export function specFromRecipe(recipe: Recipe, extra?: { avoid?: string[]; disli
   const seed = remembered?.seed ?? (seedMatch ? Number(seedMatch[1]) : undefined);
   const paceMatch = recipe.id.match(/-pace-(quick|morning|lunch|long)(?:-|$)/);
   const cookPace = remembered?.cookPace ?? recipe.cookPace ?? (paceMatch && isCookPace(paceMatch[1]) ? paceMatch[1] : undefined);
-  const flags = remembered?.constraints ?? constraintsFromId(recipe.id);
+  const flags = remembered?.constraints ?? constraintsFromId(recipe);
   const avoid = remembered?.avoidAllergens ?? extra?.avoid;
   const dislikes = remembered?.dislikes ?? extra?.dislikes;
   const common = {
@@ -181,7 +181,12 @@ function constraintsOf(spec: ShareSpec): RecipeConstraints | undefined {
   return Object.keys(constraints).length ? constraints : undefined;
 }
 
-function constraintsFromId(id: string): Partial<ShareSpec> {
+function constraintsFromId(recipe: Recipe): Partial<ShareSpec> {
+  // Legacy constraint flags follow diet/heat/servings. Words in a side such as
+  // roast-veg-tray or barley-veg are ingredient choices, never dietary flags.
+  const boundary = `-${recipe.diet}-${recipe.spiceHeat}-${recipe.servings}`;
+  const index = recipe.id.lastIndexOf(boundary);
+  const id = index < 0 ? "" : recipe.id.slice(index + boundary.length);
   const flags: Partial<ShareSpec> = {};
   if (/(?:^|-)gf(?:-|$)/.test(id)) flags.glutenFree = true;
   if (/(?:^|-)df(?:-|$)/.test(id)) flags.dairyFree = true;
