@@ -119,14 +119,19 @@ export function verifiedStoreKey(store) {
 }
 
 /** Anonymous contexts enter this pool only after the factory proves a branch. */
-export function createVerifiedStoreSessions({maxSessions = 4,ttlMs = 5 * 60_000,now = Date.now} = {}) {
+export function createVerifiedStoreSessions({maxSessions = 4,ttlMs = 5 * 60_000,now = Date.now,maxAgeMs = 0,schedule = setTimeout,cancel = clearTimeout} = {}) {
   const entries = new Map();
+  const retiring = new Set();
   let closed = false;
   const dispose = entry => {
+    if (entry.closeTask) return entry.closeTask;
     entry.invalid = true;
+    cancel(entry.ageTimer);
     if (entries.get(entry.key) === entry) entries.delete(entry.key);
     entry.controller.abort(new DOMException("Store session closed.","AbortError"));
-    return entry.value?.close().catch(() => undefined);
+    const task = entry.value?.close().catch(() => undefined);
+    if (task) { entry.closeTask = task; retiring.add(task); void task.finally(() => retiring.delete(task)); }
+    return task;
   };
   return {
     get size() { return entries.size; },
@@ -148,11 +153,15 @@ export function createVerifiedStoreSessions({maxSessions = 4,ttlMs = 5 * 60_000,
         const created = entry;
         entries.set(key,entry);
         entry.task = (async () => {
-          await Promise.all(retired);
+          await Promise.all([...retired,...retiring]);
           controller.signal.throwIfAborted();
           const value = await create(controller.signal);
           if (created.invalid || controller.signal.aborted || closed) { await value.close(); controller.signal.throwIfAborted(); throw new Error("Store session no longer needed."); }
           created.value = value; created.ready = true; created.at = now();
+          if (Number.isFinite(maxAgeMs) && maxAgeMs > 0) {
+            created.ageTimer = schedule(() => { void dispose(created); },maxAgeMs);
+            created.ageTimer?.unref?.();
+          }
           return value;
         })().catch(error => { void dispose(created); throw error; });
       }
@@ -182,8 +191,8 @@ export function createVerifiedStoreSessions({maxSessions = 4,ttlMs = 5 * 60_000,
         },error => { detach(); reject(error); });
       });
     },
-    async clear() { await Promise.all([...entries.values()].map(dispose)); },
-    async close() { closed = true; await Promise.all([...entries.values()].map(dispose)); },
+    async clear() { await Promise.all([...entries.values()].map(dispose).concat([...retiring])); },
+    async close() { closed = true; await Promise.all([...entries.values()].map(dispose).concat([...retiring])); },
   };
 }
 

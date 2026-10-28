@@ -13,6 +13,15 @@ import {
 
 const loopback = address => address === "127.0.0.1" || address === "::ffff:127.0.0.1";
 const MAX_PAGE_REQUESTS = 512;
+const COLES_IDLE_MS = 15 * 60_000;
+/** The private persisted context has an absolute lifetime, never a keepalive. */
+export function colesSessionLifetimeMs(stateFile,hours) {
+  if (!stateFile) return COLES_IDLE_MS;
+  const requested = Number(hours);
+  return Number.isFinite(requested) && requested > 0
+    ? Math.round(Math.min(24 * 60 * 60_000,Math.max(COLES_IDLE_MS,requested * 60 * 60_000)))
+    : 8 * 60 * 60_000;
+}
 const controlled = (url,providerStatus,message,status = 503,extra = {}) => ({ html:"",url,status,providerStatus,message,...extra });
 const safeMessage = value => String(value || "The retailer could not be read.").replace(/[\u0000-\u001f]/g," ").slice(0,400);
 const normalized = value => String(value || "").normalize("NFKC").toLocaleLowerCase("en-AU").replace(/[^a-z0-9]+/g," ").trim();
@@ -210,10 +219,11 @@ export async function startEgressProxy({ resolve = lookup, dial = connect } = {}
   };
 }
 
-export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", colesStateFile = process.env.RETAILER_COLES_STATE_FILE, onContext } = {}) {
+export function createBrowserRenderer({ executablePath = process.env.RETAILER_CHROMIUM_PATH || "/usr/bin/chromium", headless = process.env.RETAILER_BROWSER_HEADLESS !== "0", colesStateFile = process.env.RETAILER_COLES_STATE_FILE, colesSessionHours = process.env.RETAILER_COLES_SESSION_HOURS, colesLifecycleClock = {now:Date.now,schedule:setTimeout,cancel:clearTimeout}, onContext } = {}) {
   let browser, launching, proxy, closed = false;
   const storeSessions = createVerifiedStoreSessions();
-  const colesSessions = createVerifiedStoreSessions({maxSessions:1,ttlMs:15 * 60_000});
+  const colesLifetime = colesSessionLifetimeMs(colesStateFile,colesSessionHours);
+  const colesSessions = createVerifiedStoreSessions({maxSessions:1,ttlMs:colesLifetime,maxAgeMs:colesStateFile ? colesLifetime : 0,...colesLifecycleClock});
   const colesControlPages = new Set();
   const getBrowser = async () => {
     if (closed) throw new Error("Browser reader is stopping.");
@@ -309,14 +319,14 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
   };
   const readColesBuild = async (session,signal,previousBuildId) => {
     let page = session.colesControlPage;
-    clearTimeout(session.colesControlIdleTimer);
+    colesLifecycleClock.cancel(session.colesControlIdleTimer);
     const abort = () => { void page?.close().catch(() => undefined); };
     signal.addEventListener("abort",abort,{once:true});
     try {
       if (!page || page.isClosed()) {
         page = await session.newPage(); session.colesControlPage = page; colesControlPages.add(page);
         const control = page;
-        page.once("close",() => { colesControlPages.delete(control); if (session.colesControlPage === control) { session.colesControlPage = undefined; clearTimeout(session.colesControlIdleTimer); } });
+        page.once("close",() => { colesControlPages.delete(control); if (session.colesControlPage === control) { session.colesControlPage = undefined; colesLifecycleClock.cancel(session.colesControlIdleTimer); } });
       }
       const reusable = session.colesObservation && Date.now() - (session.colesLastHomeNavigation || 0) < 10 * 60_000
         && (!previousBuildId || session.colesObservation.buildId !== previousBuildId);
@@ -356,7 +366,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
     } finally {
       signal.removeEventListener("abort",abort);
       if (page && !page.isClosed() && session.colesControlPage === page) {
-        session.colesControlIdleTimer = setTimeout(() => { void page.close().catch(() => undefined); },15 * 60_000);
+        session.colesControlIdleTimer = colesLifecycleClock.schedule(() => { void page.close().catch(() => undefined); },colesLifetime);
         session.colesControlIdleTimer.unref?.();
       }
     }

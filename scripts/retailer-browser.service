@@ -14,6 +14,7 @@ Environment=RETAILER_BROWSER_PORT=8794
 Environment=RETAILER_BROWSER_HEADLESS=0
 Environment=RETAILER_CHROMIUM_PATH=/usr/bin/chromium
 Environment=RETAILER_COLES_STATE_FILE=/var/lib/fusion-retailer-browser/coles-state.json
+Environment=RETAILER_COLES_SESSION_HOURS=8
 Environment=HOME=/var/lib/fusion-retailer-browser
 StateDirectory=fusion-retailer-browser
 StateDirectoryMode=0700

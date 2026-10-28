@@ -35,8 +35,10 @@ reached the explicit human check described above, including with the newer
 browser. That earlier observation is evidence that the discovery path can work,
 not evidence of reliable unattended discovery on the current host.
 
-The browser worker retains one anonymous Coles cookie context for fifteen idle
-minutes. Its discovery path reads the homepage to obtain deployment metadata and
+The browser worker retains one anonymous Coles cookie context. Without private
+state persistence it retains the existing fifteen-minute idle lifetime. With
+persistence configured, its bounded context lifetime defaults to eight hours.
+Its discovery path reads the homepage to obtain deployment metadata and
 reloads once only when the visible page asks for a JavaScript/cookie refresh.
 Ordinary version revalidation revisits the homepage when a rejected ID matches
 its current document. This path stops at a CAPTCHA or human check. It never
@@ -54,8 +56,9 @@ The worker waits for the real page load and first-party network quiet, and retai
 one homepage control tab so delayed JavaScript can finish normally. An unchanged
 healthy control document can supply its version without opening another page.
 The backend supplies a validated previous-build header on 404 so a genuinely
-retired version causes normal homepage revalidation. The control tab closes after
-fifteen idle minutes; the private health response reports its retained-page count.
+retired version causes normal homepage revalidation. The control tab follows the
+configured Coles lifetime; the private health response reports its retained-page
+count. There is still only one retained control tab.
 
 Metadata and freshness
 
@@ -142,6 +145,16 @@ personal browser profile or login is imported. Only a verified homepage or
 readable successful product page can update it; a failed save keeps real prices
 available without claiming persistence worked. A retailer can invalidate its
 own cookies sooner, so persistence does not guarantee future clearance.
+
+With persistence configured, RETAILER_COLES_SESSION_HOURS controls the anonymous
+context's absolute lifetime: eight hours by default, bounded between fifteen
+minutes and twenty-four hours. Invalid/zero/negative values use eight hours;
+positive out-of-range values are clamped. Ordinary queries do not extend this
+absolute cap. At the cap, the context and its control page close; the next query
+opens a fresh bounded context from its own saved state. Service shutdown also
+closes them. Idle retention generates no keepalive request, refresh, navigation
+or polling. This change addresses early local cleanup; a real longer idle test
+is still required before attributing a repeated retailer challenge to cleanup.
 
 Set FUSION_COLES_PRICE_TRANSPORT=browser on the application to collect Coles
 prices through that actual JavaScript/cookie browser session. The existing
