@@ -79,17 +79,49 @@ export function watchPageNetwork(page,{origin} = {}) {
 /** A normal query can hydrate after the initial four-second generic page wait.
  * Wait for priced content or explicit instructions, then for first-party query
  * traffic to settle. An empty placeholder is uncertainty, not a human check. */
-export async function settleColesQuery(page,waitForQuiet,signal,{timeoutMs = 10_000} = {}) {
+export async function settleColesQuery(page,waitForQuiet,signal,{timeoutMs = 10_000,cspHeaders = []} = {}) {
   signal.throwIfAborted();
+  let readiness;
   try {
-    await page.waitForFunction(() => {
+    const handle = await page.waitForFunction(headers => {
       const text = document.body?.innerText || "", title = document.title;
       const cards = [...document.querySelectorAll('[id^="product-tile-"],[data-product-card="true"],section[data-testid="product-tile"],[data-testid="product-card"]')];
-      return cards.some(card => card.getBoundingClientRect().height > 0 && /\$\s*\d/.test(card.textContent || ""))
+      if (cards.some(card => card.getBoundingClientRect().height > 0 && /\$\s*\d/.test(card.textContent || ""))
         || /\b(?:no|0) (?:products|results)|couldn.t find any/i.test(text)
-        || /captcha|verify.*human|access denied|checking your browser|refresh.*(?:cookies|javascript)|(?:cookies|javascript).*refresh/i.test(`${title}\n${text}`);
-    },undefined,{timeout:timeoutMs});
+        || /captcha|verify.*human|access denied|checking your browser|refresh.*(?:cookies|javascript)|(?:cookies|javascript).*refresh/i.test(`${title}\n${text}`)) return true;
+      // A standalone protection iframe denied by an effective CSP is not a
+      // product query still hydrating. Observe the policy; never relax it.
+      if (text.trim()) return false;
+      const frames = [...document.querySelectorAll('body iframe')].filter(frame => {
+        const box = frame.getBoundingClientRect();
+        return box.width > 0 && box.height > 0 && getComputedStyle(frame).visibility !== "hidden";
+      });
+      if (frames.length !== 1) return false;
+      try {
+        const frameUrl = new URL(frames[0].src,location.href);
+        if (frameUrl.origin !== location.origin || !/^\/_Incapsula_Resource(?:\/|$)/i.test(frameUrl.pathname)) return false;
+      } catch { return false; }
+      const metaPolicies = [...document.querySelectorAll('meta[http-equiv]')]
+        .filter(meta => meta.httpEquiv.toLowerCase() === "content-security-policy")
+        .slice(0,8).map(meta => meta.content);
+      for (const policy of [...headers,...metaPolicies]) {
+        if (typeof policy !== "string" || policy.length > 16_000) continue;
+        for (const entry of policy.split(",")) {
+          const directives = new Map();
+          for (const directive of entry.split(";")) {
+            const [name,...sources] = directive.trim().toLowerCase().split(/\s+/);
+            if (name && !directives.has(name)) directives.set(name,sources);
+          }
+          const name = ["frame-src","child-src","default-src"].find(value => directives.has(value));
+          if (name && directives.get(name).length === 1 && directives.get(name)[0] === "'none'") return {reason:"retailer-protection-frame-blocked",directive:name};
+        }
+      }
+      return false;
+    },Array.isArray(cspHeaders) ? cspHeaders.slice(0,8) : [],{timeout:timeoutMs});
+    try { readiness = await handle?.jsonValue?.(); }
+    finally { await handle?.dispose?.(); }
   } catch { signal.throwIfAborted(); return {settled:false,reason:"query-content-loading"}; }
+  if (readiness?.reason === "retailer-protection-frame-blocked") return {settled:false,reason:readiness.reason,directive:readiness.directive};
   const snapshot = await page.evaluate(() => ({text:document.body?.innerText || "",title:document.title}));
   const action = pageAction(snapshot);
   if (action !== "ready") return {settled:false,reason:action};
@@ -489,13 +521,13 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         if (retainedColes) { await paceColes(session,signal); session.beginNavigation(page); }
         let response = await page.goto(value,{waitUntil:"domcontentloaded"});
         let colesSettlement;
-        if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal);
+        if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal,{cspHeaders:await response?.headerValues("content-security-policy").catch(() => []) || []});
         else await settle(page,source);
         let snapshot = await visible(page);
         let action = pageAction({...snapshot,status:response?.status() || 200});
         if (action === "refresh-once") {
           response = await page.reload({waitUntil:"domcontentloaded"});
-          if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal);
+          if (retainedColes) colesSettlement = await settleColesQuery(page,() => session.quiet(page,{timeoutMs:4000,quietMs:500}),signal,{cspHeaders:await response?.headerValues("content-security-policy").catch(() => []) || []});
           else await settle(page,source);
           snapshot = await visible(page);
           action = pageAction({...snapshot,status:response?.status() || 200});
@@ -504,7 +536,7 @@ export function createBrowserRenderer({ executablePath = process.env.RETAILER_CH
         const limited = requestLimit(session,page,retainedColes ? "coles-query" : "query");
         if (limited) return controlled(final,"unavailable","This browser page exhausted its bounded network-request allowance. No human check was established; retry the page normally.",503,{diagnostic:limited});
         if (action !== "ready") return controlled(final,"needs-browser","Open the retailer in your browser and complete its check, then choose your store. No automated challenge solving was attempted.",response?.status() || 403);
-        if (retainedColes && !colesSettlement?.settled) return controlled(final,"unavailable","Coles' query page has not finished loading readable product prices. No human check was established; try this item again shortly.",503,{diagnostic:{stage:"coles-query",reason:colesSettlement?.reason || "query-content-loading"}});
+        if (retainedColes && !colesSettlement?.settled) return controlled(final,"unavailable",colesSettlement?.reason === "retailer-protection-frame-blocked" ? "Coles returned a protection frame blocked by the page's content security policy. No human check was established; open the site normally to check it." : "Coles' query page has not finished loading readable product prices. No human check was established; try this item again shortly.",503,{diagnostic:{stage:"coles-query",reason:colesSettlement?.reason || "query-content-loading",...(colesSettlement?.directive ? {directive:colesSettlement.directive} : {})}});
         const selectedStore = session.selectedStore;
         if (selectedStore) {
           const settled = await settleVerifiedIgaQuery(page,selectedStore.name,() => session.quiet(page));
