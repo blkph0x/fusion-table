@@ -109,8 +109,12 @@ export function selectPriceLines(witness) {
 
 const FINISHED = /\b(?:cookies?|biscuits?|cakes?|muffins?|chocolate|cordial|crisps?|crackers?|chutney|relish|pesto|mayonnaise|aioli|hummus|dressing)\b/i;
 const COOKED = /\b(?:cooked|smoked|crumbed|breaded|battered|marinated|rotisserie|carved|shredded|nuggets?|chipees?)\b/i;
-const POULTRY_SLICES = /\b(?:chicken|turkey)\b.*\bslices\b|\bslices\b.*\b(?:chicken|turkey)\b/i;
+const POULTRY_SLICES = /\b(?:chicken|turkey|duck)\b.*\bslices\b|\bslices\b.*\b(?:chicken|turkey|duck)\b/i;
 const PROTEIN = /\b(?:chicken|turkey|beef|lamb|pork|duck|fish|salmon|tuna|prawn|prawns|kangaroo)\b/i;
+// Small independent oracle for the observed prepared-duck regression. Keep it
+// separate from catalogue scoring; a recipe's raw duck cannot use Peking/confit
+// or a cooked product even if a shared breast cut produced a high match score.
+const PREPARED_DUCK = /\b(?:peking|confit|smoked|cooked|precooked|pre[ -]cooked|roasted|roast duck|carved|shredded|marinated|ready to (?:eat|heat|serve)|heat and (?:eat|serve))\b/i;
 
 export function validatePriceResponse(lines, data, now = Date.now()) {
   const issues = [], rows = Array.isArray(data?.lines) ? data.lines : [];
@@ -153,6 +157,7 @@ export function validatePriceResponse(lines, data, now = Date.now()) {
         || ricePackPreparationUnverified(input.name, offer.productName)
         || !FINISHED.test(input.name) && FINISHED.test(offer.productName)
         || !POULTRY_SLICES.test(input.name) && POULTRY_SLICES.test(offer.productName)
+        || /\bduck\b/i.test(input.name) && !/stock|sauce|paste|broth/i.test(input.name) && !PREPARED_DUCK.test(input.name) && PREPARED_DUCK.test(offer.productName)
         || PROTEIN.test(input.name) && !COOKED.test(input.name) && !/stock|sauce|paste|broth/i.test(input.name) && COOKED.test(offer.productName)) issues.push(`Wrong food/preparation is eligible: ${input.name} / ${offer.productName}`);
       const quantity = /^(?:tbsp|tsp)$/.test(input.unit) && /(?:ml|litre|liter|\d\s*l\b)/i.test(offer.packageSize ?? "")
         ? { amount: input.amount * (input.unit === "tbsp" ? 20 : 5), unit: "ml" } : input;

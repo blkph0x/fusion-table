@@ -93,6 +93,7 @@ export function shoppingSpecialistKind(line: ShoppingLine): "butcher" | "produce
   if (/\b(vegan|vegetarian|plant[ -]?based|meat[ -]?free|tofu|tempeh|quorn|jackfruit)\b/.test(name)) return null;
   if (/\b(stock|broth|sauce|paste|powder|dried|dehydrated|flakes?|flour|crumbs?|breadcrumbs|canned|tinned|frozen|oil|vinegar|milk|cream|yogh?urt|cheese|butter|seasoning|rub|marinade|flavouring|cooked|pickled|preserved|concentrate|puree|purée|juice)\b/.test(name)) return null;
   if (/\b(ready[ -]?to[ -]?eat|deli|carved|shredded|smoked|cured|ham|salami|prosciutto|pancetta|chorizo|bacon)\b/.test(name)) return null;
+  if (/\b(rotisserie|hot[ -]+roast|roasted|braised|stewed|grilled|chargrilled|baked|poached|steamed|boiled|fried|pulled|confit|peking[ -]+duck|char[ -]+siu|tandoori[ -]+chicken|heat[ -]+(?:and|&)[ -]+serve|recipe[ -]+base|pesto|relish|chutney|biscuits?|cookies?|bread|cakes?|beer|cordial)\b/.test(name)) return null;
   return normalized.category === "butcher" || normalized.category === "produce" ? normalized.category : null;
 }
 

@@ -252,7 +252,7 @@ test("Original tofu equivalence preserves flavour, preparation, dietary and stoc
     const matches = matchProducts(name, [{ name: `Original ${extra} Firm Tofu`, priceCents: 100, packageSize: "900g", stockcode: extra, inStock: true, available: true }]);
     const row = buildShoppingOffers([{ ...line, name }], [catalogue({ query: name, matches })], [], options)[0];
     assert.equal(row.estimatedCents, null, extra);
-    assert.equal(row.offers[0]?.eligible, false, extra);
+    assert.equal(row.offers.some(offer => offer.eligible), false, extra);
   }
   for (const [name, stocked] of [["Vegan plain firm tofu", true], ["Gluten-free plain firm tofu", true], ["Plain firm tofu", false]] as const) {
     const matches = matchProducts(name, [{ name: "Evergreen Original Tofu Regular Firm", priceCents: 500, packageSize: "900g", stockcode: "restricted", inStock: stocked, available: stocked }]);
@@ -271,8 +271,8 @@ test("unrequested rice and tofu food forms stay out of automatic estimates even 
     const matches = matchProducts(name, [{ name: productName, priceCents: 100, packageSize: "1kg", stockcode: productName, inStock: true, available: true }]);
     const row = buildShoppingOffers([{ ...line, name }], [catalogue({ query: name, matches })], [], options)[0];
     assert.equal(row.estimatedCents, null, `${name}: ${productName}`);
-    assert.equal(row.offers[0]?.eligible, false, productName);
-    assert.match(row.offers[0]?.reviewReason ?? "", /different food form/, productName);
+    assert.equal(row.offers.some(offer => offer.eligible), false, productName);
+    if (row.offers.length) assert.match(row.offers[0].reviewReason ?? "", /different food form/, productName);
   }
 });
 

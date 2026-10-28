@@ -95,6 +95,20 @@ test("live price validation independently rejects captured cooked poultry wordin
  }
 });
 
+test("live audit rejects the actual targeted Peking duck offer for raw duck and retains a genuine fresh pack", () => {
+ const raw = { id: "duck", name: "Duck breast fillets", amount: 1800, unit: "g", category: "butcher" };
+ for (const product of ["LUV-A-DUCK Peking Duck Breast 380g", "Confit Duck Breast", "Smoked Duck Breast", "Cooked Duck Breast", "Heat And Eat Duck Breast"]) {
+  const data = dataFor(product, "380 g"), row = data.lines[0];
+  Object.assign(row, raw, { planningEstimate: estimateIngredientCost(raw), estimatedCents: 6495 });
+  Object.assign(row.offers[0], { source: "aldi-online-catalogue", stock: "UNKNOWN", priceCents: 1299, cost: { lineCents: 6495 } });
+  assert.ok(validatePriceResponse([raw], data, now).issues.some(issue => issue.includes("Wrong food/preparation")), product);
+ }
+ const good = dataFor("Luv-A-Duck Fresh Duck Breast Fillets", "380g"), row = good.lines[0];
+ Object.assign(row, raw, { planningEstimate: estimateIngredientCost(raw), estimatedCents: 7750 });
+ Object.assign(row.offers[0], { priceCents: 1550, cost: { lineCents: 7750 } });
+ assert.deepEqual(validatePriceResponse([raw], good, now).issues, []);
+});
+
 test("one loopback batch checks HTML/PDF/prices without following image or authentication links", async () => {
   const directory = await mkdtemp(join(tmpdir(), "fusion-live-check-"));
   const requests = [];

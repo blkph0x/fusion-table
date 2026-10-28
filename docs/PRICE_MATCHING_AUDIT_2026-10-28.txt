@@ -1,0 +1,188 @@
+FUSION TABLE — PRICE MATCHING, STORE CHOICES AND RELEASE EVIDENCE
+28 October 2026; status snapshot 09:30 UTC
+
+Release scope
+
+The public website is version 0.4.1, release 20261028-082209, source commit
+7341a8494a255798b04cfcf0782e7b7d66df32fd. Its release passed 907 automated tests.
+The public Android download is 1.5.10/code17, with 181 passing unit tests and an
+independently verified identical signed download. Later prepared-food/manual-
+review corrections are local source at this snapshot; they are not described
+here as deployed. Earlier audit notes retain their historical release numbers.
+
+Coles remains an open release-quality gate. Isolated browser candidate
+20261028-091423 passed 63 Linux worker checks, but reached a genuine retailer
+CAPTCHA at 09:16 UTC. No Coles-ready result was established on that candidate.
+A third supervised human-check approval is pending and no third action has been
+taken. Passing worker fixtures does not establish retailer clearance or reliable
+unattended collection.
+
+Observed pricing failures and their meaning
+
+The original fifty-recipe capture contains 300 sampled ingredient lines and
+2,985 offer rows: 483 were marked eligible and 102 chosen by that older code.
+Those flags are historical inputs, not endorsements of their food identity.
+Manual review found turkey priced as duck, tortillas priced as steel taco
+holders, fresh carrot candidates priced as mixed/frozen/roast vegetable packs,
+and fresh coriander leaves priced from an ambiguous 5 g herb pack. The mixed
+carrot candidates were eligible alternatives; the original chosen carrot offer
+was ordinary carrots. A tiny pack is insufficient fresh-form evidence, not proof
+that every 5 g herb product is dried.
+
+The targeted five-recipe follow-up contains 30 lines, 241 offers, 36 older
+eligible flags and eight chosen offers. Its actual result remains FAILED for
+the Coles coverage gate; zero ready batches were reported. Five HTML checks,
+five PDF checks and five price-response checks succeeded. It also exposed raw
+duck breast being priced as ALDI LUV-A-DUCK Peking Duck Breast 380g. Positive response counts alone
+therefore did not establish correct ingredient pricing.
+
+The manufacturer describes that Peking product as already cooked with reheating
+instructions. This corroborates the prepared-food diagnosis independently of
+the title-matching heuristic. The manufacturer page was checked at 09:19 UTC:
+https://www.luvaduck.com.au/products/view/peking-duck-breasts-tray/
+The corresponding retailer product is:
+https://www.aldi.com.au/product/luv-a-duck-peking-duck-breast-380g-000000000000658979
+
+Independent retained/manual review examined 72 distinct eligible-or-chosen
+ingredient/product pairs across both captures. It also replayed noneligible but
+reviewable candidates: some could still enter a total after explicit review.
+Examples included raw meat versus braised meals, recipe bases, rubs, jerky,
+dumplings and pet food; skinless versus skin-on fish; plain versus flavoured
+tofu; fresh versus preserved-fish-style products; and paneer versus a ready meal.
+These additional candidates were not automatically chosen in the baseline.
+Their ability to pass a manual hard-form check was nevertheless a real defect.
+
+The original issues receipt is preserved. The final local shared guard was
+replayed at 09:30 UTC against 23 captured occurrences from nineteen named
+fixture pairs, including all nineteen occurrences still accepted at the earlier
+09:15 snapshot. All 23 now reject through both neutral retained/manual selection
+and explicit seller-strategy totals. A separate generic-Tofu/Honey-Soy negative
+also rejects. Ten positive explicit-review controls still price with the exact
+recomputed cost: ordinary beef reviewed as Wagyu, valid fresh duck, a raw braising
+lamb cut, an explicitly requested braised meal, recipe base, chicken stock,
+Ras el hanout, Xawaash, beef rub and explicitly requested Honey Soy Tofu.
+No original failure receipt was overwritten. This is offline regression proof,
+not a new supplier quote or a guarantee about unseen future catalogue products.
+
+Final replay matcher SHA-256:
+10efa4032eac10b57abbe21fd38ad2c46c92ef714b067b860db52bea769238b8
+
+The frozen local follow-up passed 76 focused tests: 51 shared matcher/cost tests
+and 25 seller-strategy tests. The matcher tests include all thirty authored
+mains against twelve strong preparation/style markers. These are local checks
+of the next candidate, separate from the live release's 907 automated tests.
+
+Store choices and unknown prices
+
+Cheapest per item compares eligible whole-pack quantity costs across sellers.
+A chain-only choice keeps the selected supermarket; an unavailable line remains
+unknown rather than being filled by another chain or a planning allowance.
+When local specialists are enabled, fresh meat and produce follow the selected
+located butcher/fruit shop and the remaining items follow the supermarket rule.
+An unpriced specialist stays assigned on the list with an unknown price.
+Unknown lines do not count as zero or as part of a complete basket total.
+
+Shop IDs and distances are revalidated against the current area and radius.
+An unavailable explicit shop is not silently replaced. Area-specific choices,
+reloads, CSV export, radius changes and mobile layout have browser-fixture proof.
+Online price guides remain separate from verified local shelf stock or a single
+confirmed retailer basket. Recipe ingredient planning values are labelled AUD
+budget assumptions and do not replace unknown prices in the chosen-shop total.
+
+The original shop-choice public UI fixture was recorded on release
+20261028-072139/version0.4.0. A separate public-build fixture first asserted the
+exact 082209/version0.4.1 deployment identity, then injected the four unsafe
+eligible/chosen rows. All four stayed unknown and out of seller coverage and
+subtotals; a valid rice control alone remained priced. Re-entering the shopping
+view reused that same unsafe cache without another price request and remained
+safe. Equivalent positive product/form controls priced successfully. All APIs
+and images were intercepted in those UI checks: they are not supplier evidence.
+
+The local follow-up additionally keeps hot-roast/rotisserie/cooked foods,
+Peking/confit/char-siu/tandoori/heat-and-serve foods, recipe bases and finished
+foods such as pesto, ginger beer, garlic bread and carrot cake under the selected
+supermarket instead of routing them to fresh specialists. Raw Pekin duck breed,
+braising/stewing cuts, raw roasting joints, BBQ blade steak and roasting potatoes
+remain supported. Twenty-five focused strategy tests pass. This correction
+requires the next deployment before it can be claimed as public behaviour.
+
+Recipe plausibility and discovery
+
+The strongest current recipe audit passed 94,100 distinct cases: 100 rotating
+inputs for each of 907 cooking rows plus 100 for each of 34 classic structures.
+The 907 rows comprise 266 default main/method rows and 641 compatible chosen-cut
+rows. Each row covers all 76 region values and all 90 side values, with varying
+servings, heat, seed and compatible preferences. It does not cover all 6,840
+region/side pairs for every row. Another 907 one-versus-twelve serving pairs and
+fifty exact share rebuilds passed. Structural checks do not establish taste,
+successful kitchen execution, actual doneness or packaged-food contents.
+
+Discover expanded from 120 to 1,705 distinct main/method/region cores, a 14.2-fold
+increase. Side-only variants do not inflate that number. The pool represents
+30 mains, 13 methods, 76 regions and 90 sides. Fifty audited shuffles generated
+300 exact card/share recipes, seeing 293 distinct cores and no repeats inside
+the bounded 120-core recent-history window. Strict filters are not relaxed to
+fill a card batch. The native app improves selection from its existing offline
+catalogue; it does not claim the website's 1,705-core pool was copied into Android.
+
+Published Android identity at this snapshot
+
+Version: 1.5.10; code17; applicationId au.mealplanner.
+Unit tests: 181 passed; zero failures, errors or skips.
+APK: 13,991,989 bytes.
+SHA-256: 09c6e412459e47505529618a92438ef5b073d7793cd9e77e883d4e510e77666c
+Signer SHA-256: 62eb4789a25beeac003d308a0784f106c85d611aed28c6d2c5d28e5dc13c1ba6
+The same certificate, APK v2 signature and ZIP integrity were verified. The
+77,475,274-byte offline recipe asset matches source and the preceding release.
+An independent HTTPS download of the exact public APK URL matched those bytes
+and hash. No physical-device installation was performed. The bounded native
+source handoff contains only the version file, matcher, matcher tests and an
+83-file hash manifest; no signing files or recipe asset are bundled.
+Newer native source changes require their own completed build and release proof.
+
+Evidence index
+
+Repository receipts under docs/audit-evidence-2026-10-28/:
+- public-50-baseline-offers.ndjson.gz and public-50-baseline-semantic-review.json:
+  original fifty-recipe supplier evidence and its historical failures.
+- targeted-prices-5.json and targeted-prices-5-offers.ndjson.gz:
+  failed Coles gate and actual five-recipe follow-up capture; not the similarly
+  named targeted-price-5.json witness corpus.
+- manual-capture-semantic-review-issues.json and
+  manual-capture-semantic-review-fixed.json: preserved failing snapshot and
+  separate fixed hard-guard/manual/strategy replay with positive controls.
+- cached-offer-public-ui-fixture-082209.json: exact public hotfix identity and
+  isolated unsafe-cache rejection, with no supplier requests.
+- shopping-strategy-release.json, shopping-strategy-public-ui-fixture.json and
+  shopping-strategy-public-prices.json: earlier shop-choice release, fixture UI
+  and actual limited three-ingredient supplier check; not full meal coverage.
+- recipe-strata-100-audit-summary.json and
+  discovery-after-shopping-integration.json: coverage definitions and limits.
+- android-1.5.10-identity.json, android-1.5.10-source.json,
+  android-1.5.10-public-download.json and android-1.5.10-source-handoff.zip:
+  released APK, source fingerprint and public-download continuity.
+
+Additional local workspace receipts under work/expansion-audit/:
+- ingredient-082209-server-tests.log and ingredient-082209-public-pages-50.json:
+  0.4.1 release tests and fifty public HTML/PDF checks without price lookups.
+- manual-capture-semantic-review.mjs: reproducible offline hard-guard replay;
+  its default destination is a separate -fixed receipt.
+- android-1.5.10-build.log, signature/badging, unit XML archive and source handoff.
+Public UI screenshots remain in work/cached-offer-ui-public-082209/.
+
+Outstanding gates
+
+Current Coles clearance, a genuine cleared-session idle test of at least sixteen
+minutes, clearance after a cold start of the current worker, verified staged
+meal-price batches and the final public price run have not passed as a group.
+They must not be inferred from page/PDF success, synthetic UI controls, an older
+restart result, a static catalogue snapshot or a known deployment-JSON version.
+The pending supervised human check needs the required action-time approval;
+neither browser identity changes nor automatic challenge solving are enabled.
+
+The new prepared/manual guard and specialist-routing follow-up need final full
+checks and deployment; newer Android source needs a fresh signed-release receipt.
+After promotion, public identity, pages/PDFs, supplier product forms/costs and UI
+must be checked again. Until those gates pass, this audit does not claim complete
+Coles coverage, unattended reliability, every possible meal checked, or that
+all unknown shopping prices have become observed retailer prices.

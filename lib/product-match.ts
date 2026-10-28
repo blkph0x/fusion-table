@@ -67,11 +67,12 @@ const PLANT_PROTEINS: readonly (readonly [string, RegExp])[] = [
 export function isNonFoodCatalogueProduct(product: Pick<CatalogueProduct, "name" | "categories">): boolean {
   const name = product.name.slice(0, 500).toLowerCase().replace(/[^a-z0-9]+/g, " ");
   const petAccessory = /\b(?:dogs?|pupp(?:y|ies)|cats?|kittens?|pets?)\b.{0,64}\b(?:leads?|leashes?|collars?|harness(?:es)?|toys?|beds?|bowls?|treats?|food|kibble|litter|shampoo|grooming)\b/;
+  const petFood = /\bfor (?:cats?|dogs?|kittens?|puppies|pets?)\b|\b(?:dogs?|cats?|pets?) (?:meaty bites|meat chunks|meat loaf|meatloaf|morsels|pate)\b/;
   const kitchenTool = /\b(?:juicers?|squeezers?|slicers?|dicers?|spirali[sz]ers?|mandolines?|cutter gadgets?|vegetable cutters?|vegetable choppers?|food choppers?|citrus press|lemon press|garlic press|garlic crusher|tofu press|vegetable peeler|potato peeler|cheese grater|zester|knife sharpener|knife block|chopping board|cutting board|kitchen utensil|measuring cups?|measuring spoons?|baking trays?|baking tins?|muffin trays?|muffin tins?|food processor)\b/;
   const servingTool = /\b(?:taco|tortilla|burrito|egg|toast|rib)\s+(?:holders?|stands?|racks?|warmers?)\b|\b(?:holders?|stands?|racks?)\s+for\s+(?:soft\s+or\s+hard\s+)?(?:tacos?|tortillas?|burritos?)\b|\b(?:stainless steel|steel|metal|silicone|ceramic|plastic)\b.{0,70}\b(?:holders?|racks?|baking trays?|serving trays?|moulds?|molds?|tongs?|spatulas?)\b/;
   const hardware = /\b(?:cordless drill|power drill|hammer drill|drill bits?|screwdrivers?|socket sets?|garden hoses?|garden stakes?|power tools?|wall plugs?|paint brushes?|spray paint|sandpaper|wood screws?|allen keys?|hex keys?|chicken wire|wire mesh)\b/;
   const household = /\b(?:dishwashing liquid|dishwasher (?:tablets?|capsules?|detergent)|laundry detergent|cleaning spray|surface cleaner|hand wash|body wash|scented candles?)\b/;
-  if (petAccessory.test(name) || kitchenTool.test(name) || servingTool.test(name) || hardware.test(name) || household.test(name)) return true;
+  if (petAccessory.test(name) || petFood.test(name) || kitchenTool.test(name) || servingTool.test(name) || hardware.test(name) || household.test(name)) return true;
   const categories = (product.categories || []).slice(0, 12).map(value => value.slice(0, 160).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim());
   const plantingName = /\b(?:seedlings?|seed tapes?|seed mats?|seed raising kits?|grow kits?|growing kits?|planting seeds?|sowing seeds?|seeds? for (?:planting|sowing|growing))\b/;
   const gardenCategory = categories.some(category => /^(?:garden|gardening|plants)$|\bgardening\b|\b(?:garden|planting|flower) seeds?\b|\bseeds? (?:and )?(?:bulbs?|seedlings?|plants?)\b|\b(?:lawn|home|outdoor) (?:and )?garden\b/.test(category));
@@ -331,9 +332,18 @@ function cutsConflict(left: Set<string>, right: Set<string>): boolean {
   return false;
 }
 
-type MeatPreparation = "cooked" | "smoked" | "breaded" | "marinated" | "deli" | "cured";
-const MEAT_WORDS = /\b(?:chicken|turkey|beef|lamb|pork|duck|goat|venison|kangaroo|veal|fish|salmon|tuna|trout|cod|barramundi|hake|basa|prawn|shrimp|crab|lobster|squid|calamari|octopus|scallop|mussel|oyster|ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni)\b/;
-type IngredientFoodForm = "stock" | "gravy" | "paste" | "sauce" | "juice" | "powder";
+type MeatStyle = "peking" | "confit" | "char-siu" | "tandoori" | "teriyaki" | "satay" | "honey-soy" | "peri-peri" | "korean-bbq";
+type MeatPreparation = "cooked" | "smoked" | "breaded" | "marinated" | "deli" | "cured" | "preserved" | `style:${MeatStyle}`;
+const MEAT_WORDS = /\b(?:chicken|turkey|beef|lamb|pork|duck|goose|quail|rabbit|goat|venison|kangaroo|veal|mutton|fish|salmon|tuna|trout|cod|hoki|barramundi|haddock|pollock|hake|basa|sardine|mackerel|snapper|whiting|flathead|tilapia|prawn|shrimp|crab|lobster|squid|calamari|octopus|scallop|mussel|oyster|ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni)\b/;
+// These identify an expressly named prepared/flavoured product, not a raw cut
+// or a breed. In particular Pekin (the duck breed) is not Peking (the dish).
+// Keep each style distinct: a requested teriyaki product cannot become satay.
+const NAMED_MEAT_STYLES: readonly (readonly [MeatStyle, RegExp])[] = [
+  ["peking", /\bpeking\b/], ["confit", /\bconfit\b/], ["char-siu", /\b(?:char siu|char sui|chinese bbq|chinese barbecue)\b/],
+  ["tandoori", /\btandoori\b/], ["teriyaki", /\bteriyaki\b/], ["satay", /\bsatay\b/],
+  ["honey-soy", /\bhoney soy\b/], ["peri-peri", /\b(?:peri peri|piri piri)\b/], ["korean-bbq", /\bkorean (?:bbq|barbecue)\b/],
+];
+type IngredientFoodForm = "stock" | "gravy" | "paste" | "sauce" | "juice" | "powder" | "recipe-base" | "seasoning";
 
 function ingredientFoodForms(canonical: string): Set<IngredientFoodForm> {
   const forms = new Set<IngredientFoodForm>();
@@ -341,6 +351,10 @@ function ingredientFoodForms(canonical: string): Set<IngredientFoodForm> {
   // Gravy beef is an Australian raw cut, unlike a beef gravy cooking product.
   if (/\bgravy\b/.test(canonical) && !/\bgravy beef\b/.test(canonical)) forms.add("gravy");
   for (const form of ["paste", "sauce", "juice", "powder"] as const) if (new RegExp(`\\b${form}(?:ed)?\\b`).test(canonical)) forms.add(form);
+  if (/\b(?:recipe base|recipe mix|meal base|cooking mix|simmer mix)\b/.test(canonical)) forms.add("recipe-base");
+  // A packet named for a meat dish does not contain that meat. Keep this check
+  // scoped to animal-food wording so named spice blends such as Xawaash remain usable.
+  if (MEAT_WORDS.test(canonical) && /\b(?:seasoning|spice mix|spice blend|spice packet|rub)\b/.test(canonical)) forms.add("seasoning");
   return forms;
 }
 
@@ -364,6 +378,8 @@ const FINISHED_FOOD_FORMS: readonly (readonly [string, RegExp])[] = [
   ["salt", /\bsalt\b/], ["butter", /\bbutter\b/], ["risotto", /\brisotto\b/],
   ["pasta", /\b(?:pasta|lasagne|lasagna|noodle)\b/], ["pizza", /\bpizza\b/], ["gozleme", /\bgozleme\b/],
   ["bake", /\b(?:bake|gratin)\b/], ["cordial", /\bcordial\b/], ["syrup", /\bsyrup\b/], ["passata", /\bpassata\b/],
+  ["formed-food", /\b(?:dumpling|gyoza|wonton|dim sim|burger|cheeseburger|meatball|ravioli|tortellini)\b/],
+  ["ready-meal", /\b(?:ready meal|minute meal|carbonara|palak paneer|matar paneer|mutter paneer|shahi paneer|paneer makhani|paneer tikka masala|paneer butter masala)\b/],
 ];
 const RAW_PRODUCE_WORDS = new Set(["ginger", "garlic", "onion", "scallion", "shallot", "leek", "tomato", "potato", "carrot", "beetroot", "broccoli", "cauliflower", "cabbage", "capsicum", "courgette", "eggplant", "cucumber", "spinach", "lettuce", "lemon", "lime", "orange", "apple", "banana", "pear", "mushroom", "coriander", "parsley", "basil", "mint", "dill", "rosemary", "thyme", "sage", "chilli", "celery", "fennel", "asparagus"]);
 const PRODUCE_PREPARATIONS: readonly RegExp[] = [
@@ -458,21 +474,48 @@ function otherIngredientPreparationConflict(wanted: string, seen: string): boole
 }
 
 /** Shared by live matching and retained-offer checks; it never establishes stock. */
-export function ingredientPreparationConflict(requested: string, offered: string): boolean {
+export function ingredientHardConflict(requested: string, offered: string): boolean {
   const wanted = canonicalizeProductText(requested), seen = canonicalizeProductText(offered);
-  return ingredientIdentityConflictCanonical(wanted,seen) || ingredientFoodFormConflict(wanted, seen) || otherIngredientPreparationConflict(wanted, seen) || meatPreparationConflict(wanted,seen,{});
+  return isNonFoodCatalogueProduct({ name: offered }) || ingredientIdentityConflictCanonical(wanted,seen) || ingredientFoodFormConflict(wanted, seen) || otherIngredientPreparationConflict(wanted, seen) || meatPreparationConflict(wanted,seen,{}) || explicitCutAndPlantFormConflict(wanted,seen);
+}
+
+// Preserve the established entry point used by cached/manual price consumers.
+export const ingredientPreparationConflict = ingredientHardConflict;
+
+function explicitCutAndPlantFormConflict(wanted: string, seen: string): boolean {
+  // Strong preparation words describe a different purchased ingredient for every
+  // authored main, including eggs, legumes and vegetables. Ordinary cooked or
+  // canned legumes are deliberately not inferred to be a different raw food.
+  if (proteinsOf(wanted).size && !ingredientFoodForms(wanted).size) {
+    for (const preparation of [/\bmarinated\b/, /\bsmoked\b/, /\bpickled\b/]) if (preparation.test(wanted) !== preparation.test(seen)) return true;
+    for (const [, style] of NAMED_MEAT_STYLES) if (style.test(wanted) !== style.test(seen)) return true;
+  }
+  if (!ingredientFoodForms(wanted).size && cutsConflict(familiesOf(wanted),familiesOf(seen))) return true;
+  const skin = (value:string) => /\bskinless\b/.test(value) ? "off" : /\b(?:skin on|with skin)\b/.test(value) ? "on" : null;
+  const bone = (value:string) => /\bboneless\b/.test(value) ? "off" : /\b(?:bone in|on the bone)\b/.test(value) ? "on" : null;
+  for (const state of [skin,bone]) if (state(wanted) && state(seen) && state(wanted)!==state(seen)) return true;
+  if (/\b(?:tofu|tempeh|paneer|halloumi)\b/.test(wanted)) {
+    if (/\bfirm\b/.test(wanted) && /\b(?:soft|silken)\b/.test(seen) && !/\b(?:soft|silken)\b/.test(wanted)) return true;
+    for (const [, style] of NAMED_MEAT_STYLES) if (style.test(seen) && !style.test(wanted)) return true;
+    for (const flavour of [/\bsoy sauce\b/, /\btikka\b/, /\bmasala\b/, /\bcurry\b/, /\bmarinated\b/, /\bsmoked\b/, /\bspiced\b/, /\bseasoned\b/, /\b(?:flavoured|flavored)\b/, /\b(?:chilli|chili)\b/, /\bspicy\b/, /\bfried\b/, /\bbraised\b/, /\b(?:crumbed|breaded)\b/]) if (flavour.test(seen) && !flavour.test(wanted)) return true;
+  }
+  return false;
 }
 
 function meatPreparations(canonical: string, product?: Pick<CatalogueProduct,"categories">): Set<MeatPreparation> {
   const forms = new Set<MeatPreparation>();
-  if (/\b(?:cooked|precooked|pre cooked|ready to eat|rotisserie|grilled|chargrilled|char grilled|roasted|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey)\b/.test(canonical)) forms.add("cooked");
+  if (/\b(?:cooked|precooked|pre cooked|ready to eat|ready to heat|ready to serve|ready meal|heat and eat|heat and serve|heat serve|rotisserie|grilled|chargrilled|char grilled|roasted|braised|stewed|baked|poached|steamed|boiled|sous vide|barbecued|fried|pulled)\b|\broast(?:ed)? (?:chicken|turkey|duck|goose|quail)\b/.test(canonical)) forms.add("cooked");
+  for (const [style, pattern] of NAMED_MEAT_STYLES) if (pattern.test(canonical)) forms.add(`style:${style}`);
   if (/\bsmoked\b/.test(canonical)) forms.add("smoked");
-  if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|chipee|munchie|kiev|kyiv|cordon bleu)\b/.test(canonical)) forms.add("breaded");
+  if (/\b(?:crumbed|crumb|breaded|battered|schnitzel|tempura|nugget|dipper|chipee|munchie|kiev|kyiv|cordon bleu)\b/.test(canonical)) forms.add("breaded");
   if (/\b(?:marinated|marinade|seasoned|flavoured|flavored|self basting|self basted|injected|honey soy|teriyaki|satay)\b/.test(canonical)) forms.add("marinated");
   if (/\b(?:deli|sandwich|luncheon|cold cut)\b/.test(canonical)) forms.add("deli");
-  if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned)\b/.test(canonical)) forms.add("cured");
-  const poultry=/\b(?:chicken|turkey)\b/.test(canonical);
+  if (/\b(?:ham|bacon|salami|prosciutto|pancetta|chorizo|pastrami|mortadella|pepperoni|cured|corned|jerky|biltong)\b/.test(canonical)) forms.add("cured");
+  if (/\b(?:canned|tinned|in springwater|in spring water|in brine|in olive oil|in sunflower oil|in oil)\b/.test(canonical)) forms.add("preserved");
+  const poultry=/\b(?:chicken|turkey|duck|goose|quail)\b/.test(canonical);
   const explicitRaw=/\b(?:raw|uncooked|for cooking|for roasting|roasting joint|roast joint|roast cut)\b/.test(canonical);
+  if (!explicitRaw && /\broast (?:pork|beef|lamb|duck|goose|quail)\b/.test(canonical)) forms.add("cooked");
+  if (!explicitRaw && /\b(?:cocktail prawn|prawn cocktail)\b/.test(canonical)) forms.add("cooked");
   if(poultry && !explicitRaw && /\b(?:carved|shredded|roast)\b/.test(canonical)) forms.add("cooked");
   // Thinly sliced poultry sold as a product is ambiguous with ready-to-eat deli
   // chicken. It is not proof of a raw breast ingredient. A query asking only for
@@ -517,6 +560,7 @@ export function matchProducts(query: string, products: readonly CatalogueProduct
     if (ingredientFoodFormConflict(wanted, seen)) continue;
     if (otherIngredientPreparationConflict(wanted, seen)) continue;
     if (meatPreparationConflict(wanted, seen, product)) continue;
+    if (explicitCutAndPlantFormConflict(wanted,seen)) continue;
     if (/\bsausage roll\b/.test(seen) && !/\bsausage roll\b/.test(wanted)) continue;
     if (/\bsauce\b/.test(seen) && !/\bsauce\b/.test(wanted)) continue;
     const seenTokens = tokensOf(seen);

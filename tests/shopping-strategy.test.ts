@@ -211,6 +211,29 @@ test("branch-only IGA and recorded chain associations retain their concrete sell
   assert.deepEqual(result.rows[0].allowedOfferIds, [branch.id]);
 });
 
+test("ready meals and finished foods cannot inherit a fresh specialist assignment", () => {
+  const prepared = ["Hot roast whole chicken", "Rotisserie chicken", "Roasted chicken breast", "Grilled chicken breast", "Braised lamb shanks", "Stewed beef", "Lamb shanks recipe base", "Peking duck breast", "Duck confit legs", "Confit duck legs", "Char siu pork", "Tandoori chicken", "Heat-and-serve chicken", "Heat & serve chicken", "Basil pesto", "Ginger beer", "Garlic bread", "Carrot cake", "Tomato relish"];
+  for (const name of prepared) {
+    for (const category of [undefined, "butcher", "produce"] as const) {
+      assert.equal(shoppingSpecialistKind({ id: name, name, amount: 1, unit: "", category }), null, `${name}: ${category || "custom"}`);
+    }
+  }
+  for (const name of ["Pork leg roast", "Beef chuck roast", "Fresh chicken roasting joint", "Raw braising beef chuck", "Stewing beef steak", "Raw Pekin duck breast", "Beef BBQ blade steak"]) assert.equal(shoppingSpecialistKind({ id: name, name, amount: 1, unit: "kg" }), "butcher", name);
+  assert.equal(shoppingSpecialistKind({ id: "blade", name: "BBQ blade steak", amount: 1, unit: "kg", category: "butcher" }), "butcher");
+  for (const name of ["Fresh roasting potatoes", "Fresh carrots"]) assert.equal(shoppingSpecialistKind({ id: name, name, amount: 1, unit: "kg" }), "produce", name);
+});
+
+test("prepared custom items keep their selected supermarket when fresh specialists are enabled", () => {
+  for (const name of ["Hot roast whole chicken", "Rotisserie chicken", "Braised lamb shanks", "Stewed beef", "Lamb shanks recipe base", "Peking duck breast", "Duck confit legs", "Char siu pork", "Tandoori chicken", "Heat-and-serve chicken", "Basil pesto", "Ginger beer", "Garlic bread", "Carrot cake"]) {
+    const line: ShoppingLine = { id: name, name, amount: 1, unit: "" };
+    const own = offer(line, `ww-${name}`, "woolworths", 500, "1 each");
+    const result = applyShoppingStrategy([line], [row(line, [own])], strategy({ mode: "woolworths", specialists: true }), area);
+    assert.equal(result.rows[0].assignedShop?.retailerId, "woolworths", name);
+    assert.equal(result.rows[0].selectionState, "priced", name);
+    assert.equal(result.rows[0].estimatedCents, 500, name);
+  }
+});
+
 test("cheapest excludes stale local branches and outside-radius prices while retaining genuine online guides", () => {
   const far = { ...butcher, id: "far-butcher", lat: origin.lat + 1, distanceKm: 0.01 };
   const missing = { ...butcher, id: "old-area-butcher" };
