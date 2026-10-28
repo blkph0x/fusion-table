@@ -1,0 +1,156 @@
+{
+  "proofType": "Fixture-isolated frontend performance. All API calls and images are intercepted; this is not live supplier, image-generation or account proof.",
+  "startedAt": "2026-10-28T06:59:36.727Z",
+  "fixtureRequests": {
+    "/api/plate": 214,
+    "/api/account": 1,
+    "/api/community": 1,
+    "/api/shopping-prices": 3
+  },
+  "blockedExternalRequests": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "browserVersion": "156.0.4314.42",
+  "domContentLoadedMs": 348.76,
+  "hydratedSixCardsMs": 563.84,
+  "initialCardHeadings": [
+    "Cajun baked courgette / zucchini with tostones-style plantain",
+    "Afghan eggs curry with jewelled rice & herbs",
+    "Peruvian pan-fried beef with arepa & salad",
+    "Turkish roast tuna with tzatziki potatoes",
+    "Jamaican steamed cauliflower with roast plantain & greens",
+    "Australian air-fried lamb with farro & kale"
+  ],
+  "initialCardCostValues": [
+    "~A$8.89 per meal",
+    "~A$12.31 per meal",
+    "~A$17.04 per meal",
+    "~A$20.99 per meal",
+    "~A$10.84 per meal",
+    "~A$15.98 per meal"
+  ],
+  "accessibilitySnapshotMs": 47.85,
+  "accessibilitySnapshotCharacters": 10318,
+  "shuffles": [
+    {
+      "elapsedMs": 97.87,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 88.45,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 75.83,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 88.09,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 85.21,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 78.15,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 62.29,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 68.99,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 64.33,
+      "changedHeadings": 6
+    },
+    {
+      "elapsedMs": 74.93,
+      "changedHeadings": 6
+    }
+  ],
+  "exactCardOpen": {
+    "elapsedMs": 181.26,
+    "expectedTitle": "Kashmiri air-fried beef with basmati & raita",
+    "actualTitle": "Kashmiri air-fried beef with basmati & raita",
+    "shareTokenMatches": true,
+    "expectedToken": "eyJ2IjoxLCJraW5kIjoibWVhbCIsInJlZ2lvbklkIjoia2FzaG1pcmkiLCJkaWV0IjoiYmFsYW5jZWQiLCJzcGljZUhlYXQiOiJtZWRpdW0iLCJzZXJ2aW5ncyI6MiwibWFpbklkIjoiYmVlZiIsIm1ldGhvZElkIjoiYWlyLWZyaWVkIiwic2lkZUlkIjoiYmFzbWF0aS1yYWl0YSJ9",
+    "ingredientRows": [
+      {
+        "name": "Beef rump steaks",
+        "quantity": "300 g"
+      },
+      {
+        "name": "Basmati rice",
+        "quantity": "150 g"
+      },
+      {
+        "name": "Cucumber",
+        "quantity": "125 g"
+      },
+      {
+        "name": "Plain yoghurt",
+        "quantity": "100 g"
+      },
+      {
+        "name": "Garlic",
+        "quantity": "7.5 g"
+      },
+      {
+        "name": "Fresh ginger",
+        "quantity": "7.5 g"
+      },
+      {
+        "name": "Fennel seeds",
+        "quantity": "0.5 tsp"
+      },
+      {
+        "name": "Dried ginger",
+        "quantity": "0.25 tsp"
+      },
+      {
+        "name": "Ground cardamom",
+        "quantity": "0.25 tsp"
+      },
+      {
+        "name": "Ground cinnamon",
+        "quantity": "0.25 tsp"
+      },
+      {
+        "name": "Kashmiri chilli powder",
+        "quantity": "0.5 tsp"
+      },
+      {
+        "name": "Lemon juice",
+        "quantity": "15 ml"
+      },
+      {
+        "name": "Dried mint",
+        "quantity": "0.5 tsp"
+      },
+      {
+        "name": "Neutral cooking oil",
+        "quantity": "1.5 tbsp"
+      },
+      {
+        "name": "Vegetable stock",
+        "quantity": "60 ml"
+      }
+    ],
+    "exactIngredientRowsMatch": true,
+    "ingredientCount": 15
+  },
+  "status": "passed",
+  "navigation": [
+    {
+      "duration": 378.30000019073486,
+      "domContentLoadedEventEnd": 329.80000019073486,
+      "loadEventEnd": 378.30000019073486,
+      "transferSize": 11551
+    }
+  ]
+}

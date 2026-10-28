@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-10-28T07:04:59Z",
+  "status": "staged-awaiting-Coles-verification",
+  "sourceCommit": "2cf12ac732e3a5b64b65f90fc33a1044e4231c1b",
+  "candidate": {
+    "version": "0.4.0",
+    "appRelease": "20261028-062432",
+    "browserRelease": "20261028-062434",
+    "sourceManifestSha256": "05c3e58150d00108fd73571382aea216c33d66fc1b0c3826d23e291d5e10a029",
+    "archiveSha256": "8ca1c157ee570e7eef60c03d80a26c2c75270fc12cb452192dee45a29a26f077",
+    "browserArchiveSha256": "ef01247bbb4ef58a0c3efb5daeaa7705c6b2a3e316e80e580f05c7acb4a684fc",
+    "buildAndTypeChecks": "passed",
+    "automatedTests": { "passed": 846, "failed": 0, "skipped": 0 },
+    "hostAccountHttpChecksPassed": 8,
+    "hostSqlChecksPassed": 6,
+    "recipeHtmlChecksPassed": 50,
+    "recipePdfChecksPassed": 50,
+    "priceChecksIncludedInPageRun": false,
+    "nonColesSupplierRegressions": "passed"
+  },
+  "publicWebsite": {
+    "version": "0.3.3",
+    "release": "20261027-130643",
+    "sourceCommit": "ab596f3a45e9d3437775534f72532ee22869f5e9",
+    "candidateCutoverPerformed": false
+  },
+  "discovery": {
+    "previousDistinctCores": 120,
+    "candidateDistinctCores": 1705,
+    "sideOnlyVariantsCountAsNewCore": false,
+    "browserFixtureProof": "frontend-fixture-checks.json",
+    "fixtureLiveRetailerRequests": 0,
+    "fixtureShuffles": 10,
+    "fixtureHeadingsChangedPerShuffle": 6,
+    "fixtureExactOpenedIngredientsMatched": 15,
+    "fixtureLimit": "API and image responses were intercepted; these timings do not measure suppliers or image generation. Staged release identity is recorded separately in staged-062432-pages-50.json."
+  },
+  "culinaryAudit": {
+    "summary": "recipe-strata-100-audit-summary.json",
+    "uniqueCasesPassed": 94100,
+    "failedCases": 0,
+    "cookingRows": 907,
+    "casesPerCookingRow": 100,
+    "eachRowCoversEveryRegionAndSideValue": true,
+    "coversEveryRegionSidePairPerRow": false,
+    "sourceFingerprint": "591ffcc6c702b986a28756d81a51d40be0c24d764f7761ef81e6c6775500f983",
+    "limit": "Structural checks cannot establish taste or successful kitchen execution."
+  },
+  "android": {
+    "publishedVersion": "1.5.9",
+    "versionCode": 16,
+    "testsPassed": 171,
+    "testsFailed": 0,
+    "publicDownloadProof": "android-1.5.9-public-download.json",
+    "publicApkSha256": "f33d350571f2b2d0747977e6fbe15e763e51d683ded56ea308cfea30c55a1619",
+    "physicalDeviceInstallTested": false,
+    "newWebsiteColesTransportIncludedInNativeApp": false
+  },
+  "coles": {
+    "firstExpresslyApprovedHumanCheckCompleted": true,
+    "earlierBrowserRestartWithOwnSavedState": "passed on release 20261028-053553",
+    "subsequentIdleSessionRequestedAnotherHumanCheck": true,
+    "secondHumanCheckCompleted": false,
+    "secondActionTimeApproval": "pending",
+    "candidateContextRetention": "bounded eight hours when private anonymous state is configured",
+    "candidateRealSixteenMinuteIdleTest": "not run",
+    "unattendedReliabilityEstablished": false,
+    "limit": "Retailer clearance can expire. No automatic CAPTCHA solving, identity spoofing or personal retailer session is used."
+  },
+  "remainingGates": [
+    "Obtain the pending action-time permission for one additional CAPTCHA, or the user completes it.",
+    "Verify actual Coles product prices before and after at least sixteen minutes without Fusion Table price or navigation requests.",
+    "Pass ten staged recipe pricing batches and inspect their product identities and cost arithmetic.",
+    "Verify the production browser after cold start using only its own saved anonymous state.",
+    "Cut over the candidate website with rollback preserved.",
+    "Run the public fifty-recipe page, PDF and sampled ingredient-price checks, inspect price matches, and verify the public meal-card UI."
+  ]
+}
