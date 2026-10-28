@@ -147,7 +147,7 @@ export function resolveIngredientPricing(line: ShoppingLine, row?: ShoppingCostL
   // recipe quantity. Larger rows belong to a previous quantity/serving choice.
   const matchingRow = row?.id === line.id && row.name === line.name && row.unit === line.unit && Number.isFinite(row.amount) && row.amount >= 0 && row.amount <= line.amount ? row : null;
   const planningEstimate = matchingRow?.amount === line.amount ? matchingRow.planningEstimate ?? estimateIngredientCost(line) : estimateIngredientCost(line);
-  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferSelectable(offer) && !isNonFoodCatalogueProduct({ name: offer.productName }) && !ingredientPreparationConflict(line.name, offer.productName) && !ricePackPreparationUnverified(line.name, offer.productName) && !shoppingHerbPackUnverified(line.name, offer));
+  const chosen = matchingRow?.offers.find(offer => offer.id === matchingRow.chosenOfferId && isShoppingOfferUsableForIngredient(line.name, offer));
   const observedRecipeCents = chosen ? consumedOfferCost(line, chosen) : null;
   const observedPurchase = chosen && Number.isSafeInteger(matchingRow?.estimatedCents) && matchingRow!.estimatedCents! >= 0 && matchingRow!.estimatedCents! <= 1_000_000_000 ? matchingRow!.estimatedCents : null;
   const purchaseCents = observedPurchase ?? planningEstimate?.purchaseCents ?? null;
@@ -359,12 +359,21 @@ export function isShoppingOfferSelectable(offer: ShoppingOffer): boolean {
     && offer.cost.lineCents != null && Number.isSafeInteger(offer.cost.lineCents) && offer.cost.lineCents >= 0;
 }
 
+/** Recheck retained product identity as well as price/stock before using an
+ * offer for this ingredient. Old eligible flags are not fresh food evidence. */
+export function isShoppingOfferUsableForIngredient(requested: string, offer: ShoppingOffer): boolean {
+  return isShoppingOfferSelectable(offer)
+    && !ingredientPreparationConflict(requested, offer.productName)
+    && !ricePackPreparationUnverified(requested, offer.productName)
+    && !shoppingHerbPackUnverified(requested, offer);
+}
+
 /** Explicit review can resolve brand ambiguity, while hard restrictions still apply. */
 export function applyShoppingOfferSelection(row: ShoppingCostLine, offerId: string | null): ShoppingCostLine {
   if (row.amount === 0) return row;
   if (offerId === null) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "No offer selected. This line is excluded from the estimate." };
   const chosen = row.offers.find(offer => offer.id === offerId);
-  if (!chosen || !isShoppingOfferSelectable(chosen) || isNonFoodCatalogueProduct({ name: chosen.productName }) || ingredientPreparationConflict(row.name, chosen.productName) || ricePackPreparationUnverified(row.name, chosen.productName) || shoppingHerbPackUnverified(row.name, chosen)) return row;
+  if (!chosen || !isShoppingOfferUsableForIngredient(row.name, chosen)) return row;
   return { ...row, chosenOfferId: chosen.id, estimatedCents: chosen.cost.lineCents, reason: chosen.match === "review" ? "You selected this product after reviewing the match. Verify the packet." : null };
 }
 
@@ -372,7 +381,7 @@ export function applyShoppingOfferSelections(rows: readonly ShoppingCostLine[], 
   return rows.map(row => {
     if (!Object.prototype.hasOwnProperty.call(selections, row.id)) return row;
     const selection = selections[row.id];
-    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferSelectable(offer) && !isNonFoodCatalogueProduct({ name: offer.productName }) && !ingredientPreparationConflict(row.name, offer.productName) && !ricePackPreparationUnverified(row.name, offer.productName) && !shoppingHerbPackUnverified(row.name, offer))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
+    if (selection !== null && !row.offers.some(offer => offer.id === selection && isShoppingOfferUsableForIngredient(row.name, offer))) return { ...row, chosenOfferId: null, estimatedCents: null, reason: "Your previous product choice is no longer available for this estimate. Review another offer." };
     return applyShoppingOfferSelection(row, selection);
   });
 }

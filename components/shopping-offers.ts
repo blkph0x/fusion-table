@@ -1,4 +1,4 @@
-import { isShoppingOfferSelectable, type ShoppingCostLine, type ShoppingOffer } from "../lib/shopping-costs.ts";
+import { isShoppingOfferSelectable, isShoppingOfferUsableForIngredient, type ShoppingCostLine, type ShoppingOffer } from "../lib/shopping-costs.ts";
 
 function sourceKey(offer: ShoppingOffer): string {
   return `${offer.scope}|${offer.shopId || offer.retailerId || offer.shopName.trim().toLowerCase()}`;
@@ -95,7 +95,7 @@ export function shoppingVendorCards(rows: readonly ShoppingCostLine[], warnings:
   ];
   const vendors = new Map<string, ShoppingVendorCard & { lineIds: Set<string> }>();
   for (const guide of guides) {
-    const hasOffers = rows.some((row) => row.offers.some((offer) => offer.scope === "chain-online" && offer.retailerId === guide.retailer));
+    const hasOffers = rows.some((row) => row.offers.some((offer) => offer.scope === "chain-online" && offer.retailerId === guide.retailer && isShoppingOfferUsableForIngredient(row.name,offer)));
     const provider = statuses.find(status => status.id === guide.retailer);
     const relevantWarnings = warnings.filter(warning => new RegExp(`\\b${guide.retailer}\\b`, "i").test(warning));
     const unavailable = relevantWarnings.length > 0;
@@ -109,7 +109,7 @@ export function shoppingVendorCards(rows: readonly ShoppingCostLine[], warnings:
   for (const row of rows) {
     const best = new Map<string, ShoppingOffer>();
     for (const offer of row.offers) {
-      if ((!offer.eligible && row.chosenOfferId !== offer.id) || !isShoppingOfferSelectable(offer) || offer.cost.lineCents == null) continue;
+      if ((!offer.eligible && row.chosenOfferId !== offer.id) || !isShoppingOfferUsableForIngredient(row.name,offer) || offer.cost.lineCents == null) continue;
       const key = sourceKey(offer);
       if (!best.has(key) || (best.get(key)?.cost.lineCents ?? Infinity) > offer.cost.lineCents) best.set(key, offer);
     }

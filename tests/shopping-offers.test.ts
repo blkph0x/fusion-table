@@ -99,3 +99,33 @@ test("a nearby published fresh-food seller is represented beside chain prices an
   assert.equal(cards.filter(card => card.name === "Nearby butcher").length, 1);
   assert.equal(cards.find(card => card.name === "Nearby butcher")?.cents, 400);
 });
+
+test("cached unsafe species, serving tools, tiny herbs and mixed vegetable packs never enter vendor subtotals", () => {
+  // These product identities were observed in the public fifty-recipe audit.
+  const cases: { name: string; amount: number; unit: string; productName: string; packageSize: string; cents: number }[] = [
+    { name: "Turkey breast fillets", amount: 1800, unit: "g", productName: "Luv-A-Duck Fresh Duck Breast Fillets", packageSize: "380 g", cents: 7750 },
+    { name: "Soft tortillas", amount: 14, unit: "", productName: "JOYBUY Stainless Steel Taco Holders for Soft or Hard Tacos, Burritos and Tortillas (1 Pack)", packageSize: "each", cents: 43302 },
+    { name: "Coriander leaves for the side", amount: 20, unit: "g", productName: "MasterFoods Coriander Leaves", packageSize: "3 g", cents: 1400 },
+    { name: "Carrot", amount: 400, unit: "g", productName: "MARKET FARE Carrot, Sweet Corn & Broccoli Quicksteam Vegetables 3 Pack 450g", packageSize: "450 g", cents: 300 },
+    { name: "Jasmine rice", amount: 500, unit: "g", productName: "Jasmine Rice Pouch", packageSize: "500 g", cents: 350 },
+  ];
+  for (const item of cases) for (const selected of [false,true]) {
+    const cached = offer("unsafe", "woolworths", { productName: item.productName, packageSize: item.packageSize, cost: priced(item.cents) });
+    const input = { ...row([cached],selected ? cached.id : null), name: item.name, amount: item.amount, unit: item.unit, estimatedCents: item.cents };
+    const vendor = shoppingVendorCards([input],[]).find(card => card.id === "chain-online|woolworths")!;
+    assert.equal(vendor.cents,null,`${item.name}, previously chosen=${selected}`);
+    assert.equal(vendor.pricedLines,0,item.name);
+    assert.equal(vendor.status,"No matched prices",item.name);
+  }
+});
+
+test("vendor aggregation preserves valid reviewed products and exact branch separation beside a bad cached choice", () => {
+  const bad = offer("wrong-species", "woolworths", { productName:"Luv-A-Duck Fresh Duck Breast Fillets", shopId:"branch-a", shopName:"Branch A", scope:"shop-recorded", source:"recorded", cost:priced(7750) });
+  const good = offer("actual-turkey", "woolworths", { productName:"Fresh Turkey Breast Fillets", shopId:"branch-b", shopName:"Branch B", scope:"shop-recorded", source:"recorded", eligible:false, match:"review", cost:priced(800) });
+  const input = { ...row([bad,good],good.id), name:"Turkey breast fillets", amount:1800, unit:"g" };
+  const cards = shoppingVendorCards([input],[]);
+  assert.equal(cards.find(card => card.id === "chain-online|woolworths")?.cents,null);
+  assert.equal(cards.some(card => card.name === "Branch A"),false);
+  const branch = cards.find(card => card.name === "Branch B")!;
+  assert.equal(branch.scope,"shop-recorded"); assert.equal(branch.cents,800); assert.equal(branch.pricedLines,1);
+});
