@@ -2,18 +2,24 @@ COLES AUTOMATIC PRICE COLLECTION — 28 OCTOBER 2026
 
 Current verified state
 
-Coles ingredient-price queries work automatically from fresh official navigation
-JSON after the reader is bootstrapped with a verified public deployment
-observation. Product prices are read again from Coles; no one enters individual
-product prices. The stored observation is runtime metadata, outside application
-code. There is no third-party price feed or retailer login in this path.
+The host uses FUSION_COLES_PRICE_TRANSPORT=browser: ordinary public Coles pages
+with JavaScript and cookies enabled. One expressly approved human check was
+completed in the dedicated anonymous service browser. Real product searches
+returned23 products and six positively priced rice matches both before and after
+a full service restart, without another human check. The saved state remained
+private0600 and is not a personal browser profile or retailer login.
 
-Fully unattended version discovery and recovery are still limited on this host.
-Cold ordinary headed-browser checks with Chromium 142 and official Chrome 156
-both reached an explicit Imperva human-check/CAPTCHA page. Those challenges were
-not completed. A successful price query using a known, still-published version
-does not establish that a cold browser can discover the next version. The release
-verification must distinguish these two capabilities.
+The browser-mode search URL does not contain a pinned deployment ID. Normal
+site-version changes therefore do not require manual version entry. Coles can
+invalidate its own clearance or ask for another human check; the service will
+report that condition rather than solve it automatically or invent prices.
+Final recipe-batch and public-release counts are recorded separately after those
+runs. This single-product restart test alone is not proof of full meal coverage.
+
+An optional public navigation-JSON reader is also implemented and tested. Its
+Node transport initially returned real prices using verified runtime metadata,
+then encountered a browser check. It is not the configured collection transport
+on this host, and browser clearance is never copied into Node request headers.
 
 What changed
 
@@ -157,8 +163,9 @@ The wider worker security, branch-hydration and forced-GC deadline tests also pa
 Live deployment and many-meal checks are recorded separately by release
 verification. Reports must state whether they tested fresh price JSON using a
 bootstrapped observation, a cold browser metadata discovery, or recovery after a
-retired version. Passing the first does not imply the latter two passed. Current
-cold-browser discovery/recovery is blocked by the human check; unit fixtures of
-version recovery demonstrate code behaviour rather than unattended live success.
+retired version. Passing the first does not imply the latter two passed. Cold browsers without valid clearance reached a human check. After the one
+approved check, the ordinary browser product path passed a fresh-process restart
+using its own saved state. Unit fixtures of JSON version recovery demonstrate
+code behaviour rather than a guarantee that Coles will always allow access.
 Final recipe, price-match and deployment counts belong in that release evidence
 once the actual runs are complete.

@@ -3,12 +3,16 @@ import type { ItemQuote } from "./price-memory.ts";
 import { buildShoppingOffers, summarizeShoppingCosts } from "./shopping-costs.ts";
 import { australianPriceGuide, type ShoppingPriceRequest } from "./shopping-request.ts";
 
+export type ShoppingQuoteObserver = (quote: PriceQuote) => void;
+type RetailerLookup = (queries: readonly string[], signal?: AbortSignal, onQuote?: ShoppingQuoteObserver) => Promise<PriceQuote[]>;
+export interface ShoppingLocalProgress { quotes: PriceQuote[]; warnings: string[]; checkedShops: { id: string; name: string; website?: string | null }[] }
+export type ShoppingLocalObserver = (snapshot: ShoppingLocalProgress) => void;
 interface Dependencies {
-  woolworths: (queries: readonly string[], signal?: AbortSignal) => Promise<PriceQuote[]>;
-  coles: (queries: readonly string[], signal?: AbortSignal) => Promise<PriceQuote[]>;
-  aldi?: (queries: readonly string[], signal?: AbortSignal) => Promise<PriceQuote[]>;
-  iga?: (queries: readonly string[], signal?: AbortSignal) => Promise<PriceQuote[]>;
-  local?: (request: ShoppingPriceRequest, signal?: AbortSignal) => Promise<{ quotes: PriceQuote[]; warnings: string[]; checkedShops: { id: string; name: string; website?: string | null }[] }>;
+  woolworths: RetailerLookup;
+  coles: RetailerLookup;
+  aldi?: RetailerLookup;
+  iga?: RetailerLookup;
+  local?: (request: ShoppingPriceRequest, signal?: AbortSignal, onProgress?: ShoppingLocalObserver) => Promise<ShoppingLocalProgress>;
   recorded: (area: string, items: readonly string[], today: string) => Promise<ItemQuote[]>;
   now?: () => Date;
 }
@@ -42,25 +46,73 @@ export async function compareShopping(request: ShoppingPriceRequest, deps: Depen
   const queries = names.filter((name) => name.length <= 80);
   const online = request.online && australianPriceGuide(request.country) && queries.length > 0;
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Australia/Sydney", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+  let localProgress: ShoppingLocalProgress | undefined, acceptingLocal = true;
+  const rememberLocal: ShoppingLocalObserver = snapshot => {
+    if (!acceptingLocal || signal?.aborted) return;
+    try {
+      const copy = structuredClone(snapshot), shops = new Map(copy.checkedShops.map(shop => [shop.id, shop]));
+      copy.quotes = copy.quotes.filter(quote => quote.source === "local-shop-website" && queries.includes(quote.query)
+        && quote.shop && quote.shop.area === request.area && shops.get(quote.shop.id)?.name === quote.shop.name
+        && (!shops.get(quote.shop.id)?.website || shops.get(quote.shop.id)?.website === quote.shop.website));
+      localProgress = copy;
+    } catch { /* Invalid progress does not replace completed local evidence. */ }
+  };
   // Start specialist discovery first. It shares the map search with IGA, and
   // nearby produce/meat pages should not wait behind repeated chain searches.
-  const localTask = online && request.location && deps.local ? Promise.resolve().then(() => deps.local!(request, signal)) : Promise.resolve({ quotes: [] as PriceQuote[], warnings: [] as string[], checkedShops: [] as {id:string;name:string;website?:string|null}[] });
+  const localTask = online && request.location && deps.local ? Promise.resolve().then(() => { signal?.throwIfAborted(); return deps.local!(request, signal, rememberLocal); }).then(result => { rememberLocal(result); return result; }).finally(() => { acceptingLocal = false; }) : Promise.resolve({ quotes: [] as PriceQuote[], warnings: [] as string[], checkedShops: [] as {id:string;name:string;website?:string|null}[] });
+  const incremental = new Map<number, { source: PriceQuote["source"]; name: string; quotes: Map<string, PriceQuote> }>();
+  const cleanQuery = (value: string) => value.replace(/[\u0000-\u001f]/g, " ").replace(/\s+/g, " ").trim();
+  const retailerTask = (index: number, guide: typeof RETAILERS[number], lookup?: RetailerLookup) => {
+    if (!online || !lookup) return Promise.resolve([] as PriceQuote[]);
+    const collected = { source: `${guide.id}-online-catalogue` as PriceQuote["source"], name: guide.name, quotes: new Map<string, PriceQuote>() };
+    incremental.set(index, collected);
+    let accepting = true;
+    const remember: ShoppingQuoteObserver = quote => {
+      if (!accepting || signal?.aborted || quote?.source !== collected.source || typeof quote.query !== "string") return;
+      for (const query of queries) if (cleanQuery(query) === cleanQuery(quote.query)) {
+        // Snapshot completed evidence: later callbacks or object mutation cannot
+        // alter a quote after the provider's deadline or settlement.
+        try { collected.quotes.set(query, { ...structuredClone(quote), query }); } catch { /* Invalid internal evidence is not a usable quote. */ }
+      }
+    };
+    const task = Promise.resolve().then(() => { signal?.throwIfAborted(); return lookup(queries, signal, remember); }).then(quotes => {
+      for (const quote of quotes) if (!collected.quotes.has(quote.query)) remember(quote);
+      return quotes;
+    });
+    return untilAbort(task, signal).finally(() => { accepting = false; });
+  };
   const tasks = [
-    online ? Promise.resolve().then(() => deps.woolworths(queries, signal)) : Promise.resolve([] as PriceQuote[]),
-    online ? Promise.resolve().then(() => deps.coles(queries, signal)) : Promise.resolve([] as PriceQuote[]),
+    retailerTask(0, RETAILERS[0], deps.woolworths),
+    retailerTask(1, RETAILERS[1], deps.coles),
     request.localRecords !== false && australianPriceGuide(request.country) ? Promise.resolve().then(() => deps.recorded(request.area, names, today)) : Promise.resolve([] as ItemQuote[]),
-    online && deps.aldi ? Promise.resolve().then(() => deps.aldi!(queries, signal)) : Promise.resolve([] as PriceQuote[]),
-    online && deps.iga ? Promise.resolve().then(() => deps.iga!(queries, signal)) : Promise.resolve([] as PriceQuote[]),
+    retailerTask(3, RETAILERS[2], deps.aldi),
+    retailerTask(4, RETAILERS[3], deps.iga),
     localTask,
   ];
-  const sources = await Promise.allSettled(tasks.map(task => untilAbort<unknown>(task, signal)));
+  const sources = await Promise.allSettled(tasks.map((task, index) => incremental.has(index) ? task : untilAbort<unknown>(task, signal)));
+  acceptingLocal = false;
   const warnings: string[] = [];
   if (signal?.aborted) warnings.push("Some price sources took too long. Available prices are shown; retry the remaining items.");
   const catalogue: PriceQuote[] = [];
   let recorded: ItemQuote[] = [];
   const providerStatuses: ShoppingProviderStatus[] = [];
-  let localResult: { quotes: PriceQuote[]; warnings: string[]; checkedShops: {id:string;name:string;website?:string|null}[] } | undefined;
+  let localResult: ShoppingLocalProgress | undefined;
   for (const [index, result] of sources.entries()) {
+    const collected = incremental.get(index);
+    if (collected) {
+      for (const query of queries) catalogue.push(collected.quotes.get(query) || {
+        query, source: collected.source, label: `${collected.name} online price guide; this ingredient check did not complete.`,
+        fetchedAt: null, cached: false, fulfilmentStoreId: null, searched: [query], matches: [], status: "unavailable",
+        error: signal?.aborted ? "This ingredient did not finish before the price-check deadline. Completed prices are kept; retry this item." : "No completed price check was returned for this ingredient. Retry this item.",
+      });
+      if (result.status === "rejected") warnings.push(`${collected.name} prices could not be checked for this batch.`);
+      continue;
+    }
+    if (index === 5 && localProgress) {
+      localResult = localProgress; catalogue.push(...localResult.quotes); warnings.push(...localResult.warnings);
+      if (result.status === "rejected") warnings.push("Some nearby shop checks did not finish. Completed shop prices are kept; retry the remaining shops.");
+      continue;
+    }
     if (result.status === "fulfilled") {
       if (index === 2) recorded = result.value as ItemQuote[];
       else if (index === 5) { localResult = result.value as typeof localResult; catalogue.push(...(localResult?.quotes || [])); warnings.push(...(localResult?.warnings || [])); }
@@ -83,7 +135,10 @@ export async function compareShopping(request: ShoppingPriceRequest, deps: Depen
     providerStatuses.push({ id: `local:${shop.id}`, name: shop.name, shopId: shop.id, shopName: shop.name, ...(shop.website ? { url: shop.website } : {}), status: action?.status || (quotes.some(quote => quote.fetchedAt && quote.matches.length) ? quotes.some(quote => quote.error) ? "partial" : "ready" : "unavailable"), message: action?.error || quotes.find(quote => quote.error)?.error || (quotes.some(quote => quote.matches.length) ? "Published shop website price; confirm branch, collection/delivery area and current stock with the shop." : "No clear published price for these ingredients. Open the shop website or contact the shop.") });
   }
   if (!request.location) providerStatuses.push({ id: "nearby", name: "Nearby fresh food shops", status: "needs-store", message: "Choose a suburb or postcode to search nearby fruit shops and butchers." });
-  else if (sources[5].status === "rejected" || !(localResult?.checkedShops.length)) providerStatuses.push({ id: "nearby", name: "Nearby fresh food shops", status: "unavailable", message: sources[5].status === "rejected" ? "Nearby shop search is temporarily unavailable. Existing shop links and saved prices remain available." : "No nearby specialist with a readable public price website was found for these ingredients." });
+  else if (sources[5].status === "rejected" || !(localResult?.checkedShops.length)) {
+    const completedLocal = !!localResult?.quotes.some(quote => quote.fetchedAt && quote.matches.length);
+    providerStatuses.push({ id: "nearby", name: "Nearby fresh food shops", status: completedLocal ? "partial" : "unavailable", message: completedLocal ? "Some nearby shop checks did not finish. Completed shop prices are shown; retry the remaining shops." : sources[5].status === "rejected" ? "Nearby shop search is temporarily unavailable. Existing shop links and saved prices remain available." : "No nearby specialist with a readable public price website was found for these ingredients." });
+  }
   for (const quote of catalogue) if (quote.error) warnings.push(`${quote.retailerName || quote.shop?.name || RETAILERS.find(guide => quote.source === `${guide.id}-online-catalogue`)?.name || "Shop"}: ${quote.query} — ${quote.error}`);
   const lines = buildShoppingOffers(request.lines, catalogue, recorded, { area: request.area, shops: request.shops, now });
   return { area: request.area, checkedAt: now.toISOString(), label: "Published online price guides and local recorded prices; quantities, source and unconfirmed stock are shown for each offer.", lines, summary: summarizeShoppingCosts(lines), warnings: [...new Set(warnings)].slice(0, 16), providerStatuses };

@@ -258,6 +258,27 @@ test("Coles uses the configured normal renderer, identifies its default context,
   assert.equal(a.storeLabel, "Melbourne 3000"); assert.equal(a.scope, "chain-online"); assert.equal(a.fulfilmentStoreId, null);
 });
 
+test("suitable Coles brand ties finish after one search while empty results still try the food alias", async () => {
+  let tiedCalls = 0;
+  const tied: RetailerPageRenderer = async url => {
+    tiedCalls++;
+    return { url, html: renderedCard(1001, "Brand One Greek Yogurt | 500g", "4.50") + renderedCard(1002, "Brand Two Greek Yogurt | 500g", "5.50") };
+  };
+  const result = await lookupColesQuery("Greek yogurt", fetch, undefined, tied);
+  assert.equal(tiedCalls, 1); assert.equal(result.matches.length, 2);
+  assert.ok(result.matches.every(match => !match.selected && match.nameReviewable));
+  assert.deepEqual(result.searched, ["Greek yogurt"]);
+
+  const searched: string[] = [];
+  const alias: RetailerPageRenderer = async url => {
+    const phrase = new URL(url).searchParams.get("q")!; searched.push(phrase);
+    return { url, html: phrase === "Greek yogurt" ? page([]) : renderedCard(1003, "Greek Yoghurt | 500g", "4.50") };
+  };
+  const recovered = await lookupColesQuery("Greek yogurt", fetch, undefined, alias);
+  assert.deepEqual(searched, ["Greek yogurt", "Greek yoghurt"]);
+  assert.equal(recovered.matches[0].selected, true);
+});
+
 test("Coles browser refusals back off and do not fall back to challenge-evasion requests", async () => {
   let calls = 0;
   const renderer: RetailerPageRenderer = async url => { calls++; return { url, html: "<title>Pardon Our Interruption</title>", status: 403 }; };

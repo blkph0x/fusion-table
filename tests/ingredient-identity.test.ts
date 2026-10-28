@@ -12,7 +12,7 @@ function quote(name: string, productName: string): PriceQuote {
   return { query: name, source: "coles-online-catalogue", label: "Published guide", fetchedAt: now.toISOString(), cached: false, fulfilmentStoreId: null, searched: [name], error: null, matches: matchProducts(name, [product(productName)]) };
 }
 const identityConflicts = [
-  ["Beef mince", "Plant Based Beef Style Mince"], ["Beef mince", "Vegan Beef Mince"], ["Beef mince", "Meat Free Beef Mince"],
+  ["Beef mince", "Plant Based Beef Style Mince"], ["Beef mince", "Vegan Beef Mince"], ["Beef mince", "Quorn Mince"], ["Chicken mince", "Mushroom Mince"], ["Beef mince", "Meat Free Beef Mince"],
   ["Chicken breast", "Plant Based Chicken Breast"], ["Unsalted butter", "Unsalted Peanut Butter"], ["Butter", "Peanut Butter"],
   ["Butter", "Almond Butter"], ["Milk", "Coconut Milk"], ["Full cream milk", "Full Cream Coconut Milk"],
   ["Cream", "Coconut Cream"], ["Mozzarella", "Vegan Mozzarella"], ["Greek yogurt", "Coconut Greek Yogurt"],

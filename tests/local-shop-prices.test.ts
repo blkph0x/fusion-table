@@ -5,7 +5,7 @@ import { PassThrough } from "node:stream";
 import type { lookup } from "node:dns/promises";
 import type { request } from "node:https";
 import type { Shop } from "../lib/locations.ts";
-import { lookupLocalShopPrices, localProductLinks, localSellingQuantity, parseLocalShopProducts, officialShopHttpsUrl } from "../lib/local-shop-prices.ts";
+import { lookupLocalShopPrices, localProductLinks, localSellingQuantity, parseLocalShopProducts, officialShopHttpsUrl, type LocalShopPriceResult } from "../lib/local-shop-prices.ts";
 import { MAX_SHOP_PAGE_BYTES, publicShopAddress, publicShopUrl, readPublicShopPage, shopConnectionTarget } from "../lib/public-shop-reader.ts";
 import { costShoppingQuantity } from "../lib/shopping-costs.ts";
 import { isBlockedAddress, readShopPage } from "../lib/price-page.ts";
@@ -181,14 +181,18 @@ test("a slow market cannot starve a fast butcher and completed prices survive th
  const first=shop({id:"slow-market",kind:"produce",shopType:"greengrocer",name:"First fruit market",website:"https://market.example.com/"});
  const second=shop({id:"other-market",kind:"produce",shopType:"greengrocer",name:"Second fruit market",website:"https://other-market.example.com/",lat:-33.9001});
  const butcher=shop({id:"fast-butcher",lat:-33.901});const started:string[]=[];let finished=false;
- const controller=new AbortController();
+ const controller=new AbortController(),snapshots:LocalShopPriceResult[]=[];
  const work=lookupLocalShopPrices([{id:"tomato",name:"Tomatoes",amount:500,unit:"g",category:"produce"},{id:"chicken",name:"Chicken breast",amount:500,unit:"g",category:"butcher"}],[first,second,butcher],context,{read:async(url,signal)=>{
   started.push(new URL(url).hostname);
   if(new URL(url).hostname==="butcher.example.com"){finished=true;return {url,html:fixture(product())};}
   return new Promise((_resolve,reject)=>signal?.addEventListener("abort",()=>reject(signal.reason),{once:true}));
- }},controller.signal);
- await new Promise(resolve=>setTimeout(resolve,20));assert.equal(finished,true);assert.deepEqual(started.slice(0,2),["market.example.com","butcher.example.com"]);controller.abort();
+ }},controller.signal,snapshot=>snapshots.push(snapshot));
+ await new Promise(resolve=>setTimeout(resolve,20));assert.equal(finished,true);assert.deepEqual(started.slice(0,2),["market.example.com","butcher.example.com"]);
+ assert.ok(snapshots.some(snapshot=>snapshot.quotes.some(quote=>quote.shop.id==="fast-butcher"&&quote.matches[0]?.priceCents===1388)),"a completed butcher is published before other shop pages finish");
+ assert.ok(snapshots.some(snapshot=>snapshot.checkedShops.some(shop=>shop.id==="slow-market")),"only existing verified scheduled shops are disclosed");
+ const beforeAbort=snapshots.length;controller.abort();
  const result=await work;assert.deepEqual(result.checkedShops.map(shop=>shop.id),["slow-market","other-market","fast-butcher"]);assert.deepEqual(result.quotes.map(quote=>quote.shop.id),["slow-market","other-market","fast-butcher"]);assert.equal(result.quotes[2].status,"ready");assert.equal(result.quotes[2].matches[0].priceCents,1388);assert.equal(result.quotes[0].status,"unavailable");
+ assert.equal(snapshots.length,beforeAbort,"late abort failures cannot overwrite the published completed evidence");
 });
 
 test("local batch and per-shop deadlines fit inside the overall price request while allowing a cold browser queue",async t=>{

@@ -334,6 +334,7 @@ function ingredientIdentityConflictCanonical(wanted: string, seen: string): bool
   if (/\b(?:chicken|turkey)\b/.test(request) && /\bbreast\b/.test(request) && /\bfillet\b/.test(request) && /\b(?:buffe|buffet|crown)\b/.test(product) && !/\b(?:buffe|buffet|crown)\b/.test(request)) return true;
   const animalRequest=MEAT_WORDS.test(request) || /\begg\b/.test(request);
   const animalProduct=MEAT_WORDS.test(product) || /\begg\b/.test(product);
+  if (animalRequest && /\bmince\b/.test(request) && !PLANT_MEAT.test(request) && !animalProduct) return true;
   if ((animalRequest || animalProduct) && PLANT_MEAT.test(request)!==PLANT_MEAT.test(product)) return true;
   const left=dairyIdentity(request),right=dairyIdentity(product);
   if (!left || !right) return false;

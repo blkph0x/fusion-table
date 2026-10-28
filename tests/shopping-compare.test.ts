@@ -5,6 +5,8 @@ import { readReportJson, ReportBodyError } from "../lib/ledger.ts";
 import { itemKey, type ItemQuote, type PriceMemory } from "../lib/price-memory.ts";
 import { compareShopping } from "../lib/shopping-compare.ts";
 import { australianPriceGuide, parseShoppingPriceRequest } from "../lib/shopping-request.ts";
+import { lookupLocalShopPrices } from "../lib/local-shop-prices.ts";
+import type { Shop } from "../lib/locations.ts";
 
 const now = new Date("2026-10-26T13:01:00Z");
 const rice = { id: "rice", name: "Jasmine rice", amount: 1200, unit: "g" };
@@ -166,4 +168,115 @@ test("aborting catalogue checks retains finished local evidence and gives a part
   assert.equal(result.summary.knownSubtotalCents, 700);
   assert.match(result.warnings.join(" "), /took too long/);
   assert.equal(result.lines[0].offers[0].source, "recorded");
+});
+
+for (const retailer of ["woolworths", "coles", "aldi", "iga"] as const) test(`${retailer} keeps a completed ingredient when another lookup ignores cancellation`, { timeout: 2000 }, async () => {
+  const controller = new AbortController();
+  const input = parseShoppingPriceRequest({ ...body, lines: [rice, { id: "ginger", name: "Fresh ginger", amount: 50, unit: "g" }], localRecords: false });
+  const providers = deps(); let calls = 0;
+  let publish: ((quote: PriceQuote) => void) | undefined;
+  const completed = quote(`${retailer}-online-catalogue`);
+  if (retailer === "iga") Object.assign(completed, { scope: "selected-store", fulfilmentStoreId: "iga-branch", shop: { id: "iga-branch", name: "Verified IGA", website: "https://www.igashop.com.au", area: "2000" } });
+  providers[retailer] = async (queries, signal, onQuote) => {
+    calls++; assert.deepEqual(queries, [rice.name, "Fresh ginger"]); assert.equal(signal, controller.signal);
+    publish = onQuote; onQuote!(completed);
+    return new Promise<PriceQuote[]>(() => {}); // The second ingredient never cooperates.
+  };
+  const work = compareShopping(input, providers, controller.signal);
+  await new Promise(resolve => setImmediate(resolve));
+  controller.abort(new DOMException("Fixture request deadline", "TimeoutError"));
+  publish!({ ...quote(`${retailer}-online-catalogue`), query: "Fresh ginger", matches: [{ ...completed.matches[0], name: "Fresh Ginger", packageSize: "100g", priceCents: 1 }] });
+  completed.matches[0].priceCents = 1; // An old provider object cannot mutate the saved evidence.
+  const result = await work;
+  assert.equal(calls, 1, "the existing batch function is invoked once, preserving its cache/renderer identity");
+  assert.equal(result.lines[0].estimatedCents, 900); assert.equal(result.lines[0].offers[0].priceCents, 450);
+  assert.equal(result.lines[1].estimatedCents, null); assert.equal(result.lines[1].offers.length, 0);
+  assert.equal(result.summary.complete, false); assert.equal(result.summary.knownSubtotalCents, 900);
+  assert.equal(result.providerStatuses.find(status => status.id === retailer)?.status, "partial");
+  assert.match(result.warnings.join(" "), /Fresh ginger.*did not finish before/);
+});
+
+test("provider rejection retains completed quotes and refuses later callbacks before the overall deadline", async () => {
+  const providers = deps();
+  let publish: ((quote: PriceQuote) => void) | undefined, finishOther: (() => void) | undefined;
+  providers.woolworths = () => new Promise(resolve => { finishOther = () => resolve([]); });
+  providers.coles = async (_queries, _signal, onQuote) => { publish = onQuote; onQuote!(quote("coles-online-catalogue")); throw new Error("Second item failed"); };
+  const input = parseShoppingPriceRequest({ ...body, lines: [rice, { id: "ginger", name: "Fresh ginger", amount: 50, unit: "g" }] });
+  const work = compareShopping(input, providers);
+  await new Promise(resolve => setImmediate(resolve));
+  publish!({ ...quote("coles-online-catalogue"), query: "Fresh ginger", matches: [{ ...quote("coles-online-catalogue").matches[0], name: "Fresh Ginger", packageSize: "100g" }] });
+  finishOther!();
+  const result = await work;
+  assert.equal(result.lines[0].estimatedCents, 900); assert.equal(result.lines[1].estimatedCents, null);
+  assert.equal(result.providerStatuses.find(status => status.id === "coles")?.status, "partial");
+});
+
+test("unrequested or cross-retailer progress cannot turn an omitted query into a ready batch", async () => {
+  const providers = deps();
+  providers.coles = async (_queries, _signal, onQuote) => {
+    onQuote!({ ...quote("woolworths-online-catalogue"), query: "Fresh ginger" });
+    onQuote!({ ...quote("coles-online-catalogue"), query: "Unrequested ingredient" });
+    return [quote("coles-online-catalogue")];
+  };
+  const input = parseShoppingPriceRequest({ ...body, lines: [rice, { id: "ginger", name: "Fresh ginger", amount: 50, unit: "g" }] });
+  const result = await compareShopping(input, providers);
+  assert.equal(result.lines[0].estimatedCents, 900); assert.equal(result.lines[1].offers.length, 0);
+  assert.equal(result.providerStatuses.find(status => status.id === "coles")?.status, "partial");
+});
+
+test("a real completed butcher quote survives an uncooperative produce page at the overall deadline", { timeout: 2000 }, async () => {
+  const controller = new AbortController();
+  const input = parseShoppingPriceRequest({ ...body, area: "2042", location: { lat: -33.9, lon: 151.18 }, localRecords: false, lines: [
+    { id: "tomato", name: "Tomatoes", amount: 500, unit: "g", category: "produce" },
+    { id: "chicken", name: "Chicken breast", amount: 600, unit: "g", category: "butcher" },
+  ] });
+  const base: Shop = { id: "verified-butcher", name: "Verified local butcher", kind: "butcher", shopType: "butcher", website: "https://butcher.example.com/", lat: -33.9, lon: 151.18, distanceKm: 0, address: "Newtown NSW 2042", phone: null, openingHours: null, osmUrl: "https://www.openstreetmap.org/node/1", inventoryStatus: "unverified" };
+  const market: Shop = { ...base, id: "verified-market", name: "Verified fruit market", kind: "produce", shopType: "greengrocer", website: "https://market.example.com/" };
+  let calls = 0, fastReady!: () => void;
+  const fast = new Promise<void>(resolve => { fastReady = resolve; });
+  const providers = deps();
+  providers.now = () => new Date();
+  providers.local = async (context, signal, onProgress) => {
+    calls++;
+    return lookupLocalShopPrices(context.lines, [market, base], { area: context.area, location: context.location!, radiusKm: 5 }, {
+      read: async url => {
+        if (new URL(url).hostname === "market.example.com") return new Promise(() => {});
+        return { url, html: `<script type="application/ld+json">${JSON.stringify({ "@type": "Product", name: "Chicken breast fillets 1kg", url: "https://butcher.example.com/products/chicken", offers: { "@type": "Offer", price: 13.88, priceCurrency: "AUD", availability: "https://schema.org/InStock" } })}</script>` };
+      },
+    }, signal, snapshot => {
+      onProgress!(snapshot);
+      if (snapshot.quotes.some(quote => quote.shop.id === base.id && quote.matches.length)) fastReady();
+    });
+  };
+  const work = compareShopping(input, providers, controller.signal);
+  await fast; controller.abort(new DOMException("Fixture request deadline", "TimeoutError"));
+  const result = await work;
+  assert.equal(calls, 1);
+  assert.equal(result.lines[1].estimatedCents, 1388); assert.equal(result.lines[1].offers[0].shopId, base.id);
+  assert.equal(result.lines[0].estimatedCents, null); assert.equal(result.lines[0].offers.length, 0);
+  assert.equal(result.providerStatuses.find(status => status.id === `local:${base.id}`)?.status, "ready");
+  assert.equal(result.providerStatuses.find(status => status.id === `local:${market.id}`)?.status, "unavailable");
+  assert.equal(result.providerStatuses.find(status => status.id === "nearby")?.status, "partial");
+  assert.match(result.warnings.join(" "), /Completed shop prices are kept/);
+});
+
+test("late local progress and source objects cannot change completed specialist evidence", async () => {
+  const controller = new AbortController(), providers = deps();
+  const shop = { id: "trusted-shop", name: "Trusted local shop", website: "https://grocer.example.com/" };
+  const local = quote("local-shop-website"); local.scope = "shop-website"; local.shop = { ...shop, area: "2000" };
+  let publish: Parameters<NonNullable<typeof providers.local>>[2];
+  providers.local = async (_request, _signal, onProgress) => { publish = onProgress; onProgress!({ quotes: [local], checkedShops: [shop], warnings: [] }); return new Promise(() => {}); };
+  const work = compareShopping(parseShoppingPriceRequest({ ...body, location: { lat: -33.9, lon: 151.18 } }), providers, controller.signal);
+  await new Promise(resolve => setImmediate(resolve)); controller.abort();
+  local.matches[0].priceCents = 1;
+  publish!({ quotes: [{ ...local, matches: [{ ...local.matches[0], priceCents: 1 }] }], checkedShops: [shop], warnings: [] });
+  const result = await work;
+  assert.equal(result.lines[0].estimatedCents, 900); assert.equal(result.lines[0].offers[0].priceCents, 450);
+});
+
+test("completed legacy local providers retain prices without adopting the optional progress callback", async () => {
+  const providers = deps(), shop = { id: "existing-shop", name: "Existing verified grocer", website: "https://grocer.example.com/", area: "2000" };
+  providers.local = async () => ({ quotes: [{ ...quote("local-shop-website"), scope: "shop-website", shop }], checkedShops: [{ id: shop.id, name: shop.name }], warnings: [] });
+  const result = await compareShopping(parseShoppingPriceRequest({ ...body, location: { lat: -33.9, lon: 151.18 } }), providers);
+  assert.equal(result.lines[0].estimatedCents, 900); assert.equal(result.lines[0].offers[0].shopId, shop.id);
 });

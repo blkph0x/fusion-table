@@ -14,6 +14,8 @@ export interface LocalShopQuote extends Omit<PriceQuote,"source"> {
 }
 export interface LocalShopPriceDependencies { read?: ShopPageReader; render?: ShopPageReader; discover?: ShopPageReader; now?: () => Date }
 export interface CheckedLocalShop { id: string; name: string; website: string }
+export interface LocalShopPriceResult { quotes: LocalShopQuote[]; warnings: string[]; checkedShops: CheckedLocalShop[] }
+export type LocalShopPriceObserver = (snapshot: LocalShopPriceResult) => void;
 type LocalFailure={message:string;status:"needs-browser"|"needs-store"|"not-configured"|"unavailable"};
 const cache = new SharedPriceCache<{products:CatalogueProduct[];fetchedAt:string;searched:string[];issues:Record<string,LocalFailure>}>(96,10*60_000);
 const identities=new WeakMap<ShopPageReader,typeof fetch>();
@@ -145,7 +147,7 @@ const category=(line:ShoppingLine)=>{const inferred=inferShoppingCategory(line.n
 
 /** Caller must pass server-discovered shops, never client-supplied website URLs.
  * Recompute radius from coordinates; a supplied distanceKm never grants locality. */
-export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifiedShops:readonly Shop[],context:LocalShopContext,deps:LocalShopPriceDependencies={},signal?:AbortSignal):Promise<{quotes:LocalShopQuote[];warnings:string[];checkedShops:CheckedLocalShop[]}> {
+export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifiedShops:readonly Shop[],context:LocalShopContext,deps:LocalShopPriceDependencies={},signal?:AbortSignal,onProgress?:LocalShopPriceObserver):Promise<LocalShopPriceResult> {
   if(!validPoint(context.location)||!Number.isFinite(context.radiusKm)||context.radiusKm<1||context.radiusKm>25||!context.area.trim()||context.country&&!/^(?:au|aus|australia)$/i.test(context.country))return {quotes:[],warnings:["Choose an Australian shopping area to check nearby specialist websites."],checkedShops:[]};
   const reader=deps.render||deps.read||readPublicShopPage,now=deps.now?.()||new Date();
   const needs=new Set(lines.map(category));
@@ -159,6 +161,13 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
   const batch=createDeadline(28_000,signal?[signal]:[]);
   try{
   const batchSignal=batch.signal;
+  const progress=new Map<string,LocalShopPriceResult>();
+  const publish=(id:string,result:LocalShopPriceResult)=>{
+    if(batchSignal.aborted||!onProgress)return;
+    progress.set(id,structuredClone(result));
+    const completed=shops.flatMap(shop=>progress.get(shop.id)||[]);
+    onProgress({quotes:completed.flatMap(item=>item.quotes),warnings:completed.flatMap(item=>item.warnings),checkedShops:completed.flatMap(item=>item.checkedShops)});
+  };
   async function checkShop(shop:Shop){
     const quotes:LocalShopQuote[]=[],warnings:string[]=[],checkedShops:CheckedLocalShop[]=[];
     const result={quotes,warnings,checkedShops};
@@ -168,6 +177,7 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
     let base:URL;try{base=publicShopUrl(shop.website!);if(/(?:^|\.)(?:facebook|instagram|youtube|google|goo\.gl|tiktok)\./i.test(base.hostname))return result;}catch{return result;}
     const queries=[...new Set(suitable.map(line=>line.name))].slice(0,2);
     checkedShops.push({id:shop.id,name:shop.name,website:base.href});
+    publish(shop.id,result);
     const shopInfo={id:shop.id,name:shop.name,website:base.href,area:context.area,lat:shop.lat,lon:shop.lon};
     const key=JSON.stringify([shop.id,base.href,shop.lat,shop.lon,context.area,queries]);
     try{
@@ -216,6 +226,7 @@ export async function lookupLocalShopPrices(lines:readonly ShoppingLine[],verifi
       warnings.push(`${shop.name}: ${message}`);
       for(const line of suitable)quotes.push({query:line.name,source:"local-shop-website",scope:"shop-website",shop:shopInfo,status,collectionMethod:deps.render?"browser":"http",label:`Published website guide for ${shop.name}. Branch prices, delivery terms and shelf stock are unconfirmed.`,fetchedAt:null,cached:false,fulfilmentStoreId:null,searched:[base.href],matches:[],error:message});
     }
+    publish(shop.id,result);
     return result;
   }
   // Start one of each needed specialist first. shopSlot still limits all requests

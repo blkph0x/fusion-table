@@ -154,7 +154,11 @@ export async function lookupAldiQuery(raw: string, fetchImpl: typeof fetch = fet
   }
   return { query, source: "aldi-online-catalogue", label: ALDI_CATALOGUE_LABEL, retailerName: "ALDI", scope: "chain-online", collectionMethod: renderer ? "browser" : "http", status: fetchedAt ? "ready" : failureStatus, fetchedAt, cached, fulfilmentStoreId: null, searched, matches: matchProducts(query, products), error: fetchedAt ? null : error || "ALDI prices are unavailable." };
 }
-export async function lookupAldiQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer): Promise<PriceQuote[]> {
+export async function lookupAldiQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, onQuote?: (quote: PriceQuote) => void): Promise<PriceQuote[]> {
   if (!queries.length || queries.length > 16) throw new Error("Check between 1 and 16 items at a time.");
-  return Promise.all(queries.map(query => lookupAldiQuery(query, fetchImpl, signal, renderer)));
+  return Promise.all(queries.map(async query => {
+    const quote = await lookupAldiQuery(query, fetchImpl, signal, renderer);
+    if (!signal?.aborted) onQuote?.(quote);
+    return quote;
+  }));
 }

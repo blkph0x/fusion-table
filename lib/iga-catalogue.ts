@@ -149,7 +149,11 @@ export async function lookupIgaQuery(raw: string, fetchImpl: typeof fetch = fetc
   }
   return { ...base, shop: { ...store, name: storeLabel }, storeLabel, fulfilmentStoreId: fetchedAt ? store.id : null, status: fetchedAt ? "ready" : /matching IGA store/.test(error || "") ? "needs-store" : failureStatus, fetchedAt, cached, searched, matches: matchProducts(query, products), error: fetchedAt ? null : error || "IGA prices are unavailable." };
 }
-export async function lookupIgaQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, store?: IgaStoreContext): Promise<PriceQuote[]> {
+export async function lookupIgaQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, store?: IgaStoreContext, onQuote?: (quote: PriceQuote) => void): Promise<PriceQuote[]> {
   if (!queries.length || queries.length > 16) throw new Error("Check between 1 and 16 items at a time.");
-  return Promise.all(queries.map(query => lookupIgaQuery(query, fetchImpl, signal, renderer, store)));
+  return Promise.all(queries.map(async query => {
+    const quote = await lookupIgaQuery(query, fetchImpl, signal, renderer, store);
+    if (!signal?.aborted) onQuote?.(quote);
+    return quote;
+  }));
 }

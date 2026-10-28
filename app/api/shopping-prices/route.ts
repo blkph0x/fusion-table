@@ -37,24 +37,24 @@ export async function POST(request: Request) {
       let nearbySearch: Promise<Shop[]> | undefined;
       const nearbyShops = () => nearbySearch ??= input.location ? searchShopsWithFresh({ ...input.location, radiusKm: input.radiusKm ?? 5 }, { photonReverseUrl: process.env.PHOTON_REVERSE_API_URL, overpassUrl: process.env.OVERPASS_API_URL, shopProvider: process.env.SHOP_DATA_PROVIDER, appOrigin: new URL(request.url).origin }).then(result => enrichShopWebsites(result.shops, { appOrigin: new URL(request.url).origin }, signal).catch(() => result.shops)) : Promise.resolve([]);
       const result = await compareShopping(input, {
-        woolworths: (queries, abort) => lookupQueries(queries, fetch, abort),
-        coles: (queries, abort) => lookupColesQueries(queries, fetch, abort, render, colesNavigation),
-        aldi: (queries, abort) => lookupAldiQueries(queries, fetch, abort, render),
-        iga: async (queries, abort) => {
+        woolworths: (queries, abort, onQuote) => lookupQueries(queries, fetch, abort, onQuote),
+        coles: (queries, abort, onQuote) => lookupColesQueries(queries, fetch, abort, render, colesNavigation, onQuote),
+        aldi: (queries, abort, onQuote) => lookupAldiQueries(queries, fetch, abort, render, onQuote),
+        iga: async (queries, abort, onQuote) => {
           const shops = input.location ? await nearbyShops().catch(() => []) : [];
           const shop = shops.find(shop => /\biga\b/i.test(shop.name) && (shop.name.replace(/\b(?:iga|supa|supermarket|express|local|store|grocer|grocers|grocery|food|fresh|plus|liquor)\b/gi, "").trim().length >= 4 || /^\d+[a-z]?\s+[^,]+(?:street|st|road|rd|avenue|ave|parade|pde|drive|dr|lane|ln|highway|hwy|way)\b/i.test(shop.address || "") && /\b\d{4}\b/.test(shop.address || "")));
           const store = shop ? { id: shop.id, name: shop.name, website: "https://www.igashop.com.au/", area: input.area, address: shop.address, lat: shop.lat, lon: shop.lon } : undefined;
           // A named branch is selected through the retailer's normal chooser and
           // verified again by the adapter. Generic IGA listings cannot prove identity.
           const storeRender = store ? browserPriceRenderer(process.env.FUSION_BROWSER_PRICE_URL, fetch, store) : render;
-          return lookupIgaQueries(queries, fetch, abort, storeRender, store);
+          return lookupIgaQueries(queries, fetch, abort, storeRender, store, onQuote);
         },
-        local: async (context, abort) => {
+        local: async (context, abort, onProgress) => {
           if (!context.location) return { quotes: [], warnings: [], checkedShops: [] };
           // The visitor supplies coordinates only. Shop identities/websites come from
           // our existing server-side map search, never request-provided URLs.
           const shops = await nearbyShops();
-          return lookupLocalShopPrices(context.lines, shops, { area: context.area, location: context.location, radiusKm: context.radiusKm ?? 5, country: context.country }, { render: renderShop, ...(renderShop ? { discover: readPublicShopPage } : {}) }, abort);
+          return lookupLocalShopPrices(context.lines, shops, { area: context.area, location: context.location, radiusKm: context.radiusKm ?? 5, country: context.country }, { render: renderShop, ...(renderShop ? { discover: readPublicShopPage } : {}) }, abort, onProgress);
         },
         recorded: (area, items, today) => withLedger(ledgerFile(), (ledger) => ({ result: quoteItems(ledger, area, items, today) })),
       }, signal);

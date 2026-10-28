@@ -284,7 +284,7 @@ export async function lookupColesQuery(raw: string, fetchImpl: typeof fetch = fe
         if (seen.has(product.stockcode || product.name)) continue;
         seen.add(product.stockcode || product.name); products.push(product);
       }
-      if (matchProducts(query, products).some((match) => match.selected) || products.length >= 48) break;
+      if (matchProducts(query, products).some(match => match.priceCents != null && (match.selected || match.nameMatched || match.nameReviewable && match.score >= 40)) || products.length >= 48) break;
     } catch (error) {
       lastError = error instanceof Error && error.message.length < 240 ? error.message : "Coles prices are unavailable for this item.";
       failureStatus = retailerFailureStatus(error, failureStatus);
@@ -296,7 +296,11 @@ export async function lookupColesQuery(raw: string, fetchImpl: typeof fetch = fe
   return { query, source: "coles-online-catalogue", label: COLES_CATALOGUE_LABEL, retailerName: "Coles", scope: "chain-online", collectionMethod, storeLabel, status: fetchedAt ? "ready" : failureStatus, fetchedAt, cached, fulfilmentStoreId: null, searched, matches: matchProducts(query, products), error: fetchedAt ? null : lastError || "Coles prices are unavailable for this item." };
 }
 
-export async function lookupColesQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, navigation?: ColesNavigationReader): Promise<PriceQuote[]> {
+export async function lookupColesQueries(queries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, renderer?: RetailerPageRenderer, navigation?: ColesNavigationReader, onQuote?: (quote: PriceQuote) => void): Promise<PriceQuote[]> {
   if (queries.length < 1 || queries.length > 16) throw new Error("Check between 1 and 16 items at a time.");
-  return Promise.all(queries.map((query) => lookupColesQuery(query, fetchImpl, signal, renderer, navigation)));
+  return Promise.all(queries.map(async query => {
+    const quote = await lookupColesQuery(query, fetchImpl, signal, renderer, navigation);
+    if (!signal?.aborted) onQuote?.(quote);
+    return quote;
+  }));
 }

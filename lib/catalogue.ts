@@ -328,12 +328,17 @@ export async function lookupQuery(raw: string, fetchImpl: typeof fetch = fetch, 
   };
 }
 
-export async function lookupQueries(rawQueries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal): Promise<PriceQuote[]> {
+export async function lookupQueries(rawQueries: readonly string[], fetchImpl: typeof fetch = fetch, signal?: AbortSignal, onQuote?: (quote: PriceQuote) => void): Promise<PriceQuote[]> {
   if (rawQueries.length < 1 || rawQueries.length > 16) throw new Error("Check between 1 and 16 items at a time.");
   const quotes: PriceQuote[] = [];
   for (let index = 0; index < rawQueries.length; index += 4) {
+    if (signal?.aborted) break;
     const chunk = rawQueries.slice(index, index + 4);
-    quotes.push(...await Promise.all(chunk.map((query) => lookupQuery(query, fetchImpl, signal))));
+    quotes.push(...await Promise.all(chunk.map(async query => {
+      const quote = await lookupQuery(query, fetchImpl, signal);
+      if (!signal?.aborted) onQuote?.(quote);
+      return quote;
+    })));
   }
   return quotes;
 }
